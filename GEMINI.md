@@ -1,10 +1,11 @@
 # Guild Master
 
-Guild Master is a guild management system built with Next.js. It provides tools for organizing guild activities, starting with a comprehensive calendar system.
+Guild Master is a guild management system built with Next.js, following the **Feature-Sliced Design (FSD)** architectural pattern. It provides tools for organizing guild activities, starting with a comprehensive calendar system.
 
 ## Technology Stack
 
 - **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
+- **Architecture:** [Feature-Sliced Design (FSD)](https://feature-sliced.design/)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) with `react-redux`
 - **Styling:** [CSS Modules](https://github.com/css-modules/css-modules)
@@ -49,6 +50,7 @@ npm run start
 
 ## Development Conventions
 
+- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles for the entire project. Organize code into standardized layers (app, processes, pages, features, entities, shared).
 - **State Management:** Always use Redux Toolkit slices for global state. Custom hooks `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` should be used for type-safe store interaction.
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions.
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/types/index.ts` or close to their usage if specific to a single module.
