@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UIState } from '@/types';
+import { UIState } from '@/shared/types';
 
 const initialState: UIState = {
   isEventModalOpen: false,

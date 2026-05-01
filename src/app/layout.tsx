@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import StoreProvider from "./StoreProvider";
+import StoreProvider from "./providers/StoreProvider";
 
 export const metadata: Metadata = {
   title: "Guild Master",

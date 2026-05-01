@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { EventsState, ActivityEvent } from '@/types';
+import { EventsState, ActivityEvent } from '@/shared/types';
 
 const initialState: EventsState = {
   items: [],

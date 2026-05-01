@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import uiReducer from './slices/uiSlice';
-import eventsReducer from './slices/eventsSlice';
+import { calendarReducer } from '@/entities/calendar';
+import { eventsReducer } from '@/entities/event';
 
 export const store = configureStore({
   reducer: {
-    ui: uiReducer,
+    ui: calendarReducer,
     events: eventsReducer,
   },
 });
