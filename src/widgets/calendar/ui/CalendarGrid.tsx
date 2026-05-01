@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './CalendarGrid.module.css';
-import { useAppSelector } from '@/store/hooks';
+import { useAppSelector } from '@/shared/lib/hooks';
 
 const DAYS_OF_WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 

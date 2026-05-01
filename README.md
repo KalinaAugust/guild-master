@@ -1,17 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Guild Master
+
+Guild Master is a guild management system built with Next.js, following the **Feature-Sliced Design (FSD)** architectural pattern. It provides tools for organizing guild activities, starting with a comprehensive calendar system.
+
+## Technology Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Architecture:** Feature-Sliced Design (FSD)
+- **Language:** TypeScript
+- **State Management:** Redux Toolkit with `react-redux`
+- **Styling:** CSS Modules
 
 ## Getting Started
 
-First, run the development server:
+### Installation
+
+```bash
+npm install
+```
+
+### Running the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
