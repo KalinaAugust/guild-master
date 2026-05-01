@@ -34,6 +34,7 @@
   min-height: 100px;
   padding: 0.5rem;
   transition: background-color 0.2s;
+  cursor: pointer;
 }
 
 .day:hover {
@@ -42,6 +43,7 @@
 
 .today {
   background-color: #e3f2fd;
+  cursor: pointer;
 }
 
 .otherMonth {

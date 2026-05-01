@@ -15,12 +15,12 @@
 **Files:**
 - Create: `package.json`, `tsconfig.json`, `next.config.mjs`, `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`
 
-- [ ] **Step 1: Run `create-next-app`**
+- [x] **Step 1: Run `create-next-app`**
 
 Run: `npx create-next-app@latest . --typescript --eslint --app --src-dir --import-alias "@/*" --use-npm`
 (Note: When prompted, answer NO to Tailwind CSS as we are using CSS Modules, and NO to Turbo as it's not strictly necessary for initialization).
 
-- [ ] **Step 2: Clean up generated files**
+- [x] **Step 2: Clean up generated files**
 
 Remove boilerplate content from `src/app/page.tsx` and `src/app/globals.css` to start fresh.
 
@@ -43,12 +43,12 @@ body {
 }
 ```
 
-- [ ] **Step 3: Run the application to verify**
+- [x] **Step 3: Run the application to verify**
 
 Run: `npm run dev`
 Expected: Application starts on localhost:3000 and displays "Guild Master" without errors. Stop the server after verification.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add .
@@ -61,11 +61,11 @@ git commit -m "chore: initialize Next.js application"
 - Modify: `package.json`
 - Create: `src/types/index.ts`
 
-- [ ] **Step 1: Install Redux dependencies**
+- [x] **Step 1: Install Redux dependencies**
 
 Run: `npm install @reduxjs/toolkit react-redux`
 
-- [ ] **Step 2: Define basic types**
+- [x] **Step 2: Define basic types**
 
 Create `src/types/index.ts` with the following interfaces:
 
@@ -94,7 +94,7 @@ export interface UIState {
 }
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add package.json package-lock.json src/types/index.ts
@@ -109,7 +109,7 @@ git commit -m "feat: install Redux and define base TypeScript interfaces"
 - Create: `src/store/store.ts`
 - Create: `src/store/hooks.ts`
 
-- [ ] **Step 1: Create UI Slice**
+- [x] **Step 1: Create UI Slice**
 
 ```typescript
 // src/store/slices/uiSlice.ts
@@ -141,7 +141,7 @@ export const { openEventModal, closeEventModal, setSelectedDate } = uiSlice.acti
 export default uiSlice.reducer;
 ```
 
-- [ ] **Step 2: Create Events Slice**
+- [x] **Step 2: Create Events Slice**
 
 ```typescript
 // src/store/slices/eventsSlice.ts
@@ -169,7 +169,7 @@ export const { addEvent } = eventsSlice.actions;
 export default eventsSlice.reducer;
 ```
 
-- [ ] **Step 3: Configure Store**
+- [x] **Step 3: Configure Store**
 
 ```typescript
 // src/store/store.ts
@@ -188,7 +188,7 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 ```
 
-- [ ] **Step 4: Create Typed Hooks**
+- [x] **Step 4: Create Typed Hooks**
 
 ```typescript
 // src/store/hooks.ts
@@ -199,12 +199,12 @@ export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 ```
 
-- [ ] **Step 5: Verify types compile**
+- [x] **Step 5: Verify types compile**
 
 Run: `npx tsc --noEmit`
 Expected: Exits with 0 (no type errors).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/store/
@@ -217,7 +217,7 @@ git commit -m "feat: configure Redux store and create initial slices"
 - Create: `src/app/StoreProvider.tsx`
 - Modify: `src/app/layout.tsx`
 
-- [ ] **Step 1: Create Client Provider Component**
+- [x] **Step 1: Create Client Provider Component**
 
 Because the root layout is a Server Component, we need a Client Component to provide the Redux store.
 
@@ -234,7 +234,7 @@ export default function StoreProvider({ children }: { children: ReactNode }) {
 }
 ```
 
-- [ ] **Step 2: Update Root Layout**
+- [x] **Step 2: Update Root Layout**
 
 Wrap the children in `src/app/layout.tsx` with the new `StoreProvider`.
 
@@ -269,12 +269,12 @@ export default function RootLayout({
 }
 ```
 
-- [ ] **Step 3: Verify Integration**
+- [x] **Step 3: Verify Integration**
 
 Run: `npm run build`
 Expected: Successful build, confirming the Client Component provider works within the Server Component layout.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/app/StoreProvider.tsx src/app/layout.tsx

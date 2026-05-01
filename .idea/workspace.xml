@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dc7abe90-5f0b-490d-a060-5c3bfa9ff87f" name="Changes" comment="">
+    <list default="true" id="dc7abe90-5f0b-490d-a060-5c3bfa9ff87f" name="Changes" comment="init commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/superpowers/plans/2026-05-01-guild-master-initialization-plan.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/superpowers/plans/2026-05-01-guild-master-initialization-plan.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CalendarGrid/CalendarGrid.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CalendarGrid/CalendarGrid.module.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +48,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "git-widget-placeholder": "master",
+    "javascript.preferred.runtime.type.id": "node",
     "js.debugger.nextJs.config.created.client": "true",
     "js.debugger.nextJs.config.created.server": "true",
     "last_opened_file_path": "/Users/deniskalinin/frontend/guild-master",
@@ -55,6 +58,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "npm.Next.js: server-side.executor": "Run",
+    "ts.external.directory.path": "/Users/deniskalinin/frontend/guild-master/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -88,11 +92,24 @@
       <option name="presentableId" value="Default" />
       <updated>1777633266399</updated>
       <workItem from="1777633267428" duration="3189000" />
-      <workItem from="1777636475319" duration="1149000" />
+      <workItem from="1777636475319" duration="3589000" />
     </task>
+    <task id="LOCAL-00001" summary="init commit">
+      <option name="closed" value="true" />
+      <created>1777637839899</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1777637839899</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="init commit" />
   </component>
 </project>
