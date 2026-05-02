@@ -9,7 +9,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.controlsLeft {
+  display: flex;
+  gap: 12px;
+}
+
+.controlsRight {
+  display: flex;
+  gap: 8px;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.navButton:hover {
+  background: #f9f9f9;
 }
 
 .grid {
@@ -54,4 +82,28 @@
 .dateNumber {
   font-size: 0.85rem;
   font-weight: 500;
+  display: block;
+  margin-bottom: 4px;
 }
+
+.eventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.eventItem {
+  font-size: 0.7rem;
+  padding: 2px 4px;
+  border-radius: 2px;
+  background-color: #007bff;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.event_raid { background-color: #d32f2f; }
+.event_game { background-color: #388e3c; }
+.event_meeting { background-color: #f9a825; }
+.event_other { background-color: #7b1fa2; }
