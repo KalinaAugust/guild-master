@@ -50,12 +50,12 @@ npm run start
 
 ## Development Conventions
 
-- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles for the entire project. Organize code into standardized layers (app, processes, pages, features, entities, shared).
+- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering.
 - **State Management:** Always use Redux Toolkit slices for global state. Custom hooks `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` should be used for type-safe store interaction.
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions.
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/types/index.ts` or close to their usage if specific to a single module.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
-- **Architecture:** Follow the Next.js App Router patterns. Keep business logic in slices and utility functions, keeping components focused on rendering.
+- **Testing:** We use Vitest and React Testing Library for unit and integration tests. Follow TDD principles: write a failing test before implementing the logic.
 
 ## Key Commands
 
@@ -65,3 +65,6 @@ npm run start
 | `npm run build` | Compiles the application for production deployment. |
 | `npm run start` | Runs the production-ready build. |
 | `npm run lint` | Runs ESLint to check for code quality and style issues. |
+| `npm test` | Runs tests in watch mode. |
+| `npm run test:run` | Runs all tests once. |
+| `npm run test:ui` | Starts Vitest UI for interactive test debugging. |
