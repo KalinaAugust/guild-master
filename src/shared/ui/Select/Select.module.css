@@ -17,6 +17,21 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   overflow: hidden;
   z-index: 1000;
+  width: var(--radix-select-trigger-width);
+  min-width: 120px;
+  max-height: 300px;
+}
+.viewport {
+  padding: 4px;
+}
+.scrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: #666;
+  cursor: default;
 }
 .item {
   padding: 8px 12px;

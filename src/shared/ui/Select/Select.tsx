@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import styles from './Select.module.css';
 
 interface SelectProps {
@@ -20,7 +20,14 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, p
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
     <SelectPrimitive.Portal>
-      <SelectPrimitive.Content className={styles.content}>
+      <SelectPrimitive.Content
+        className={styles.content}
+        position="popper"
+        sideOffset={4}
+      >
+        <SelectPrimitive.ScrollUpButton className={styles.scrollButton}>
+          <ChevronUp size={16} />
+        </SelectPrimitive.ScrollUpButton>
         <SelectPrimitive.Viewport className={styles.viewport}>
           {options.map((opt) => (
             <SelectPrimitive.Item key={opt.value} value={opt.value} className={styles.item}>
@@ -28,6 +35,9 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, p
             </SelectPrimitive.Item>
           ))}
         </SelectPrimitive.Viewport>
+        <SelectPrimitive.ScrollDownButton className={styles.scrollButton}>
+          <ChevronDown size={16} />
+        </SelectPrimitive.ScrollDownButton>
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   </SelectPrimitive.Root>
