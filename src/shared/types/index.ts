@@ -18,4 +18,5 @@ export interface EventsState {
 export interface UIState {
   isEventModalOpen: boolean;
   selectedDate: string | null; // ISO string for the currently viewed date
+  viewDate: string; // NEW: currently viewed month/year
 }
