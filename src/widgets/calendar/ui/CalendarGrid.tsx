@@ -1,19 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
+import { fetchEventsThunk } from '@/entities/event';
 import { Select } from '@/shared/ui/Select';
 
 const DAYS_OF_WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-export const CalendarGrid: React.FC = () => {
+export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
   
+  useEffect(() => {
+    dispatch(fetchEventsThunk(guildId));
+  }, [dispatch, guildId]);
+
   const now = new Date(viewDateStr);
   
   const currentYear = now.getFullYear();

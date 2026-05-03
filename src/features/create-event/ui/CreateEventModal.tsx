@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import styles from './CreateEventModal.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
-import { addEvent } from '@/entities/event';
+import { createEventThunk } from '@/entities/event';
 import { ActivityType } from '@/shared/types';
 
-export const CreateEventModal: React.FC = () => {
+export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.ui.isEventModalOpen);
   const selectedDate = useAppSelector((state) => state.ui.selectedDate);
@@ -35,13 +35,13 @@ export const CreateEventModal: React.FC = () => {
     
     if (!title || !date || !time) return;
 
-    dispatch(addEvent({
-      id: crypto.randomUUID(),
+    dispatch(createEventThunk({
       title,
       date,
       time,
       type,
       description,
+      guild_id: guildId,
     }));
 
     handleClose();
