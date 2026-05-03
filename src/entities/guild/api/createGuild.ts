@@ -8,6 +8,17 @@ export const createGuild = async (name: string, description?: string): Promise<G
   
   if (!user) throw new Error('Unauthorized');
 
+  // Ensure profile exists (fallback for trigger)
+  await supabase
+    .from('profiles')
+    .upsert({ 
+      id: user.id,
+      full_name: user.user_metadata?.full_name || null,
+      avatar_url: user.user_metadata?.avatar_url || null
+    })
+    .select()
+    .single();
+
   // Insert guild
   const { data: guild, error: guildError } = await supabase
     .from('guilds')
