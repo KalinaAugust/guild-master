@@ -15,9 +15,10 @@ export const CreateGuildForm = () => {
     setLoading(true);
     try {
       await createGuild(name, description);
-      router.push('/');
-      router.refresh();
     } catch (error) {
+      // Игнорируем ошибку NEXT_REDIRECT, так как это штатное поведение
+      if ((error as any)?.message === 'NEXT_REDIRECT') return;
+      
       console.error('Failed to create guild:', error);
       alert('Ошибка при создании гильдии');
     } finally {

@@ -2,6 +2,8 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { Guild } from '../model/types';
 
+import { redirect } from 'next/navigation';
+
 export const createGuild = async (name: string, description?: string): Promise<Guild> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -44,6 +46,8 @@ export const createGuild = async (name: string, description?: string): Promise<G
     console.error('Error creating guild member:', memberError);
     throw memberError;
   }
+
+  redirect('/');
 
   return {
     id: guild.id,
