@@ -15,6 +15,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <div className="bg-blob" />
+        <div className="bg-blob bg-blob-secondary" />
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
