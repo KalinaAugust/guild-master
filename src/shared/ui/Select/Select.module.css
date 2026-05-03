@@ -1,44 +1,85 @@
 .trigger {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  backdrop-filter: var(--glass-blur);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
   min-width: 100px;
-  cursor: pointer;
   font-size: 14px;
 }
+
+.trigger:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
 .content {
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background: #1a0b2e; /* Solid background for options as requested */
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-glass);
   overflow: hidden;
   z-index: 1000;
   width: var(--radix-select-trigger-width);
   min-width: 120px;
   max-height: 300px;
+  backdrop-filter: var(--glass-blur);
 }
+
 .viewport {
   padding: 4px;
 }
+
 .scrollButton {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 25px;
-  background-color: white;
-  color: #666;
-  cursor: default;
+  background-color: transparent;
+  color: var(--text-muted);
 }
+
 .item {
   padding: 8px 12px;
   cursor: pointer;
   font-size: 14px;
   outline: none;
+  color: var(--text-primary);
+  border-radius: 4px;
+  transition: background 0.2s ease;
 }
+
 .item:hover, .item[data-highlighted] {
-  background: #f0f0f0;
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+}
+
+/* Fallback for native select if used elsewhere */
+.select {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  backdrop-filter: var(--glass-blur);
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.select:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.select option {
+  background: #1a0b2e;
+  color: var(--text-primary);
 }
