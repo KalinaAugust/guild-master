@@ -127,7 +127,9 @@ export const CalendarGrid: React.FC = () => {
           </div>
         ))}
         {days.map((day, index) => {
-          const dayEvents = events.filter(event => event.date === day.fullDate);
+          const dayEvents = events
+            .filter(event => event.date === day.fullDate)
+            .sort((a, b) => a.time.localeCompare(b.time));
           
           return (
             <div
