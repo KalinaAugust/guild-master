@@ -11,7 +11,7 @@ export const createGuild = async (name: string, description?: string): Promise<G
   // Insert guild
   const { data: guild, error: guildError } = await supabase
     .from('guilds')
-    .insert({ name, description, ownerId: user.id })
+    .insert({ name, description, owner_id: user.id })
     .select()
     .single();
 
@@ -26,7 +26,7 @@ export const createGuild = async (name: string, description?: string): Promise<G
     .insert({ 
       guild_id: guild.id, 
       user_id: user.id, 
-      role: 'owner' 
+      role: 'OWNER' 
     });
 
   if (memberError) {
@@ -34,5 +34,10 @@ export const createGuild = async (name: string, description?: string): Promise<G
     throw memberError;
   }
 
-  return guild as Guild;
+  return {
+    id: guild.id,
+    name: guild.name,
+    ownerId: guild.owner_id,
+    description: guild.description || undefined,
+  };
 }

@@ -1,1 +1,1 @@
-export { default as eventsReducer, addEvent } from './model/slice';
+export { default as eventsReducer, addEvent, fetchEventsThunk, createEventThunk } from './model/slice';

@@ -22,9 +22,9 @@ export const getUser = async (): Promise<User | null> => {
     email: user.email,
     profile: profile
       ? {
-          id: (profile as any).id,
-          fullName: (profile as any).fullName,
-          avatarUrl: (profile as any).avatarUrl,
+          id: profile.id,
+          fullName: profile.full_name,
+          avatarUrl: profile.avatar_url,
         }
       : null,
   };

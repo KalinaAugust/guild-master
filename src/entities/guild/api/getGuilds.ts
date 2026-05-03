@@ -19,5 +19,13 @@ export const getMyGuilds = async (): Promise<Guild[]> => {
   }
     
   // Map the nested guilds data and ensure it matches the Guild interface
-  return ((data as any[])?.map(m => m.guilds).filter(Boolean) as Guild[]) || [];
+  return ((data as any[])?.map(m => {
+    if (!m.guilds) return null;
+    return {
+      id: m.guilds.id,
+      name: m.guilds.name,
+      ownerId: m.guilds.owner_id,
+      description: m.guilds.description,
+    };
+  }).filter(Boolean) as Guild[]) || [];
 }
