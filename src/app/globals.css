@@ -1,3 +1,34 @@
+:root {
+  /* Backgrounds */
+  --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: blur(16px);
+  
+  /* Accents */
+  --accent-primary: #9d4edd;
+  --accent-secondary: #c8b6ff;
+  --accent-glow: rgba(157, 78, 221, 0.3);
+  
+  /* Text */
+  --text-primary: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-highlight: #c8b6ff;
+
+  /* Shadows */
+  --shadow-glass: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  
+  /* Events (Amethyst-themed palette) */
+  --event-raid: rgba(235, 64, 52, 0.3);
+  --event-raid-border: #eb4034;
+  --event-meeting: rgba(52, 152, 219, 0.3);
+  --event-meeting-border: #3498db;
+  --event-game: rgba(46, 204, 113, 0.3);
+  --event-game-border: #2ecc71;
+  --event-other: rgba(157, 78, 221, 0.3);
+  --event-other-border: #9d4edd;
+}
+
 html {
   scrollbar-gutter: stable;
 }
@@ -6,6 +37,13 @@ html {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+html, body {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  min-height: 100vh;
 }
 
 body {
