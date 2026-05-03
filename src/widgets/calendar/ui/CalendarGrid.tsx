@@ -10,15 +10,14 @@ import { Select } from '@/shared/ui/Select';
 
 const DAYS_OF_WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-export const CalendarGrid: React.FC = () => {
+export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
   
   useEffect(() => {
-    // Using a hardcoded guild ID for now
-    dispatch(fetchEventsThunk('00000000-0000-0000-0000-000000000000'));
-  }, [dispatch]);
+    dispatch(fetchEventsThunk(guildId));
+  }, [dispatch, guildId]);
 
   const now = new Date(viewDateStr);
   
