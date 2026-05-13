@@ -18,7 +18,7 @@ class PointerEvent extends Event {
   }
 }
 
-window.PointerEvent = PointerEvent as any;
+window.PointerEvent = PointerEvent as unknown as typeof window.PointerEvent;
 window.HTMLElement.prototype.releasePointerCapture = vi.fn();
 window.HTMLElement.prototype.hasPointerCapture = vi.fn();
 

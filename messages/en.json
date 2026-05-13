@@ -1,0 +1,13 @@
+{
+  "Common": {
+    "title": "Guild Master",
+    "logout": "Logout",
+    "language": "Language"
+  },
+  "Auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign In"
+  }
+}

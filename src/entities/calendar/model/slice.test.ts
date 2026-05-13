@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import dayjs from 'dayjs';
 import reducer, { 
   openEventModal, 
   closeEventModal, 
@@ -12,7 +13,7 @@ describe('uiSlice', () => {
   const initialState = {
     isEventModalOpen: false,
     selectedDate: null,
-    viewDate: new Date('2026-05-01').toISOString(),
+    viewDate: dayjs('2026-05-01').toISOString(),
   };
 
   it('should return the initial state', () => {
@@ -40,16 +41,14 @@ describe('uiSlice', () => {
 
   it('should handle nextMonth', () => {
     const actual = reducer(initialState, nextMonth());
-    const expectedDate = new Date('2026-05-01');
-    expectedDate.setMonth(expectedDate.getMonth() + 1);
-    expect(actual.viewDate).toBe(expectedDate.toISOString());
+    const expectedDate = dayjs('2026-05-01').add(1, 'month').toISOString();
+    expect(actual.viewDate).toBe(expectedDate);
   });
 
   it('should handle prevMonth', () => {
     const actual = reducer(initialState, prevMonth());
-    const expectedDate = new Date('2026-05-01');
-    expectedDate.setMonth(expectedDate.getMonth() - 1);
-    expect(actual.viewDate).toBe(expectedDate.toISOString());
+    const expectedDate = dayjs('2026-05-01').subtract(1, 'month').toISOString();
+    expect(actual.viewDate).toBe(expectedDate);
   });
 
   it('should handle setViewDate', () => {

@@ -28,16 +28,18 @@ export const createGuild = async (name: string, description?: string): Promise<G
     .select()
     .single();
 
-  if (guildError) {
+  if (guildError || !guild) {
     console.error('Error creating guild:', guildError);
-    throw guildError;
+    throw guildError || new Error('Failed to create guild');
   }
+
+  const createdGuild = guild;
 
   // Insert owner as member
   const { error: memberError } = await supabase
     .from('guild_members')
     .insert({ 
-      guild_id: guild.id, 
+      guild_id: createdGuild.id, 
       user_id: user.id, 
       role: 'OWNER' 
     });
@@ -50,9 +52,9 @@ export const createGuild = async (name: string, description?: string): Promise<G
   redirect('/');
 
   return {
-    id: guild.id,
-    name: guild.name,
-    ownerId: guild.owner_id,
-    description: guild.description || undefined,
+    id: createdGuild.id,
+    name: createdGuild.name,
+    ownerId: createdGuild.owner_id,
+    description: createdGuild.description || undefined,
   };
 }

@@ -1,10 +1,14 @@
 import { createClient } from '@/shared/api/supabase/server';
 import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { LogoutButton } from './LogoutButton';
+import { LanguageSwitcher } from '@/features/language-switcher';
 
 export const Header = async () => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const t = await getTranslations('Common');
+  const authT = await getTranslations('Auth');
 
   return (
     <header style={{ 
@@ -19,9 +23,10 @@ export const Header = async () => {
       zIndex: 100
     }}>
       <Link href="/" style={{ fontSize: '1.5rem', fontWeight: 'bold', textDecoration: 'none', color: 'inherit' }}>
-        Guild Master
+        {t('title')}
       </Link>
-      <nav>
+      <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+        <LanguageSwitcher />
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span>{user.email}</span>
@@ -29,7 +34,7 @@ export const Header = async () => {
           </div>
         ) : (
           <Link href="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
-            Login
+            {authT('login')}
           </Link>
         )}
       </nav>

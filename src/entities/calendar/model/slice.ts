@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UIState } from '@/shared/types';
+import dayjs from 'dayjs';
 
 const initialState: UIState = {
   isEventModalOpen: false,
   selectedDate: null,
-  viewDate: new Date().toISOString(),
+  viewDate: dayjs().toISOString(),
 };
 
 export const uiSlice = createSlice({
@@ -21,14 +22,10 @@ export const uiSlice = createSlice({
       state.selectedDate = action.payload;
     },
     nextMonth: (state) => {
-      const date = new Date(state.viewDate);
-      date.setMonth(date.getMonth() + 1);
-      state.viewDate = date.toISOString();
+      state.viewDate = dayjs(state.viewDate).add(1, 'month').toISOString();
     },
     prevMonth: (state) => {
-      const date = new Date(state.viewDate);
-      date.setMonth(date.getMonth() - 1);
-      state.viewDate = date.toISOString();
+      state.viewDate = dayjs(state.viewDate).subtract(1, 'month').toISOString();
     },
     setViewDate: (state, action: PayloadAction<string>) => {
       state.viewDate = action.payload;

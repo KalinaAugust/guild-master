@@ -13,19 +13,22 @@ export const getMyGuilds = async (): Promise<Guild[]> => {
     .select('guild_id, guilds (*)')
     .eq('user_id', user.id);
     
-  if (error) {
+  if (error || !data) {
     console.error('Error fetching guilds:', error);
     return [];
   }
     
   // Map the nested guilds data and ensure it matches the Guild interface
-  return ((data as any[])?.map(m => {
-    if (!m.guilds) return null;
-    return {
-      id: m.guilds.id,
-      name: m.guilds.name,
-      ownerId: m.guilds.owner_id,
-      description: m.guilds.description,
-    };
-  }).filter(Boolean) as Guild[]) || [];
+  return data.reduce<Guild[]>((acc, m) => {
+    const g = m.guilds as unknown as { id: string; name: string; owner_id: string; description: string | null };
+    if (g) {
+      acc.push({
+        id: g.id,
+        name: g.name,
+        ownerId: g.owner_id,
+        description: g.description || undefined,
+      });
+    }
+    return acc;
+  }, []);
 }

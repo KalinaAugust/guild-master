@@ -8,6 +8,14 @@ export async function proxy(request: NextRequest) {
     },
   })
 
+  // Handle locale initialization
+  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
+  if (!localeCookie) {
+    const acceptLanguage = request.headers.get('accept-language')
+    const preferredLocale = acceptLanguage?.startsWith('ru') ? 'ru' : 'en'
+    response.cookies.set('NEXT_LOCALE', preferredLocale)
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
