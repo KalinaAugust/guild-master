@@ -18,7 +18,7 @@ describe('getMyGuilds', () => {
         getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }),
       },
     };
-    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as any);
+    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
     const result = await getMyGuilds();
 
@@ -61,13 +61,23 @@ describe('getMyGuilds', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null }),
     };
-    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as any);
+    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
     const result = await getMyGuilds();
 
     expect(result).toEqual([
-      mockGuildsData[0].guilds,
-      mockGuildsData[1].guilds,
+      {
+        id: 'guild-1',
+        name: 'First Guild',
+        description: 'Description 1',
+        ownerId: 'owner-1',
+      },
+      {
+        id: 'guild-2',
+        name: 'Second Guild',
+        description: 'Description 2',
+        ownerId: 'user-123',
+      },
     ]);
     expect(mockSupabase.from).toHaveBeenCalledWith('guild_members');
     expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, guilds (*)');
@@ -86,7 +96,7 @@ describe('getMyGuilds', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockResolvedValue({ data: null, error: mockError }),
     };
-    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as any);
+    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
     const result = await getMyGuilds();
 
@@ -115,7 +125,7 @@ describe('getMyGuilds', () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null }),
     };
-    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as any);
+    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
     const result = await getMyGuilds();
 

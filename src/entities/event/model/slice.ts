@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { EventsState, ActivityEvent, ActivityType } from '@/shared/types';
 import { fetchEvents } from '../api/getEvents';
 import { createEvent } from '../api/createEvent';
+import dayjs from '@/shared/lib/dayjs';
 
 export const fetchEventsThunk = createAsyncThunk(
   'events/fetchEvents',
@@ -9,14 +10,17 @@ export const fetchEventsThunk = createAsyncThunk(
     const data = await fetchEvents(guildId);
     if (!data) return [];
     
-    return data.map(event => ({
-      id: event.id,
-      title: event.title,
-      description: event.description || undefined,
-      type: event.type as ActivityType,
-      date: event.event_date.split('T')[0],
-      time: event.event_date.split('T')[1].substring(0, 5),
-    }));
+    return data.map(event => {
+      const d = dayjs(event.event_date);
+      return {
+        id: event.id,
+        title: event.title,
+        description: event.description || undefined,
+        type: event.type as ActivityType,
+        date: d.format('YYYY-MM-DD'),
+        time: d.format('HH:mm'),
+      };
+    });
   }
 );
 
@@ -24,13 +28,14 @@ export const createEventThunk = createAsyncThunk(
   'events/createEvent',
   async (event: Omit<ActivityEvent, 'id'> & { guild_id: string }) => {
     const data = await createEvent(event);
+    const d = dayjs(data.event_date);
     return {
       id: data.id,
       title: data.title,
       description: data.description || undefined,
       type: data.type as ActivityType,
-      date: data.event_date.split('T')[0],
-      time: data.event_date.split('T')[1].substring(0, 5),
+      date: d.format('YYYY-MM-DD'),
+      time: d.format('HH:mm'),
     };
   }
 );

@@ -1,100 +1,112 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useLocale } from 'next-intl';
+import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
 import { fetchEventsThunk } from '@/entities/event';
 import { Select } from '@/shared/ui/Select';
 
-const DAYS_OF_WEEK = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-
 export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
-  
+  const locale = useLocale();
+
   useEffect(() => {
     dispatch(fetchEventsThunk(guildId));
   }, [dispatch, guildId]);
 
-  const now = new Date(viewDateStr);
-  
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth();
+  // Set dayjs locale based on next-intl locale
+  const now = useMemo(() => dayjs(viewDateStr).locale(locale), [viewDateStr, locale]);
 
   const handlePrevMonth = () => dispatch(prevMonth());
   const handleNextMonth = () => dispatch(nextMonth());
 
-  const months = Array.from({ length: 12 }, (_, i) => ({
-    label: new Date(2000, i, 1).toLocaleString('ru-RU', { month: 'long' }),
-    value: i.toString(),
-  }));
+  const months = useMemo(() => {
+    const localeData = now.localeData();
+    return localeData.months().map((label, i) => ({
+      label: label.charAt(0).toUpperCase() + label.slice(1),
+      value: i.toString(),
+    }));
+  }, [now]);
 
-  const years = Array.from({ length: 21 }, (_, i) => {
-    const year = new Date().getFullYear() - 10 + i;
+  const years = useMemo(() => Array.from({ length: 21 }, (_, i) => {
+    const year = dayjs().year() - 10 + i;
     return { label: year.toString(), value: year.toString() };
-  });
+  }), []);
 
   const handleMonthChange = (month: string) => {
-    const newDate = new Date(now);
-    newDate.setMonth(parseInt(month));
-    dispatch(setViewDate(newDate.toISOString()));
+    dispatch(setViewDate(now.month(parseInt(month)).toISOString()));
   };
 
   const handleYearChange = (year: string) => {
-    const newDate = new Date(now);
-    newDate.setFullYear(parseInt(year));
-    dispatch(setViewDate(newDate.toISOString()));
+    dispatch(setViewDate(now.year(parseInt(year)).toISOString()));
   };
 
-  // Первый день месяца
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-  // День недели первого дня (0 - воскресенье, корректируем под Пн-Вс)
-  let firstDayOfWeek = firstDayOfMonth.getDay();
-  firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+  const DAYS_OF_WEEK = useMemo(() => {
+    const localeData = now.localeData();
+    const weekdays = localeData.weekdaysMin();
+    // weekdays start with Sunday (index 0). We want Monday to Sunday.
+    const shifted = [...weekdays.slice(1), weekdays[0]];
+    return shifted.map((label, index) => ({
+      key: index === 5 || index === 6 ? (index === 5 ? 'sat' : 'sun') : index.toString(),
+      label: label.charAt(0).toUpperCase() + label.slice(1),
+    }));
+  }, [now]);
 
-  // Количество дней в текущем месяце
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  
-  // Количество дней в предыдущем месяце для заполнения начала сетки
-  const prevMonthLastDay = new Date(currentYear, currentMonth, 0).getDate();
+  const days = useMemo(() => {
+    const startOfMonth = now.startOf('month');
+    
+    // Day of week for 1st day (0 is Sunday, adjust to 0 for Monday)
+    const dayValue = startOfMonth.day();
+    const firstDayOfWeek = dayValue === 0 ? 6 : dayValue - 1;
 
-  const days = [];
+    const calendarDays = [];
 
-  // Заполняем дни из предыдущего месяца
-  for (let i = firstDayOfWeek; i > 0; i--) {
-    const dayDate = prevMonthLastDay - i + 1;
-    const date = new Date(currentYear, currentMonth - 1, dayDate);
-    days.push({
-      date: dayDate,
-      fullDate: date.toISOString().split('T')[0],
-      isCurrentMonth: false,
-    });
-  }
+    // Prev month days
+    const prevMonth = now.subtract(1, 'month');
+    const daysInPrevMonth = prevMonth.daysInMonth();
+    for (let i = firstDayOfWeek; i > 0; i--) {
+      const d = prevMonth.date(daysInPrevMonth - i + 1);
+      calendarDays.push({
+        date: d.date(),
+        fullDate: d.format('YYYY-MM-DD'),
+        isCurrentMonth: false,
+      });
+    }
 
-  // Заполняем текущий месяц
-  for (let i = 1; i <= daysInMonth; i++) {
-    const date = new Date(currentYear, currentMonth, i);
-    days.push({
-      date: i,
-      fullDate: date.toISOString().split('T')[0],
-      isCurrentMonth: true,
-      isToday: i === new Date().getDate() && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear(),
-    });
-  }
+    // Current month days
+    const daysInMonth = now.daysInMonth();
+    const today = dayjs().format('YYYY-MM-DD');
+    for (let i = 1; i <= daysInMonth; i++) {
+      const d = now.date(i);
+      const fullDate = d.format('YYYY-MM-DD');
+      calendarDays.push({
+        date: i,
+        fullDate,
+        isCurrentMonth: true,
+        isToday: fullDate === today,
+      });
+    }
 
-  // Заполняем остаток сетки до 42 ячеек (6 недель)
-  const remainingDays = 42 - days.length;
-  for (let i = 1; i <= remainingDays; i++) {
-    const date = new Date(currentYear, currentMonth + 1, i);
-    days.push({
-      date: i,
-      fullDate: date.toISOString().split('T')[0],
-      isCurrentMonth: false,
-    });
-  }
+    // Next month days
+    const remaining = 42 - calendarDays.length;
+    const nextMonth = now.add(1, 'month');
+    for (let i = 1; i <= remaining; i++) {
+      const d = nextMonth.date(i);
+      calendarDays.push({
+        date: i,
+        fullDate: d.format('YYYY-MM-DD'),
+        isCurrentMonth: false,
+      });
+    }
+
+    return calendarDays;
+  }, [now]);
 
   const handleDayClick = (dateStr: string) => {
     dispatch(setSelectedDate(dateStr));
@@ -105,15 +117,15 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.controlsLeft}>
-          <Select 
-            value={now.getMonth().toString()} 
-            onValueChange={handleMonthChange} 
-            options={months} 
+          <Select
+            value={now.month().toString()}
+            onValueChange={handleMonthChange}
+            options={months}
           />
-          <Select 
-            value={now.getFullYear().toString()} 
-            onValueChange={handleYearChange} 
-            options={years} 
+          <Select
+            value={now.year().toString()}
+            onValueChange={handleYearChange}
+            options={years}
           />
         </div>
         <div className={styles.controlsRight}>
@@ -127,15 +139,18 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
       </div>
       <div className={styles.grid}>
         {DAYS_OF_WEEK.map((day) => (
-          <div key={day} className={styles.dayHeader}>
-            {day}
+          <div
+            key={day.key}
+            className={`${styles.dayHeader} ${day.key === 'sat' || day.key === 'sun' ? styles.weekendHeader : ''}`}
+          >
+            {day.label}
           </div>
         ))}
         {days.map((day, index) => {
           const dayEvents = events
             .filter(event => event.date === day.fullDate)
             .sort((a, b) => a.time.localeCompare(b.time));
-          
+
           return (
             <div
               key={index}
@@ -147,8 +162,8 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
               <span className={styles.dateNumber}>{day.date}</span>
               <div className={styles.eventsList}>
                 {dayEvents.map(event => (
-                  <div 
-                    key={event.id} 
+                  <div
+                    key={event.id}
                     className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
                     title={`${event.time} - ${event.title}`}
                   >

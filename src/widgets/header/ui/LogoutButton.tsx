@@ -2,10 +2,12 @@
 
 import { createClient } from '@/shared/api/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export const LogoutButton = () => {
   const supabase = createClient();
   const router = useRouter();
+  const t = useTranslations('Common');
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -24,7 +26,7 @@ export const LogoutButton = () => {
         cursor: 'pointer'
       }}
     >
-      Logout
+      {t('logout')}
     </button>
   );
 };

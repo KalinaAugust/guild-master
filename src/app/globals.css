@@ -29,10 +29,6 @@
   --event-other-border: #9d4edd;
 }
 
-html {
-  scrollbar-gutter: stable;
-}
-
 * {
   box-sizing: border-box;
   padding: 0;

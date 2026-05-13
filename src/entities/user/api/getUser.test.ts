@@ -29,9 +29,9 @@ describe('getUser', () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
     const mockProfile = { 
       id: 'user-123', 
-      fullName: 'John Doe', 
-      avatarUrl: 'http://example.com/avatar.png',
-      extraField: 'should be mapped away' 
+      full_name: 'John Doe', 
+      avatar_url: 'http://example.com/avatar.png',
+      extra_field: 'should be mapped away' 
     };
 
     const mockSupabase = {
@@ -52,8 +52,8 @@ describe('getUser', () => {
       email: mockUser.email,
       profile: {
         id: mockProfile.id,
-        fullName: mockProfile.fullName,
-        avatarUrl: mockProfile.avatarUrl,
+        fullName: mockProfile.full_name,
+        avatarUrl: mockProfile.avatar_url,
       },
     });
     expect(mockSupabase.from).toHaveBeenCalledWith('profiles');

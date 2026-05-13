@@ -1,14 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createGuild } from '@/entities/guild';
 
 export const CreateGuildForm = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,8 +14,9 @@ export const CreateGuildForm = () => {
     try {
       await createGuild(name, description);
     } catch (error) {
+      const err = error as Error;
       // Игнорируем ошибку NEXT_REDIRECT, так как это штатное поведение
-      if ((error as any)?.message === 'NEXT_REDIRECT') return;
+      if (err.message === 'NEXT_REDIRECT') return;
       
       console.error('Failed to create guild:', error);
       alert('Ошибка при создании гильдии');

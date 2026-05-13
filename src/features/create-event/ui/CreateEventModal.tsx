@@ -1,32 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CreateEventModal.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
 import { createEventThunk } from '@/entities/event';
 import { ActivityType } from '@/shared/types';
+import { Select } from '@/shared/ui/Select';
+
+const typeOptions: { label: string; value: ActivityType }[] = [
+  { label: 'Игра', value: 'game' },
+  { label: 'Рейд', value: 'raid' },
+  { label: 'Встреча', value: 'meeting' },
+  { label: 'Другое', value: 'other' },
+];
+
+import dayjs from '@/shared/lib/dayjs';
 
 export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.ui.isEventModalOpen);
   const selectedDate = useAppSelector((state) => state.ui.selectedDate);
 
-  const [prevSelectedDate, setPrevSelectedDate] = useState(selectedDate);
-
+  const [prevSelectedDate, setPrevSelectedDate] = useState<string | null>(null);
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('19:00');
   const [type, setType] = useState<ActivityType>('game');
   const [description, setDescription] = useState('');
 
+  // Sync date when selectedDate changes
   if (selectedDate !== prevSelectedDate) {
     setPrevSelectedDate(selectedDate);
     if (selectedDate) {
-      const dateObj = new Date(selectedDate);
-      setDate(dateObj.toISOString().split('T')[0]);
+      setDate(dayjs(selectedDate).format('YYYY-MM-DD'));
     }
   }
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -63,6 +83,7 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             <input
               type="text"
               id="title"
+              placeholder="Введите название..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
@@ -89,22 +110,18 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="type">Тип</label>
-            <select
-              id="type"
+            <label>Тип события</label>
+            <Select
               value={type}
-              onChange={(e) => setType(e.target.value as ActivityType)}
-            >
-              <option value="game">Игра</option>
-              <option value="raid">Рейд</option>
-              <option value="meeting">Встреча</option>
-              <option value="other">Другое</option>
-            </select>
+              onValueChange={(val) => setType(val as ActivityType)}
+              options={typeOptions}
+            />
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="description">Описание</label>
             <textarea
               id="description"
+              placeholder="Добавьте подробности о событии..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -114,7 +131,7 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
               Отмена
             </button>
             <button type="submit" className={styles.submitBtn}>
-              Создать
+              Создать событие
             </button>
           </div>
         </form>

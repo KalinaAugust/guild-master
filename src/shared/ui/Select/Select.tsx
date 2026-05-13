@@ -7,7 +7,7 @@ import styles from './Select.module.css';
 interface SelectProps {
   value: string;
   onValueChange: (value: string) => void;
-  options: { label: string; value: string }[];
+  options: { label: React.ReactNode; value: string }[];
   placeholder?: string;
 }
 

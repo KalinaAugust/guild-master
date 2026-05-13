@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import "./globals.css";
 import StoreProvider from "./providers/StoreProvider";
 import { Header } from "@/widgets/header";
@@ -8,22 +10,27 @@ export const metadata: Metadata = {
   description: "Guild management system",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
-        <StoreProvider>
-          <Header />
-          <div style={{ padding: '0 2rem' }}>
-            {children}
-          </div>
-        </StoreProvider>
+        <NextIntlClientProvider messages={messages}>
+          <StoreProvider>
+            <Header />
+            <div style={{ padding: '0 2rem' }}>
+              {children}
+            </div>
+          </StoreProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
