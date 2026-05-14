@@ -2,12 +2,45 @@
   "Common": {
     "title": "Guild Master",
     "logout": "Logout",
-    "language": "Language"
+    "language": "Language",
+    "cancel": "Cancel",
+    "save": "Save",
+    "create": "Create",
+    "locales": {
+      "en": "English",
+      "ru": "Russian"
+    }
   },
   "Auth": {
     "login": "Login",
     "email": "Email",
     "password": "Password",
-    "submit": "Sign In"
+    "submit": "Login"
+  },
+  "Event": {
+    "createTitle": "New Event",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter title...",
+    "dateLabel": "Date",
+    "timeLabel": "Time",
+    "typeLabel": "Event Type",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Add details about the event...",
+    "submit": "Create Event",
+    "types": {
+      "game": "Game",
+      "raid": "Raid",
+      "meeting": "Meeting",
+      "other": "Other"
+    }
+  },
+  "Guild": {
+    "createTitle": "Create New Guild",
+    "welcomeText": "It looks like you don't belong to any guilds yet. Create your own to start working with the calendar!",
+    "nameLabel": "Guild Name",
+    "descriptionLabel": "Description (optional)",
+    "submit": "Create Guild",
+    "creating": "Creating...",
+    "errorCreate": "Error creating guild"
   }
 }

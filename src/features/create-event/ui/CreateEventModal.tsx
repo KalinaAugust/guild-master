@@ -1,26 +1,28 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import styles from './CreateEventModal.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
 import { createEventThunk } from '@/entities/event';
 import { ActivityType } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
-
-const typeOptions: { label: string; value: ActivityType }[] = [
-  { label: 'Игра', value: 'game' },
-  { label: 'Рейд', value: 'raid' },
-  { label: 'Встреча', value: 'meeting' },
-  { label: 'Другое', value: 'other' },
-];
-
 import dayjs from '@/shared/lib/dayjs';
 
 export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.ui.isEventModalOpen);
   const selectedDate = useAppSelector((state) => state.ui.selectedDate);
+  const t = useTranslations('Event');
+  const commonT = useTranslations('Common');
+
+  const typeOptions = useMemo(() => [
+    { label: t('types.game'), value: 'game' as ActivityType },
+    { label: t('types.raid'), value: 'raid' as ActivityType },
+    { label: t('types.meeting'), value: 'meeting' as ActivityType },
+    { label: t('types.other'), value: 'other' as ActivityType },
+  ], [t]);
 
   const [prevSelectedDate, setPrevSelectedDate] = useState<string | null>(null);
   const [title, setTitle] = useState('');
@@ -52,7 +54,7 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!title || !date || !time) return;
 
     dispatch(createEventThunk({
@@ -76,21 +78,21 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
   return (
     <div className={styles.overlay} onClick={handleClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <h2>Новое событие</h2>
+        <h2>{t('createTitle')}</h2>
         <form onSubmit={handleSubmit}>
           <div className={styles.formGroup}>
-            <label htmlFor="title">Название</label>
+            <label htmlFor="title">{t('titleLabel')}</label>
             <input
               type="text"
               id="title"
-              placeholder="Введите название..."
+              placeholder={t('titlePlaceholder')}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="date">Дата</label>
+            <label htmlFor="date">{t('dateLabel')}</label>
             <input
               type="date"
               id="date"
@@ -100,7 +102,7 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="time">Время</label>
+            <label htmlFor="time">{t('timeLabel')}</label>
             <input
               type="time"
               id="time"
@@ -110,7 +112,7 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             />
           </div>
           <div className={styles.formGroup}>
-            <label>Тип события</label>
+            <label>{t('typeLabel')}</label>
             <Select
               value={type}
               onValueChange={(val) => setType(val as ActivityType)}
@@ -118,20 +120,20 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="description">Описание</label>
+            <label htmlFor="description">{t('descriptionLabel')}</label>
             <textarea
               id="description"
-              placeholder="Добавьте подробности о событии..."
+              placeholder={t('descriptionPlaceholder')}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className={styles.actions}>
             <button type="button" className={styles.cancelBtn} onClick={handleClose}>
-              Отмена
+              {commonT('cancel')}
             </button>
             <button type="submit" className={styles.submitBtn}>
-              Создать событие
+              {t('submit')}
             </button>
           </div>
         </form>
@@ -139,3 +141,4 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
     </div>
   );
 };
+

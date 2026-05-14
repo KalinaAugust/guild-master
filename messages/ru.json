@@ -2,12 +2,45 @@
   "Common": {
     "title": "Мастер Гильдий",
     "logout": "Выйти",
-    "language": "Язык"
+    "language": "Язык",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "create": "Создать",
+    "locales": {
+      "en": "English",
+      "ru": "Русский"
+    }
   },
   "Auth": {
     "login": "Вход",
     "email": "Электронная почта",
     "password": "Пароль",
     "submit": "Войти"
+  },
+  "Event": {
+    "createTitle": "Новое событие",
+    "titleLabel": "Название",
+    "titlePlaceholder": "Введите название...",
+    "dateLabel": "Дата",
+    "timeLabel": "Время",
+    "typeLabel": "Тип события",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Добавьте подробности о событии...",
+    "submit": "Создать событие",
+    "types": {
+      "game": "Игра",
+      "raid": "Рейд",
+      "meeting": "Встреча",
+      "other": "Другое"
+    }
+  },
+  "Guild": {
+    "createTitle": "Создание новой гильдии",
+    "welcomeText": "Похоже, вы еще не состоите ни в одной гильдии. Создайте свою, чтобы начать работу с календарем!",
+    "nameLabel": "Название гильдии",
+    "descriptionLabel": "Описание (необязательно)",
+    "submit": "Создать гильдию",
+    "creating": "Создание...",
+    "errorCreate": "Ошибка при создании гильдии"
   }
 }

@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { createGuild } from '@/entities/guild';
 
 export const CreateGuildForm = () => {
+  const t = useTranslations('Guild');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,7 +21,7 @@ export const CreateGuildForm = () => {
       if (err.message === 'NEXT_REDIRECT') return;
       
       console.error('Failed to create guild:', error);
-      alert('Ошибка при создании гильдии');
+      alert(t('errorCreate'));
     } finally {
       setLoading(false);
     }
@@ -28,7 +30,7 @@ export const CreateGuildForm = () => {
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '400px' }}>
       <div>
-        <label htmlFor="name" style={{ display: 'block', marginBottom: '5px' }}>Название гильдии</label>
+        <label htmlFor="name" style={{ display: 'block', marginBottom: '5px' }}>{t('nameLabel')}</label>
         <input
           id="name"
           type="text"
@@ -46,7 +48,7 @@ export const CreateGuildForm = () => {
         />
       </div>
       <div>
-        <label htmlFor="description" style={{ display: 'block', marginBottom: '5px' }}>Описание (необязательно)</label>
+        <label htmlFor="description" style={{ display: 'block', marginBottom: '5px' }}>{t('descriptionLabel')}</label>
         <textarea
           id="description"
           value={description}
@@ -76,8 +78,9 @@ export const CreateGuildForm = () => {
           fontWeight: 'bold'
         }}
       >
-        {loading ? 'Создание...' : 'Создать гильдию'}
+        {loading ? t('creating') : t('submit')}
       </button>
     </form>
   );
 };
+
