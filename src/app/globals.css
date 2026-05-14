@@ -17,6 +17,9 @@
 
   /* Shadows */
   --shadow-glass: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
+  /* Modal */
+  --modal-bg: #1a0b2e;
   
   /* Events (Amethyst-themed palette) */
   --event-raid: rgba(235, 64, 52, 0.3);
