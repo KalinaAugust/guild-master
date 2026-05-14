@@ -81,12 +81,40 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
 }
 
 .day:hover {
   background: rgba(255, 255, 255, 0.08);
   transform: translateY(-4px);
   border-color: rgba(255, 255, 255, 0.2);
+}
+
+.addEventBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease, background 0.2s ease;
+  z-index: 10;
+}
+
+.day:hover .addEventBtn {
+  opacity: 1;
+}
+
+.addEventBtn:hover {
+  background: var(--accent-primary);
 }
 
 .today {
