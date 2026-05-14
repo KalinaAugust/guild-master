@@ -1,12 +1,13 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Select } from '@/shared/ui/Select';
 import { setUserLocale } from '../api/setLocale';
 import { useTransition } from 'react';
 
 export const LanguageSwitcher = () => {
   const locale = useLocale();
+  const t = useTranslations('Common');
   const [isPending, startTransition] = useTransition();
 
   const options = [
@@ -14,7 +15,7 @@ export const LanguageSwitcher = () => {
       label: (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <span style={{ marginRight: '0.75rem' }}>🇺🇸</span>
-          English
+          {t('locales.en')}
         </div>
       ), 
       value: 'en' 
@@ -23,7 +24,7 @@ export const LanguageSwitcher = () => {
       label: (
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <span style={{ marginRight: '0.75rem' }}>🇷🇺</span>
-          Русский
+          {t('locales.ru')}
         </div>
       ), 
       value: 'ru' 
@@ -46,3 +47,4 @@ export const LanguageSwitcher = () => {
     </div>
   );
 };
+
