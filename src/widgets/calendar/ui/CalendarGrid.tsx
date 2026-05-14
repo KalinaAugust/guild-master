@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
 import { fetchEventsThunk } from '@/entities/event';
 import { Select } from '@/shared/ui/Select';
+import { Button } from '@/shared/ui/Button';
 
 export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
@@ -74,10 +75,12 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
     const daysInPrevMonth = prevMonth.daysInMonth();
     for (let i = firstDayOfWeek; i > 0; i--) {
       const d = prevMonth.date(daysInPrevMonth - i + 1);
+      const dayOfWeek = d.day();
       calendarDays.push({
         date: d.date(),
         fullDate: d.format('YYYY-MM-DD'),
         isCurrentMonth: false,
+        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
       });
     }
 
@@ -87,11 +90,13 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
     for (let i = 1; i <= daysInMonth; i++) {
       const d = now.date(i);
       const fullDate = d.format('YYYY-MM-DD');
+      const dayOfWeek = d.day();
       calendarDays.push({
         date: i,
         fullDate,
         isCurrentMonth: true,
         isToday: fullDate === today,
+        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
       });
     }
 
@@ -100,10 +105,12 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
     const nextMonth = now.add(1, 'month');
     for (let i = 1; i <= remaining; i++) {
       const d = nextMonth.date(i);
+      const dayOfWeek = d.day();
       calendarDays.push({
         date: i,
         fullDate: d.format('YYYY-MM-DD'),
         isCurrentMonth: false,
+        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
       });
     }
 
@@ -136,12 +143,12 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
           />
         </div>
         <div className={styles.controlsRight}>
-          <button className={styles.navButton} onClick={handlePrevMonth}>
+          <Button variant="icon" size="icon" onClick={handlePrevMonth}>
             <ChevronLeft size={20} />
-          </button>
-          <button className={styles.navButton} onClick={handleNextMonth}>
+          </Button>
+          <Button variant="icon" size="icon" onClick={handleNextMonth}>
             <ChevronRight size={20} />
-          </button>
+          </Button>
         </div>
       </div>
       <div className={styles.grid}>
@@ -163,17 +170,19 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
               key={index}
               className={`${styles.day} ${!day.isCurrentMonth ? styles.otherMonth : ''} ${
                 day.isToday ? styles.today : ''
-              }`}
+              } ${day.isWeekend ? styles.weekend : ''}`}
               onClick={() => handleDayClick(day.fullDate)}
             >
               <span className={styles.dateNumber}>{day.date}</span>
-              <button 
+              <Button 
+                variant="icon_floating"
+                size="icon_sm"
                 className={styles.addEventBtn} 
                 onClick={(e) => handleAddEventClick(e, day.fullDate)}
                 title="Добавить событие"
               >
                 <Plus size={16} />
-              </button>
+              </Button>
               <div className={styles.eventsList}>
                 {dayEvents.map(event => (
                   <div

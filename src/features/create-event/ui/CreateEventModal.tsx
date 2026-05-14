@@ -8,6 +8,7 @@ import { closeEventModal } from '@/entities/calendar';
 import { createEventThunk } from '@/entities/event';
 import { ActivityType } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
+import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 
 export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => {
@@ -129,12 +130,12 @@ export const CreateEventModal: React.FC<{ guildId: string }> = ({ guildId }) => 
             />
           </div>
           <div className={styles.actions}>
-            <button type="button" className={styles.cancelBtn} onClick={handleClose}>
+            <Button type="button" variant="secondary" onClick={handleClose}>
               {commonT('cancel')}
-            </button>
-            <button type="submit" className={styles.submitBtn}>
+            </Button>
+            <Button type="submit" variant="primary">
               {t('submit')}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
