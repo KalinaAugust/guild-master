@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
@@ -12,6 +13,7 @@ import { Select } from '@/shared/ui/Select';
 
 export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
   const locale = useLocale();
@@ -109,6 +111,11 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   }, [now]);
 
   const handleDayClick = (dateStr: string) => {
+    router.push(`/day/${dateStr}`);
+  };
+
+  const handleAddEventClick = (e: React.MouseEvent, dateStr: string) => {
+    e.stopPropagation();
     dispatch(setSelectedDate(dateStr));
     dispatch(openEventModal());
   };
@@ -160,6 +167,13 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
               onClick={() => handleDayClick(day.fullDate)}
             >
               <span className={styles.dateNumber}>{day.date}</span>
+              <button 
+                className={styles.addEventBtn} 
+                onClick={(e) => handleAddEventClick(e, day.fullDate)}
+                title="Добавить событие"
+              >
+                <Plus size={16} />
+              </button>
               <div className={styles.eventsList}>
                 {dayEvents.map(event => (
                   <div
