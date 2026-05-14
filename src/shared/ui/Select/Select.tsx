@@ -15,7 +15,7 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, p
   <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
     <SelectPrimitive.Trigger className={styles.trigger}>
       <SelectPrimitive.Value placeholder={placeholder} />
-      <SelectPrimitive.Icon>
+      <SelectPrimitive.Icon className={styles.icon}>
         <ChevronDown size={16} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>

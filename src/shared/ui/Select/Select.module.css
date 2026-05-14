@@ -12,6 +12,14 @@
   justify-content: space-between;
   min-width: 100px;
   font-size: 14px;
+  gap: 8px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
 }
 
 .trigger:focus {

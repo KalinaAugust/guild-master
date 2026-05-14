@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { createGuild } from '@/entities/guild';
+import { Button } from '@/shared/ui/Button';
 
 export const CreateGuildForm = () => {
   const t = useTranslations('Guild');
@@ -64,22 +65,14 @@ export const CreateGuildForm = () => {
           }}
         />
       </div>
-      <button 
+      <Button 
         type="submit" 
+        variant="primary"
         disabled={loading || !name}
-        style={{ 
-          padding: '10px', 
-          borderRadius: '4px', 
-          border: 'none', 
-          backgroundColor: '#3b82f6', 
-          color: 'white', 
-          cursor: loading ? 'not-allowed' : 'pointer',
-          opacity: loading ? 0.7 : 1,
-          fontWeight: 'bold'
-        }}
+        fullWidth
       >
         {loading ? t('creating') : t('submit')}
-      </button>
+      </Button>
     </form>
   );
 };

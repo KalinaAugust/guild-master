@@ -3,6 +3,7 @@
 import { createClient } from '@/shared/api/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { Button } from '@/shared/ui/Button';
 
 export const LogoutButton = () => {
   const supabase = createClient();
@@ -15,18 +16,11 @@ export const LogoutButton = () => {
   };
 
   return (
-    <button 
+    <Button 
+      variant="secondary"
       onClick={handleLogout}
-      style={{
-        padding: '0.5rem 1rem',
-        borderRadius: '0.5rem',
-        border: '1px solid rgba(255, 255, 255, 0.2)',
-        background: 'rgba(255, 255, 255, 0.1)',
-        color: 'white',
-        cursor: 'pointer'
-      }}
     >
       {t('logout')}
-    </button>
+    </Button>
   );
 };
