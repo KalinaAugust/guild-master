@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import styles from './EventModal.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
@@ -149,12 +150,24 @@ export const EventModal: React.FC<{ guildId: string, isDayView?: boolean }> = ({
       dispatch(updateEventThunk({
         id: editingEvent.id,
         event: data
-      }));
+      })).then((result) => {
+        if (result.meta.requestStatus === 'fulfilled') {
+          toast.success(t('successUpdated'));
+        } else {
+          toast.error(t('error'));
+        }
+      });
     } else {
       dispatch(createEventThunk({
         ...data,
         guild_id: guildId,
-      }));
+      })).then((result) => {
+        if (result.meta.requestStatus === 'fulfilled') {
+          toast.success(t('successCreated'));
+        } else {
+          toast.error(t('error'));
+        }
+      });
     }
     handleClose();
   };

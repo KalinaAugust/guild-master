@@ -6,6 +6,8 @@
     "cancel": "Отмена",
     "save": "Сохранить",
     "create": "Создать",
+    "confirm": "Подтвердить",
+    "delete": "Удалить",
     "confirmDelete": "Вы уверены, что хотите удалить это событие?",
     "backToCalendar": "Назад в календарь",
     "locales": {
@@ -34,6 +36,10 @@
     "descriptionLabel": "Описание",
     "descriptionPlaceholder": "Добавьте подробности о событии...",
     "submit": "Создать событие",
+    "successCreated": "Событие успешно создано",
+    "successUpdated": "Событие обновлено",
+    "successDeleted": "Событие удалено",
+    "error": "Произошла ошибка",
     "types": {
       "game": "Игра",
       "raid": "Рейд",

@@ -6,6 +6,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "create": "Create",
+    "confirm": "Confirm",
+    "delete": "Delete",
     "confirmDelete": "Are you sure you want to delete this event?",
     "backToCalendar": "Back to calendar",
     "locales": {
@@ -34,6 +36,10 @@
     "descriptionLabel": "Description",
     "descriptionPlaceholder": "Add details about the event...",
     "submit": "Create Event",
+    "successCreated": "Event created successfully",
+    "successUpdated": "Event updated",
+    "successDeleted": "Event deleted",
+    "error": "An error occurred",
     "types": {
       "game": "Game",
       "raid": "Raid",

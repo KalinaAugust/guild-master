@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
@@ -169,6 +169,9 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
             .filter(event => event.date === day.fullDate)
             .sort((a, b) => a.time.localeCompare(b.time));
 
+          const displayedEvents = dayEvents.slice(0, 2);
+          const hasMoreEvents = dayEvents.length > 2;
+
           return (
             <div
               key={index}
@@ -188,7 +191,7 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
                 <Plus size={16} />
               </Button>
               <div className={styles.eventsList}>
-                {dayEvents.map(event => (
+                {displayedEvents.map(event => (
                   <div
                     key={event.id}
                     className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
@@ -197,6 +200,11 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
                     {event.time} {event.title}
                   </div>
                 ))}
+                {hasMoreEvents && (
+                  <div className={styles.moreEvents}>
+                    <MoreHorizontal size={14} />
+                  </div>
+                )}
               </div>
             </div>
           );

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { Toaster } from 'sonner';
 import "./globals.css";
 import StoreProvider from "./providers/StoreProvider";
 import { Header } from "@/widgets/header";
@@ -25,6 +26,7 @@ export default async function RootLayout({
         <div className="bg-blob bg-blob-secondary" />
         <NextIntlClientProvider messages={messages}>
           <StoreProvider>
+            <Toaster position="top-right" richColors closeButton theme="dark" />
             <Header />
             <div style={{ padding: '0 2rem' }}>
               {children}
