@@ -42,12 +42,16 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
     .filter(event => event.date === date)
     .sort((a, b) => a.time.localeCompare(b.time));
 
+  const isPastDate = dayjs(date).isBefore(dayjs().startOf('day'));
+
   const handleAddEvent = () => {
+    if (isPastDate) return;
     dispatch(setSelectedDate(date));
     dispatch(openEventModal());
   };
 
   const handleEditEvent = (event: ActivityEvent) => {
+    if (isPastDate) return;
     dispatch(openEventModal(event));
   };
 
@@ -79,10 +83,12 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
         <h2 className={styles.title}>
           {day} <span className={styles.dateHighlight}>{month}</span> {year}
         </h2>
-        <Button variant="primary" size="sm" onClick={handleAddEvent} className={styles.addBtn}>
-          <Plus size={18} />
-          <span>{t('addEvent')}</span>
-        </Button>
+        {!isPastDate && (
+          <Button variant="primary" size="sm" onClick={handleAddEvent} className={styles.addBtn}>
+            <Plus size={18} />
+            <span>{t('addEvent')}</span>
+          </Button>
+        )}
       </div>
 
       {dayEvents.length > 0 ? (
@@ -91,7 +97,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
             <EventCard 
               key={event.id} 
               event={event} 
-              onEdit={handleEditEvent}
+              onEdit={!isPastDate ? handleEditEvent : undefined}
               onDelete={handleDeleteClick}
             />
           ))}
@@ -99,9 +105,11 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
       ) : (
         <div className={styles.empty}>
           <p>{t('noEvents')}</p>
-          <Button variant="secondary" onClick={handleAddEvent}>
-            {t('createFirst')}
-          </Button>
+          {!isPastDate && (
+            <Button variant="secondary" onClick={handleAddEvent}>
+              {t('createFirst')}
+            </Button>
+          )}
         </div>
       )}
 

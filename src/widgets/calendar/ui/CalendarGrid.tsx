@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
@@ -170,7 +170,7 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
             .sort((a, b) => a.time.localeCompare(b.time));
 
           const displayedEvents = dayEvents.slice(0, 2);
-          const hasMoreEvents = dayEvents.length > 2;
+          const remainingCount = dayEvents.length - displayedEvents.length;
 
           return (
             <div
@@ -181,15 +181,17 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
               onClick={() => handleDayClick(day.fullDate)}
             >
               <span className={styles.dateNumber}>{day.date}</span>
-              <Button 
-                variant="icon_floating"
-                size="icon_sm"
-                className={styles.addEventBtn} 
-                onClick={(e) => handleAddEventClick(e, day.fullDate)}
-                title="Добавить событие"
-              >
-                <Plus size={16} />
-              </Button>
+              {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && (
+                <Button 
+                  variant="icon_floating"
+                  size="icon_sm"
+                  className={styles.addEventBtn} 
+                  onClick={(e) => handleAddEventClick(e, day.fullDate)}
+                  title="Добавить событие"
+                >
+                  <Plus size={16} />
+                </Button>
+              )}
               <div className={styles.eventsList}>
                 {displayedEvents.map(event => (
                   <div
@@ -200,9 +202,9 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
                     {event.time} {event.title}
                   </div>
                 ))}
-                {hasMoreEvents && (
+                {remainingCount > 0 && (
                   <div className={styles.moreEvents}>
-                    <MoreHorizontal size={14} />
+                    +{remainingCount}
                   </div>
                 )}
               </div>

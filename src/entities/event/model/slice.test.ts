@@ -12,9 +12,10 @@ describe('eventsSlice', () => {
 
   it('should handle addEvent', () => {
     const initialState: EventsState = {
+      isInitialized: false,
       items: [],
       loading: false,
-      error: null,
+      error: null
     };
     const newEvent: ActivityEvent = {
       id: 'test-1',
@@ -24,7 +25,7 @@ describe('eventsSlice', () => {
       type: 'game',
       description: 'Test description',
     };
-    
+
     const actual = eventsReducer(initialState, addEvent(newEvent));
     expect(actual.items).toHaveLength(1);
     expect(actual.items[0]).toEqual(newEvent);
@@ -32,9 +33,10 @@ describe('eventsSlice', () => {
 
   it('should handle createEventThunk.fulfilled', () => {
     const initialState: EventsState = {
+      isInitialized: false,
       items: [],
       loading: false,
-      error: null,
+      error: null
     };
     const newEvent: ActivityEvent = {
       id: 'new-id',
@@ -44,7 +46,7 @@ describe('eventsSlice', () => {
       type: 'raid',
       description: 'New description',
     };
-    
+
     const action = { type: createEventThunk.fulfilled.type, payload: newEvent };
     const actual = eventsReducer(initialState, action);
     expect(actual.items).toHaveLength(1);

@@ -13,6 +13,7 @@
   
   /* Text */
   --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.6);
   --text-highlight: #c8b6ff;
 
