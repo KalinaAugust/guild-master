@@ -6,6 +6,8 @@
     "cancel": "Отмена",
     "save": "Сохранить",
     "create": "Создать",
+    "confirmDelete": "Вы уверены, что хотите удалить это событие?",
+    "backToCalendar": "Назад в календарь",
     "locales": {
       "en": "English",
       "ru": "Русский"
@@ -19,6 +21,11 @@
   },
   "Event": {
     "createTitle": "Новое событие",
+    "editTitle": "Редактировать событие",
+    "dayTitle": "События дня",
+    "addEvent": "Добавить событие",
+    "noEvents": "На этот день ничего не запланировано",
+    "createFirst": "Создать первое событие",
     "titleLabel": "Название",
     "titlePlaceholder": "Введите название...",
     "dateLabel": "Дата",

@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { getMyGuilds } from '@/entities/guild';
 import { CalendarGrid } from '@/widgets/calendar';
-import { CreateEventModal } from '@/features/create-event';
+import { EventModal } from '@/features/create-event';
 
 export default async function Home() {
   const guilds = await getMyGuilds();
@@ -19,8 +19,7 @@ export default async function Home() {
     <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
       <h1 style={{ marginBottom: '20px' }}>{t('title')}</h1>
       <CalendarGrid guildId={currentGuildId} />
-      <CreateEventModal guildId={currentGuildId} />
+      <EventModal guildId={currentGuildId} />
     </main>
   );
 }
-

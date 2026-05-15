@@ -17,11 +17,15 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
   const router = useRouter();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
+  const loading = useAppSelector((state) => state.events.loading);
+  const isInitialized = useAppSelector((state) => state.events.isInitialized);
   const locale = useLocale();
 
   useEffect(() => {
-    dispatch(fetchEventsThunk(guildId));
-  }, [dispatch, guildId]);
+    if (!isInitialized && !loading) {
+      dispatch(fetchEventsThunk(guildId));
+    }
+  }, [dispatch, guildId, isInitialized, loading]);
 
   // Set dayjs locale based on next-intl locale
   const now = useMemo(() => dayjs(viewDateStr).locale(locale), [viewDateStr, locale]);

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UIState } from '@/shared/types';
+import { UIState, ActivityEvent } from '@/shared/types';
 import dayjs from 'dayjs';
 
 const initialState: UIState = {
@@ -12,11 +12,16 @@ export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    openEventModal: (state) => {
+    openEventModal: (state, action: PayloadAction<ActivityEvent | undefined>) => {
       state.isEventModalOpen = true;
+      state.editingEvent = action.payload;
+      if (action.payload) {
+        state.selectedDate = action.payload.date;
+      }
     },
     closeEventModal: (state) => {
       state.isEventModalOpen = false;
+      state.editingEvent = undefined;
     },
     setSelectedDate: (state, action: PayloadAction<string | null>) => {
       state.selectedDate = action.payload;
