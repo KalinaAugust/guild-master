@@ -105,3 +105,15 @@
 .variant_icon_floating:hover:not(:disabled) {
   background: var(--accent-primary, #b25fff);
 }
+
+.variant_danger {
+  background: rgba(235, 64, 52, 0.2);
+  border: 1px solid rgba(235, 64, 52, 0.4);
+  color: #ff6b6b;
+}
+
+.variant_danger:hover:not(:disabled) {
+  background: rgba(235, 64, 52, 0.3);
+  border-color: #eb4034;
+  box-shadow: 0 4px 12px rgba(235, 64, 52, 0.2);
+}

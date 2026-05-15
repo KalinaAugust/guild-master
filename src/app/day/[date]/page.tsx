@@ -5,6 +5,7 @@ import { DayEventsList } from '@/widgets/day-events';
 import { EventModal } from '@/features/create-event';
 import { ChevronLeft } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import styles from './DayPage.module.css';
 
 interface DayPageProps {
   params: Promise<{
@@ -25,29 +26,13 @@ export default async function DayPage({ params }: DayPageProps) {
   const currentGuildId = guilds[0].id;
 
   return (
-    <main style={{ maxWidth: '800px', margin: '0 auto', padding: '40px' }}>
-      <Link href="/" style={{ 
-        display: 'inline-flex', 
-        alignItems: 'center',
-        gap: '8px',
-        marginBottom: '32px', 
-        color: 'var(--text-secondary)', 
-        textDecoration: 'none',
-        fontWeight: '500',
-        transition: 'color 0.2s ease'
-      }}>
+    <main className={styles.main}>
+      <Link href="/" className={styles.backLink}>
         <ChevronLeft size={20} />
         {t('backToCalendar')}
       </Link>
-      
-      <div style={{ 
-        padding: '40px', 
-        borderRadius: '32px', 
-        background: 'var(--glass-bg)', 
-        border: '1px solid var(--glass-border)',
-        backdropFilter: 'var(--glass-blur)',
-        boxShadow: 'var(--shadow-glass)'
-      }}>
+
+      <div className={styles.card}>
         <DayEventsList date={date} guildId={currentGuildId} />
       </div>
 
@@ -55,3 +40,4 @@ export default async function DayPage({ params }: DayPageProps) {
     </main>
   );
 }
+
