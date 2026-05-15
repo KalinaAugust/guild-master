@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import { getMyGuilds } from '@/entities/guild';
 import { redirect } from 'next/navigation';
+import { DayEventsList } from '@/widgets/day-events';
+import { EventModal } from '@/features/create-event';
+import { ChevronLeft } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 interface DayPageProps {
   params: Promise<{
@@ -11,40 +15,43 @@ interface DayPageProps {
 export default async function DayPage({ params }: DayPageProps) {
   const { date } = await params;
   const guilds = await getMyGuilds();
+  const t = await getTranslations('Common');
 
   if (guilds.length === 0) {
     redirect('/guilds/create');
   }
 
-  // We could fetch events specific to this day here, but for now we'll rely on the existing Redux state or render a basic layout.
-  // Since Redux is client-side state, a fully SSR page would need to fetch events directly from Supabase.
-  // For the MVP of this task, we will scaffold the page structure.
+  // Для MVP берем первую гильдию
+  const currentGuildId = guilds[0].id;
 
   return (
     <main style={{ maxWidth: '800px', margin: '0 auto', padding: '40px' }}>
       <Link href="/" style={{ 
-        display: 'inline-block', 
-        marginBottom: '20px', 
-        color: 'var(--accent-primary)', 
+        display: 'inline-flex', 
+        alignItems: 'center',
+        gap: '8px',
+        marginBottom: '32px', 
+        color: 'var(--text-secondary)', 
         textDecoration: 'none',
-        fontWeight: 'bold'
+        fontWeight: '500',
+        transition: 'color 0.2s ease'
       }}>
-        &larr; Назад в календарь
+        <ChevronLeft size={20} />
+        {t('backToCalendar')}
       </Link>
       
       <div style={{ 
-        padding: '30px', 
-        borderRadius: '24px', 
+        padding: '40px', 
+        borderRadius: '32px', 
         background: 'var(--glass-bg)', 
         border: '1px solid var(--glass-border)',
-        backdropFilter: 'var(--glass-blur)'
+        backdropFilter: 'var(--glass-blur)',
+        boxShadow: 'var(--shadow-glass)'
       }}>
-        <h1 style={{ marginBottom: '20px', fontSize: '2rem' }}>Расписание на {date}</h1>
-        
-        <p style={{ opacity: 0.7 }}>
-          Здесь будет отображаться детальный список событий на выбранный день.
-        </p>
+        <DayEventsList date={date} guildId={currentGuildId} />
       </div>
+
+      <EventModal guildId={currentGuildId} isDayView />
     </main>
   );
 }

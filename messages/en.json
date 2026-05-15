@@ -6,6 +6,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "create": "Create",
+    "confirmDelete": "Are you sure you want to delete this event?",
+    "backToCalendar": "Back to calendar",
     "locales": {
       "en": "English",
       "ru": "Russian"
@@ -19,6 +21,11 @@
   },
   "Event": {
     "createTitle": "New Event",
+    "editTitle": "Edit Event",
+    "dayTitle": "Day Events",
+    "addEvent": "Add Event",
+    "noEvents": "Nothing scheduled for this day",
+    "createFirst": "Create first event",
     "titleLabel": "Title",
     "titlePlaceholder": "Enter title...",
     "dateLabel": "Date",
