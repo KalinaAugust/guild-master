@@ -130,3 +130,12 @@
 .event_game { background: var(--event-game); border-left-color: var(--event-game-border); }
 .event_meeting { background: var(--event-meeting); border-left-color: var(--event-meeting-border); }
 .event_other { background: var(--event-other); border-left-color: var(--event-other-border); }
+
+.moreEvents {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 0;
+  color: var(--text-muted);
+  opacity: 0.8;
+}

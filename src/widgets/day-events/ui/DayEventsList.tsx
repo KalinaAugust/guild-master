@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { deleteEventThunk, EventCard, fetchEventsThunk } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './DayEventsList.module.css';
 
@@ -25,6 +27,9 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
   const events = useAppSelector((state) => state.events.items);
   const loading = useAppSelector((state) => state.events.loading);
   const isInitialized = useAppSelector((state) => state.events.isInitialized);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch events if not initialized and not loading
@@ -46,9 +51,21 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
     dispatch(openEventModal(event));
   };
 
-  const handleDeleteEvent = (id: string) => {
-    if (window.confirm(commonT('confirmDelete'))) {
-      dispatch(deleteEventThunk(id));
+  const handleDeleteClick = (id: string) => {
+    setEventToDelete(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (eventToDelete) {
+      dispatch(deleteEventThunk(eventToDelete)).then((result) => {
+        if (result.meta.requestStatus === 'fulfilled') {
+          toast.success(t('successDeleted'));
+        } else {
+          toast.error(t('error'));
+        }
+      });
+      setEventToDelete(null);
     }
   };
 
@@ -75,7 +92,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
               key={event.id} 
               event={event} 
               onEdit={handleEditEvent}
-              onDelete={handleDeleteEvent}
+              onDelete={handleDeleteClick}
             />
           ))}
         </div>
@@ -87,6 +104,15 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
           </Button>
         </div>
       )}
+
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title={commonT('delete')}
+        description={commonT('confirmDelete')}
+        confirmLabel={commonT('delete')}
+      />
     </div>
   );
 };
