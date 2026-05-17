@@ -1,8 +1,7 @@
 import { createClient } from '@/shared/api/supabase/server';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
-import { LogoutButton } from './LogoutButton';
-import { LanguageSwitcher } from '@/features/language-switcher';
+import { UserMenu } from './UserMenu';
 
 export const Header = async () => {
   const supabase = await createClient();
@@ -26,16 +25,15 @@ export const Header = async () => {
         {t('title')}
       </Link>
       <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-        <LanguageSwitcher />
         {user ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span>{user.email}</span>
-            <LogoutButton />
-          </div>
+          <UserMenu email={user.email} />
         ) : (
-          <Link href="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
-            {authT('login')}
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <UserMenu />
+            <Link href="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
+              {authT('login')}
+            </Link>
+          </div>
         )}
       </nav>
     </header>

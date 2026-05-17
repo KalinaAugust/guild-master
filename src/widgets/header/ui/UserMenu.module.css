@@ -1,0 +1,128 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--text-primary);
+  cursor: pointer;
+  backdrop-filter: var(--glass-blur);
+  transition: all 0.2s ease;
+}
+
+.trigger:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.trigger:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.content {
+  min-width: 200px;
+  background: #1a0b2e;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: var(--glass-blur);
+  z-index: 1000;
+}
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.accordionTrigger:hover {
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+}
+
+.accordionContent {
+  display: flex;
+  flex-direction: column;
+  padding-left: 0.5rem;
+  margin-top: 2px;
+}
+
+.langItem {
+  display: flex;
+  align-items: center;
+  padding-left: 1.5rem;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  display: block;
+}
+
+.chevron {
+  transition: transform 0.2s ease;
+}
+
+.item {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.75rem;
+  position: relative;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.itemContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.item:hover, .item[data-highlighted] {
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+}
+
+.item[data-disabled] {
+  color: var(--text-muted);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.separator {
+  height: 1px;
+  background-color: var(--glass-border);
+  margin: 5px;
+}
+
+.subTrigger[data-state='open'] {
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+}

@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { getMyGuilds } from '@/entities/guild';
 import { CalendarGrid } from '@/widgets/calendar';
 import { EventModal } from '@/features/create-event';
+import styles from './HomePage.module.css';
 
 export default async function Home() {
   const guilds = await getMyGuilds();
@@ -16,8 +17,8 @@ export default async function Home() {
   const currentGuildId = guilds[0].id;
 
   return (
-    <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px' }}>
-      <h1 style={{ marginBottom: '20px' }}>{t('title')}</h1>
+    <main className={styles.main}>
+      <h1 className={styles.title}>{t('title')}</h1>
       <CalendarGrid guildId={currentGuildId} />
       <EventModal guildId={currentGuildId} />
     </main>

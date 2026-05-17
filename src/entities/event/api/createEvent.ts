@@ -4,6 +4,8 @@ import { ActivityEvent } from '@/shared/types';
 
 export const createEvent = async (event: Omit<ActivityEvent, 'id'> & { guild_id: string }) => {
   const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
   const { data, error } = await supabase
     .from('events')
     .insert([
@@ -13,6 +15,7 @@ export const createEvent = async (event: Omit<ActivityEvent, 'id'> & { guild_id:
         type: event.type,
         event_date: `${event.date}T${event.time}:00`,
         guild_id: event.guild_id,
+        created_by: user?.id,
       }
     ])
     .select()

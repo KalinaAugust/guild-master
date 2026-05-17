@@ -52,7 +52,7 @@ npm run start
 
 - **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering.
 - **State Management:** Always use Redux Toolkit slices for global state. Custom hooks `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` should be used for type-safe store interaction.
-- **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions.
+- **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/types/index.ts` or close to their usage if specific to a single module.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
 - **Testing:** We use Vitest and React Testing Library for unit and integration tests. Follow TDD principles: write a failing test before implementing the logic.
