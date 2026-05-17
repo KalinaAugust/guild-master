@@ -9,29 +9,35 @@ import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
 import { fetchEventsThunk } from '@/entities/event';
+import { Guild, setCurrentGuild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 
-export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
+export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const events = useAppSelector((state) => state.events.items);
-  const loading = useAppSelector((state) => state.events.loading);
-  const isInitialized = useAppSelector((state) => state.events.isInitialized);
+  const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
   const locale = useLocale();
 
+  const activeGuildId = useMemo(() => currentGuildId || guilds[0]?.id, [currentGuildId, guilds]);
+
   useEffect(() => {
-    if (!isInitialized && !loading) {
-      dispatch(fetchEventsThunk(guildId));
+    if (activeGuildId) {
+      dispatch(fetchEventsThunk(activeGuildId));
     }
-  }, [dispatch, guildId, isInitialized, loading]);
+  }, [dispatch, activeGuildId]);
 
   // Set dayjs locale based on next-intl locale
   const now = useMemo(() => dayjs(viewDateStr).locale(locale), [viewDateStr, locale]);
 
   const handlePrevMonth = () => dispatch(prevMonth());
   const handleNextMonth = () => dispatch(nextMonth());
+
+  const handleGuildChange = (guildId: string) => {
+    dispatch(setCurrentGuild(guildId));
+  };
 
   const months = useMemo(() => {
     const localeData = now.localeData();
@@ -45,6 +51,16 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
     const year = dayjs().year() - 10 + i;
     return { label: year.toString(), value: year.toString() };
   }), []);
+
+  const guildOptions = useMemo(() => guilds.map(guild => ({
+    label: (
+      <div className={styles.guildOption}>
+        <span>{guild.name}</span>
+      </div>
+    ),
+    value: guild.id,
+    avatar: '/assets/guild-placeholder.svg'
+  })), [guilds]);
 
   const handleMonthChange = (month: string) => {
     dispatch(setViewDate(now.month(parseInt(month)).toISOString()));
@@ -144,6 +160,13 @@ export const CalendarGrid: React.FC<{ guildId: string }> = ({ guildId }) => {
             value={now.year().toString()}
             onValueChange={handleYearChange}
             options={years}
+          />
+          <div className={styles.separator} />
+          <Select
+            value={activeGuildId || ''}
+            onValueChange={handleGuildChange}
+            options={guildOptions}
+            placeholder="Выберите гильдию"
           />
         </div>
         <div className={styles.controlsRight}>

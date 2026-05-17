@@ -30,4 +30,19 @@ describe('Select Component', () => {
     
     expect(handleChange).toHaveBeenCalledWith('1');
   });
+
+  it('renders avatars when provided in options', async () => {
+    const user = userEvent.setup();
+    const optionsWithAvatars = [
+      { label: 'Guild 1', value: 'g1', avatar: '/avatar1.png' },
+    ];
+    render(<Select value="" onValueChange={() => {}} options={optionsWithAvatars} placeholder="Select guild" />);
+    
+    const trigger = screen.getByRole('combobox');
+    await user.click(trigger);
+    
+    const avatar = await screen.findByRole('img', { hidden: true });
+    expect(avatar.getAttribute('src')).toContain(encodeURIComponent('/avatar1.png'));
+    expect(screen.getByText('Guild 1')).toBeInTheDocument();
+  });
 });

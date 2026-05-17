@@ -2,12 +2,13 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import Image from 'next/image';
 import styles from './Select.module.css';
 
 interface SelectProps {
   value: string;
   onValueChange: (value: string) => void;
-  options: { label: React.ReactNode; value: string }[];
+  options: { label: React.ReactNode; value: string; avatar?: string }[];
   placeholder?: string;
 }
 
@@ -31,7 +32,20 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, p
         <SelectPrimitive.Viewport className={styles.viewport}>
           {options.map((opt) => (
             <SelectPrimitive.Item key={opt.value} value={opt.value} className={styles.item}>
-              <SelectPrimitive.ItemText>{opt.label}</SelectPrimitive.ItemText>
+              <SelectPrimitive.ItemText>
+                <div className={styles.itemContent}>
+                  {opt.avatar && (
+                    <Image 
+                      src={opt.avatar} 
+                      alt="avatar" 
+                      className={styles.avatar} 
+                      width={20} 
+                      height={20} 
+                    />
+                  )}
+                  {opt.label}
+                </div>
+              </SelectPrimitive.ItemText>
             </SelectPrimitive.Item>
           ))}
         </SelectPrimitive.Viewport>
