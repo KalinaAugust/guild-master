@@ -56,8 +56,7 @@
   border-radius: 8px;
   box-shadow: var(--shadow-glass);
   z-index: 2000;
-  /*min-width: 100%;*/
-  width: 100%; /* This ensures the dropdown matches the trigger width */
+  min-width: var(--radix-select-trigger-width);
   max-height: 300px;
   backdrop-filter: var(--glass-blur);
 }
