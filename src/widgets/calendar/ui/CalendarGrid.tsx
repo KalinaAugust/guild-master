@@ -152,20 +152,23 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
             onValueChange={handleMonthChange}
             options={months}
             className={styles.monthSelect}
+            centered
           />
           <Select
             value={now.year().toString()}
             onValueChange={handleYearChange}
             options={years}
             className={styles.yearSelect}
+            centered
           />
           <div className={styles.separator} />
-          <Select 
-            value={activeGuildId} 
-            onValueChange={handleGuildChange} 
-            options={guildOptions} 
+          <Select
+            value={activeGuildId}
+            onValueChange={handleGuildChange}
+            options={guildOptions}
             placeholder="Выберите гильдию"
             className={styles.guildSelect}
+            truncate
           />
         </div>
         <div className={styles.controlsRight}>

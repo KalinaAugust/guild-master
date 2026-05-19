@@ -11,6 +11,8 @@ interface SelectProps {
   options: { label: React.ReactNode; value: string; avatar?: string }[];
   placeholder?: string;
   className?: string;
+  centered?: boolean;
+  truncate?: boolean;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -18,10 +20,12 @@ export const Select: React.FC<SelectProps> = ({
   onValueChange,
   options,
   placeholder,
-  className
+  className,
+  centered,
+  truncate
 }) => (
   <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
-    <SelectPrimitive.Trigger className={`${styles.trigger} ${className || ''}`}>
+    <SelectPrimitive.Trigger className={`${styles.trigger} ${truncate ? styles.triggerTruncate : ''} ${className || ''}`}>
       <SelectPrimitive.Value placeholder={placeholder} />
       <SelectPrimitive.Icon className={styles.icon}>
         <ChevronDown size={16} />
@@ -38,7 +42,7 @@ export const Select: React.FC<SelectProps> = ({
         </SelectPrimitive.ScrollUpButton>
         <SelectPrimitive.Viewport className={styles.viewport}>
           {options.map((opt) => (
-            <SelectPrimitive.Item key={opt.value} value={opt.value} className={styles.item}>
+            <SelectPrimitive.Item key={opt.value} value={opt.value} className={`${styles.item} ${centered ? styles.itemCentered : ''}`}>
               <SelectPrimitive.ItemText>
                 <span className={styles.itemContent}>
                   {opt.avatar && (
