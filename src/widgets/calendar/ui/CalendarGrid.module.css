@@ -19,12 +19,45 @@
 
 .controlsLeft {
   display: flex;
+  align-items: center;
   gap: 12px;
 }
 
 .controlsRight {
   display: flex;
+  align-items: center;
   gap: 8px;
+}
+
+.monthSelect {
+  min-width: 120px;
+}
+
+.yearSelect {
+  min-width: 90px;
+}
+
+.separator {
+  width: 1px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 0 4px;
+}
+
+.guildOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guildAvatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+
+.guildSelect {
+  width: 220px;
 }
 
 .grid {

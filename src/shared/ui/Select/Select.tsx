@@ -10,11 +10,18 @@ interface SelectProps {
   onValueChange: (value: string) => void;
   options: { label: React.ReactNode; value: string; avatar?: string }[];
   placeholder?: string;
+  className?: string;
 }
 
-export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, placeholder }) => (
+export const Select: React.FC<SelectProps> = ({
+  value,
+  onValueChange,
+  options,
+  placeholder,
+  className
+}) => (
   <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
-    <SelectPrimitive.Trigger className={styles.trigger}>
+    <SelectPrimitive.Trigger className={`${styles.trigger} ${className || ''}`}>
       <SelectPrimitive.Value placeholder={placeholder} />
       <SelectPrimitive.Icon className={styles.icon}>
         <ChevronDown size={16} />
@@ -33,18 +40,18 @@ export const Select: React.FC<SelectProps> = ({ value, onValueChange, options, p
           {options.map((opt) => (
             <SelectPrimitive.Item key={opt.value} value={opt.value} className={styles.item}>
               <SelectPrimitive.ItemText>
-                <div className={styles.itemContent}>
+                <span className={styles.itemContent}>
                   {opt.avatar && (
-                    <Image 
-                      src={opt.avatar} 
-                      alt="avatar" 
-                      className={styles.avatar} 
-                      width={20} 
-                      height={20} 
+                    <Image
+                      src={opt.avatar}
+                      alt="avatar"
+                      className={styles.avatar}
+                      width={20}
+                      height={20}
                     />
                   )}
-                  {opt.label}
-                </div>
+                  <span className={styles.label}>{opt.label}</span>
+                </span>
               </SelectPrimitive.ItemText>
             </SelectPrimitive.Item>
           ))}

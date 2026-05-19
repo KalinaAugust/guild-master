@@ -11,12 +11,15 @@ import dayjs from '@/shared/lib/dayjs';
 import { EventForm } from './EventForm';
 import { EventFormData } from '../model/types';
 
-export const EventModal: React.FC<{ guildId: string, isDayView?: boolean }> = ({ guildId, isDayView }) => {
+export const EventModal: React.FC<{ guildId?: string, isDayView?: boolean }> = ({ guildId: propGuildId, isDayView }) => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.ui.isEventModalOpen);
   const selectedDate = useAppSelector((state) => state.ui.selectedDate);
   const editingEvent = useAppSelector((state) => state.ui.editingEvent);
+  const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
   
+  const activeGuildId = currentGuildId || propGuildId;
+
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
 
@@ -25,6 +28,11 @@ export const EventModal: React.FC<{ guildId: string, isDayView?: boolean }> = ({
   };
 
   const handleSubmit = (data: EventFormData) => {
+    if (!activeGuildId) {
+      toast.error(t('error'));
+      return;
+    }
+
     if (editingEvent) {
       dispatch(updateEventThunk({
         id: editingEvent.id,
@@ -39,7 +47,7 @@ export const EventModal: React.FC<{ guildId: string, isDayView?: boolean }> = ({
     } else {
       dispatch(createEventThunk({
         ...data,
-        guild_id: guildId,
+        guild_id: activeGuildId,
       })).then((result) => {
         if (result.meta.requestStatus === 'fulfilled') {
           toast.success(t('successCreated'));

@@ -13,14 +13,35 @@
   justify-content: space-between;
   width: 100%;
   font-size: 1rem;
+  gap: 12px;
+  text-align: left;
+}
+
+/* Select.Value renders a span */
+.trigger > span {
+  display: flex;
+  align-items: center;
   gap: 8px;
+  white-space: nowrap;
+  /* NO overflow: hidden here as requested */
+}
+
+.itemContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.label {
+  white-space: nowrap;
 }
 
 .icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 1;
+  flex-shrink: 0;
 }
 
 .trigger:focus {
@@ -30,14 +51,13 @@
 }
 
 .content {
-  background: #1a0b2e; /* Solid background for options as requested */
+  background: #1a0b2e;
   border: 1px solid var(--glass-border);
   border-radius: 8px;
   box-shadow: var(--shadow-glass);
-  overflow: hidden;
   z-index: 2000;
-  width: var(--radix-select-trigger-width);
-  min-width: 120px;
+  /*min-width: 100%;*/
+  width: 100%; /* This ensures the dropdown matches the trigger width */
   max-height: 300px;
   backdrop-filter: var(--glass-blur);
 }
@@ -63,6 +83,18 @@
   color: var(--text-primary);
   border-radius: 4px;
   transition: background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .item:hover, .item[data-highlighted] {

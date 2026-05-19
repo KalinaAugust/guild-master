@@ -53,11 +53,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   }), []);
 
   const guildOptions = useMemo(() => guilds.map(guild => ({
-    label: (
-      <div className={styles.guildOption}>
-        <span>{guild.name}</span>
-      </div>
-    ),
+    label: guild.name,
     value: guild.id,
     avatar: '/assets/guild-placeholder.svg'
   })), [guilds]);
@@ -155,18 +151,21 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
             value={now.month().toString()}
             onValueChange={handleMonthChange}
             options={months}
+            className={styles.monthSelect}
           />
           <Select
             value={now.year().toString()}
             onValueChange={handleYearChange}
             options={years}
+            className={styles.yearSelect}
           />
           <div className={styles.separator} />
-          <Select
-            value={activeGuildId || ''}
-            onValueChange={handleGuildChange}
-            options={guildOptions}
+          <Select 
+            value={activeGuildId} 
+            onValueChange={handleGuildChange} 
+            options={guildOptions} 
             placeholder="Выберите гильдию"
+            className={styles.guildSelect}
           />
         </div>
         <div className={styles.controlsRight}>

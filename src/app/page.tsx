@@ -13,14 +13,11 @@ export default async function Home() {
     redirect('/guilds/create');
   }
 
-  // Для простоты берем первую гильдию. В будущем можно добавить селектор.
-  const currentGuildId = guilds[0].id;
-
   return (
     <main className={styles.main}>
       <h1 className={styles.title}>{t('title')}</h1>
-      <CalendarGrid guildId={currentGuildId} />
-      <EventModal guildId={currentGuildId} />
+      <CalendarGrid guilds={guilds} />
+      <EventModal />
     </main>
   );
 }

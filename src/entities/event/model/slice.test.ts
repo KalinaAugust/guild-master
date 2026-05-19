@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import eventsReducer, { addEvent, createEventThunk } from './slice';
+import eventsReducer, { addEvent, createEventThunk, updateEventThunk, deleteEventThunk } from './slice';
 import { EventsState, ActivityEvent } from '@/shared/types';
 
 describe('eventsSlice', () => {
@@ -51,5 +51,52 @@ describe('eventsSlice', () => {
     const actual = eventsReducer(initialState, action);
     expect(actual.items).toHaveLength(1);
     expect(actual.items[0]).toEqual(newEvent);
+  });
+
+  it('should handle updateEventThunk.fulfilled', () => {
+    const existingEvent: ActivityEvent = {
+      id: 'existing-id',
+      title: 'Existing Event',
+      date: '2026-05-03',
+      time: '12:00',
+      type: 'game',
+      description: 'Existing description',
+    };
+    const initialState: EventsState = {
+      isInitialized: true,
+      items: [existingEvent],
+      loading: false,
+      error: null
+    };
+    const updatedEvent: ActivityEvent = {
+      ...existingEvent,
+      title: 'Updated Event',
+    };
+
+    const action = { type: updateEventThunk.fulfilled.type, payload: updatedEvent };
+    const actual = eventsReducer(initialState, action);
+    expect(actual.items).toHaveLength(1);
+    expect(actual.items[0].title).toBe('Updated Event');
+    expect(actual.items[0].id).toBe('existing-id');
+  });
+
+  it('should handle deleteEventThunk.fulfilled', () => {
+    const existingEvent: ActivityEvent = {
+      id: 'id-to-delete',
+      title: 'Event to Delete',
+      date: '2026-05-03',
+      time: '12:00',
+      type: 'game',
+    };
+    const initialState: EventsState = {
+      isInitialized: true,
+      items: [existingEvent],
+      loading: false,
+      error: null
+    };
+
+    const action = { type: deleteEventThunk.fulfilled.type, payload: 'id-to-delete' };
+    const actual = eventsReducer(initialState, action);
+    expect(actual.items).toHaveLength(0);
   });
 });

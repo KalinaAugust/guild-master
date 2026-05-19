@@ -15,10 +15,10 @@ import styles from './DayEventsList.module.css';
 
 interface DayEventsListProps {
   date: string;
-  guildId: string;
+  guildId?: string;
 }
 
-export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) => {
+export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: propGuildId }) => {
   const dispatch = useAppDispatch();
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
@@ -27,16 +27,19 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId }) =
   const events = useAppSelector((state) => state.events.items);
   const loading = useAppSelector((state) => state.events.loading);
   const isInitialized = useAppSelector((state) => state.events.isInitialized);
+  const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
+
+  const activeGuildId = currentGuildId || propGuildId;
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch events if not initialized and not loading
-    if (!isInitialized && !loading) {
-      dispatch(fetchEventsThunk(guildId));
+    if (activeGuildId && (!isInitialized || events.length === 0) && !loading) {
+      dispatch(fetchEventsThunk(activeGuildId));
     }
-  }, [dispatch, guildId, isInitialized, loading]);
+  }, [dispatch, activeGuildId, isInitialized, loading, events.length]);
 
   const dayEvents = events
     .filter(event => event.date === date)

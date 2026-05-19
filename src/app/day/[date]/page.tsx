@@ -36,7 +36,7 @@ export default async function DayPage({ params }: DayPageProps) {
         <DayEventsList date={date} guildId={currentGuildId} />
       </div>
 
-      <EventModal guildId={currentGuildId} isDayView />
+      <EventModal isDayView />
     </main>
   );
 }
