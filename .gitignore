@@ -44,3 +44,7 @@ next-env.d.ts
 
 # superpowers
 .superpowers/
+
+# local dev tools
+.antigravitycli/
+.mcp.json
