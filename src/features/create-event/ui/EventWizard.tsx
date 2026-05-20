@@ -55,6 +55,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
       dispatch(updateEventThunk({ id: editingEvent.id, event: data })).then((result) => {
         if (result.meta.requestStatus === 'fulfilled') {
           toast.success(t('successUpdated'));
+          handleClose();
         } else {
           toast.error(t('error'));
         }
@@ -63,12 +64,12 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
       dispatch(createEventThunk({ ...data, guild_id: activeGuildId })).then((result) => {
         if (result.meta.requestStatus === 'fulfilled') {
           toast.success(t('successCreated'));
+          handleClose();
         } else {
           toast.error(t('error'));
         }
       });
     }
-    handleClose();
   };
 
   const initialData = useMemo(() => {
@@ -92,7 +93,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
 
           <div className={styles.body}>
             <div className={styles.column}>
-              <p className={styles.columnTitle}>Main</p>
+              <p className={styles.columnTitle}>{t('wizard.mainColumn')}</p>
               {isOpen && (
                 <EventForm
                   key={editingEvent?.id || selectedDate || 'new'}
@@ -109,15 +110,15 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
             </div>
 
             <div className={styles.column}>
-              <p className={styles.columnTitle}>Additional</p>
+              <p className={styles.columnTitle}>{t('wizard.additionalColumn')}</p>
 
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>Event icon</span>
-                <div className={styles.stubField}>Choose icon…</div>
+                <span className={styles.stubLabel}>{t('wizard.iconLabel')}</span>
+                <div className={styles.stubField}>{t('wizard.iconPlaceholder')}</div>
               </div>
 
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>Color</span>
+                <span className={styles.stubLabel}>{t('wizard.colorLabel')}</span>
                 <div className={styles.colorDots}>
                   {COLOR_DOTS.map(({ cls, label }) => (
                     <div key={label} className={`${styles.colorDot} ${cls}`} />
@@ -126,7 +127,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
               </div>
 
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>Repeat on days</span>
+                <span className={styles.stubLabel}>{t('wizard.repeatLabel')}</span>
                 <div className={styles.dayToggles}>
                   {DAY_LABELS.map((d) => (
                     <div key={d} className={styles.dayToggle}>{d}</div>
@@ -135,8 +136,8 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
               </div>
 
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>Invited users</span>
-                <div className={styles.stubField}>Add members…</div>
+                <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
+                <div className={styles.stubField}>{t('wizard.invitedPlaceholder')}</div>
               </div>
             </div>
           </div>
