@@ -102,7 +102,6 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
 
           <div className={styles.body}>
             <div className={styles.column}>
-              <p className={styles.columnTitle}>{t('wizard.mainColumn')}</p>
               {isOpen && (
                 <EventForm
                   key={editingEvent?.id || selectedDate || 'new'}
@@ -119,8 +118,6 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
             </div>
 
             <div className={styles.column}>
-              <p className={styles.columnTitle}>{t('wizard.additionalColumn')}</p>
-
               <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.iconLabel')}</span>
                 <div className={styles.stubField}>{t('wizard.iconPlaceholder')}</div>

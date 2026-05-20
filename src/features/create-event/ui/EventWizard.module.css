@@ -62,21 +62,11 @@
   border-right: 1px solid var(--glass-border);
 }
 
-.columnTitle {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-  margin: 0 0 24px;
-}
-
 .stubGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 20px;
-  opacity: 0.45;
 }
 
 .stubLabel {
