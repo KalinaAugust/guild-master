@@ -15,4 +15,6 @@ export interface EventFormProps {
   submitLabel: string;
   isDayView?: boolean;
   isEdit?: boolean;
+  hideActions?: boolean;
+  formId?: string;
 }
