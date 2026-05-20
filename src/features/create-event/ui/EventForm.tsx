@@ -6,7 +6,7 @@ import { ActivityType } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { EventFormProps } from '../model/types';
-import styles from './EventModal.module.css';
+import styles from './EventForm.module.css';
 
 export const EventForm: React.FC<EventFormProps> = ({ 
   initialData, 
