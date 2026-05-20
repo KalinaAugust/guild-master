@@ -13,7 +13,7 @@ export const fetchEventsThunk = createAsyncThunk(
     if (!data) return [];
     
     return data.map(event => {
-      const d = dayjs(event.event_date);
+      const d = dayjs.utc(event.event_date);
       return {
         id: event.id,
         title: event.title,
@@ -30,7 +30,7 @@ export const createEventThunk = createAsyncThunk(
   'events/createEvent',
   async (event: Omit<ActivityEvent, 'id'> & { guild_id: string }) => {
     const data = await createEvent(event);
-    const d = dayjs(data.event_date);
+    const d = dayjs.utc(data.event_date);
     return {
       id: data.id,
       title: data.title,
@@ -46,7 +46,7 @@ export const updateEventThunk = createAsyncThunk(
   'events/updateEvent',
   async ({ id, event }: { id: string, event: Partial<Omit<ActivityEvent, 'id'>> }) => {
     const data = await updateEvent(id, event);
-    const d = dayjs(data.event_date);
+    const d = dayjs.utc(data.event_date);
     return {
       id: data.id,
       title: data.title,
