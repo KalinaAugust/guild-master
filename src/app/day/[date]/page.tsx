@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getMyGuilds } from '@/entities/guild';
 import { redirect } from 'next/navigation';
 import { DayEventsList } from '@/widgets/day-events';
-import { EventModal } from '@/features/create-event';
+import { EventWizard } from '@/features/create-event';
 import { ChevronLeft } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import styles from './DayPage.module.css';
@@ -36,7 +36,7 @@ export default async function DayPage({ params }: DayPageProps) {
         <DayEventsList date={date} guildId={currentGuildId} />
       </div>
 
-      <EventModal isDayView />
+      <EventWizard isDayView />
     </main>
   );
 }

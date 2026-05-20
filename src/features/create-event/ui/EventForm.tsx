@@ -6,15 +6,17 @@ import { ActivityType } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { EventFormProps } from '../model/types';
-import styles from './EventModal.module.css';
+import styles from './EventForm.module.css';
 
-export const EventForm: React.FC<EventFormProps> = ({ 
-  initialData, 
-  onSubmit, 
-  onCancel, 
+export const EventForm: React.FC<EventFormProps> = ({
+  initialData,
+  onSubmit,
+  onCancel,
   submitLabel,
   isDayView,
-  isEdit
+  isEdit,
+  hideActions,
+  formId,
 }) => {
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
@@ -41,7 +43,7 @@ export const EventForm: React.FC<EventFormProps> = ({
   const showDateInput = !isDayView || isEdit;
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form id={formId} onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="title">{t('titleLabel')}</label>
         <input
@@ -98,14 +100,16 @@ export const EventForm: React.FC<EventFormProps> = ({
           className={styles.textarea}
         />
       </div>
-      <div className={styles.actions}>
-        <Button type="button" variant="secondary" onClick={onCancel}>
-          {commonT('cancel')}
-        </Button>
-        <Button type="submit" variant="primary">
-          {submitLabel}
-        </Button>
-      </div>
+      {!hideActions && (
+        <div className={styles.actions}>
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            {commonT('cancel')}
+          </Button>
+          <Button type="submit" variant="primary">
+            {submitLabel}
+          </Button>
+        </div>
+      )}
     </form>
   );
 };

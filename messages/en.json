@@ -46,6 +46,16 @@
       "raid": "Raid",
       "meeting": "Meeting",
       "other": "Other"
+    },
+    "wizard": {
+      "mainColumn": "Main",
+      "additionalColumn": "Additional",
+      "iconLabel": "Event icon",
+      "iconPlaceholder": "Choose icon…",
+      "colorLabel": "Color",
+      "repeatLabel": "Repeat on days",
+      "invitedLabel": "Invited users",
+      "invitedPlaceholder": "Add members…"
     }
   },
   "Guild": {
