@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
@@ -40,6 +40,15 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
 
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   const handleClose = () => {
     dispatch(closeEventModal());
