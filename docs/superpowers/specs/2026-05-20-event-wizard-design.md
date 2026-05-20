@@ -32,17 +32,17 @@ Dispatches `closeEventModal`, `createEventThunk`, `updateEventThunk` — identic
 
 ```
 ┌────────────────────────────────────────────────────────────────┐
-│  [✕]                    Создать событие                        │  ← header, ~64px
+│  [✕]                     Create event                          │  ← header, ~64px
 ├─────────────────────────────────┬──────────────────────────────┤
-│  ОСНОВНОЕ                       │  ДОПОЛНИТЕЛЬНО               │
+│  MAIN                           │  ADDITIONAL                  │
 │                                 │                              │
-│  [ Название               ]     │  [ Иконка события  (stub) ]  │
-│  [ Дата      ] [ Время    ]     │  [ Цвет ● ● ● ●    (stub) ]  │
-│  [ Тип (Select)           ]     │  [ Повтор по дням   (stub) ] │
-│  [ Описание (textarea)    ]     │  [ Участники        (stub) ] │
+│  [ Title                  ]     │  [ Event icon      (stub) ]  │
+│  [ Date      ] [ Time     ]     │  [ Color ● ● ● ●   (stub) ]  │
+│  [ Type (Select)          ]     │  [ Repeat by days  (stub) ]  │
+│  [ Description (textarea) ]     │  [ Invited users   (stub) ]  │
 │                                 │                              │
 ├─────────────────────────────────┴──────────────────────────────┤
-│                                          [Отмена]  [Создать →] │
+│                                           [Cancel]  [Create →] │
 └────────────────────────────────────────────────────────────────┘
 ```
 
@@ -56,12 +56,12 @@ Dispatches `closeEventModal`, `createEventThunk`, `updateEventThunk` — identic
 ## Right Column Stubs
 
 Four disabled placeholder fields (no data sent on submit):
-1. **Иконка события** — empty div with label, visually looks like a selector
-2. **Цвет** — row of colored circles, non-interactive
-3. **Повтор** — disabled day-of-week toggles (Пн Вт Ср Чт Пт Сб Вс)
-4. **Участники** — empty input-like stub with label
+1. **Event icon** — empty div with label, visually looks like a selector
+2. **Color** — row of colored circles, non-interactive
+3. **Repeat** — disabled day-of-week toggles (Mon Tue Wed Thu Fri Sat Sun)
+4. **Invited users** — empty input-like stub with label
 
-All stubs render with `opacity: 0.5` and a "скоро" badge or disabled state to signal they are not yet functional.
+All stubs render with `opacity: 0.5` and a "coming soon" badge or disabled state to signal they are not yet functional.
 
 ## Out of Scope
 
