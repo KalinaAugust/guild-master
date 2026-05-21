@@ -1,28 +1,28 @@
-# Инструкции для папки /src
+# Instructions for /src
 
-Этот файл содержит директивы для работы с исходным кодом проекта Guild Master. Эти правила являются обязательными для исполнения.
+This file contains directives for working with Guild Master source code. All rules are mandatory.
 
-## Архитектура: Feature-Sliced Design (FSD)
+## Architecture: Feature-Sliced Design (FSD)
 
-Соблюдай строгую изоляцию слоев:
-1.  **Layers:** `shared`, `entities`, `features`, `widgets`, `app`.
-2.  **Public API:** Взаимодействие между модулями разрешено ТОЛЬКО через `index.ts` (Public API) каждого слайса.
-3.  **Cross-imports:** Запрещены импорты между слайсами одного уровня (например, один `feature` не может импортировать другой `feature`). Используй композицию в `widgets` или `app`.
-4.  **Shared:** Общий код, не имеющий бизнес-логики, должен находиться в `shared`.
+Maintain strict layer isolation:
+1. **Layers:** `shared`, `entities`, `features`, `widgets`, `app`.
+2. **Public API:** Cross-module interaction is ONLY allowed through each slice's `index.ts`.
+3. **Cross-imports:** Imports between slices on the same layer are forbidden (e.g. one `feature` cannot import another `feature`). Use composition in `widgets` or `app`.
+4. **Shared:** Code with no business logic goes in `shared`.
 
-## Аутентификация и Proxy Logic
+## Authentication and Proxy Logic
 
-В этом проекте **НЕ ИСПОЛЬЗУЕТСЯ** стандартный `middleware.ts`.
-1.  Вся логика перехвата запросов, защиты роутов и обработки локали находится в **`src/proxy.ts`**.
-2.  При необходимости добавить защиту для новых роутов или изменить логику редиректов — вноси изменения в `src/proxy.ts`.
-3.  Не пытайся создать `middleware.ts` в корне проекта.
+This project does **NOT** use the standard `middleware.ts`.
+1. All request interception, route protection, and locale handling lives in **`src/proxy.ts`**.
+2. To protect new routes or change redirect logic — edit `src/proxy.ts`.
+3. Do not create `middleware.ts` in the project root.
 
-## Работа с Supabase (SSR)
+## Supabase (SSR)
 
-При создании клиента Supabase на сервере (в Server Components или `proxy.ts`):
-1.  Всегда используй методы `getAll()` и `setAll()` для работы с куки.
-2.  **Запрещено** использовать устаревшие методы `get`, `set` и `remove`. Это критично для совместимости с асинхронными API куки в Next.js 15+.
-3.  Пример инициализации клиента:
+When creating a Supabase client on the server (Server Components or `proxy.ts`):
+1. Always use `getAll()` and `setAll()` for cookie handling.
+2. **Forbidden:** legacy `get`, `set`, and `remove` methods — incompatible with async cookie APIs in Next.js 15+.
+3. Client initialization example:
     ```typescript
     const supabase = createServerClient(url, key, {
       cookies: {
@@ -36,14 +36,28 @@
     })
     ```
 
-## Стилизация и UI
+## Database Schema (Supabase)
 
-1.  **CSS Modules:** Используй только CSS Modules (`*.module.css`).
-2.  **Inline styles:** Категорически запрещены.
-3.  **Naming:** Следуй BEM-подобному именованию классов внутри модулей, если это упрощает чтение.
+| Table | Key columns |
+|---|---|
+| `profiles` | `id` (uuid, FK → auth.users), `full_name`, `avatar_url`, `updated_at` |
+| `guilds` | `id`, `name`, `description`, `owner_id` (FK → profiles) |
+| `guild_members` | `id`, `guild_id`, `user_id`, `role` (OWNER\|ADMIN\|MEMBER) |
+| `events` | `id`, `guild_id`, `title`, `description`, `event_date`, `type`, `created_by` |
+| `event_participants` | `id`, `event_id`, `user_id`, `status` (pending\|confirmed\|declined) |
 
-## Состояние (State Management)
+All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
 
-1.  Используй Redux Toolkit.
-2.  Бизнес-логика (actions, thunks, selectors) должна располагаться внутри соответствующих слайсов в `entities` или `features`.
-3.  Типизируй селекторы и хуки, используя `useAppSelector` и `useAppDispatch`.
+## Styling and UI
+
+1. **CSS Modules:** Use CSS Modules only (`*.module.css`).
+2. **Inline styles:** Strictly forbidden.
+3. **Naming:** Follow BEM-like class naming inside modules where it aids readability.
+4. **Radix UI:** Style Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-select`, `@radix-ui/react-dropdown-menu`) via CSS Modules, never Tailwind.
+5. **clsx + tailwind-merge:** Only allowed in `shared/ui` utility components. Features/entities/widgets use CSS Modules only.
+
+## State Management
+
+1. Use Redux Toolkit.
+2. Business logic (actions, thunks, selectors) belongs inside the relevant slices in `entities` or `features`.
+3. Type selectors and hooks using `useAppSelector` and `useAppDispatch`.
