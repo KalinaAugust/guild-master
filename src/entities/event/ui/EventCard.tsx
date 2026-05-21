@@ -8,6 +8,7 @@ import styles from './EventCard.module.css';
 
 interface EventCardProps {
   event: ActivityEvent;
+  onClick?: (event: ActivityEvent) => void;
   onEdit?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
 }
@@ -19,9 +20,12 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   other: <Calendar size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, onEdit, onDelete }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, onClick, onEdit, onDelete }) => {
   return (
-    <div className={`${styles.card} ${styles[`type_${event.type}`]}`}>
+    <div
+      className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
+      onClick={() => onClick?.(event)}
+    >
       <div className={styles.iconWrapper}>
         {typeIcons[event.type]}
       </div>
@@ -42,20 +46,20 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onEdit, onDelete })
 
       <div className={styles.actions}>
         {onEdit && (
-          <Button 
-            variant="ghost" 
-            size="icon_sm" 
-            onClick={() => onEdit(event)}
+          <Button
+            variant="ghost"
+            size="icon_sm"
+            onClick={(e) => { e.stopPropagation(); onEdit(event); }}
             className={styles.actionBtn}
           >
             <Edit2 size={16} />
           </Button>
         )}
         {onDelete && (
-          <Button 
-            variant="ghost" 
-            size="icon_sm" 
-            onClick={() => onDelete(event.id)}
+          <Button
+            variant="ghost"
+            size="icon_sm"
+            onClick={(e) => { e.stopPropagation(); onDelete(event.id); }}
             className={styles.deleteBtn}
           >
             <Trash2 size={16} />
