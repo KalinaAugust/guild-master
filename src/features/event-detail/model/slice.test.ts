@@ -79,4 +79,10 @@ describe('eventDetailSlice', () => {
     const actual = reducer(state, action);
     expect(actual.participants[0].status).toBe('confirmed');
   });
+
+  it('updateParticipantStatusThunk.rejected sets error', () => {
+    const action = updateParticipantStatusThunk.rejected(new Error('update failed'), '', { eventId: 'e1', status: 'confirmed' });
+    const actual = reducer(initialState, action);
+    expect(actual.error).toBe('update failed');
+  });
 });
