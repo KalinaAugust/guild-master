@@ -7,10 +7,11 @@ export const syncParticipants = async (eventId: string, userIds: string[]): Prom
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const db = supabase as any;
 
-  const { data: current } = await db
+  const { data: current, error: fetchError } = await db
     .from('event_participants')
     .select('user_id')
     .eq('event_id', eventId);
+  if (fetchError) throw fetchError;
 
   const currentIds = new Set(((current as { user_id: string }[]) || []).map((r) => r.user_id));
   const newIds = new Set(userIds);

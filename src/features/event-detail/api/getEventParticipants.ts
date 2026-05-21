@@ -6,7 +6,8 @@ export const getEventParticipants = async (
   eventId: string
 ): Promise<{ participants: EventParticipant[]; currentUserId: string }> => {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error('Not authenticated');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data, error } = await (supabase as any)
