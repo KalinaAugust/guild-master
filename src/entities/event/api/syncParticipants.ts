@@ -4,17 +4,20 @@ import { createClient } from '@/shared/api/supabase/server';
 export const syncParticipants = async (eventId: string, userIds: string[]): Promise<void> => {
   const supabase = await createClient();
 
-  const { data: current } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const db = supabase as any;
+
+  const { data: current } = await db
     .from('event_participants')
     .select('user_id')
     .eq('event_id', eventId);
 
-  const currentIds = new Set((current || []).map((r) => r.user_id));
+  const currentIds = new Set(((current as { user_id: string }[]) || []).map((r) => r.user_id));
   const newIds = new Set(userIds);
 
   const toDelete = [...currentIds].filter((id) => !newIds.has(id));
   if (toDelete.length > 0) {
-    const { error } = await supabase
+    const { error } = await db
       .from('event_participants')
       .delete()
       .eq('event_id', eventId)
@@ -24,7 +27,7 @@ export const syncParticipants = async (eventId: string, userIds: string[]): Prom
 
   const toInsert = [...newIds].filter((id) => !currentIds.has(id));
   if (toInsert.length > 0) {
-    const { error } = await supabase
+    const { error } = await db
       .from('event_participants')
       .insert(toInsert.map((user_id) => ({ event_id: eventId, user_id, status: 'pending' })));
     if (error) throw error;
