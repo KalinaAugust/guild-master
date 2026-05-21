@@ -22,7 +22,7 @@ describe('updateEvent API', () => {
       }),
     };
 
-    vi.mocked(createClient).mockResolvedValue(mockSupabase as Awaited<ReturnType<typeof createClient>>);
+    vi.mocked(createClient).mockResolvedValue(mockSupabase as unknown as Awaited<ReturnType<typeof createClient>>);
 
     const result = await updateEvent('1', { title: 'Updated', date: '2026-05-19', time: '19:00' });
 
@@ -50,7 +50,7 @@ describe('updateEvent API', () => {
       }),
     };
 
-    vi.mocked(createClient).mockResolvedValue(mockSupabase as Awaited<ReturnType<typeof createClient>>);
+    vi.mocked(createClient).mockResolvedValue(mockSupabase as unknown as Awaited<ReturnType<typeof createClient>>);
 
     await updateEvent('1', { title: 'Updated' });
 

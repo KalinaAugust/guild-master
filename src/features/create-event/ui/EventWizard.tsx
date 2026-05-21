@@ -60,6 +60,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     if (editingEvent) {
       getEventParticipantUserIds(editingEvent.id).then(setSelectedParticipants);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedParticipants([]);
     }
   }, [isOpen, activeGuildId, editingEvent]);

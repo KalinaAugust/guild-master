@@ -17,6 +17,8 @@ describe('uiSlice', () => {
     isEventModalOpen: false,
     selectedDate: null,
     viewDate: dayjs('2026-05-01').toISOString(),
+    isEventDetailOpen: false,
+    viewingEvent: null,
   };
 
   it('should return the initial state', () => {

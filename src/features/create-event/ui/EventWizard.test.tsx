@@ -28,6 +28,8 @@ function makeStore(uiOverrides = {}) {
         isEventModalOpen: false,
         selectedDate: null,
         viewDate: '2026-05-20T00:00:00.000Z',
+        isEventDetailOpen: false,
+        viewingEvent: null,
         ...uiOverrides,
       },
       guild: { currentGuildId: null },
