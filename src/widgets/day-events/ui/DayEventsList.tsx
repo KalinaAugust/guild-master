@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
-import { openEventModal, setSelectedDate } from '@/entities/calendar';
+import { openEventModal, setSelectedDate, openEventDetail } from '@/entities/calendar';
 import { deleteEventThunk, EventCard, fetchEventsThunk } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
@@ -58,6 +58,10 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
     dispatch(openEventModal(event));
   };
 
+  const handleViewEvent = (event: ActivityEvent) => {
+    dispatch(openEventDetail(event));
+  };
+
   const handleDeleteClick = (id: string) => {
     setEventToDelete(id);
     setDeleteModalOpen(true);
@@ -97,9 +101,10 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
       {dayEvents.length > 0 ? (
         <div className={styles.list}>
           {dayEvents.map(event => (
-            <EventCard 
-              key={event.id} 
-              event={event} 
+            <EventCard
+              key={event.id}
+              event={event}
+              onClick={handleViewEvent}
               onEdit={!isPastDate ? handleEditEvent : undefined}
               onDelete={handleDeleteClick}
             />

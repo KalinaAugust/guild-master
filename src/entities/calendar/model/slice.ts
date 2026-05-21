@@ -6,6 +6,8 @@ const initialState: UIState = {
   isEventModalOpen: false,
   selectedDate: null,
   viewDate: dayjs().toISOString(),
+  isEventDetailOpen: false,
+  viewingEvent: null,
 };
 
 export const uiSlice = createSlice({
@@ -35,15 +37,25 @@ export const uiSlice = createSlice({
     setViewDate: (state, action: PayloadAction<string>) => {
       state.viewDate = action.payload;
     },
+    openEventDetail: (state, action: PayloadAction<ActivityEvent>) => {
+      state.isEventDetailOpen = true;
+      state.viewingEvent = action.payload;
+    },
+    closeEventDetail: (state) => {
+      state.isEventDetailOpen = false;
+      state.viewingEvent = null;
+    },
   },
 });
 
-export const { 
-  openEventModal, 
-  closeEventModal, 
+export const {
+  openEventModal,
+  closeEventModal,
   setSelectedDate,
   nextMonth,
   prevMonth,
-  setViewDate
+  setViewDate,
+  openEventDetail,
+  closeEventDetail,
 } = uiSlice.actions;
 export default uiSlice.reducer;

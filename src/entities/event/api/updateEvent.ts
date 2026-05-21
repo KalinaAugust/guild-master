@@ -5,7 +5,7 @@ import { ActivityEvent } from '@/shared/types';
 export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent, 'id'>>) => {
   const supabase = await createClient();
   
-  const updateData: Record<string, string> = {};
+  const updateData: { title?: string; description?: string | null; type?: string; event_date?: string } = {};
 
   if (event.title !== undefined) updateData.title = event.title;
   if (event.description !== undefined) updateData.description = event.description;

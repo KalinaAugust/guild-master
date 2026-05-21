@@ -1,19 +1,24 @@
 import { describe, it, expect } from 'vitest';
 import dayjs from 'dayjs';
-import reducer, { 
-  openEventModal, 
-  closeEventModal, 
+import reducer, {
+  openEventModal,
+  closeEventModal,
   setSelectedDate,
   nextMonth,
   prevMonth,
-  setViewDate 
+  setViewDate,
+  openEventDetail,
+  closeEventDetail,
 } from './slice';
+import { ActivityEvent } from '@/shared/types';
 
 describe('uiSlice', () => {
   const initialState = {
     isEventModalOpen: false,
     selectedDate: null,
     viewDate: dayjs('2026-05-01').toISOString(),
+    isEventDetailOpen: false,
+    viewingEvent: null,
   };
 
   it('should return the initial state', () => {
@@ -55,5 +60,28 @@ describe('uiSlice', () => {
     const newDate = '2026-06-01T00:00:00.000Z';
     const actual = reducer(initialState, setViewDate(newDate));
     expect(actual.viewDate).toBe(newDate);
+  });
+
+  it('should handle openEventDetail', () => {
+    const event: ActivityEvent = {
+      id: '1', title: 'Raid', date: '2026-05-28', time: '20:00', type: 'raid',
+    };
+    const actual = reducer(
+      { ...initialState, isEventDetailOpen: false, viewingEvent: null },
+      openEventDetail(event)
+    );
+    expect(actual.isEventDetailOpen).toBe(true);
+    expect(actual.viewingEvent).toEqual(event);
+  });
+
+  it('should handle closeEventDetail', () => {
+    const state = {
+      ...initialState,
+      isEventDetailOpen: true,
+      viewingEvent: { id: '1', title: 'Raid', date: '2026-05-28', time: '20:00', type: 'raid' as const },
+    };
+    const actual = reducer(state, closeEventDetail());
+    expect(actual.isEventDetailOpen).toBe(false);
+    expect(actual.viewingEvent).toBeNull();
   });
 });

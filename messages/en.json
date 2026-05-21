@@ -55,8 +55,26 @@
       "colorLabel": "Color",
       "repeatLabel": "Repeat on days",
       "invitedLabel": "Invited users",
-      "invitedPlaceholder": "Add members…"
+      "invitedPlaceholder": "Add members…",
+      "memberSearch": "Search members…",
+      "noMembers": "No guild members found"
     }
+  },
+  "EventDetail": {
+    "type": "Type",
+    "dateTime": "Date & Time",
+    "description": "Description",
+    "creator": "Creator",
+    "participants": "Participants",
+    "noParticipants": "No participants yet. Add them when editing the event.",
+    "edit": "Edit",
+    "status": {
+      "pending": "Awaiting response",
+      "confirmed": "Coming",
+      "declined": "Not coming"
+    },
+    "confirmBtn": "Coming",
+    "declineBtn": "Not coming"
   },
   "Guild": {
     "createTitle": "Create New Guild",

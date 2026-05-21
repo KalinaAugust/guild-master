@@ -21,4 +21,19 @@ export interface UIState {
   selectedDate: string | null; // ISO string for the currently viewed date
   viewDate: string; // NEW: currently viewed month/year
   editingEvent?: ActivityEvent; // Event being edited
+  isEventDetailOpen: boolean;
+  viewingEvent: ActivityEvent | null;
+}
+
+export type ParticipantStatus = 'pending' | 'confirmed' | 'declined';
+
+export interface EventParticipant {
+  id: string;
+  event_id: string;
+  user_id: string;
+  status: ParticipantStatus;
+  profile: {
+    fullName: string | null;
+    avatarUrl: string | null;
+  };
 }

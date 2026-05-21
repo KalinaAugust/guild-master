@@ -1,9 +1,11 @@
-export { 
-  default as calendarReducer, 
-  openEventModal, 
-  closeEventModal, 
+export {
+  default as calendarReducer,
+  openEventModal,
+  closeEventModal,
   setSelectedDate,
   nextMonth,
   prevMonth,
-  setViewDate
+  setViewDate,
+  openEventDetail,
+  closeEventDetail,
 } from './model/slice';
