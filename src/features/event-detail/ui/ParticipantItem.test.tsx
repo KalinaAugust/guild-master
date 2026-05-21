@@ -70,4 +70,19 @@ describe('ParticipantItem', () => {
     await user.click(screen.getByText('confirmBtn'));
     expect(onConfirm).toHaveBeenCalledOnce();
   });
+
+  it('calls onDecline when decline button clicked', async () => {
+    const user = userEvent.setup();
+    const onDecline = vi.fn();
+    render(
+      <ParticipantItem
+        participant={base}
+        isCurrentUser={true}
+        onConfirm={vi.fn()}
+        onDecline={onDecline}
+      />
+    );
+    await user.click(screen.getByText('declineBtn'));
+    expect(onDecline).toHaveBeenCalledOnce();
+  });
 });
