@@ -55,8 +55,26 @@
       "colorLabel": "Цвет",
       "repeatLabel": "Повтор по дням",
       "invitedLabel": "Приглашённые участники",
-      "invitedPlaceholder": "Добавить участников…"
+      "invitedPlaceholder": "Добавить участников…",
+      "memberSearch": "Поиск участников…",
+      "noMembers": "Участников гильдии не найдено"
     }
+  },
+  "EventDetail": {
+    "type": "Тип",
+    "dateTime": "Дата и время",
+    "description": "Описание",
+    "creator": "Создатель",
+    "participants": "Участники",
+    "noParticipants": "Участников пока нет. Добавьте их при редактировании события.",
+    "edit": "Редактировать",
+    "status": {
+      "pending": "Ожидает ответа",
+      "confirmed": "Придёт",
+      "declined": "Не придёт"
+    },
+    "confirmBtn": "Приду",
+    "declineBtn": "Не приду"
   },
   "Guild": {
     "createTitle": "Создание новой гильдии",
