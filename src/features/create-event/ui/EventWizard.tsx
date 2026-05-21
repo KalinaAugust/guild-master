@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
-import { createEventThunk, updateEventThunk } from '@/entities/event';
+import { createEventThunk, updateEventThunk, getEventParticipantUserIds, syncParticipants } from '@/entities/event';
+import { getGuildMembers, GuildMember } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 import { EventForm } from './EventForm';
@@ -41,6 +42,9 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
 
+  const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -50,8 +54,24 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen || !activeGuildId) return;
+    getGuildMembers(activeGuildId).then(setGuildMembers);
+    if (editingEvent) {
+      getEventParticipantUserIds(editingEvent.id).then(setSelectedParticipants);
+    } else {
+      setSelectedParticipants([]);
+    }
+  }, [isOpen, activeGuildId, editingEvent]);
+
   const handleClose = () => {
     dispatch(closeEventModal());
+  };
+
+  const toggleParticipant = (userId: string) => {
+    setSelectedParticipants((prev) =>
+      prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
   };
 
   const handleSubmit = (data: EventFormData) => {
@@ -61,8 +81,11 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     }
 
     if (editingEvent) {
-      dispatch(updateEventThunk({ id: editingEvent.id, event: data })).then((result) => {
+      dispatch(updateEventThunk({ id: editingEvent.id, event: data })).then(async (result) => {
         if (result.meta.requestStatus === 'fulfilled') {
+          await syncParticipants(editingEvent.id, selectedParticipants).catch(() => {
+            toast.error(t('error'));
+          });
           toast.success(t('successUpdated'));
           handleClose();
         } else {
@@ -70,8 +93,12 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
         }
       });
     } else {
-      dispatch(createEventThunk({ ...data, guild_id: activeGuildId })).then((result) => {
+      dispatch(createEventThunk({ ...data, guild_id: activeGuildId })).then(async (result) => {
         if (result.meta.requestStatus === 'fulfilled') {
+          const newEventId = (result.payload as { id: string }).id;
+          await syncParticipants(newEventId, selectedParticipants).catch(() => {
+            toast.error(t('error'));
+          });
           toast.success(t('successCreated'));
           handleClose();
         } else {
@@ -143,7 +170,32 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
 
               <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
-                <div className={styles.stubField}>{t('wizard.invitedPlaceholder')}</div>
+                {guildMembers.length === 0 ? (
+                  <p className={styles.noMembers}>{t('wizard.noMembers')}</p>
+                ) : (
+                  <div className={styles.memberList}>
+                    {guildMembers.map((member) => {
+                      const initials = (member.profile.fullName || '?')
+                        .split(' ')
+                        .map((w) => w[0])
+                        .join('')
+                        .toUpperCase()
+                        .slice(0, 2);
+                      const selected = selectedParticipants.includes(member.userId);
+                      return (
+                        <div
+                          key={member.userId}
+                          className={`${styles.memberItem} ${selected ? styles.memberSelected : ''}`}
+                          onClick={() => toggleParticipant(member.userId)}
+                        >
+                          <div className={styles.memberAvatar}>{initials}</div>
+                          <span className={styles.memberName}>{member.profile.fullName || member.userId}</span>
+                          {selected && <span className={styles.memberCheck}>✓</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
           </div>
