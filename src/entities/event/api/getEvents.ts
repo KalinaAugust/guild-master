@@ -1,4 +1,3 @@
-'use server';
 import { createClient } from '@/shared/api/supabase/server';
 
 export const fetchEvents = async (guildId: string) => {

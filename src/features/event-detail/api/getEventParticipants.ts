@@ -1,4 +1,3 @@
-'use server';
 import { createClient } from '@/shared/api/supabase/server';
 import { EventParticipant, ParticipantStatus } from '@/shared/types';
 
