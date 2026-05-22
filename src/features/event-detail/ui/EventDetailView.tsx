@@ -7,12 +7,9 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventDetail, openEventModal } from '@/entities/calendar';
+import { useGetParticipantsQuery } from '@/entities/event';
 import { Button } from '@/shared/ui/Button';
-import {
-  fetchParticipantsThunk,
-  updateParticipantStatusThunk,
-  clearParticipants,
-} from '../model/slice';
+import { useUpdateParticipantStatusMutation } from '../api/detailApi';
 import { ParticipantItem } from './ParticipantItem';
 import styles from './EventDetailView.module.css';
 
@@ -24,18 +21,14 @@ export const EventDetailView: React.FC = () => {
 
   const isOpen = useAppSelector((state) => state.ui.isEventDetailOpen);
   const event = useAppSelector((state) => state.ui.viewingEvent);
-  const { participants, currentUserId, loading } = useAppSelector(
-    (state) => state.eventDetail
-  );
 
-  useEffect(() => {
-    if (isOpen && event) {
-      dispatch(fetchParticipantsThunk(event.id));
-    }
-    if (!isOpen) {
-      dispatch(clearParticipants());
-    }
-  }, [isOpen, event, dispatch]);
+  const { data, isLoading } = useGetParticipantsQuery(event?.id ?? '', {
+    skip: !isOpen || !event,
+  });
+  const participants = data?.participants ?? [];
+  const currentUserId = data?.currentUserId ?? '';
+
+  const [updateStatus] = useUpdateParticipantStatusMutation();
 
   useEffect(() => {
     if (isOpen) {
@@ -54,22 +47,22 @@ export const EventDetailView: React.FC = () => {
     dispatch(openEventModal(event));
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (!event) return;
-    dispatch(updateParticipantStatusThunk({ eventId: event.id, status: 'confirmed' })).then(
-      (result) => {
-        if (result.meta.requestStatus === 'rejected') toast.error(eventT('error'));
-      }
-    );
+    try {
+      await updateStatus({ eventId: event.id, status: 'confirmed' }).unwrap();
+    } catch {
+      toast.error(eventT('error'));
+    }
   };
 
-  const handleDecline = () => {
+  const handleDecline = async () => {
     if (!event) return;
-    dispatch(updateParticipantStatusThunk({ eventId: event.id, status: 'declined' })).then(
-      (result) => {
-        if (result.meta.requestStatus === 'rejected') toast.error(eventT('error'));
-      }
-    );
+    try {
+      await updateStatus({ eventId: event.id, status: 'declined' }).unwrap();
+    } catch {
+      toast.error(eventT('error'));
+    }
   };
 
   const typeLabel = event ? eventT(`types.${event.type}` as Parameters<typeof eventT>[0]) : '';
@@ -115,16 +108,16 @@ export const EventDetailView: React.FC = () => {
 
             <div className={styles.column}>
               <span className={styles.label}>
-                {t('participants')} {!loading && `(${participants.length})`}
+                {t('participants')} {!isLoading && `(${participants.length})`}
               </span>
 
-              {loading && <div className={styles.skeleton} />}
+              {isLoading && <div className={styles.skeleton} />}
 
-              {!loading && participants.length === 0 && (
+              {!isLoading && participants.length === 0 && (
                 <p className={styles.empty}>{t('noParticipants')}</p>
               )}
 
-              {!loading &&
+              {!isLoading &&
                 participants.map((p) => (
                   <ParticipantItem
                     key={p.id}

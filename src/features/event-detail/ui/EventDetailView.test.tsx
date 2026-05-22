@@ -13,11 +13,14 @@ vi.mock('next-intl', () => ({
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
 }));
-vi.mock('../api/getEventParticipants', () => ({
-  getEventParticipants: vi.fn().mockResolvedValue({ participants: [], currentUserId: '' }),
+vi.mock('@/entities/event', () => ({
+  useGetParticipantsQuery: vi.fn().mockReturnValue({
+    data: { participants: [], currentUserId: '' },
+    isLoading: false,
+  }),
 }));
-vi.mock('../api/updateParticipantStatus', () => ({
-  updateParticipantStatus: vi.fn().mockResolvedValue(undefined),
+vi.mock('../api/detailApi', () => ({
+  useUpdateParticipantStatusMutation: vi.fn().mockReturnValue([vi.fn()]),
 }));
 
 const mockEvent: ActivityEvent = {
