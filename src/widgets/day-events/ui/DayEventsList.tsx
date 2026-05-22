@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, openEventDetail } from '@/entities/calendar';
-import { deleteEventThunk, EventCard, fetchEventsThunk } from '@/entities/event';
+import { EventCard, useDeleteEventMutation, useGetEventsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
@@ -24,22 +24,17 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const commonT = useTranslations('Common');
   const locale = useLocale();
   
-  const events = useAppSelector((state) => state.events.items);
-  const loading = useAppSelector((state) => state.events.loading);
-  const isInitialized = useAppSelector((state) => state.events.isInitialized);
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
 
   const activeGuildId = currentGuildId || propGuildId;
 
+  const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId,
+  });
+  const [deleteEvent] = useDeleteEventMutation();
+
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
-
-  useEffect(() => {
-    // Fetch events if not initialized and not loading
-    if (activeGuildId && (!isInitialized || events.length === 0) && !loading) {
-      dispatch(fetchEventsThunk(activeGuildId));
-    }
-  }, [dispatch, activeGuildId, isInitialized, loading, events.length]);
 
   const dayEvents = events
     .filter(event => event.date === date)
@@ -67,15 +62,14 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
     setDeleteModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (eventToDelete) {
-      dispatch(deleteEventThunk(eventToDelete)).then((result) => {
-        if (result.meta.requestStatus === 'fulfilled') {
-          toast.success(t('successDeleted'));
-        } else {
-          toast.error(t('error'));
-        }
-      });
+      try {
+        await deleteEvent(eventToDelete).unwrap();
+        toast.success(t('successDeleted'));
+      } catch {
+        toast.error(t('error'));
+      }
       setEventToDelete(null);
     }
   };

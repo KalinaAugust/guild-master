@@ -1,4 +1,3 @@
-'use server';
 import { createClient } from '@/shared/api/supabase/server';
 
 export const syncParticipants = async (eventId: string, userIds: string[]): Promise<void> => {

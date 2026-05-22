@@ -1,4 +1,3 @@
-'use server';
 import { createClient } from '@/shared/api/supabase/server';
 import { GuildMember } from '../model/types';
 

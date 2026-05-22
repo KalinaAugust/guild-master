@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
-import { fetchEventsThunk } from '@/entities/event';
+import { useGetEventsQuery } from '@/entities/event';
 import { Guild, setCurrentGuild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
@@ -17,17 +17,14 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
-  const events = useAppSelector((state) => state.events.items);
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
   const locale = useLocale();
 
   const activeGuildId = useMemo(() => currentGuildId || guilds[0]?.id, [currentGuildId, guilds]);
 
-  useEffect(() => {
-    if (activeGuildId) {
-      dispatch(fetchEventsThunk(activeGuildId));
-    }
-  }, [dispatch, activeGuildId]);
+  const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId,
+  });
 
   // Set dayjs locale based on next-intl locale
   const now = useMemo(() => dayjs(viewDateStr).locale(locale), [viewDateStr, locale]);

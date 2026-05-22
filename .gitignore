@@ -47,4 +47,5 @@ next-env.d.ts
 
 # local dev tools
 .antigravitycli/
+.claude/
 .mcp.json
