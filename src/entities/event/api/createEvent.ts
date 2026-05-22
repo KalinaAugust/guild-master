@@ -1,3 +1,4 @@
+'use server';
 import { createClient } from '@/shared/api/supabase/server';
 import { ActivityEvent } from '@/shared/types';
 
