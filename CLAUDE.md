@@ -58,6 +58,7 @@ npm run start
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/types/index.ts` or close to their usage if specific to a single module.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
 - **Testing:** We use Vitest and React Testing Library for unit and integration tests. Follow TDD principles: write a failing test before implementing the logic.
+- **CLAUDE.md hygiene:** After any task that changes infrastructure, global state patterns, routing conventions, or other project-wide rules — update this file to reflect the new reality before closing the task.
 
 ## Key Commands
 
