@@ -5,3 +5,4 @@ export {
   fetchParticipantsThunk,
   updateParticipantStatusThunk,
 } from './model/slice';
+export { useUpdateParticipantStatusMutation } from './api/detailApi';
