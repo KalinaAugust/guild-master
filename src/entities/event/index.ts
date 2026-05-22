@@ -9,3 +9,11 @@ export {
 export { EventCard } from './ui/EventCard';
 export { getEventParticipantUserIds } from './api/getEventParticipantUserIds';
 export { syncParticipants } from './api/syncParticipants';
+export {
+  useGetEventsQuery,
+  useCreateEventMutation,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
+  useGetParticipantsQuery,
+  useSyncParticipantsMutation,
+} from './api/eventApi';
