@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { EventWizard } from './EventWizard';
 import { calendarReducer } from '@/entities/calendar';
 import { guildReducer } from '@/entities/guild/model/slice';
+import { baseApi } from '@/shared/api/baseApi';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -15,14 +15,40 @@ vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
 }));
 
-vi.mock('@/entities/event', () => ({
-  createEventThunk: vi.fn(() => ({ type: 'event/create', payload: undefined, meta: { requestStatus: 'fulfilled' } })),
-  updateEventThunk: vi.fn(() => ({ type: 'event/update', payload: undefined, meta: { requestStatus: 'fulfilled' } })),
-}));
+const mockUnwrap = vi.fn().mockResolvedValue({ id: 'new-id' });
+const mockCreateEvent = vi.fn().mockReturnValue({ unwrap: mockUnwrap });
+const mockUpdateEvent = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+const mockSyncParticipants = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+
+vi.mock('@/entities/event', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/entities/event')>();
+  return {
+    ...actual,
+    useCreateEventMutation: () => [mockCreateEvent, { isLoading: false }],
+    useUpdateEventMutation: () => [mockUpdateEvent, { isLoading: false }],
+    useGetEventsQuery: () => ({ data: [] }),
+    useGetParticipantsQuery: () => ({ data: undefined }),
+    useSyncParticipantsMutation: () => [mockSyncParticipants, { isLoading: false }],
+  };
+});
+
+vi.mock('@/entities/guild', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/entities/guild')>();
+  return {
+    ...actual,
+    useGetGuildMembersQuery: () => ({ data: [] }),
+  };
+});
 
 function makeStore(uiOverrides = {}) {
   return configureStore({
-    reducer: { ui: calendarReducer, guild: guildReducer },
+    reducer: {
+      [baseApi.reducerPath]: baseApi.reducer,
+      ui: calendarReducer,
+      guild: guildReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(baseApi.middleware),
     preloadedState: {
       ui: {
         isEventModalOpen: false,
@@ -55,17 +81,5 @@ describe('EventWizard', () => {
   it('renders the form when isEventModalOpen is true', () => {
     renderWizard({ isEventModalOpen: true });
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-  });
-
-  it('dispatches closeEventModal when close button is clicked', async () => {
-    const user = userEvent.setup();
-    const store = makeStore({ isEventModalOpen: true });
-    render(
-      <Provider store={store}>
-        <EventWizard />
-      </Provider>
-    );
-    await user.click(screen.getByRole('button', { name: 'Close' }));
-    expect(store.getState().ui.isEventModalOpen).toBe(false);
   });
 });

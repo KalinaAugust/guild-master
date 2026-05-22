@@ -7,8 +7,13 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
-import { createEventThunk, updateEventThunk, getEventParticipantUserIds, syncParticipants } from '@/entities/event';
-import { getGuildMembers, GuildMember } from '@/entities/guild';
+import {
+  useCreateEventMutation,
+  useUpdateEventMutation,
+  useGetParticipantsQuery,
+  useSyncParticipantsMutation,
+} from '@/entities/event';
+import { useGetGuildMembersQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 import { EventForm } from './EventForm';
@@ -42,8 +47,19 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
 
-  const [guildMembers, setGuildMembers] = useState<GuildMember[]>([]);
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+
+  const { data: guildMembers = [] } = useGetGuildMembersQuery(activeGuildId ?? '', {
+    skip: !isOpen || !activeGuildId,
+  });
+
+  const { data: participantsData } = useGetParticipantsQuery(editingEvent?.id ?? '', {
+    skip: !isOpen || !editingEvent,
+  });
+
+  const [createEvent] = useCreateEventMutation();
+  const [updateEvent] = useUpdateEventMutation();
+  const [syncParticipants] = useSyncParticipantsMutation();
 
   useEffect(() => {
     if (isOpen) {
@@ -55,19 +71,15 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
   }, [isOpen]);
 
   useEffect(() => {
-    if (!isOpen || !activeGuildId) return;
-    getGuildMembers(activeGuildId).then(setGuildMembers);
-    if (editingEvent) {
-      getEventParticipantUserIds(editingEvent.id).then(setSelectedParticipants);
-    } else {
+    if (participantsData) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedParticipants(participantsData.participants.map((p) => p.user_id));
+    } else if (!editingEvent) {
       setSelectedParticipants([]);
     }
-  }, [isOpen, activeGuildId, editingEvent]);
+  }, [participantsData, editingEvent]);
 
-  const handleClose = () => {
-    dispatch(closeEventModal());
-  };
+  const handleClose = () => dispatch(closeEventModal());
 
   const toggleParticipant = (userId: string) => {
     setSelectedParticipants((prev) =>
@@ -75,37 +87,24 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     );
   };
 
-  const handleSubmit = (data: EventFormData) => {
+  const handleSubmit = async (data: EventFormData) => {
     if (!activeGuildId) {
       toast.error(t('error'));
       return;
     }
-
-    if (editingEvent) {
-      dispatch(updateEventThunk({ id: editingEvent.id, event: data })).then(async (result) => {
-        if (result.meta.requestStatus === 'fulfilled') {
-          await syncParticipants(editingEvent.id, selectedParticipants).catch(() => {
-            toast.error(t('error'));
-          });
-          toast.success(t('successUpdated'));
-          handleClose();
-        } else {
-          toast.error(t('error'));
-        }
-      });
-    } else {
-      dispatch(createEventThunk({ ...data, guild_id: activeGuildId })).then(async (result) => {
-        if (result.meta.requestStatus === 'fulfilled') {
-          const newEventId = (result.payload as { id: string }).id;
-          await syncParticipants(newEventId, selectedParticipants).catch(() => {
-            toast.error(t('error'));
-          });
-          toast.success(t('successCreated'));
-          handleClose();
-        } else {
-          toast.error(t('error'));
-        }
-      });
+    try {
+      if (editingEvent) {
+        await updateEvent({ id: editingEvent.id, event: data }).unwrap();
+        await syncParticipants({ eventId: editingEvent.id, userIds: selectedParticipants }).unwrap();
+        toast.success(t('successUpdated'));
+      } else {
+        const newEvent = await createEvent({ ...data, guild_id: activeGuildId }).unwrap();
+        await syncParticipants({ eventId: newEvent.id, userIds: selectedParticipants }).unwrap();
+        toast.success(t('successCreated'));
+      }
+      handleClose();
+    } catch {
+      toast.error(t('error'));
     }
   };
 
