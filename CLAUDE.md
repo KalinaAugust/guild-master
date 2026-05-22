@@ -7,15 +7,16 @@ Guild Master is a guild management system built with Next.js, following the **Fe
 - **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
 - **Architecture:** [Feature-Sliced Design (FSD)](https://feature-sliced.design/)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) with `react-redux`
+- **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) with RTK Query (`@reduxjs/toolkit/query/react`) and `react-redux`
 - **Styling:** [CSS Modules](https://github.com/css-modules/css-modules)
 - **Runtime:** [Node.js](https://nodejs.org/)
 
 ## Project Structure
 
-- `src/app/`: Next.js App Router directory (layouts, pages, and providers).
+- `src/app/`: Next.js App Router directory (layouts, pages, and providers). Store is configured in `src/app/providers/StoreProvider/`.
 - `src/components/`: Reusable React components.
-- `src/store/`: Redux store configuration, slices, and custom hooks.
+- `src/shared/api/baseApi.ts`: Single RTK Query `createApi` instance; all feature APIs extend it via `injectEndpoints`.
+- `src/app/api/`: Next.js route handlers that serve as the HTTP transport layer for RTK Query.
 - `src/types/`: TypeScript interface and type definitions.
 - `public/`: Static assets (images, icons, etc.).
 - `docs/`: Project documentation and implementation plans.
@@ -51,7 +52,8 @@ npm run start
 ## Development Conventions
 
 - **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering.
-- **State Management:** Always use Redux Toolkit slices for global state. Custom hooks `useAppDispatch` and `useAppSelector` from `src/store/hooks.ts` should be used for type-safe store interaction.
+- **Data Fetching:** Use RTK Query for all server data. Add endpoints via `injectEndpoints` on `baseApi` (`src/shared/api/baseApi.ts`) within the relevant FSD slice (`entities/*/api/*Api.ts`, `features/*/api/*Api.ts`). Never use `createAsyncThunk` for data fetching. Route handlers in `src/app/api/` are the transport layer — Supabase calls belong there, not in client components.
+- **State Management:** Use Redux Toolkit slices only for pure UI/client state (e.g., selected date, active guild). Custom hooks `useAppDispatch` and `useAppSelector` from `src/app/providers/StoreProvider/hooks.ts` should be used for type-safe store interaction.
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/types/index.ts` or close to their usage if specific to a single module.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
