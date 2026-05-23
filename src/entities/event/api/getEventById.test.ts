@@ -40,6 +40,7 @@ describe('getEventById', () => {
     expect(result!.event.time).toBe('20:00');
     expect(result!.event.description).toBe('Bring potions');
     expect(result!.guildId).toBe('g1');
+    expect(mock.eq).toHaveBeenCalledWith('id', 'e1');
   });
 
   it('returns null when event not found', async () => {

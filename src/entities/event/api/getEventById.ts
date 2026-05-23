@@ -21,7 +21,11 @@ export const getEventById = async (
     .eq('id', id)
     .single();
 
-  if (error || !data) return null;
+  if (error) {
+    if (error.code === 'PGRST116') return null;
+    throw error;
+  }
+  if (!data) return null;
 
   const raw = data as RawEventRow;
   const d = dayjs.utc(raw.event_date);
