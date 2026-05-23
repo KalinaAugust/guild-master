@@ -91,10 +91,6 @@ export const eventApi = baseApi.injectEndpoints({
     }),
     getEventById: builder.query<{ event: ActivityEvent; guildId: string }, string>({
       query: (id) => `events/${id}`,
-      transformResponse: (raw: { event: RawEvent; guildId: string }) => ({
-        event: transformEvent(raw.event),
-        guildId: raw.guildId,
-      }),
       providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
     }),
   }),
