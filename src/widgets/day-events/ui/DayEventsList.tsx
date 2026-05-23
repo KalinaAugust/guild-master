@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
-import { openEventModal, setSelectedDate, openEventDetail } from '@/entities/calendar';
+import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventCard, useDeleteEventMutation, useGetEventsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
@@ -19,6 +20,7 @@ interface DayEventsListProps {
 }
 
 export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: propGuildId }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
@@ -54,7 +56,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   };
 
   const handleViewEvent = (event: ActivityEvent) => {
-    dispatch(openEventDetail(event));
+    router.push(`/events/${event.id}`);
   };
 
   const handleDeleteClick = (id: string) => {
