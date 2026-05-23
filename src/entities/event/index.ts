@@ -6,4 +6,5 @@ export {
   useDeleteEventMutation,
   useGetParticipantsQuery,
   useSyncParticipantsMutation,
+  useGetEventByIdQuery,
 } from './api/eventApi';
