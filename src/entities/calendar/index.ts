@@ -6,6 +6,4 @@ export {
   nextMonth,
   prevMonth,
   setViewDate,
-  openEventDetail,
-  closeEventDetail,
 } from './model/slice';
