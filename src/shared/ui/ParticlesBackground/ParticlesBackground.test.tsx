@@ -3,12 +3,14 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@tsparticles/react', () => ({
   default: ({ id }: { id: string }) => <div data-testid="particles" data-id={id} />,
-  initParticlesEngine: vi.fn(() => Promise.resolve()),
+  Particles: ({ id }: { id: string }) => <div data-testid="particles" data-id={id} />,
+  ParticlesProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 vi.mock('@tsparticles/slim', () => ({
   loadSlim: vi.fn(),
 }));
 
+import React from 'react';
 import { ParticlesBackground } from './ParticlesBackground';
 
 describe('ParticlesBackground', () => {
