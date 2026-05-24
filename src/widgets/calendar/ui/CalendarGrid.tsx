@@ -2,7 +2,7 @@
 
 import React, { useMemo } from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
@@ -21,6 +21,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const viewDateStr = useAppSelector((state) => state.ui.viewDate);
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
   const locale = useLocale();
+  const t = useTranslations('Event');
 
   const activeGuildId = useMemo(() => currentGuildId || guilds[0]?.id, [currentGuildId, guilds]);
 
@@ -206,7 +207,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
             >
               <span className={styles.dateNumber}>{day.date}</span>
               {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && (
-                <Tooltip content="Добавить событие" side="top">
+                <Tooltip content={t('addEvent')} side="top">
                   <Button
                     variant="icon_floating"
                     size="icon_sm"
