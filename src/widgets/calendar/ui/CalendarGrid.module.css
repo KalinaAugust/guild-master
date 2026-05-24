@@ -165,6 +165,13 @@
 .event_meeting { background: var(--event-meeting); border-left-color: var(--event-meeting-border); }
 .event_other { background: var(--event-other); border-left-color: var(--event-other-border); }
 
+.tooltipEventsList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 140px;
+}
+
 .moreEvents {
   display: flex;
   justify-content: center;

@@ -12,6 +12,7 @@ import { useGetEventsQuery } from '@/entities/event';
 import { Guild, setCurrentGuild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
+import { Tooltip } from '@/shared/ui/Tooltip';
 
 export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const dispatch = useAppDispatch();
@@ -204,30 +205,47 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
             >
               <span className={styles.dateNumber}>{day.date}</span>
               {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && (
-                <Button 
-                  variant="icon_floating"
-                  size="icon_sm"
-                  className={styles.addEventBtn} 
-                  onClick={(e) => handleAddEventClick(e, day.fullDate)}
-                  title="Добавить событие"
-                >
-                  <Plus size={16} />
-                </Button>
+                <Tooltip content="Добавить событие" side="top">
+                  <Button
+                    variant="icon_floating"
+                    size="icon_sm"
+                    className={styles.addEventBtn}
+                    onClick={(e) => handleAddEventClick(e, day.fullDate)}
+                  >
+                    <Plus size={16} />
+                  </Button>
+                </Tooltip>
               )}
               <div className={styles.eventsList}>
                 {displayedEvents.map(event => (
-                  <div
-                    key={event.id}
-                    className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
-                    title={`${event.time} - ${event.title}`}
-                  >
-                    {event.time} {event.title}
-                  </div>
+                  <Tooltip key={event.id} content={`${event.time} - ${event.title}`} side="top">
+                    <div
+                      className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
+                    >
+                      {event.time} {event.title}
+                    </div>
+                  </Tooltip>
                 ))}
                 {remainingCount > 0 && (
-                  <div className={styles.moreEvents}>
-                    +{remainingCount}
-                  </div>
+                  <Tooltip
+                    side="right"
+                    content={
+                      <div className={styles.tooltipEventsList}>
+                        {dayEvents.slice(displayedEvents.length).map(event => (
+                          <div
+                            key={event.id}
+                            className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
+                          >
+                            {event.time} {event.title}
+                          </div>
+                        ))}
+                      </div>
+                    }
+                  >
+                    <div className={styles.moreEvents}>
+                      +{remainingCount}
+                    </div>
+                  </Tooltip>
                 )}
               </div>
             </div>
