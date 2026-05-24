@@ -87,6 +87,22 @@
     "descriptionLabel": "Описание (необязательно)",
     "submit": "Создать гильдию",
     "creating": "Создание...",
-    "errorCreate": "Ошибка при создании гильдии"
+    "errorCreate": "Ошибка при создании гильдии",
+    "manageTitle": "Управление гильдиями",
+    "ownerSection": "Вы владелец",
+    "memberSection": "Вы участник",
+    "createButton": "Создать гильдию",
+    "editTitle": "Редактировать гильдию",
+    "deleteSuccess": "Гильдия удалена",
+    "deleteConfirm": "Вы уверены, что хотите удалить эту гильдию?",
+    "emptyOwned": "У вас нет своих гильдий",
+    "emptyMember": "Вы не состоите ни в одной гильдии",
+    "editLabel": "Редактировать гильдию",
+    "deleteLabel": "Удалить гильдию",
+    "avatarSection": "Аватар",
+    "membersSection": "Участники",
+    "settingsSection": "Настройки",
+    "comingSoon": "Скоро",
+    "successCreated": "Гильдия создана"
   }
 }
