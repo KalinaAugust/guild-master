@@ -96,72 +96,69 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   return (
     <div className={styles.container}>
-      <Link href={`/day/${event.date}`} className={styles.backLink}>
-        <ChevronLeft size={20} />
-        {commonT('backToDay')}
-      </Link>
+      <div className={styles.header}>
+        <Link href={`/day/${event.date}`} className={styles.backLink}>
+          <ChevronLeft size={20} />
+          {commonT('backToDay')}
+        </Link>
+        <h1 className={styles.title}>{event.title}</h1>
+      </div>
 
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>{event.title}</h1>
-        </div>
-
-        <div className={styles.body}>
-          <div className={styles.column}>
-            <div className={styles.infoGroup}>
-              <span className={styles.label}>{t('type')}</span>
-              <span className={`${styles.typeBadge} ${styles[`type_${event.type}`]}`}>
-                {typeLabel}
-              </span>
-            </div>
-
-            <div className={styles.infoGroup}>
-              <span className={styles.label}>{t('dateTime')}</span>
-              <span className={styles.dateTime}>
-                <span>{event.date}</span>{' '}<span>{event.time}</span>
-              </span>
-            </div>
-
-            {event.description && (
-              <div className={styles.infoGroup}>
-                <span className={styles.label}>{t('description')}</span>
-                <p className={styles.description}>{event.description}</p>
-              </div>
-            )}
-          </div>
-
-          <div className={styles.column}>
-            <span className={styles.label}>
-              {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
+      <div className={styles.body}>
+        <div className={styles.column}>
+          <div className={styles.infoGroup}>
+            <span className={styles.label}>{t('type')}</span>
+            <span className={`${styles.typeBadge} ${styles[`type_${event.type}`]}`}>
+              {typeLabel}
             </span>
-
-            {isParticipantsLoading && <div className={styles.skeleton} />}
-
-            {!isParticipantsLoading && participants.length === 0 && (
-              <p className={styles.empty}>{t('noParticipants')}</p>
-            )}
-
-            {!isParticipantsLoading &&
-              participants.map((p) => (
-                <ParticipantItem
-                  key={p.id}
-                  participant={p}
-                  isCurrentUser={p.user_id === currentUserId}
-                  onConfirm={handleConfirm}
-                  onDecline={handleDecline}
-                />
-              ))}
           </div>
+
+          <div className={styles.infoGroup}>
+            <span className={styles.label}>{t('dateTime')}</span>
+            <span className={styles.dateTime}>
+              <span>{event.date}</span>{' '}<span>{event.time}</span>
+            </span>
+          </div>
+
+          {event.description && (
+            <div className={styles.infoGroup}>
+              <span className={styles.label}>{t('description')}</span>
+              <p className={styles.description}>{event.description}</p>
+            </div>
+          )}
         </div>
 
-        <div className={styles.footer}>
-          <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
-            {commonT('delete')}
-          </Button>
-          <Button type="button" variant="primary" onClick={handleEdit}>
-            {t('edit')}
-          </Button>
+        <div className={styles.column}>
+          <span className={styles.label}>
+            {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
+          </span>
+
+          {isParticipantsLoading && <div className={styles.skeleton} />}
+
+          {!isParticipantsLoading && participants.length === 0 && (
+            <p className={styles.empty}>{t('noParticipants')}</p>
+          )}
+
+          {!isParticipantsLoading &&
+            participants.map((p) => (
+              <ParticipantItem
+                key={p.id}
+                participant={p}
+                isCurrentUser={p.user_id === currentUserId}
+                onConfirm={handleConfirm}
+                onDecline={handleDecline}
+              />
+            ))}
         </div>
+      </div>
+
+      <div className={styles.footer}>
+        <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
+          {commonT('delete')}
+        </Button>
+        <Button type="button" variant="primary" onClick={handleEdit}>
+          {t('edit')}
+        </Button>
       </div>
 
       <ConfirmModal

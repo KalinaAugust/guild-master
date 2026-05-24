@@ -1,65 +1,73 @@
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px;
+  position: fixed;
+  top: 3.8rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--glass-border);
+  flex-shrink: 0;
+  position: relative;
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 32px;
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
+  z-index: 1;
 }
 
 .backLink:hover {
   color: var(--text-primary);
 }
 
-.card {
-  padding: 40px;
-  border-radius: 32px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--shadow-glass);
-}
-
-.header {
-  margin-bottom: 32px;
-}
-
 .title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
 }
 
 .body {
+  flex: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  margin-bottom: 32px;
+  overflow-y: auto;
 }
 
 .column {
-  padding: 0 32px 0 0;
+  padding: 32px;
 }
 
-.column:last-child {
-  padding: 0 0 0 32px;
-  border-left: 1px solid var(--glass-border);
+.column:first-child {
+  border-right: 1px solid var(--glass-border);
 }
 
 .infoGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .label {
@@ -68,7 +76,6 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-secondary);
-  margin-bottom: 4px;
   display: block;
 }
 
@@ -109,7 +116,7 @@
 .empty {
   font-size: 0.85rem;
   color: var(--text-secondary);
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .skeleton {
@@ -124,8 +131,9 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  padding-top: 24px;
+  padding: 20px 32px;
   border-top: 1px solid var(--glass-border);
+  flex-shrink: 0;
 }
 
 @keyframes pulse {
@@ -134,28 +142,16 @@
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 20px;
-  }
-
-  .card {
-    padding: 24px;
-    border-radius: 24px;
-  }
-
   .body {
     grid-template-columns: 1fr;
   }
 
-  .column {
-    padding: 0;
+  .column:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--glass-border);
   }
 
-  .column:last-child {
-    padding: 0;
-    border-left: none;
-    border-top: 1px solid var(--glass-border);
-    padding-top: 24px;
-    margin-top: 24px;
+  .title {
+    max-width: 50%;
   }
 }
