@@ -1,7 +1,7 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
 import styles from './ProfilePage.module.css';
-import { Mail, Calendar, Shield } from 'lucide-react';
+import { Mail, Calendar, User } from 'lucide-react';
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -21,7 +21,7 @@ export default async function ProfilePage() {
   // Fetch profile
   const { data: profile } = await supabase
     .from('profiles')
-    .select('avatar_url')
+    .select('avatar_url, full_name')
     .eq('id', user.id)
     .single();
 
@@ -58,6 +58,15 @@ export default async function ProfilePage() {
         </div>
 
         <div className={styles.infoGrid}>
+          {profile?.full_name && (
+            <div className={styles.infoItem}>
+              <User className={styles.icon} size={20} />
+              <div>
+                <label>Name</label>
+                <p>{profile.full_name}</p>
+              </div>
+            </div>
+          )}
           <div className={styles.infoItem}>
             <Mail className={styles.icon} size={20} />
             <div>
@@ -65,13 +74,7 @@ export default async function ProfilePage() {
               <p>{user.email}</p>
             </div>
           </div>
-          <div className={styles.infoItem}>
-            <Shield className={styles.icon} size={20} />
-            <div>
-              <label>User ID</label>
-              <p className={styles.truncate}>{user.id}</p>
-            </div>
-          </div>
+
           <div className={styles.infoItem}>
             <Calendar className={styles.icon} size={20} />
             <div>
