@@ -59,10 +59,10 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
                 </Link>
               </DropdownMenu.Item>
               <DropdownMenu.Item className={styles.item} asChild>
-                <Link href="/guilds/create" className={styles.link}>
+                <Link href="/guilds" className={styles.link}>
                   <div className={styles.itemContent}>
                     <ShieldPlus size={18} />
-                    <span>{guildT('createTitle')}</span>
+                    <span>{guildT('manageTitle')}</span>
                   </div>
                 </Link>
               </DropdownMenu.Item>
