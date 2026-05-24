@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X, Image, Users, Settings } from 'lucide-react';
-import { Guild, useCreateGuildMutation } from '@/entities/guild';
+import { X, Image as ImageIcon, Users, Settings } from 'lucide-react';
+import { Guild, useCreateGuildMutation, useUpdateGuildMutation } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import styles from './EditGuildWizard.module.css';
 
@@ -22,12 +22,9 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
 
   const [name, setName] = useState(guild?.name ?? '');
   const [description, setDescription] = useState(guild?.description ?? '');
-  const [createGuild, { isLoading }] = useCreateGuildMutation();
-
-  useEffect(() => {
-    setName(guild?.name ?? '');
-    setDescription(guild?.description ?? '');
-  }, [guild]);
+  const [createGuild, { isLoading: isCreating }] = useCreateGuildMutation();
+  const [updateGuild, { isLoading: isUpdating }] = useUpdateGuildMutation();
+  const isLoading = isCreating || isUpdating;
 
   const handleClose = () => {
     if (!isEdit) {
@@ -41,8 +38,13 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     e.preventDefault();
     if (!name.trim()) return;
     try {
-      await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
-      toast.success(t('successCreated'));
+      if (isEdit) {
+        await updateGuild({ id: guild.id, name: name.trim(), description: description.trim() }).unwrap();
+        toast.success(t('successUpdated'));
+      } else {
+        await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
+        toast.success(t('successCreated'));
+      }
       handleClose();
     } catch {
       toast.error(t('errorCreate'));
@@ -92,7 +94,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
             <div className={styles.column}>
               <div className={styles.stubGroup}>
                 <div className={styles.stubHeader}>
-                  <Image size={16} />
+                  <ImageIcon size={16} aria-hidden="true" />
                   <span className={styles.stubLabel}>{t('avatarSection')}</span>
                 </div>
                 <div className={styles.stubField}>{t('comingSoon')}</div>
@@ -121,12 +123,14 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
               {commonT('cancel')}
             </Button>
             <Button
-              type={isEdit ? 'button' : 'submit'}
+              type="submit"
               variant="primary"
-              form={isEdit ? undefined : 'guild-wizard-form'}
-              disabled={isEdit || !name.trim() || isLoading}
+              form="guild-wizard-form"
+              disabled={!name.trim() || isLoading}
             >
-              {isEdit ? commonT('save') : isLoading ? t('creating') : t('submit')}
+              {isEdit
+                ? isLoading ? commonT('saving') : commonT('save')
+                : isLoading ? t('creating') : t('submit')}
             </Button>
           </div>
         </DialogPrimitive.Content>

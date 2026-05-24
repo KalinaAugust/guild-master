@@ -25,6 +25,10 @@ export const guildApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `guilds/${id}`, method: 'DELETE' }),
       invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
     }),
+    updateGuild: builder.mutation<Guild, { id: string; name: string; description?: string }>({
+      query: ({ id, ...body }) => ({ url: `guilds/${id}`, method: 'PATCH', body }),
+      invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -33,4 +37,5 @@ export const {
   useGetGuildsQuery,
   useCreateGuildMutation,
   useDeleteGuildMutation,
+  useUpdateGuildMutation,
 } = guildApi;

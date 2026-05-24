@@ -1,6 +1,45 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/api/supabase/server';
 
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const { id } = await params;
+  const { name, description } = await request.json();
+  if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 });
+
+  const { data: existing } = await supabase
+    .from('guilds')
+    .select('owner_id')
+    .eq('id', id)
+    .single();
+
+  if (!existing || existing.owner_id !== user.id) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  const { data: guild, error } = await supabase
+    .from('guilds')
+    .update({ name, description: description || null })
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error || !guild) return NextResponse.json({ error: 'Failed to update guild' }, { status: 500 });
+
+  return NextResponse.json({
+    id: guild.id,
+    name: guild.name,
+    ownerId: guild.owner_id,
+    description: guild.description || undefined,
+  });
+}
+
 export async function DELETE(
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> }

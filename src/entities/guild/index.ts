@@ -6,4 +6,5 @@ export {
   useGetGuildsQuery,
   useCreateGuildMutation,
   useDeleteGuildMutation,
+  useUpdateGuildMutation,
 } from './api/guildApi';

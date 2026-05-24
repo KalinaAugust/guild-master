@@ -9,6 +9,7 @@
     "create": "Create",
     "confirm": "Confirm",
     "delete": "Delete",
+    "saving": "Saving...",
     "confirmDelete": "Are you sure you want to delete this event?",
     "backToCalendar": "Back to calendar",
     "backToDay": "Back to day",
@@ -103,6 +104,7 @@
     "membersSection": "Members",
     "settingsSection": "Settings",
     "comingSoon": "Coming soon",
-    "successCreated": "Guild created"
+    "successCreated": "Guild created",
+    "successUpdated": "Guild updated"
   }
 }

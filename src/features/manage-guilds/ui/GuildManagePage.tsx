@@ -70,7 +70,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
         emptyMessage={t('emptyMember')}
       />
 
-      <EditGuildWizard open={wizardOpen} guild={editingGuild} onClose={closeWizard} />
+      <EditGuildWizard key={editingGuild?.id ?? 'new'} open={wizardOpen} guild={editingGuild} onClose={closeWizard} />
       <ConfirmModal
         isOpen={!!deletingGuild}
         onClose={() => setDeletingGuild(null)}

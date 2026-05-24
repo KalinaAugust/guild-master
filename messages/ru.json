@@ -9,6 +9,7 @@
     "create": "Создать",
     "confirm": "Подтвердить",
     "delete": "Удалить",
+    "saving": "Сохранение...",
     "confirmDelete": "Вы уверены, что хотите удалить это событие?",
     "backToCalendar": "Назад в календарь",
     "backToDay": "Назад к дню",
@@ -103,6 +104,7 @@
     "membersSection": "Участники",
     "settingsSection": "Настройки",
     "comingSoon": "Скоро",
-    "successCreated": "Гильдия создана"
+    "successCreated": "Гильдия создана",
+    "successUpdated": "Гильдия обновлена"
   }
 }
