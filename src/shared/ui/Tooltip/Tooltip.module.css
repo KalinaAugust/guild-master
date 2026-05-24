@@ -1,0 +1,52 @@
+.content {
+  background-color: var(--color-surface, #1e1e2e);
+  color: var(--color-text, #cdd6f4);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  max-width: 260px;
+  z-index: 100;
+  animation-duration: 150ms;
+  animation-timing-function: ease-out;
+}
+
+.content[data-state='delayed-open'][data-side='top'] {
+  animation-name: slideDown;
+}
+
+.content[data-state='delayed-open'][data-side='bottom'] {
+  animation-name: slideUp;
+}
+
+.content[data-state='delayed-open'][data-side='left'] {
+  animation-name: slideRight;
+}
+
+.content[data-state='delayed-open'][data-side='right'] {
+  animation-name: slideLeft;
+}
+
+.arrow {
+  fill: var(--color-surface, #1e1e2e);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
