@@ -1,5 +1,10 @@
 export * from './model/types';
 export * from './model/slice';
 export * from './api/getGuilds';
-export * from './api/createGuild';
-export { useGetGuildMembersQuery } from './api/guildApi';
+export {
+  useGetGuildMembersQuery,
+  useGetGuildsQuery,
+  useCreateGuildMutation,
+  useDeleteGuildMutation,
+  useUpdateGuildMutation,
+} from './api/guildApi';

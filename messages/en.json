@@ -9,6 +9,7 @@
     "create": "Create",
     "confirm": "Confirm",
     "delete": "Delete",
+    "saving": "Saving...",
     "confirmDelete": "Are you sure you want to delete this event?",
     "backToCalendar": "Back to calendar",
     "backToDay": "Back to day",
@@ -87,6 +88,23 @@
     "descriptionLabel": "Description (optional)",
     "submit": "Create Guild",
     "creating": "Creating...",
-    "errorCreate": "Error creating guild"
+    "errorCreate": "Error creating guild",
+    "manageTitle": "Manage Guilds",
+    "ownerSection": "You are the owner",
+    "memberSection": "You are a member",
+    "createButton": "Create Guild",
+    "editTitle": "Edit Guild",
+    "deleteSuccess": "Guild deleted",
+    "deleteConfirm": "Are you sure you want to delete this guild?",
+    "emptyOwned": "You don't own any guilds yet",
+    "emptyMember": "You are not a member of any guilds",
+    "editLabel": "Edit guild",
+    "deleteLabel": "Delete guild",
+    "avatarSection": "Avatar",
+    "membersSection": "Members",
+    "settingsSection": "Settings",
+    "comingSoon": "Coming soon",
+    "successCreated": "Guild created",
+    "successUpdated": "Guild updated"
   }
 }

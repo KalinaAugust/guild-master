@@ -1,5 +1,5 @@
 import { baseApi } from '@/shared/api/baseApi';
-import { GuildMember } from '../model/types';
+import { Guild, GuildMember } from '../model/types';
 
 export const guildApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -13,7 +13,29 @@ export const guildApi = baseApi.injectEndpoints({
             ]
           : [{ type: 'GuildMember' as const, id: `LIST-${guildId}` }],
     }),
+    getGuilds: builder.query<Guild[], void>({
+      query: () => 'guilds',
+      providesTags: [{ type: 'Guild', id: 'LIST' }],
+    }),
+    createGuild: builder.mutation<Guild, { name: string; description?: string }>({
+      query: (body) => ({ url: 'guilds', method: 'POST', body }),
+      invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
+    }),
+    deleteGuild: builder.mutation<{ success: boolean }, string>({
+      query: (id) => ({ url: `guilds/${id}`, method: 'DELETE' }),
+      invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
+    }),
+    updateGuild: builder.mutation<Guild, { id: string; name: string; description?: string }>({
+      query: ({ id, ...body }) => ({ url: `guilds/${id}`, method: 'PATCH', body }),
+      invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
+    }),
   }),
 });
 
-export const { useGetGuildMembersQuery } = guildApi;
+export const {
+  useGetGuildMembersQuery,
+  useGetGuildsQuery,
+  useCreateGuildMutation,
+  useDeleteGuildMutation,
+  useUpdateGuildMutation,
+} = guildApi;

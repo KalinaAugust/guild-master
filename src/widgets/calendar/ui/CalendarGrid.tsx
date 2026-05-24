@@ -214,7 +214,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
                     className={styles.addEventBtn}
                     onClick={(e) => handleAddEventClick(e, day.fullDate)}
                   >
-                    <Plus size={16} />
+                    <Plus size={16} strokeWidth={2.5} />
                   </Button>
                 </Tooltip>
               )}
