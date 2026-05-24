@@ -38,12 +38,10 @@ const particlesOptions = {
   detectRetina: true,
 } as const;
 
-async function initEngine(engine: Engine) {
-  await loadSlim(engine);
-}
-
 export function ParticlesBackground() {
-  const init = useCallback(initEngine, []);
+  const init = useCallback(async (engine: Engine) => {
+    await loadSlim(engine);
+  }, []);
 
   return (
     <ParticlesProvider init={init}>
