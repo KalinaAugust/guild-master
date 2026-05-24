@@ -13,6 +13,7 @@ import { Guild, setCurrentGuild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
+import { EventsTooltipContent } from './EventsTooltipContent';
 
 export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const dispatch = useAppDispatch();
@@ -229,18 +230,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
                 {remainingCount > 0 && (
                   <Tooltip
                     side="right"
-                    content={
-                      <div className={styles.tooltipEventsList}>
-                        {dayEvents.slice(displayedEvents.length).map(event => (
-                          <div
-                            key={event.id}
-                            className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
-                          >
-                            {event.time} {event.title}
-                          </div>
-                        ))}
-                      </div>
-                    }
+                    content={<EventsTooltipContent events={dayEvents.slice(displayedEvents.length)} />}
                   >
                     <div className={styles.moreEvents}>
                       +{remainingCount}
