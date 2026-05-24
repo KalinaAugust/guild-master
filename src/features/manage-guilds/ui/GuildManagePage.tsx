@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
+import { Plus } from 'lucide-react';
 import { useGetGuildsQuery, useDeleteGuildMutation, Guild } from '@/entities/guild';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Button } from '@/shared/ui/Button';
@@ -44,7 +45,8 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.pageTitle}>{t('manageTitle')}</h1>
-        <Button variant="primary" onClick={() => setCreateOpen(true)}>
+        <Button variant="primary" onClick={() => setCreateOpen(true)} className={styles.createBtn}>
+          <Plus size={18} strokeWidth={3} />
           {t('createButton')}
         </Button>
       </div>

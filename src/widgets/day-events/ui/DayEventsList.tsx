@@ -88,7 +88,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         </h2>
         {!isPastDate && (
           <Button variant="primary" size="sm" onClick={handleAddEvent} className={styles.addBtn}>
-            <Plus size={18} />
+            <Plus size={18} strokeWidth={2.5} />
             <span>{t('addEvent')}</span>
           </Button>
         )}
