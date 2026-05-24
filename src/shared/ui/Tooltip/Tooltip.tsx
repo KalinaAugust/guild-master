@@ -11,6 +11,8 @@ export interface TooltipProps {
   delayDuration?: number;
 }
 
+export const TooltipProvider = TooltipPrimitive.Provider;
+
 export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
