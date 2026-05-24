@@ -53,7 +53,7 @@ All tables use RLS. Supabase client is created via `createServerClient` with `ge
 1. **CSS Modules:** Use CSS Modules only (`*.module.css`).
 2. **Inline styles:** Strictly forbidden.
 3. **Naming:** Follow BEM-like class naming inside modules where it aids readability.
-4. **Radix UI:** Style Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-select`, `@radix-ui/react-dropdown-menu`) via CSS Modules, never Tailwind.
+4. **Radix UI:** Style Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-select`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tooltip`) via CSS Modules, never Tailwind.
 5. **clsx + tailwind-merge:** Only allowed in `shared/ui` utility components. Features/entities/widgets use CSS Modules only.
 
 ## State Management
