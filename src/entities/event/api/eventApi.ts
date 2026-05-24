@@ -89,6 +89,10 @@ export const eventApi = baseApi.injectEndpoints({
         { type: 'Participant' as const, id: `LIST-${eventId}` },
       ],
     }),
+    getEventById: builder.query<{ event: ActivityEvent; guildId: string }, string>({
+      query: (id) => `events/${id}`,
+      providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
+    }),
   }),
 });
 
@@ -99,4 +103,5 @@ export const {
   useDeleteEventMutation,
   useGetParticipantsQuery,
   useSyncParticipantsMutation,
+  useGetEventByIdQuery,
 } = eventApi;

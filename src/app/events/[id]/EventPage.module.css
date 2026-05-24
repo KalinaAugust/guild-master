@@ -1,0 +1,43 @@
+.main {}
+
+.accessDeniedContainer {
+  max-width: 480px;
+  margin: 80px auto;
+  padding: 40px;
+  text-align: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  backdrop-filter: var(--glass-blur);
+}
+
+.accessDeniedTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 12px;
+}
+
+.accessDeniedMessage {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 24px;
+  border-radius: 10px;
+  background: rgba(108, 99, 255, 0.2);
+  color: #a89fff;
+  border: 1px solid rgba(108, 99, 255, 0.3);
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.homeLink:hover {
+  background: rgba(108, 99, 255, 0.35);
+}

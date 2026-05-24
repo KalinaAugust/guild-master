@@ -11,11 +11,9 @@ export interface ActivityEvent {
 
 export interface UIState {
   isEventModalOpen: boolean;
-  selectedDate: string | null; // ISO string for the currently viewed date
-  viewDate: string; // NEW: currently viewed month/year
-  editingEvent?: ActivityEvent; // Event being edited
-  isEventDetailOpen: boolean;
-  viewingEvent: ActivityEvent | null;
+  selectedDate: string | null;
+  viewDate: string;
+  editingEvent?: ActivityEvent;
 }
 
 export type ParticipantStatus = 'pending' | 'confirmed' | 'declined';
