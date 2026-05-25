@@ -10,10 +10,10 @@ const particlesOptions = {
   background: { color: { value: 'transparent' } },
   fpsLimit: 60,
   particles: {
-    color: { value: '#9d4edd' },
+    color: { value: '#e2e8f0' },
     links: {
       enable: true,
-      color: '#c8b6ff',
+      color: 'rgba(255, 255, 255, 0.3)',
       distance: 130,
       opacity: 0.35,
       width: 1,
