@@ -29,11 +29,18 @@
 }
 
 .monthSelect {
-  min-width: 120px;
+  width: 150px;
+  flex-shrink: 0;
 }
 
 .yearSelect {
-  min-width: 90px;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.guildSelect {
+  width: 270px;
+  flex-shrink: 0;
 }
 
 .separator {
@@ -122,7 +129,7 @@
 }
 
 .today {
-  background: rgba(157, 78, 221, 0.1);
+  background: rgba(56, 189, 248, 0.1);
   border-color: var(--accent-primary);
 }
 

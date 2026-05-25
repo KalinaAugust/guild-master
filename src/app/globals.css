@@ -1,37 +1,38 @@
 :root {
   /* Backgrounds */
-  --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  --bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: blur(2px);
 
   /* Accents */
-  --accent-primary: #9d4edd;
-  --accent-secondary: #c8b6ff;
-  --accent-yellow: #ffcc33;
-  --accent-glow: rgba(157, 78, 221, 0.3);
+  --accent-primary: #38bdf8;
+  --accent-hover: #0ea5e9;
+  --accent-secondary: #7dd3fc;
+  --accent-yellow: #f59e0b;
+  --accent-glow: rgba(56, 189, 248, 0.3);
 
   /* Text */
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.6);
-  --text-highlight: #c8b6ff;
+  --text-highlight: #bae6fd;
 
   /* Shadows */
   --shadow-glass: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 
   /* Modal */
-  --modal-bg: #1a0b2e;
+  --modal-bg: #051020;
 
-  /* Events (Amethyst-themed palette) */
-  --event-raid: rgba(235, 64, 52, 0.3);
-  --event-raid-border: #eb4034;
-  --event-meeting: rgba(52, 152, 219, 0.3);
-  --event-meeting-border: #3498db;
-  --event-game: rgba(46, 204, 113, 0.3);
-  --event-game-border: #2ecc71;
-  --event-other: rgba(157, 78, 221, 0.3);
-  --event-other-border: #9d4edd;
+  /* Events */
+  --event-raid: #5c3030;
+  --event-raid-border: #b06060;
+  --event-meeting: #1e4d80;
+  --event-meeting-border: #5a90b8;
+  --event-game: #254d38;
+  --event-game-border: #4a9068;
+  --event-other: #1a5272;
+  --event-other-border: #4a85a8;
 }
 
 * {
@@ -42,12 +43,12 @@
 
 html, body {
   background: var(--bg-gradient);
-  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
 }
 
 body {
+  position: relative;
   font-family: sans-serif;
   line-height: 1.5;
 }
@@ -59,7 +60,7 @@ body {
 }
 
 .bg-blob {
-  position: fixed;
+  position: absolute;
   width: 500px;
   height: 500px;
   background: var(--accent-primary);

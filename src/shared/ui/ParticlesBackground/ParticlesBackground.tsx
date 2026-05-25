@@ -7,13 +7,14 @@ import type { Engine } from '@tsparticles/engine';
 import styles from './ParticlesBackground.module.css';
 
 const particlesOptions = {
+  fullScreen: { enable: false },
   background: { color: { value: 'transparent' } },
   fpsLimit: 60,
   particles: {
-    color: { value: '#9d4edd' },
+    color: { value: '#e2e8f0' },
     links: {
       enable: true,
-      color: '#c8b6ff',
+      color: 'rgba(255, 255, 255, 0.3)',
       distance: 130,
       opacity: 0.35,
       width: 1,
@@ -25,7 +26,7 @@ const particlesOptions = {
     },
     opacity: { value: 0.5 },
     shape: { type: 'circle' },
-    size: { value: { min: 2, max: 5 } },
+    size: { value: { min: 2, max: 4 } },
   },
   interactivity: {
     events: {

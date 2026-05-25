@@ -15,6 +15,7 @@
   font-size: 1rem;
   gap: 12px;
   text-align: left;
+  overflow: hidden;
 }
 
 /* Select.Value renders a span */
@@ -72,7 +73,7 @@
 }
 
 .content {
-  background: #1a0b2e;
+  background: var(--modal-bg);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
   box-shadow: var(--shadow-glass);
@@ -142,6 +143,6 @@
 }
 
 .select option {
-  background: #1a0b2e;
+  background: var(--modal-bg);
   color: var(--text-primary);
 }
