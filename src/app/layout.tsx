@@ -5,6 +5,8 @@ import { Toaster } from 'sonner';
 import "./globals.css";
 import StoreProvider from "./providers/StoreProvider";
 import { Header } from "@/widgets/header";
+import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
+import styles from './Layout.module.css';
 
 export const metadata: Metadata = {
   title: "Guild Master",
@@ -24,11 +26,12 @@ export default async function RootLayout({
       <body>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
+        <ParticlesBackground />
         <NextIntlClientProvider messages={messages}>
           <StoreProvider>
             <Toaster position="top-right" richColors closeButton theme="dark" />
             <Header />
-            <div style={{ padding: '0 2rem' }}>
+            <div className={styles.content}>
               {children}
             </div>
           </StoreProvider>

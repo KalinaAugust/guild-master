@@ -3,14 +3,14 @@
   --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(16px);
-  
+  --glass-blur: blur(2px);
+
   /* Accents */
   --accent-primary: #9d4edd;
   --accent-secondary: #c8b6ff;
   --accent-yellow: #ffcc33;
   --accent-glow: rgba(157, 78, 221, 0.3);
-  
+
   /* Text */
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
@@ -22,7 +22,7 @@
 
   /* Modal */
   --modal-bg: #1a0b2e;
-  
+
   /* Events (Amethyst-themed palette) */
   --event-raid: rgba(235, 64, 52, 0.3);
   --event-raid-border: #eb4034;
