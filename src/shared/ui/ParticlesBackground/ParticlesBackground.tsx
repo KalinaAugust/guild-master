@@ -7,6 +7,7 @@ import type { Engine } from '@tsparticles/engine';
 import styles from './ParticlesBackground.module.css';
 
 const particlesOptions = {
+  fullScreen: { enable: false },
   background: { color: { value: 'transparent' } },
   fpsLimit: 60,
   particles: {
