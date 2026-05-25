@@ -43,12 +43,12 @@
 
 html, body {
   background: var(--bg-gradient);
-  background-attachment: fixed;
   color: var(--text-primary);
   min-height: 100vh;
 }
 
 body {
+  position: relative;
   font-family: sans-serif;
   line-height: 1.5;
 }
@@ -60,7 +60,7 @@ body {
 }
 
 .bg-blob {
-  position: fixed;
+  position: absolute;
   width: 500px;
   height: 500px;
   background: var(--accent-primary);
