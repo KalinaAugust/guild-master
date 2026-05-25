@@ -29,11 +29,18 @@
 }
 
 .monthSelect {
-  min-width: 150px;
+  width: 150px;
+  flex-shrink: 0;
 }
 
 .yearSelect {
-  min-width: 90px;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.guildSelect {
+  width: 220px;
+  flex-shrink: 0;
 }
 
 .separator {
