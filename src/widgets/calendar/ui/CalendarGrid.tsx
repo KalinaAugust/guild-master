@@ -147,29 +147,32 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <div className={styles.controlsLeft}>
-          <Select
-            value={now.month().toString()}
-            onValueChange={handleMonthChange}
-            options={months}
-            className={styles.monthSelect}
-            centered
-          />
-          <Select
-            value={now.year().toString()}
-            onValueChange={handleYearChange}
-            options={years}
-            className={styles.yearSelect}
-            centered
-          />
+          <div className={styles.monthSelect}>
+            <Select
+              value={now.month().toString()}
+              onValueChange={handleMonthChange}
+              options={months}
+              centered
+            />
+          </div>
+          <div className={styles.yearSelect}>
+            <Select
+              value={now.year().toString()}
+              onValueChange={handleYearChange}
+              options={years}
+              centered
+            />
+          </div>
           <div className={styles.separator} />
-          <Select
-            value={activeGuildId}
-            onValueChange={handleGuildChange}
-            options={guildOptions}
-            placeholder="Выберите гильдию"
-            className={styles.guildSelect}
-            truncate
-          />
+          <div className={styles.guildSelect}>
+            <Select
+              value={activeGuildId}
+              onValueChange={handleGuildChange}
+              options={guildOptions}
+              placeholder="Выберите гильдию"
+              truncate
+            />
+          </div>
         </div>
         <div className={styles.controlsRight}>
           <Button variant="icon" size="icon" onClick={handlePrevMonth}>
