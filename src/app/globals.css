@@ -25,13 +25,13 @@
   --modal-bg: #051020;
 
   /* Events */
-  --event-raid: rgba(235, 64, 52, 0.3);
+  --event-raid: #7f1d1d;
   --event-raid-border: #eb4034;
-  --event-meeting: rgba(52, 152, 219, 0.3);
+  --event-meeting: #1e3a5f;
   --event-meeting-border: #3498db;
-  --event-game: rgba(46, 204, 113, 0.3);
+  --event-game: #14532d;
   --event-game-border: #2ecc71;
-  --event-other: rgba(56, 189, 248, 0.2);
+  --event-other: #0c4a6e;
   --event-other-border: #38bdf8;
 }
 
