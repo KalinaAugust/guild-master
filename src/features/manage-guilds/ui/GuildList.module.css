@@ -26,8 +26,10 @@
   gap: 12px;
   padding: 14px 16px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   transition: background 0.15s ease;
 }
 

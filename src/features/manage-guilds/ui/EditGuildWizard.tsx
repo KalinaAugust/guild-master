@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X, Image as ImageIcon, Users, Settings } from 'lucide-react';
-import { Guild, useCreateGuildMutation, useUpdateGuildMutation } from '@/entities/guild';
+import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { GuildMembersSection } from './GuildMembersSection';
 import styles from './EditGuildWizard.module.css';
@@ -26,16 +26,33 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
   const [name, setName] = useState(guild?.name ?? '');
   const [description, setDescription] = useState(guild?.description ?? '');
   const [activeTab, setActiveTab] = useState<Tab>('members');
+  const [pendingEmails, setPendingEmails] = useState<string[]>([]);
+  const [pendingInput, setPendingInput] = useState('');
   const [createGuild, { isLoading: isCreating }] = useCreateGuildMutation();
   const [updateGuild, { isLoading: isUpdating }] = useUpdateGuildMutation();
+  const [addMember] = useAddGuildMemberMutation();
   const isLoading = isCreating || isUpdating;
 
   const handleClose = () => {
     if (!isEdit) {
       setName('');
       setDescription('');
+      setPendingEmails([]);
+      setPendingInput('');
     }
     onClose();
+  };
+
+  const handleAddPending = (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = pendingInput.trim();
+    if (!email || pendingEmails.includes(email)) return;
+    setPendingEmails((prev) => [...prev, email]);
+    setPendingInput('');
+  };
+
+  const handleRemovePending = (email: string) => {
+    setPendingEmails((prev) => prev.filter((e) => e !== email));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,7 +63,14 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
         await updateGuild({ id: guild.id, name: name.trim(), description: description.trim() }).unwrap();
         toast.success(t('successUpdated'));
       } else {
-        await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
+        const newGuild = await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
+        if (pendingEmails.length > 0) {
+          const results = await Promise.allSettled(
+            pendingEmails.map((email) => addMember({ guildId: newGuild.id, email }).unwrap())
+          );
+          const failed = results.filter((r) => r.status === 'rejected').length;
+          if (failed > 0) toast.error(`Failed to add ${failed} member(s)`);
+        }
         toast.success(t('successCreated'));
       }
       handleClose();
@@ -118,7 +142,39 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
               {activeTab === 'members' && (
                 guild
                   ? <GuildMembersSection guildId={guild.id} />
-                  : <p className={styles.tabEmpty}>Save guild first to manage members.</p>
+                  : (
+                    <div>
+                      <form onSubmit={handleAddPending} className={styles.pendingForm}>
+                        <input
+                          type="email"
+                          value={pendingInput}
+                          onChange={(e) => setPendingInput(e.target.value)}
+                          placeholder="user@example.com"
+                          className={styles.pendingInput}
+                        />
+                        <Button type="submit" variant="primary" disabled={!pendingInput.trim()}>
+                          Add
+                        </Button>
+                      </form>
+                      {pendingEmails.length > 0 && (
+                        <ul className={styles.pendingList}>
+                          {pendingEmails.map((email) => (
+                            <li key={email} className={styles.pendingItem}>
+                              <span className={styles.pendingEmail}>{email}</span>
+                              <button
+                                type="button"
+                                className={styles.pendingRemove}
+                                onClick={() => handleRemovePending(email)}
+                                aria-label="Remove"
+                              >
+                                <X size={12} />
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  )
               )}
 
               {activeTab === 'settings' && (
