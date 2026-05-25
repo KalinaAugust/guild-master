@@ -29,6 +29,25 @@ export const guildApi = baseApi.injectEndpoints({
       query: ({ id, ...body }) => ({ url: `guilds/${id}`, method: 'PATCH', body }),
       invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
     }),
+    addGuildMember: builder.mutation<GuildMember, { guildId: string; email: string }>({
+      query: ({ guildId, email }) => ({
+        url: `guilds/${guildId}/members`,
+        method: 'POST',
+        body: { email },
+      }),
+      invalidatesTags: (_, __, { guildId }) => [
+        { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+      ],
+    }),
+    removeGuildMember: builder.mutation<{ success: boolean }, { guildId: string; userId: string }>({
+      query: ({ guildId, userId }) => ({
+        url: `guilds/${guildId}/members/${userId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (_, __, { guildId }) => [
+        { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+      ],
+    }),
   }),
 });
 
@@ -38,4 +57,6 @@ export const {
   useCreateGuildMutation,
   useDeleteGuildMutation,
   useUpdateGuildMutation,
+  useAddGuildMemberMutation,
+  useRemoveGuildMemberMutation,
 } = guildApi;
