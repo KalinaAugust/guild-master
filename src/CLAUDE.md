@@ -56,6 +56,24 @@ All tables use RLS. Supabase client is created via `createServerClient` with `ge
 4. **Radix UI:** Style Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-select`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tooltip`) via CSS Modules, never Tailwind.
 5. **clsx + tailwind-merge:** Only allowed in `shared/ui` utility components. Features/entities/widgets use CSS Modules only.
 
+## CSS Vendor Prefixes
+
+Never add `-webkit-` prefixes for properties that are fully standard — they add noise and trigger deprecation warnings in Chrome DevTools.
+
+**Drop entirely (no prefix needed in any modern browser):**
+`transform`, `transition`, `animation` / `@keyframes`, `border-radius`, `box-shadow`, `flex` / `flexbox`, `grid`, `user-select`, `background-size`, `calc()`, `linear-gradient` / `radial-gradient`, `columns`.
+
+**Keep BOTH prefixed + unprefixed:**
+- `backdrop-filter` — Safari 17 and below still require `-webkit-backdrop-filter`. Write both until Safari 17 share drops (~2026):
+  ```css
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  ```
+- `appearance` — write both for reliable form-control resets on iOS Safari.
+
+**`-webkit-` only (no standard equivalent, keep as-is):**
+`-webkit-text-stroke`, `-webkit-text-fill-color`, `-webkit-tap-highlight-color`, `-webkit-touch-callout`.
+
 ## State Management
 
 1. Use Redux Toolkit.
