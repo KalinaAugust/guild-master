@@ -1,0 +1,18 @@
+.wrapper {
+  width: 140px;
+  opacity: 1;
+  transition: opacity 0.2s;
+}
+
+.wrapper_pending {
+  opacity: 0.5;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+}
+
+.flag {
+  margin-right: 0.75rem;
+}

@@ -43,7 +43,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     onClose();
   };
 
-  const handleAddPending = (e: React.FormEvent) => {
+  const handleAddPending = (e: React.SubmitEvent) => {
     e.preventDefault();
     const email = pendingInput.trim();
     if (!email || pendingEmails.includes(email)) return;
@@ -55,7 +55,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     setPendingEmails((prev) => prev.filter((e) => e !== email));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
     try {

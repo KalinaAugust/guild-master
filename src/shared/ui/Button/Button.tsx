@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -7,14 +7,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
+export const Button = ({
   children,
   variant = 'primary',
   size = 'md',
   fullWidth = false,
   className = '',
   ...props
-}, ref) => {
+}: ButtonProps) => {
   const classes = [
     styles.button,
     styles[`variant_${variant}`],
@@ -24,10 +24,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   ].filter(Boolean).join(' ');
 
   return (
-    <button ref={ref} className={classes} {...props}>
+    <button className={classes} {...props}>
       {children}
     </button>
   );
-});
-
-Button.displayName = 'Button';
+};
