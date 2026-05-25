@@ -7,4 +7,6 @@ export {
   useCreateGuildMutation,
   useDeleteGuildMutation,
   useUpdateGuildMutation,
+  useAddGuildMemberMutation,
+  useRemoveGuildMemberMutation,
 } from './api/guildApi';
