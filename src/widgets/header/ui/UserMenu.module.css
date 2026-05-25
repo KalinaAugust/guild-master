@@ -26,7 +26,7 @@
 
 .content {
   min-width: 200px;
-  background: #1a0b2e;
+  background: var(--modal-bg);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
   padding: 0.5rem;
