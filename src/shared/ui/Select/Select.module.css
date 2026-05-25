@@ -15,6 +15,7 @@
   font-size: 1rem;
   gap: 12px;
   text-align: left;
+  overflow: hidden;
 }
 
 /* Select.Value renders a span */

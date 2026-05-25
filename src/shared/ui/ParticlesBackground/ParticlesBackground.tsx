@@ -26,7 +26,7 @@ const particlesOptions = {
     },
     opacity: { value: 0.5 },
     shape: { type: 'circle' },
-    size: { value: { min: 2, max: 5 } },
+    size: { value: { min: 2, max: 4 } },
   },
   interactivity: {
     events: {
