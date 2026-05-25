@@ -25,14 +25,14 @@
   --modal-bg: #051020;
 
   /* Events */
-  --event-raid: #7f1d1d;
-  --event-raid-border: #eb4034;
-  --event-meeting: #1e3a5f;
-  --event-meeting-border: #3498db;
-  --event-game: #14532d;
-  --event-game-border: #2ecc71;
-  --event-other: #0c4a6e;
-  --event-other-border: #38bdf8;
+  --event-raid: #3d2323;
+  --event-raid-border: #a05050;
+  --event-meeting: #1e2e42;
+  --event-meeting-border: #4a7fa0;
+  --event-game: #1a3328;
+  --event-game-border: #3a7a58;
+  --event-other: #152a3a;
+  --event-other-border: #3a7090;
 }
 
 * {
