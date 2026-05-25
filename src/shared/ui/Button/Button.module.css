@@ -52,13 +52,13 @@
 
 /* Variants */
 .variant_primary {
-  background: var(--accent-primary, #b25fff);
+  background: var(--accent-primary, #38bdf8);
   color: white;
 }
 
 .variant_primary:hover:not(:disabled) {
-  background: var(--accent-hover, #9b4de0);
-  box-shadow: 0 4px 12px var(--accent-glow, rgba(178, 95, 255, 0.4));
+  background: var(--accent-hover, #0ea5e9);
+  box-shadow: 0 4px 12px var(--accent-glow, rgba(56, 189, 248, 0.4));
 }
 
 .variant_primary:active:not(:disabled) {
@@ -93,7 +93,7 @@
 
 .variant_icon:hover:not(:disabled) {
   background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-primary, #b25fff);
+  border-color: var(--accent-primary, #38bdf8);
 }
 
 .variant_icon_floating {
@@ -103,7 +103,7 @@
 }
 
 .variant_icon_floating:hover:not(:disabled) {
-  background: var(--accent-primary, #b25fff);
+  background: var(--accent-primary, #38bdf8);
 }
 
 .variant_danger {
