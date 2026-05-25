@@ -7,7 +7,10 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X, Image as ImageIcon, Users, Settings } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { GuildMembersSection } from './GuildMembersSection';
 import styles from './EditGuildWizard.module.css';
+
+type Tab = 'members' | 'settings';
 
 interface GuildWizardProps {
   open: boolean;
@@ -22,6 +25,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
 
   const [name, setName] = useState(guild?.name ?? '');
   const [description, setDescription] = useState(guild?.description ?? '');
+  const [activeTab, setActiveTab] = useState<Tab>('members');
   const [createGuild, { isLoading: isCreating }] = useCreateGuildMutation();
   const [updateGuild, { isLoading: isUpdating }] = useUpdateGuildMutation();
   const isLoading = isCreating || isUpdating;
@@ -92,29 +96,40 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
             </div>
 
             <div className={styles.column}>
-              <div className={styles.stubGroup}>
-                <div className={styles.stubHeader}>
-                  <ImageIcon size={16} aria-hidden="true" />
-                  <span className={styles.stubLabel}>{t('avatarSection')}</span>
-                </div>
-                <div className={styles.stubField}>{t('comingSoon')}</div>
+              <div className={styles.tabBar}>
+                <button
+                  type="button"
+                  className={`${styles.tab} ${activeTab === 'members' ? styles.tabActive : ''}`}
+                  onClick={() => setActiveTab('members')}
+                >
+                  <Users size={15} />
+                  {t('membersSection')}
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.tab} ${activeTab === 'settings' ? styles.tabActive : ''}`}
+                  onClick={() => setActiveTab('settings')}
+                >
+                  <Settings size={15} />
+                  {t('settingsSection')}
+                </button>
               </div>
 
-              <div className={styles.stubGroup}>
-                <div className={styles.stubHeader}>
-                  <Users size={16} />
-                  <span className={styles.stubLabel}>{t('membersSection')}</span>
-                </div>
-                <div className={styles.stubField}>{t('comingSoon')}</div>
-              </div>
+              {activeTab === 'members' && (
+                guild
+                  ? <GuildMembersSection guildId={guild.id} />
+                  : <p className={styles.tabEmpty}>Save guild first to manage members.</p>
+              )}
 
-              <div className={styles.stubGroup}>
-                <div className={styles.stubHeader}>
-                  <Settings size={16} />
-                  <span className={styles.stubLabel}>{t('settingsSection')}</span>
+              {activeTab === 'settings' && (
+                <div className={styles.stubGroup}>
+                  <div className={styles.stubHeader}>
+                    <ImageIcon size={16} aria-hidden="true" />
+                    <span className={styles.stubLabel}>{t('avatarSection')}</span>
+                  </div>
+                  <div className={styles.stubField}>{t('comingSoon')}</div>
                 </div>
-                <div className={styles.stubField}>{t('comingSoon')}</div>
-              </div>
+              )}
             </div>
           </div>
 
