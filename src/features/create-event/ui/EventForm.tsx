@@ -34,7 +34,7 @@ export const EventForm: React.FC<EventFormProps> = ({
     { label: t('types.other'), value: 'other' as ActivityType },
   ], [t]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!title || !date || !time) return;
     onSubmit({ title, date, time, type, description });

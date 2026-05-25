@@ -16,6 +16,7 @@ import {
 import { useGetGuildMembersQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
+import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { EventForm } from './EventForm';
 import { EventFormData } from '../model/types';
 import styles from './EventWizard.module.css';
@@ -27,8 +28,6 @@ const COLOR_DOTS = [
   { cls: styles.colorDotOrange, label: 'Orange' },
   { cls: styles.colorDotBlue,   label: 'Blue' },
 ];
-
-const DAY_LABELS = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
 const FORM_ID = 'event-wizard-form';
 
@@ -46,6 +45,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
 
   const t = useTranslations('Event');
   const commonT = useTranslations('Common');
+  const dayLabels = useWeekdayLabels();
 
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
 
@@ -162,7 +162,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
               <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.repeatLabel')}</span>
                 <div className={styles.dayToggles}>
-                  {DAY_LABELS.map((d) => (
+                  {dayLabels.map((d) => (
                     <div key={d} className={styles.dayToggle}>{d}</div>
                   ))}
                 </div>
@@ -179,8 +179,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
                         .split(' ')
                         .map((w) => w[0])
                         .join('')
-                        .toUpperCase()
-                        .slice(0, 2);
+                        .toUpperCase();
                       const selected = selectedParticipants.includes(member.userId);
                       return (
                         <div

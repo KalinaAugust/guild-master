@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Select } from '@/shared/ui/Select';
 import { setUserLocale } from '../api/setLocale';
 import { useTransition } from 'react';
+import styles from './LanguageSwitcher.module.css';
 
 export const LanguageSwitcher = () => {
   const locale = useLocale();
@@ -11,38 +12,38 @@ export const LanguageSwitcher = () => {
   const [isPending, startTransition] = useTransition();
 
   const options = [
-    { 
+    {
       label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: '0.75rem' }}>🇺🇸</span>
+        <div className={styles.option}>
+          <span className={styles.flag}>🇺🇸</span>
           {t('locales.en')}
         </div>
-      ), 
-      value: 'en' 
+      ),
+      value: 'en'
     },
-    { 
+    {
       label: (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <span style={{ marginRight: '0.75rem' }}>🇷🇺</span>
+        <div className={styles.option}>
+          <span className={styles.flag}>🇷🇺</span>
           {t('locales.ru')}
         </div>
-      ), 
-      value: 'ru' 
+      ),
+      value: 'ru'
     }
   ];
 
   const handleValueChange = (value: string) => {
-    startTransition(() => {
-      setUserLocale(value);
+    startTransition(async () => {
+      await setUserLocale(value);
     });
   };
 
   return (
-    <div style={{ width: '140px', opacity: isPending ? 0.5 : 1 }}>
-      <Select 
-        value={locale} 
-        onValueChange={handleValueChange} 
-        options={options} 
+    <div className={`${styles.wrapper} ${isPending ? styles.wrapper_pending : ''}`}>
+      <Select
+        value={locale}
+        onValueChange={handleValueChange}
+        options={options}
       />
     </div>
   );

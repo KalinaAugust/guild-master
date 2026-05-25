@@ -5,6 +5,7 @@ Guild Master is a guild management system built with Next.js, following the **Fe
 ## Technology Stack
 
 - **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
+- **UI Library:** [React 19.2.4](https://react.dev/)
 - **Architecture:** [Feature-Sliced Design (FSD)](https://feature-sliced.design/)
 - **Language:** [TypeScript](https://www.typescriptlang.org/)
 - **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/) with RTK Query (`@reduxjs/toolkit/query/react`) and `react-redux`
@@ -57,7 +58,7 @@ npm run start
 - **Data Fetching:** Use RTK Query for all server data. Add endpoints via `injectEndpoints` on `baseApi` (`src/shared/api/baseApi.ts`) within the relevant FSD slice (`entities/*/api/*Api.ts`, `features/*/api/*Api.ts`). Never use `createAsyncThunk` for data fetching. Route handlers in `src/app/api/` are the transport layer — Supabase calls belong there, not in client components.
 - **State Management:** Use Redux Toolkit slices only for pure UI/client state (e.g., selected date, active guild). Custom hooks `useAppDispatch` and `useAppSelector` from `src/shared/lib/hooks.ts` should be used for type-safe store interaction.
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
-- **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/shared/types/index.ts` or close to their usage if specific to a single module.
+- **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/shared/types/index.ts` or close to their usage if specific to a single module. `React.FormEvent` is deprecated in React 19 — use `React.SubmitEvent` for form submit handlers instead. `React.MouseEvent` is not deprecated and can be used as-is.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
 - **Testing:** We use Vitest and React Testing Library for unit and integration tests. Follow TDD principles: write a failing test before implementing the logic.
 - **CLAUDE.md hygiene:** After any task that changes infrastructure, global state patterns, routing conventions, or other project-wide rules — update this file to reflect the new reality before closing the task.

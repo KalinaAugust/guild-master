@@ -1,137 +1,35 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
-import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
-import { openEventModal, setSelectedDate, nextMonth, prevMonth, setViewDate } from '@/entities/calendar';
+import { useAppDispatch } from '@/shared/lib/hooks';
+import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { useGetEventsQuery } from '@/entities/event';
-import { Guild, setCurrentGuild } from '@/entities/guild';
+import { Guild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import { EventsTooltipContent } from './EventsTooltipContent';
+import { useCalendarNavigation } from '../model/useCalendarNavigation';
+import { useCalendarDays } from '../lib/useCalendarDays';
+import { useGuildSelection } from '../model/useGuildSelection';
 
 export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const viewDateStr = useAppSelector((state) => state.ui.viewDate);
-  const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
-  const locale = useLocale();
   const t = useTranslations('Event');
 
-  const activeGuildId = useMemo(() => currentGuildId || guilds[0]?.id, [currentGuildId, guilds]);
+  const { now, months, years, handlePrevMonth, handleNextMonth, handleMonthChange, handleYearChange } = useCalendarNavigation();
+  const { days, DAYS_OF_WEEK } = useCalendarDays(now);
+  const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds);
 
   const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
-
-  // Set dayjs locale based on next-intl locale
-  const now = useMemo(() => dayjs(viewDateStr).locale(locale), [viewDateStr, locale]);
-
-  const handlePrevMonth = () => dispatch(prevMonth());
-  const handleNextMonth = () => dispatch(nextMonth());
-
-  const handleGuildChange = (guildId: string) => {
-    dispatch(setCurrentGuild(guildId));
-  };
-
-  const months = useMemo(() => {
-    const localeData = now.localeData();
-    return localeData.months().map((label, i) => ({
-      label: label.charAt(0).toUpperCase() + label.slice(1),
-      value: i.toString(),
-    }));
-  }, [now]);
-
-  const years = useMemo(() => Array.from({ length: 21 }, (_, i) => {
-    const year = dayjs().year() - 10 + i;
-    return { label: year.toString(), value: year.toString() };
-  }), []);
-
-  const guildOptions = useMemo(() => guilds.map(guild => ({
-    label: guild.name,
-    value: guild.id,
-    avatar: '/assets/guild-placeholder.svg'
-  })), [guilds]);
-
-  const handleMonthChange = (month: string) => {
-    dispatch(setViewDate(now.month(parseInt(month)).toISOString()));
-  };
-
-  const handleYearChange = (year: string) => {
-    dispatch(setViewDate(now.year(parseInt(year)).toISOString()));
-  };
-
-  const DAYS_OF_WEEK = useMemo(() => {
-    const localeData = now.localeData();
-    const weekdays = localeData.weekdaysMin();
-    // weekdays start with Sunday (index 0). We want Monday to Sunday.
-    const shifted = [...weekdays.slice(1), weekdays[0]];
-    return shifted.map((label, index) => ({
-      key: index === 5 || index === 6 ? (index === 5 ? 'sat' : 'sun') : index.toString(),
-      label: label.charAt(0).toUpperCase() + label.slice(1),
-    }));
-  }, [now]);
-
-  const days = useMemo(() => {
-    const startOfMonth = now.startOf('month');
-    
-    // Day of week for 1st day (0 is Sunday, adjust to 0 for Monday)
-    const dayValue = startOfMonth.day();
-    const firstDayOfWeek = dayValue === 0 ? 6 : dayValue - 1;
-
-    const calendarDays = [];
-
-    // Prev month days
-    const prevMonth = now.subtract(1, 'month');
-    const daysInPrevMonth = prevMonth.daysInMonth();
-    for (let i = firstDayOfWeek; i > 0; i--) {
-      const d = prevMonth.date(daysInPrevMonth - i + 1);
-      const dayOfWeek = d.day();
-      calendarDays.push({
-        date: d.date(),
-        fullDate: d.format('YYYY-MM-DD'),
-        isCurrentMonth: false,
-        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-      });
-    }
-
-    // Current month days
-    const daysInMonth = now.daysInMonth();
-    const today = dayjs().format('YYYY-MM-DD');
-    for (let i = 1; i <= daysInMonth; i++) {
-      const d = now.date(i);
-      const fullDate = d.format('YYYY-MM-DD');
-      const dayOfWeek = d.day();
-      calendarDays.push({
-        date: i,
-        fullDate,
-        isCurrentMonth: true,
-        isToday: fullDate === today,
-        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-      });
-    }
-
-    // Next month days
-    const remaining = 42 - calendarDays.length;
-    const nextMonth = now.add(1, 'month');
-    for (let i = 1; i <= remaining; i++) {
-      const d = nextMonth.date(i);
-      const dayOfWeek = d.day();
-      calendarDays.push({
-        date: i,
-        fullDate: d.format('YYYY-MM-DD'),
-        isCurrentMonth: false,
-        isWeekend: dayOfWeek === 0 || dayOfWeek === 6,
-      });
-    }
-
-    return calendarDays;
-  }, [now]);
 
   const handleDayClick = (dateStr: string) => {
     router.push(`/day/${dateStr}`);

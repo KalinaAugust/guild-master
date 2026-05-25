@@ -21,7 +21,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember] = useRemoveGuildMemberMutation();
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const handleAdd = async (e: React.SubmitEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
     try {
