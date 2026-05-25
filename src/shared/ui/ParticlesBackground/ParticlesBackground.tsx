@@ -18,21 +18,19 @@ const particlesOptions = {
       opacity: 0.35,
       width: 1,
     },
-    move: { enable: true, speed: 1.5 },
+    move: { enable: true, speed: 0.3 },
     number: {
       density: { enable: true, area: 800 },
-      value: 60,
+      value: 70,
     },
     opacity: { value: 0.5 },
     shape: { type: 'circle' },
-    size: { value: { min: 2, max: 4 } },
+    size: { value: { min: 2, max: 5 } },
   },
   interactivity: {
     events: {
-      onHover: { enable: true, mode: 'repulse' },
-    },
-    modes: {
-      repulse: { distance: 80, duration: 0.4 },
+      onHover: { enable: false },
+      onClick: { enable: false },
     },
   },
   detectRetina: true,
