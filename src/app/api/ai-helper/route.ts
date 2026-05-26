@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { systemPrompt } from './systemPrompt';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
   try {
     const completion = await client.chat.completions.create({
       model: 'deepseek-v4-flash',
-      messages,
+      messages: [{ role: 'system', content: systemPrompt }, ...messages],
     });
 
     const message = completion.choices[0]?.message?.content;
