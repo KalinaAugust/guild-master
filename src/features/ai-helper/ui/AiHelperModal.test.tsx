@@ -87,7 +87,7 @@ describe('AiHelperModal', () => {
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
     await waitFor(() => {
-      expect(mockDispatch).toHaveBeenCalled();
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'invalidateTags' });
     });
   });
 
