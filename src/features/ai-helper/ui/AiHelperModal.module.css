@@ -57,7 +57,7 @@
 .inputRow {
   display: flex;
   gap: 0.5rem;
-  align-items: flex-end;
+  align-items: stretch;
 }
 
 .textarea {
@@ -96,8 +96,7 @@
   border-radius: 0.75rem;
   color: white;
   cursor: pointer;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
   flex-shrink: 0;
   transition: background 0.2s;
 }
