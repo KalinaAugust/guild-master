@@ -4,13 +4,19 @@ interface DeepSeekResponse {
   choices: { message: { content: string } }[];
 }
 
-export async function POST(_request: NextRequest) {
+export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       { error: 'DEEPSEEK_API_KEY not configured' },
       { status: 500 }
     );
+  }
+
+  const body = await request.json().catch(() => null) as { message?: string } | null;
+  const userMessage = body?.message?.trim();
+  if (!userMessage) {
+    return NextResponse.json({ error: 'message required' }, { status: 400 });
   }
 
   try {
@@ -21,8 +27,8 @@ export async function POST(_request: NextRequest) {
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: [{ role: 'user', content: 'Say hello in one sentence' }],
+        model: 'deepseek-v4-flash',
+        messages: [{ role: 'user', content: userMessage }],
       }),
     });
 
