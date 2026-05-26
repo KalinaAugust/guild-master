@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface DeepSeekResponse {
+  choices: { message: { content: string } }[];
+}
+
 export async function POST(_request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
@@ -29,8 +33,11 @@ export async function POST(_request: NextRequest) {
       );
     }
 
-    const data = await response.json();
-    const message: string = data.choices[0].message.content;
+    const data = await response.json() as DeepSeekResponse;
+    const message = data.choices?.[0]?.message?.content;
+    if (typeof message !== 'string') {
+      return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
+    }
     return NextResponse.json({ message });
   } catch {
     return NextResponse.json(
