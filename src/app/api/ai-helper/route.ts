@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
@@ -10,10 +15,10 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const body = await request.json().catch(() => null) as { message?: string } | null;
-  const userMessage = body?.message?.trim();
-  if (!userMessage) {
-    return NextResponse.json({ error: 'message required' }, { status: 400 });
+  const body = await request.json().catch(() => null) as { messages?: ChatMessage[] } | null;
+  const messages = body?.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return NextResponse.json({ error: 'messages required' }, { status: 400 });
   }
 
   const client = new OpenAI({
@@ -24,7 +29,7 @@ export async function POST(request: NextRequest) {
   try {
     const completion = await client.chat.completions.create({
       model: 'deepseek-v4-flash',
-      messages: [{ role: 'user', content: userMessage }],
+      messages,
     });
 
     const message = completion.choices[0]?.message?.content;

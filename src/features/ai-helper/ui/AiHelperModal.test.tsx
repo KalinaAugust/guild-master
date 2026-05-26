@@ -12,6 +12,10 @@ vi.mock('@/shared/ui/Modal', () => ({
     isOpen ? <div data-testid="modal"><h2>{title}</h2>{children}</div> : null,
 }));
 
+vi.mock('./CatSearchIllustration', () => ({
+  CatSearchIllustration: () => <div data-testid="cat-illustration" />,
+}));
+
 const mockSendMessage = vi.fn();
 
 vi.mock('../api/aiHelperApi', () => ({
@@ -53,9 +57,9 @@ describe('AiHelperModal', () => {
     expect(screen.getByRole('button', { name: 'send' })).not.toBeDisabled();
   });
 
-  it('appends user message and AI response in chat on success', async () => {
+  it('sends full messages array on submit', async () => {
     mockSendMessage.mockReturnValue({
-      unwrap: () => Promise.resolve({ message: 'Hello from AI!' }),
+      unwrap: () => Promise.resolve({ message: 'Hi!' }),
     });
 
     render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
@@ -64,9 +68,31 @@ describe('AiHelperModal', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
-    await waitFor(() => {
-      expect(screen.getByText('Hello')).toBeInTheDocument();
-      expect(screen.getByText('Hello from AI!')).toBeInTheDocument();
+    expect(mockSendMessage).toHaveBeenCalledWith({
+      messages: [{ role: 'user', content: 'Hello' }],
+    });
+  });
+
+  it('includes conversation history in subsequent messages', async () => {
+    mockSendMessage
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve({ message: 'First reply' }) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve({ message: 'Second reply' }) });
+
+    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'First' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+    await waitFor(() => expect(screen.getByText('First reply')).toBeInTheDocument());
+
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Second' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    expect(mockSendMessage).toHaveBeenLastCalledWith({
+      messages: [
+        { role: 'user', content: 'First' },
+        { role: 'assistant', content: 'First reply' },
+        { role: 'user', content: 'Second' },
+      ],
     });
   });
 
