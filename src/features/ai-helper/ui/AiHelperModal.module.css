@@ -20,9 +20,12 @@
 
 .empty {
   color: var(--text-secondary);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
   text-align: center;
-  padding: 3rem 0;
+  padding: 3rem 1.5rem;
+  max-width: 340px;
+  margin: 0 auto;
 }
 
 .messageUser {
