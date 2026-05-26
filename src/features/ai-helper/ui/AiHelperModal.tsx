@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
+import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
+import { baseApi } from '@/shared/api/baseApi';
 import { useSendTestMessageMutation } from '../api/aiHelperApi';
 import styles from './AiHelperModal.module.css';
 import { CatSearchIllustration } from './CatSearchIllustration';
@@ -20,6 +22,8 @@ interface AiHelperModalProps {
 
 export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
   const t = useTranslations('AiHelper');
+  const dispatch = useAppDispatch();
+  const guildId = useAppSelector((state) => state.guild.currentGuildId) ?? '';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [sendMessage, { isLoading }] = useSendTestMessageMutation();
@@ -36,8 +40,11 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
     const history = [...messages, { role: 'user' as const, content: userMessage }];
     setMessages(history);
     try {
-      const result = await sendMessage({ messages: history }).unwrap();
+      const result = await sendMessage({ messages: history, guildId }).unwrap();
       setMessages((prev) => [...prev, { role: 'assistant', content: result.message }]);
+      if (result.eventCreated) {
+        dispatch(baseApi.util.invalidateTags(['Event']));
+      }
     } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: t('error') }]);
     }

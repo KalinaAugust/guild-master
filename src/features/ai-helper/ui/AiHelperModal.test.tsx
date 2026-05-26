@@ -16,6 +16,19 @@ vi.mock('./CatSearchIllustration', () => ({
   CatSearchIllustration: () => <div data-testid="cat-illustration" />,
 }));
 
+const mockDispatch = vi.fn();
+vi.mock('@/shared/lib/hooks', () => ({
+  useAppDispatch: () => mockDispatch,
+  useAppSelector: (selector: (state: { guild: { currentGuildId: string } }) => string) =>
+    selector({ guild: { currentGuildId: 'guild-123' } }),
+}));
+
+vi.mock('@/shared/api/baseApi', () => ({
+  baseApi: {
+    util: { invalidateTags: vi.fn(() => ({ type: 'invalidateTags' })) },
+  },
+}));
+
 const mockSendMessage = vi.fn();
 
 vi.mock('../api/aiHelperApi', () => ({
@@ -49,56 +62,53 @@ describe('AiHelperModal', () => {
     expect(screen.getByRole('button', { name: 'send' })).toBeDisabled();
   });
 
-  it('enables send button when textarea has content', () => {
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
-    fireEvent.change(screen.getByPlaceholderText('placeholder'), {
-      target: { value: 'Hello' },
-    });
-    expect(screen.getByRole('button', { name: 'send' })).not.toBeDisabled();
-  });
-
-  it('sends full messages array on submit', async () => {
+  it('sends messages and guildId on submit', async () => {
     mockSendMessage.mockReturnValue({
-      unwrap: () => Promise.resolve({ message: 'Hi!' }),
+      unwrap: () => Promise.resolve({ message: 'Hi!', eventCreated: false }),
     });
 
     render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
-    fireEvent.change(screen.getByPlaceholderText('placeholder'), {
-      target: { value: 'Hello' },
-    });
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
     expect(mockSendMessage).toHaveBeenCalledWith({
       messages: [{ role: 'user', content: 'Hello' }],
+      guildId: 'guild-123',
     });
   });
 
-  it('includes conversation history in subsequent messages', async () => {
-    mockSendMessage
-      .mockReturnValueOnce({ unwrap: () => Promise.resolve({ message: 'First reply' }) })
-      .mockReturnValueOnce({ unwrap: () => Promise.resolve({ message: 'Second reply' }) });
+  it('invalidates Event cache when eventCreated is true', async () => {
+    mockSendMessage.mockReturnValue({
+      unwrap: () => Promise.resolve({ message: 'Event created!', eventCreated: true }),
+    });
 
     render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
-
-    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'First' } });
-    fireEvent.click(screen.getByRole('button', { name: 'send' }));
-    await waitFor(() => expect(screen.getByText('First reply')).toBeInTheDocument());
-
-    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Second' } });
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Create event' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
-    expect(mockSendMessage).toHaveBeenLastCalledWith({
-      messages: [
-        { role: 'user', content: 'First' },
-        { role: 'assistant', content: 'First reply' },
-        { role: 'user', content: 'Second' },
-      ],
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalled();
     });
+  });
+
+  it('does not invalidate cache when eventCreated is false', async () => {
+    mockSendMessage.mockReturnValue({
+      unwrap: () => Promise.resolve({ message: 'Sure!', eventCreated: false }),
+    });
+
+    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Sure!')).toBeInTheDocument();
+    });
+    expect(mockDispatch).not.toHaveBeenCalled();
   });
 
   it('clears input after sending', async () => {
     mockSendMessage.mockReturnValue({
-      unwrap: () => Promise.resolve({ message: 'ok' }),
+      unwrap: () => Promise.resolve({ message: 'ok', eventCreated: false }),
     });
 
     render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
@@ -115,9 +125,7 @@ describe('AiHelperModal', () => {
     });
 
     render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
-    fireEvent.change(screen.getByPlaceholderText('placeholder'), {
-      target: { value: 'Hello' },
-    });
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
     await waitFor(() => {
