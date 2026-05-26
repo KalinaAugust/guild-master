@@ -1,7 +1,7 @@
 // src/app/api/ai-helper/tools/executeCreateEvent.ts
 import { createEvent } from '@/entities/event/api/createEvent';
 
-interface CreateEventArgs {
+export interface CreateEventArgs {
   title: string;
   date: string;
   time: string;

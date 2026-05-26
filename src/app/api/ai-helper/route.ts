@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { systemPrompt } from './systemPrompt';
 import { createEventTool } from './tools/createEventTool';
-import { executeCreateEvent } from './tools/executeCreateEvent';
+import { executeCreateEvent, CreateEventArgs } from './tools/executeCreateEvent';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   if (!Array.isArray(messages) || messages.length === 0) {
     return NextResponse.json({ error: 'messages required' }, { status: 400 });
   }
-  if (!guildId) {
+  if (typeof guildId !== 'string' || !guildId) {
     return NextResponse.json({ error: 'guildId required' }, { status: 400 });
   }
 
@@ -54,9 +54,10 @@ export async function POST(request: NextRequest) {
       let toolResultContent: string;
 
       if (toolCall.type !== 'function') {
+        console.error('[ai-helper] Unexpected non-function tool call type:', toolCall.type);
         toolResultContent = 'Unknown tool type';
       } else if (toolCall.function.name === 'createEvent') {
-        let args: { title: string; date: string; time: string; type: 'raid' | 'game' | 'meeting' | 'other'; description: string; };
+        let args: CreateEventArgs;
         try {
           args = JSON.parse(toolCall.function.arguments);
         } catch {
@@ -68,6 +69,7 @@ export async function POST(request: NextRequest) {
           ? `Event created successfully with id ${result.eventId}`
           : `Failed to create event: ${result.error}`;
       } else {
+        console.error('[ai-helper] Unexpected tool name:', toolCall.function.name);
         toolResultContent = 'Unknown tool';
       }
 
