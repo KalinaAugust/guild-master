@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AiHelperModal } from './AiHelperModal';
-import { useSendTestMessageMutation } from '../api/aiHelperApi';
+import { useSendAiMessageMutation } from '../api/aiHelperApi';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -32,7 +32,7 @@ vi.mock('@/shared/api/baseApi', () => ({
 const mockSendMessage = vi.fn();
 
 vi.mock('../api/aiHelperApi', () => ({
-  useSendTestMessageMutation: vi.fn(() => [mockSendMessage, { isLoading: false }]),
+  useSendAiMessageMutation: vi.fn(() => [mockSendMessage, { isLoading: false }]),
 }));
 
 type MockMutationHook = [typeof mockSendMessage, { isLoading: boolean }];
@@ -40,7 +40,7 @@ type MockMutationHook = [typeof mockSendMessage, { isLoading: boolean }];
 describe('AiHelperModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useSendTestMessageMutation).mockReturnValue(
+    vi.mocked(useSendAiMessageMutation).mockReturnValue(
       [mockSendMessage, { isLoading: false }] as unknown as MockMutationHook
     );
   });
@@ -165,7 +165,7 @@ describe('AiHelperModal', () => {
   });
 
   it('shows thinking bubble while loading', () => {
-    vi.mocked(useSendTestMessageMutation).mockReturnValue(
+    vi.mocked(useSendAiMessageMutation).mockReturnValue(
       [mockSendMessage, { isLoading: true }] as unknown as MockMutationHook
     );
 

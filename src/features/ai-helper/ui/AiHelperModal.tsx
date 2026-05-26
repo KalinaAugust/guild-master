@@ -6,7 +6,7 @@ import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
-import { useSendTestMessageMutation } from '../api/aiHelperApi';
+import { useSendAiMessageMutation } from '../api/aiHelperApi';
 import styles from './AiHelperModal.module.css';
 import { CatSearchIllustration } from './CatSearchIllustration';
 
@@ -26,7 +26,7 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
   const guildId = useAppSelector((state) => state.guild.currentGuildId) ?? '';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [sendMessage, { isLoading }] = useSendTestMessageMutation();
+  const [sendMessage, { isLoading }] = useSendAiMessageMutation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

@@ -7,7 +7,7 @@ interface ChatMessage {
 
 export const aiHelperApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendTestMessage: builder.mutation<
+    sendAiMessage: builder.mutation<
       { message: string; eventCreated: boolean },
       { messages: ChatMessage[]; guildId: string }
     >({
@@ -20,4 +20,4 @@ export const aiHelperApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useSendTestMessageMutation } = aiHelperApi;
+export const { useSendAiMessageMutation } = aiHelperApi;
