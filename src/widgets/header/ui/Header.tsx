@@ -2,6 +2,7 @@ import { createClient } from '@/shared/api/supabase/server';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { UserMenu } from './UserMenu';
+import { AiHelperButton } from '@/features/ai-helper';
 import styles from './Header.module.css';
 
 export const Header = async () => {
@@ -16,6 +17,7 @@ export const Header = async () => {
         {t('title')}
       </Link>
       <nav className={styles.nav}>
+        <AiHelperButton />
         {user ? (
           <UserMenu email={user.email} />
         ) : (
