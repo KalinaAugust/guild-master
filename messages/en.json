@@ -114,6 +114,6 @@
     "send": "Send",
     "thinking": "Thinking...",
     "error": "Something went wrong, try again",
-    "emptyHint": "Ask me to create an event, find something on the calendar, or edit an existing event."
+    "emptyHint": "Ask me to create, edit, or find an event on the calendar."
   }
 }
