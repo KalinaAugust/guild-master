@@ -9,6 +9,8 @@ vi.mock('sonner', () => ({
 
 const mockSendTestMessage = vi.fn();
 
+type MockMutationHook = [typeof mockSendTestMessage, { isLoading: boolean }];
+
 vi.mock('../api/aiHelperApi', () => ({
   useSendTestMessageMutation: vi.fn(() => [mockSendTestMessage, { isLoading: false }]),
 }));
@@ -16,7 +18,7 @@ vi.mock('../api/aiHelperApi', () => ({
 describe('AiHelperButton', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: false }] as any);
+    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: false }] as unknown as MockMutationHook);
   });
 
   it('renders a button with aria-label "AI helper"', () => {
@@ -54,7 +56,7 @@ describe('AiHelperButton', () => {
   });
 
   it('disables the button while loading', () => {
-    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: true }] as any);
+    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: true }] as unknown as MockMutationHook);
 
     render(<AiHelperButton />);
     expect(screen.getByRole('button', { name: /ai helper/i })).toBeDisabled();
