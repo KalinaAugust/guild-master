@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useSendTestMessageMutation } from '../api/aiHelperApi';
 import styles from './AiHelperButton.module.css';
 
-export const AiHelperButton: React.FC = () => {
+export const AiHelperButton = () => {
   const [sendTestMessage, { isLoading }] = useSendTestMessageMutation();
 
   const handleClick = async () => {
