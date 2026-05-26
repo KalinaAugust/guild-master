@@ -113,6 +113,7 @@
     "placeholder": "Type your message...",
     "send": "Send",
     "thinking": "Thinking...",
-    "error": "Something went wrong, try again"
+    "error": "Something went wrong, try again",
+    "emptyHint": "Ask me anything..."
   }
 }

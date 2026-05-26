@@ -12,12 +12,6 @@ vi.mock('@/shared/ui/Modal', () => ({
     isOpen ? <div data-testid="modal"><h2>{title}</h2>{children}</div> : null,
 }));
 
-vi.mock('@/shared/ui/Button', () => ({
-  Button: ({ children, onClick, disabled }: { children: React.ReactNode; onClick: () => void; disabled?: boolean }) => (
-    <button onClick={onClick} disabled={disabled}>{children}</button>
-  ),
-}));
-
 const mockSendMessage = vi.fn();
 
 vi.mock('../api/aiHelperApi', () => ({
@@ -59,7 +53,7 @@ describe('AiHelperModal', () => {
     expect(screen.getByRole('button', { name: 'send' })).not.toBeDisabled();
   });
 
-  it('shows response in modal on success', async () => {
+  it('appends user message and AI response in chat on success', async () => {
     mockSendMessage.mockReturnValue({
       unwrap: () => Promise.resolve({ message: 'Hello from AI!' }),
     });
@@ -71,11 +65,25 @@ describe('AiHelperModal', () => {
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
     await waitFor(() => {
+      expect(screen.getByText('Hello')).toBeInTheDocument();
       expect(screen.getByText('Hello from AI!')).toBeInTheDocument();
     });
   });
 
-  it('shows error text in modal on failure', async () => {
+  it('clears input after sending', async () => {
+    mockSendMessage.mockReturnValue({
+      unwrap: () => Promise.resolve({ message: 'ok' }),
+    });
+
+    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    const textarea = screen.getByPlaceholderText('placeholder');
+    fireEvent.change(textarea, { target: { value: 'Hello' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    expect((textarea as HTMLTextAreaElement).value).toBe('');
+  });
+
+  it('shows error message in chat on failure', async () => {
     mockSendMessage.mockReturnValue({
       unwrap: () => Promise.reject(new Error('fail')),
     });
@@ -91,7 +99,7 @@ describe('AiHelperModal', () => {
     });
   });
 
-  it('shows thinking text while loading', () => {
+  it('shows thinking bubble while loading', () => {
     vi.mocked(useSendTestMessageMutation).mockReturnValue(
       [mockSendMessage, { isLoading: true }] as unknown as MockMutationHook
     );
