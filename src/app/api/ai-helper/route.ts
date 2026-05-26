@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-interface DeepSeekResponse {
-  choices: { message: { content: string } }[];
-}
+import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
@@ -19,28 +16,18 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'message required' }, { status: 400 });
   }
 
+  const client = new OpenAI({
+    apiKey,
+    baseURL: 'https://api.deepseek.com',
+  });
+
   try {
-    const response = await fetch('https://api.deepseek.com/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'deepseek-v4-flash',
-        messages: [{ role: 'user', content: userMessage }],
-      }),
+    const completion = await client.chat.completions.create({
+      model: 'deepseek-v4-flash',
+      messages: [{ role: 'user', content: userMessage }],
     });
 
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: 'DeepSeek API error' },
-        { status: response.status }
-      );
-    }
-
-    const data = await response.json() as DeepSeekResponse;
-    const message = data.choices?.[0]?.message?.content;
+    const message = completion.choices[0]?.message?.content;
     if (typeof message !== 'string') {
       return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
     }
