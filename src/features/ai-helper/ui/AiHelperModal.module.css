@@ -11,7 +11,7 @@
   min-height: 200px;
   max-height: 420px;
   overflow-y: auto;
-  padding: 0.25rem 0.5rem 0.25rem 0;
+  padding: 0.25rem 1rem 0.25rem 0;
 }
 
 .empty {
