@@ -34,7 +34,7 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
   }, [messages, isLoading]);
 
   const handleSubmit = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !guildId) return;
     const userMessage = input.trim();
     setInput('');
     const history = [...messages, { role: 'user' as const, content: userMessage }];
@@ -43,7 +43,7 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
       const result = await sendMessage({ messages: history, guildId }).unwrap();
       setMessages((prev) => [...prev, { role: 'assistant', content: result.message }]);
       if (result.eventCreated) {
-        dispatch(baseApi.util.invalidateTags(['Event']));
+        dispatch(baseApi.util.invalidateTags([{ type: 'Event', id: 'LIST' }]));
       }
     } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: t('error') }]);

@@ -77,6 +77,37 @@ describe('AiHelperModal', () => {
     });
   });
 
+  it('includes conversation history in subsequent messages', async () => {
+    mockSendMessage
+      .mockReturnValueOnce({
+        unwrap: () => Promise.resolve({ message: 'First reply', eventCreated: false }),
+      })
+      .mockReturnValueOnce({
+        unwrap: () => Promise.resolve({ message: 'Second reply', eventCreated: false }),
+      });
+
+    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'First message' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    await waitFor(() => expect(screen.getByText('First reply')).toBeInTheDocument());
+
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Second message' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    await waitFor(() => expect(screen.getByText('Second reply')).toBeInTheDocument());
+
+    expect(mockSendMessage).toHaveBeenNthCalledWith(2, {
+      messages: [
+        { role: 'user', content: 'First message' },
+        { role: 'assistant', content: 'First reply' },
+        { role: 'user', content: 'Second message' },
+      ],
+      guildId: 'guild-123',
+    });
+  });
+
   it('invalidates Event cache when eventCreated is true', async () => {
     mockSendMessage.mockReturnValue({
       unwrap: () => Promise.resolve({ message: 'Event created!', eventCreated: true }),

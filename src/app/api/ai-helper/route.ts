@@ -10,6 +10,8 @@ interface ChatMessage {
   content: string;
 }
 
+const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+
 export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
@@ -35,7 +37,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const completion = await client.chat.completions.create({
-      model: 'deepseek-v4-flash',
+      model: DEEPSEEK_MODEL,
       messages: [{ role: 'system', content: systemPrompt }, ...messages],
       tools: [createEventTool],
       tool_choice: 'auto',
@@ -75,7 +77,7 @@ export async function POST(request: NextRequest) {
 
       // Send tool result back to get final response
       const followUp = await client.chat.completions.create({
-        model: 'deepseek-v4-flash',
+        model: DEEPSEEK_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages,
