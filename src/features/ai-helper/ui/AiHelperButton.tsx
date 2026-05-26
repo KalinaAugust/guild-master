@@ -1,30 +1,28 @@
 'use client';
 
+import { useState } from 'react';
 import { Bot } from 'lucide-react';
-import { toast } from 'sonner';
-import { useSendTestMessageMutation } from '../api/aiHelperApi';
+import { useTranslations } from 'next-intl';
+import { Tooltip } from '@/shared/ui/Tooltip';
+import { AiHelperModal } from './AiHelperModal';
 import styles from './AiHelperButton.module.css';
 
 export const AiHelperButton = () => {
-  const [sendTestMessage, { isLoading }] = useSendTestMessageMutation();
-
-  const handleClick = async () => {
-    try {
-      const result = await sendTestMessage().unwrap();
-      toast.success(result.message);
-    } catch {
-      toast.error('AI helper failed to respond');
-    }
-  };
+  const t = useTranslations('AiHelper');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <button
-      className={styles.button}
-      onClick={handleClick}
-      disabled={isLoading}
-      aria-label="AI helper"
-    >
-      <Bot size={20} className={isLoading ? styles.loading : undefined} />
-    </button>
+    <>
+      <Tooltip content={t('tooltip')} side="bottom">
+        <button
+          className={styles.button}
+          onClick={() => setIsModalOpen(true)}
+          aria-label="AI helper"
+        >
+          <Bot size={20} />
+        </button>
+      </Tooltip>
+      <AiHelperModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 };

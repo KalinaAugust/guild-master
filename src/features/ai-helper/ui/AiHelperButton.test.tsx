@@ -1,64 +1,45 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
 import { AiHelperButton } from './AiHelperButton';
-import { useSendTestMessageMutation } from '../api/aiHelperApi';
 
-vi.mock('sonner', () => ({
-  toast: { error: vi.fn(), success: vi.fn() },
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
 }));
 
-const mockSendTestMessage = vi.fn();
+vi.mock('@/shared/ui/Tooltip', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
 
-type MockMutationHook = [typeof mockSendTestMessage, { isLoading: boolean }];
-
-vi.mock('../api/aiHelperApi', () => ({
-  useSendTestMessageMutation: vi.fn(() => [mockSendTestMessage, { isLoading: false }]),
+vi.mock('./AiHelperModal', () => ({
+  AiHelperModal: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
+    isOpen ? (
+      <div data-testid="ai-modal">
+        <button onClick={onClose}>close</button>
+      </div>
+    ) : null,
 }));
 
 describe('AiHelperButton', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: false }] as unknown as MockMutationHook);
-  });
-
   it('renders a button with aria-label "AI helper"', () => {
     render(<AiHelperButton />);
     expect(screen.getByRole('button', { name: /ai helper/i })).toBeInTheDocument();
   });
 
-  it('calls sendTestMessage and shows success toast on click', async () => {
-    const { toast } = await import('sonner');
-    mockSendTestMessage.mockReturnValue({
-      unwrap: () => Promise.resolve({ message: 'Hello from DeepSeek!' }),
-    });
-
+  it('modal is closed initially', () => {
     render(<AiHelperButton />);
-    fireEvent.click(screen.getByRole('button', { name: /ai helper/i }));
-
-    await waitFor(() => {
-      expect(mockSendTestMessage).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('Hello from DeepSeek!');
-    });
+    expect(screen.queryByTestId('ai-modal')).not.toBeInTheDocument();
   });
 
-  it('shows error toast when mutation rejects', async () => {
-    const { toast } = await import('sonner');
-    mockSendTestMessage.mockReturnValue({
-      unwrap: () => Promise.reject(new Error('network error')),
-    });
-
+  it('opens modal on button click', () => {
     render(<AiHelperButton />);
     fireEvent.click(screen.getByRole('button', { name: /ai helper/i }));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('AI helper failed to respond');
-    });
+    expect(screen.getByTestId('ai-modal')).toBeInTheDocument();
   });
 
-  it('disables the button while loading', () => {
-    vi.mocked(useSendTestMessageMutation).mockReturnValue([mockSendTestMessage, { isLoading: true }] as unknown as MockMutationHook);
-
+  it('closes modal when onClose is called', () => {
     render(<AiHelperButton />);
-    expect(screen.getByRole('button', { name: /ai helper/i })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /ai helper/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'close' }));
+    expect(screen.queryByTestId('ai-modal')).not.toBeInTheDocument();
   });
 });
