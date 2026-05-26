@@ -1,7 +1,6 @@
 // src/app/api/ai-helper/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import type { ChatCompletionMessageFunctionToolCall } from 'openai/resources/chat/completions/completions';
 import { systemPrompt } from './systemPrompt';
 import { createEventTool } from './tools/createEventTool';
 import { executeCreateEvent } from './tools/executeCreateEvent';
@@ -42,23 +41,27 @@ export async function POST(request: NextRequest) {
       tool_choice: 'auto',
     });
 
+    if (!completion.choices[0]) {
+      return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
+    }
     const choice = completion.choices[0];
 
     // DeepSeek wants to call a tool
     if (choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
+      // Only one tool registered; take the first call only
       const toolCall = choice.message.tool_calls[0];
       let eventCreated = false;
       let toolResultContent: string;
 
-      const fnToolCall = toolCall as ChatCompletionMessageFunctionToolCall;
-      if (fnToolCall.function.name === 'createEvent') {
-        const args = JSON.parse(fnToolCall.function.arguments) as {
-          title: string;
-          date: string;
-          time: string;
-          type: 'raid' | 'game' | 'meeting' | 'other';
-          description: string;
-        };
+      if (toolCall.type !== 'function') {
+        toolResultContent = 'Unknown tool type';
+      } else if (toolCall.function.name === 'createEvent') {
+        let args: { title: string; date: string; time: string; type: 'raid' | 'game' | 'meeting' | 'other'; description: string; };
+        try {
+          args = JSON.parse(toolCall.function.arguments);
+        } catch {
+          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
+        }
         const result = await executeCreateEvent(args, guildId);
         eventCreated = result.success;
         toolResultContent = result.success
