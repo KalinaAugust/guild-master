@@ -55,7 +55,7 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={t('modalTitle')}>
+    <Modal isOpen={isOpen} onClose={handleClose} title={t('modalTitle')} className={styles.modalContent}>
       <div className={styles.body}>
         <div className={styles.messages}>
           {messages.length === 0 && !isLoading && (
