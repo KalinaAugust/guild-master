@@ -106,5 +106,13 @@
     "comingSoon": "Скоро",
     "successCreated": "Гильдия создана",
     "successUpdated": "Гильдия обновлена"
+  },
+  "AiHelper": {
+    "tooltip": "AI помощник",
+    "modalTitle": "AI помощник",
+    "placeholder": "Введите сообщение...",
+    "send": "Отправить",
+    "thinking": "Думаю...",
+    "error": "Что-то пошло не так, попробуйте снова"
   }
 }
