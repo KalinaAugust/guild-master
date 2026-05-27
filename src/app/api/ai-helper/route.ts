@@ -4,6 +4,8 @@ import OpenAI from 'openai';
 import { getSystemPrompt } from './systemPrompt';
 import { createEventTool } from './tools/createEventTool';
 import { executeCreateEvent, CreateEventArgs } from './tools/executeCreateEvent';
+import { findEventsTool } from './tools/findEventsTool';
+import { executeFindEvents, FindEventsArgs } from './tools/executeFindEvents';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -39,7 +41,7 @@ export async function POST(request: NextRequest) {
     const completion = await client.chat.completions.create({
       model: DEEPSEEK_MODEL,
       messages: [{ role: 'system', content: getSystemPrompt() }, ...messages],
-      tools: [createEventTool],
+      tools: [createEventTool, findEventsTool],
       tool_choice: 'auto',
     });
 
@@ -50,7 +52,6 @@ export async function POST(request: NextRequest) {
 
     // DeepSeek wants to call a tool
     if (choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
-      // Only one tool registered; take the first call only
       const toolCall = choice.message.tool_calls[0];
       let eventCreated = false;
       let toolResultContent: string;
@@ -70,6 +71,15 @@ export async function POST(request: NextRequest) {
         toolResultContent = result.success
           ? `Event created successfully with id ${result.eventId}`
           : `Failed to create event: ${result.error}`;
+      } else if (toolCall.function.name === 'findEvents') {
+        let args: FindEventsArgs;
+        try {
+          args = JSON.parse(toolCall.function.arguments);
+        } catch {
+          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
+        }
+        const result = await executeFindEvents(args, guildId);
+        toolResultContent = JSON.stringify(result);
       } else {
         console.error('[ai-helper] Unexpected tool name:', toolCall.function.name);
         toolResultContent = 'Unknown tool';
