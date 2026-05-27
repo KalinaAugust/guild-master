@@ -19,11 +19,11 @@ export const editEventTool: ChatCompletionTool = {
         },
         date: {
           type: 'string',
-          description: 'New date in YYYY-MM-DD format.',
+          description: 'New date in YYYY-MM-DD format. Omit to keep the existing date. If provided, you MUST also provide time.',
         },
         time: {
           type: 'string',
-          description: 'New start time in HH:mm 24-hour format.',
+          description: 'New start time in HH:mm 24-hour format. Omit to keep the existing time. If provided, you MUST also provide date.',
         },
         type: {
           type: 'string',
