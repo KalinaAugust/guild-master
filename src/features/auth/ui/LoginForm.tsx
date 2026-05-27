@@ -4,6 +4,7 @@ import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { createClient } from '@/shared/api/supabase/client';
 import { useEffect, useState } from 'react';
+import styles from './LoginForm.module.css';
 
 export const LoginForm = () => {
   const [mounted, setMounted] = useState(false);
@@ -18,7 +19,7 @@ export const LoginForm = () => {
   const origin = typeof window !== 'undefined' ? window.location.origin : '';
 
   return (
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
+    <div className={styles.container}>
       <Auth 
         supabaseClient={supabase} 
         appearance={{ theme: ThemeSupa }} 

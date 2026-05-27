@@ -10,7 +10,7 @@ export default async function Home() {
   const t = await getTranslations('Common');
 
   if (guilds.length === 0) {
-    redirect('/guilds/create');
+    redirect('/guilds');
   }
 
   return (

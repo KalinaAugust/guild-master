@@ -1,20 +1,13 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import DOMPurify from 'dompurify';
-
-function sanitizeMessage(html: string): string {
-  const clean = DOMPurify.sanitize(html, { ADD_ATTR: ['target'] });
-  const div = document.createElement('div');
-  div.innerHTML = clean;
-  return div.innerHTML;
-}
 import { useTranslations } from 'next-intl';
 import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
 import { useSendAiMessageMutation } from '../api/aiHelperApi';
+import { sanitizeHtml } from '@/shared/lib/sanitizeHtml';
 import styles from './AiHelperModal.module.css';
 import { CatSearchIllustration } from './CatSearchIllustration';
 
@@ -86,7 +79,7 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
               key={i}
               className={msg.role === 'user' ? styles.messageUser : styles.messageAssistant}
               {...(msg.role === 'assistant'
-                ? { dangerouslySetInnerHTML: { __html: sanitizeMessage(msg.content) } }
+                ? { dangerouslySetInnerHTML: { __html: sanitizeHtml(msg.content) } }
                 : { children: msg.content }
               )}
             />

@@ -1,4 +1,3 @@
-// src/app/api/ai-helper/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { getSystemPrompt } from './systemPrompt';
@@ -15,6 +14,7 @@ interface ChatMessage {
 }
 
 const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const MAX_TOOL_TURNS = 5;
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
@@ -40,23 +40,37 @@ export async function POST(request: NextRequest) {
   const client = new OpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
 
   try {
-    const completion = await client.chat.completions.create({
-      model: DEEPSEEK_MODEL,
-      messages: [{ role: 'system', content: getSystemPrompt() }, ...messages],
-      tools: [createEventTool, findEventsTool, editEventTool],
-      tool_choice: 'auto',
-    });
+    let currentMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+      { role: 'system', content: getSystemPrompt() },
+      ...messages,
+    ];
+    let eventCreated = false;
+    let eventUpdated = false;
 
-    if (!completion.choices[0]) {
-      return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
-    }
-    const choice = completion.choices[0];
+    for (let turn = 0; turn < MAX_TOOL_TURNS; turn++) {
+      const completion = await client.chat.completions.create({
+        model: DEEPSEEK_MODEL,
+        messages: currentMessages,
+        tools: [createEventTool, findEventsTool, editEventTool],
+        tool_choice: 'auto',
+      });
 
-    // DeepSeek wants to call a tool
-    if (choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
+      if (!completion.choices[0]) {
+        return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
+      }
+      const choice = completion.choices[0];
+
+      // Normal text response — done
+      if (choice.finish_reason !== 'tool_calls' || !choice.message.tool_calls) {
+        const message = choice.message?.content;
+        if (typeof message !== 'string') {
+          return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
+        }
+        return NextResponse.json({ message, eventCreated, eventUpdated });
+      }
+
+      // Tool call — execute and continue the loop
       const toolCall = choice.message.tool_calls[0];
-      let eventCreated = false;
-      let eventUpdated = false;
       let toolResultContent: string;
 
       if (toolCall.type !== 'function') {
@@ -100,34 +114,18 @@ export async function POST(request: NextRequest) {
         toolResultContent = 'Unknown tool';
       }
 
-      // Send tool result back to get final response
-      const followUp = await client.chat.completions.create({
-        model: DEEPSEEK_MODEL,
-        messages: [
-          { role: 'system', content: getSystemPrompt() },
-          ...messages,
-          choice.message,
-          {
-            role: 'tool',
-            tool_call_id: toolCall.id,
-            content: toolResultContent,
-          },
-        ],
-      });
-
-      const message = followUp.choices[0]?.message?.content;
-      if (typeof message !== 'string') {
-        return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
-      }
-      return NextResponse.json({ message, eventCreated, eventUpdated });
+      currentMessages = [
+        ...currentMessages,
+        choice.message,
+        {
+          role: 'tool' as const,
+          tool_call_id: toolCall.id,
+          content: toolResultContent,
+        },
+      ];
     }
 
-    // Normal text response
-    const message = choice.message?.content;
-    if (typeof message !== 'string') {
-      return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
-    }
-    return NextResponse.json({ message, eventCreated: false, eventUpdated: false });
+    return NextResponse.json({ error: 'Too many tool call iterations' }, { status: 502 });
   } catch {
     return NextResponse.json({ error: 'Failed to contact DeepSeek' }, { status: 500 });
   }

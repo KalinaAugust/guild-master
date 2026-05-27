@@ -126,3 +126,11 @@
   background: var(--accent-glow);
   color: var(--accent-secondary);
 }
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.flag {
+  margin-right: 0.5rem;
+}

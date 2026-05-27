@@ -38,6 +38,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const participants = participantsData?.participants ?? [];
   const currentUserId = participantsData?.currentUserId ?? '';
 
+  const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
+
   const [updateStatus] = useUpdateParticipantStatusMutation();
   const [deleteEvent] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -152,14 +154,16 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         </div>
       </div>
 
-      <div className={styles.footer}>
-        <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
-          {commonT('delete')}
-        </Button>
-        <Button type="button" variant="primary" onClick={handleEdit}>
-          {t('edit')}
-        </Button>
-      </div>
+      {isCreator && (
+        <div className={styles.footer}>
+          <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
+            {commonT('delete')}
+          </Button>
+          <Button type="button" variant="primary" onClick={handleEdit}>
+            {t('edit')}
+          </Button>
+        </div>
+      )}
 
       <ConfirmModal
         isOpen={deleteModalOpen}

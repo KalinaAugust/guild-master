@@ -17,6 +17,7 @@ export const detailApi = baseApi.injectEndpoints({
       ],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const { useUpdateParticipantStatusMutation } = detailApi;

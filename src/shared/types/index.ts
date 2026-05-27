@@ -7,6 +7,7 @@ export interface ActivityEvent {
   time: string; // HH:mm format
   type: ActivityType;
   description?: string;
+  createdBy?: string;
 }
 
 export interface UIState {

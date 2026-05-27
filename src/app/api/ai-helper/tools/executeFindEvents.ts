@@ -31,8 +31,7 @@ export const executeFindEvents = async (
       if (args.dateFrom && dateStr < args.dateFrom) return false;
       if (args.dateTo && dateStr > args.dateTo) return false;
       if (args.type && event.type !== args.type) return false;
-      if (args.keyword && !event.title.toLowerCase().includes(args.keyword.toLowerCase())) return false;
-      return true;
+      return !(args.keyword && !event.title.toLowerCase().includes(args.keyword.toLowerCase()));
     });
 
     const events: FoundEvent[] = filtered.map((event) => {

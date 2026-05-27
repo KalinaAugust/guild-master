@@ -8,6 +8,7 @@ type RawEvent = {
   description: string | null;
   type: string;
   event_date: string;
+  created_by?: string;
 };
 
 interface ParticipantsResponse {
@@ -24,6 +25,7 @@ function transformEvent(raw: RawEvent): ActivityEvent {
     type: raw.type as ActivityType,
     date: d.format('YYYY-MM-DD'),
     time: d.format('HH:mm'),
+    createdBy: raw.created_by,
   };
 }
 
@@ -94,6 +96,7 @@ export const eventApi = baseApi.injectEndpoints({
       providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

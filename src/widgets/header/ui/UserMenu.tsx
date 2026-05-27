@@ -84,8 +84,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
               </div>
               <ChevronDown 
                 size={16} 
-                className={styles.chevron}
-                style={{ transform: isLanguageOpen ? 'rotate(180deg)' : 'none' }} 
+                className={`${styles.chevron} ${isLanguageOpen ? styles.chevronOpen : ''}`} 
               />
             </button>
             
@@ -97,7 +96,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
                   disabled={locale === 'en' || isPending}
                 >
                   <div className={styles.langItem}>
-                    <span style={{ marginRight: '0.5rem' }}>🇺🇸</span> {t('locales.en')}
+                    <span className={styles.flag}>🇺🇸</span> {t('locales.en')}
                   </div>
                 </DropdownMenu.Item>
                 <DropdownMenu.Item 
@@ -106,7 +105,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
                   disabled={locale === 'ru' || isPending}
                 >
                   <div className={styles.langItem}>
-                    <span style={{ marginRight: '0.5rem' }}>🇷🇺</span> {t('locales.ru')}
+                    <span className={styles.flag}>🇷🇺</span> {t('locales.ru')}
                   </div>
                 </DropdownMenu.Item>
               </div>

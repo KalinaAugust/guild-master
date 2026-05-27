@@ -18,6 +18,7 @@ export const aiHelperApi = baseApi.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: true,
 });
 
 export const { useSendAiMessageMutation } = aiHelperApi;
