@@ -1,6 +1,14 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import DOMPurify from 'dompurify';
+
+function sanitizeMessage(html: string): string {
+  const clean = DOMPurify.sanitize(html, { ADD_ATTR: ['target'] });
+  const div = document.createElement('div');
+  div.innerHTML = clean;
+  return div.innerHTML;
+}
 import { useTranslations } from 'next-intl';
 import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
@@ -43,7 +51,7 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
     try {
       const result = await sendMessage({ messages: history, guildId }).unwrap();
       setMessages((prev) => [...prev, { role: 'assistant', content: result.message }]);
-      if (result.eventCreated) {
+      if (result.eventCreated || result.eventUpdated) {
         dispatch(baseApi.util.invalidateTags([{ type: 'Event', id: 'LIST' }]));
       }
     } catch {
@@ -77,9 +85,11 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
             <div
               key={i}
               className={msg.role === 'user' ? styles.messageUser : styles.messageAssistant}
-            >
-              {msg.content}
-            </div>
+              {...(msg.role === 'assistant'
+                ? { dangerouslySetInnerHTML: { __html: sanitizeMessage(msg.content) } }
+                : { children: msg.content }
+              )}
+            />
           ))}
           {isLoading && (
             <div className={`${styles.messageAssistant} ${styles.thinking}`}>
