@@ -96,7 +96,7 @@
   font-size: 0.95rem;
   width: 100%;
   min-height: 120px;
-  resize: vertical;
+  resize: none;
   font-family: inherit;
 }
 

@@ -1,0 +1,17 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.button:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
