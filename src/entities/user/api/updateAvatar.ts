@@ -2,7 +2,8 @@ import { createClient } from '@/shared/api/supabase/client';
 
 export const updateAvatar = async (userId: string, blob: Blob) => {
   const supabase = createClient();
-  const filePath = `${userId}/avatar-${Date.now()}.png`;
+  const fileName = `avatar-${Date.now()}.png`;
+  const filePath = `${userId}/${fileName}`;
 
   // 1. Upload to Storage
   const { error: uploadError } = await supabase.storage
@@ -22,7 +23,30 @@ export const updateAvatar = async (userId: string, blob: Blob) => {
     .update({ avatar_url: publicUrl })
     .eq('id', userId);
 
-  if (updateError) throw updateError;
+  if (updateError) {
+    // Rollback: delete the uploaded file if database update fails
+    await supabase.storage.from('avatars').remove([filePath]);
+    throw updateError;
+  }
+
+  // 4. Clean up old avatars in the background
+  try {
+    const { data: files } = await supabase.storage
+      .from('avatars')
+      .list(userId);
+
+    if (files && files.length > 0) {
+      const toDelete = files
+        .filter((file) => file.name !== fileName)
+        .map((file) => `${userId}/${file.name}`);
+
+      if (toDelete.length > 0) {
+        await supabase.storage.from('avatars').remove(toDelete);
+      }
+    }
+  } catch (cleanupError) {
+    console.error('Error cleaning up old avatars:', cleanupError);
+  }
 
   return publicUrl;
 };

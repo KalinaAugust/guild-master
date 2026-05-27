@@ -52,6 +52,10 @@ npm run build
 npm run start
 ```
 
+## Git Workflow
+
+- **No mid-task commits:** Do NOT create git commits after completing individual subtasks or plan steps. Only commit when explicitly asked by the user.
+
 ## Development Conventions
 
 - **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering.
@@ -60,7 +64,7 @@ npm run start
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/shared/types/index.ts` or close to their usage if specific to a single module. `React.FormEvent` is deprecated in React 19 — use `React.SubmitEvent` for form submit handlers instead. `React.MouseEvent` is not deprecated and can be used as-is.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
-- **Testing:** We use Vitest and React Testing Library for unit and integration tests. Follow TDD principles: write a failing test before implementing the logic.
+- **Testing:** Do NOT write new unit tests. Existing tests should remain untouched, but no new test files or test cases should be added.
 - **CLAUDE.md hygiene:** After any task that changes infrastructure, global state patterns, routing conventions, or other project-wide rules — update this file to reflect the new reality before closing the task.
 
 ## Key Commands

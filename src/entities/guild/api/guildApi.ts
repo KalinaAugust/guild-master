@@ -49,6 +49,7 @@ export const guildApi = baseApi.injectEndpoints({
       ],
     }),
   }),
+  overrideExisting: true,
 });
 
 export const {

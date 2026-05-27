@@ -9,6 +9,7 @@ type RawEventRow = {
   type: string;
   event_date: string;
   guild_id: string;
+  created_by: string;
 };
 
 export const getEventById = async (
@@ -17,7 +18,7 @@ export const getEventById = async (
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('events')
-    .select('id, title, description, type, event_date, guild_id')
+    .select('id, title, description, type, event_date, guild_id, created_by')
     .eq('id', id)
     .single();
 
@@ -37,6 +38,7 @@ export const getEventById = async (
       type: raw.type as ActivityEvent['type'],
       date: d.format('YYYY-MM-DD'),
       time: d.format('HH:mm'),
+      createdBy: raw.created_by,
     },
     guildId: raw.guild_id,
   };

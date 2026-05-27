@@ -7,6 +7,7 @@ import { Modal } from '@/shared/ui/Modal';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
 import { useSendAiMessageMutation } from '../api/aiHelperApi';
+import { sanitizeHtml } from '@/shared/lib/sanitizeHtml';
 import styles from './AiHelperModal.module.css';
 import { CatSearchIllustration } from './CatSearchIllustration';
 
@@ -43,7 +44,7 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
     try {
       const result = await sendMessage({ messages: history, guildId }).unwrap();
       setMessages((prev) => [...prev, { role: 'assistant', content: result.message }]);
-      if (result.eventCreated) {
+      if (result.eventCreated || result.eventUpdated) {
         dispatch(baseApi.util.invalidateTags([{ type: 'Event', id: 'LIST' }]));
       }
     } catch {
@@ -77,9 +78,11 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
             <div
               key={i}
               className={msg.role === 'user' ? styles.messageUser : styles.messageAssistant}
-            >
-              {msg.content}
-            </div>
+              {...(msg.role === 'assistant'
+                ? { dangerouslySetInnerHTML: { __html: sanitizeHtml(msg.content) } }
+                : { children: msg.content }
+              )}
+            />
           ))}
           {isLoading && (
             <div className={`${styles.messageAssistant} ${styles.thinking}`}>

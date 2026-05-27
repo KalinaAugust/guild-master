@@ -8,7 +8,7 @@ interface ChatMessage {
 export const aiHelperApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     sendAiMessage: builder.mutation<
-      { message: string; eventCreated: boolean },
+      { message: string; eventCreated: boolean; eventUpdated: boolean },
       { messages: ChatMessage[]; guildId: string }
     >({
       query: ({ messages, guildId }) => ({
@@ -18,6 +18,7 @@ export const aiHelperApi = baseApi.injectEndpoints({
       }),
     }),
   }),
+  overrideExisting: true,
 });
 
 export const { useSendAiMessageMutation } = aiHelperApi;

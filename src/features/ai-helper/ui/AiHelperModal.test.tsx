@@ -131,6 +131,20 @@ describe('AiHelperModal', () => {
     });
   });
 
+  it('invalidates Event cache when eventUpdated is true', async () => {
+    mockSendMessage.mockReturnValue({
+      unwrap: () => Promise.resolve({ message: 'Event updated!', eventCreated: false, eventUpdated: true }),
+    });
+
+    renderModal();
+    fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Rename event' } });
+    fireEvent.click(screen.getByRole('button', { name: 'send' }));
+
+    await waitFor(() => {
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'invalidateTags' });
+    });
+  });
+
   it('does not invalidate cache when eventCreated is false', async () => {
     mockSendMessage.mockReturnValue({
       unwrap: () => Promise.resolve({ message: 'Sure!', eventCreated: false }),

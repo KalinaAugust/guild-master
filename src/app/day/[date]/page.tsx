@@ -19,7 +19,7 @@ export default async function DayPage({ params }: DayPageProps) {
   const t = await getTranslations('Common');
 
   if (guilds.length === 0) {
-    redirect('/guilds/create');
+    redirect('/guilds');
   }
 
   const currentGuildId = guilds[0].id;
