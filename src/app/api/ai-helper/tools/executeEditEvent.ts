@@ -13,6 +13,9 @@ export interface EditEventArgs {
 export const executeEditEvent = async (
   args: EditEventArgs,
 ): Promise<{ success: boolean; eventId?: string; error?: string }> => {
+  if ((args.date && !args.time) || (!args.date && args.time)) {
+    return { success: false, error: 'Both date and time must be provided together' };
+  }
   try {
     const { id, ...fields } = args;
     const data = await updateEvent(id, fields);
