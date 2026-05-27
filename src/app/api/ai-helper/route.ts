@@ -6,6 +6,8 @@ import { createEventTool } from './tools/createEventTool';
 import { executeCreateEvent, CreateEventArgs } from './tools/executeCreateEvent';
 import { findEventsTool } from './tools/findEventsTool';
 import { executeFindEvents, FindEventsArgs } from './tools/executeFindEvents';
+import { editEventTool } from './tools/editEventTool';
+import { executeEditEvent, EditEventArgs } from './tools/executeEditEvent';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -41,7 +43,7 @@ export async function POST(request: NextRequest) {
     const completion = await client.chat.completions.create({
       model: DEEPSEEK_MODEL,
       messages: [{ role: 'system', content: getSystemPrompt() }, ...messages],
-      tools: [createEventTool, findEventsTool],
+      tools: [createEventTool, findEventsTool, editEventTool],
       tool_choice: 'auto',
     });
 
@@ -54,6 +56,7 @@ export async function POST(request: NextRequest) {
     if (choice.finish_reason === 'tool_calls' && choice.message.tool_calls) {
       const toolCall = choice.message.tool_calls[0];
       let eventCreated = false;
+      let eventUpdated = false;
       let toolResultContent: string;
 
       if (toolCall.type !== 'function') {
@@ -80,6 +83,18 @@ export async function POST(request: NextRequest) {
         }
         const result = await executeFindEvents(args, guildId);
         toolResultContent = JSON.stringify(result);
+      } else if (toolCall.function.name === 'editEvent') {
+        let args: EditEventArgs;
+        try {
+          args = JSON.parse(toolCall.function.arguments);
+        } catch {
+          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
+        }
+        const result = await executeEditEvent(args);
+        eventUpdated = result.success;
+        toolResultContent = result.success
+          ? `Event updated successfully with id ${result.eventId}`
+          : `Failed to update event: ${result.error}`;
       } else {
         console.error('[ai-helper] Unexpected tool name:', toolCall.function.name);
         toolResultContent = 'Unknown tool';
@@ -104,7 +119,7 @@ export async function POST(request: NextRequest) {
       if (typeof message !== 'string') {
         return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
       }
-      return NextResponse.json({ message, eventCreated });
+      return NextResponse.json({ message, eventCreated, eventUpdated });
     }
 
     // Normal text response
@@ -112,7 +127,7 @@ export async function POST(request: NextRequest) {
     if (typeof message !== 'string') {
       return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
     }
-    return NextResponse.json({ message, eventCreated: false });
+    return NextResponse.json({ message, eventCreated: false, eventUpdated: false });
   } catch {
     return NextResponse.json({ error: 'Failed to contact DeepSeek' }, { status: 500 });
   }
