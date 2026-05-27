@@ -1,7 +1,7 @@
 // src/app/api/ai-helper/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { systemPrompt } from './systemPrompt';
+import { getSystemPrompt } from './systemPrompt';
 import { createEventTool } from './tools/createEventTool';
 import { executeCreateEvent, CreateEventArgs } from './tools/executeCreateEvent';
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
   try {
     const completion = await client.chat.completions.create({
       model: DEEPSEEK_MODEL,
-      messages: [{ role: 'system', content: systemPrompt }, ...messages],
+      messages: [{ role: 'system', content: getSystemPrompt() }, ...messages],
       tools: [createEventTool],
       tool_choice: 'auto',
     });
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       const followUp = await client.chat.completions.create({
         model: DEEPSEEK_MODEL,
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: getSystemPrompt() },
           ...messages,
           choice.message,
           {

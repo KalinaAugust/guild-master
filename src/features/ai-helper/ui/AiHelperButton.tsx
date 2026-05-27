@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { Bot } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Tooltip } from '@/shared/ui/Tooltip';
-import { AiHelperModal } from './AiHelperModal';
+import { AiHelperModal, Message } from './AiHelperModal';
 import styles from './AiHelperButton.module.css';
 
 export const AiHelperButton = () => {
   const t = useTranslations('AiHelper');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   return (
     <>
@@ -22,7 +23,12 @@ export const AiHelperButton = () => {
           <Bot size={20} />
         </button>
       </Tooltip>
-      <AiHelperModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <AiHelperModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        messages={messages}
+        setMessages={setMessages}
+      />
     </>
   );
 };

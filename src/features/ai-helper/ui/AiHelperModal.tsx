@@ -10,7 +10,7 @@ import { useSendAiMessageMutation } from '../api/aiHelperApi';
 import styles from './AiHelperModal.module.css';
 import { CatSearchIllustration } from './CatSearchIllustration';
 
-interface Message {
+export interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
@@ -18,14 +18,15 @@ interface Message {
 interface AiHelperModalProps {
   isOpen: boolean;
   onClose: () => void;
+  messages: Message[];
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
 }
 
-export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
+export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelperModalProps) => {
   const t = useTranslations('AiHelper');
   const dispatch = useAppDispatch();
   const guildId = useAppSelector((state) => state.guild.currentGuildId) ?? '';
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
   const [sendMessage, { isLoading }] = useSendAiMessageMutation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -59,7 +60,6 @@ export const AiHelperModal = ({ isOpen, onClose }: AiHelperModalProps) => {
 
   const handleClose = () => {
     setInput('');
-    setMessages([]);
     onClose();
   };
 

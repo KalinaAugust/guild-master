@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useState } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { AiHelperModal } from './AiHelperModal';
+import { AiHelperModal, Message } from './AiHelperModal';
 import { useSendAiMessageMutation } from '../api/aiHelperApi';
 
 vi.mock('next-intl', () => ({
@@ -37,6 +38,14 @@ vi.mock('../api/aiHelperApi', () => ({
 
 type MockMutationHook = [typeof mockSendMessage, { isLoading: boolean }];
 
+const ModalWrapper = ({ isOpen = true, onClose = vi.fn() }: { isOpen?: boolean; onClose?: () => void }) => {
+  const [messages, setMessages] = useState<Message[]>([]);
+  return <AiHelperModal isOpen={isOpen} onClose={onClose} messages={messages} setMessages={setMessages} />;
+};
+
+const renderModal = (props: { isOpen?: boolean; onClose?: () => void } = {}) =>
+  render(<ModalWrapper {...props} />);
+
 describe('AiHelperModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -46,19 +55,19 @@ describe('AiHelperModal', () => {
   });
 
   it('renders nothing when isOpen is false', () => {
-    render(<AiHelperModal isOpen={false} onClose={vi.fn()} />);
+    renderModal({ isOpen: false });
     expect(screen.queryByTestId('modal')).not.toBeInTheDocument();
   });
 
   it('renders modal with textarea and send button when open', () => {
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     expect(screen.getByTestId('modal')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('placeholder')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'send' })).toBeInTheDocument();
   });
 
   it('disables send button when textarea is empty', () => {
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     expect(screen.getByRole('button', { name: 'send' })).toBeDisabled();
   });
 
@@ -67,7 +76,7 @@ describe('AiHelperModal', () => {
       unwrap: () => Promise.resolve({ message: 'Hi!', eventCreated: false }),
     });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
@@ -86,7 +95,7 @@ describe('AiHelperModal', () => {
         unwrap: () => Promise.resolve({ message: 'Second reply', eventCreated: false }),
       });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
 
     fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'First message' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
@@ -113,7 +122,7 @@ describe('AiHelperModal', () => {
       unwrap: () => Promise.resolve({ message: 'Event created!', eventCreated: true }),
     });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Create event' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
@@ -127,7 +136,7 @@ describe('AiHelperModal', () => {
       unwrap: () => Promise.resolve({ message: 'Sure!', eventCreated: false }),
     });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
@@ -142,7 +151,7 @@ describe('AiHelperModal', () => {
       unwrap: () => Promise.resolve({ message: 'ok', eventCreated: false }),
     });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     const textarea = screen.getByPlaceholderText('placeholder');
     fireEvent.change(textarea, { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
@@ -155,7 +164,7 @@ describe('AiHelperModal', () => {
       unwrap: () => Promise.reject(new Error('fail')),
     });
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     fireEvent.change(screen.getByPlaceholderText('placeholder'), { target: { value: 'Hello' } });
     fireEvent.click(screen.getByRole('button', { name: 'send' }));
 
@@ -169,7 +178,7 @@ describe('AiHelperModal', () => {
       [mockSendMessage, { isLoading: true }] as unknown as MockMutationHook
     );
 
-    render(<AiHelperModal isOpen={true} onClose={vi.fn()} />);
+    renderModal();
     expect(screen.getByText('thinking')).toBeInTheDocument();
   });
 });
