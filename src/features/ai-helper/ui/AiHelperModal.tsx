@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
+import { Textarea } from '@/shared/ui/Textarea';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
 import { useSendAiMessageMutation } from '../api/aiHelperApi';
@@ -92,7 +93,7 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
           <div ref={messagesEndRef} />
         </div>
         <div className={styles.inputRow}>
-          <textarea
+          <Textarea
             className={styles.textarea}
             value={input}
             onChange={(e) => setInput(e.target.value)}

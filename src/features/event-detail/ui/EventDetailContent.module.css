@@ -41,7 +41,7 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--accent-yellow);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

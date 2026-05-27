@@ -1,0 +1,17 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.errorMessage {
+  font-size: 0.75rem;
+  color: #ff6b6b;
+  margin-top: -4px;
+}
