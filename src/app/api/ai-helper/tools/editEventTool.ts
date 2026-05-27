@@ -1,0 +1,41 @@
+import type { ChatCompletionTool } from 'openai/resources/chat/completions';
+
+export const editEventTool: ChatCompletionTool = {
+  type: 'function',
+  function: {
+    name: 'editEvent',
+    description:
+      'Edits an existing calendar event. Use when the user asks to update, rename, reschedule, or modify an event. Always call findEvents first to obtain the event id.',
+    parameters: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          description: 'The id of the event to edit. Obtain it via findEvents.',
+        },
+        title: {
+          type: 'string',
+          description: 'New title for the event.',
+        },
+        date: {
+          type: 'string',
+          description: 'New date in YYYY-MM-DD format.',
+        },
+        time: {
+          type: 'string',
+          description: 'New start time in HH:mm 24-hour format.',
+        },
+        type: {
+          type: 'string',
+          enum: ['raid', 'game', 'meeting', 'other'],
+          description: 'New event type.',
+        },
+        description: {
+          type: 'string',
+          description: 'New description. Pass empty string to clear.',
+        },
+      },
+      required: ['id'],
+    },
+  },
+};
