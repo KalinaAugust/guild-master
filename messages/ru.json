@@ -49,6 +49,11 @@
       "meeting": "Встреча",
       "other": "Другое"
     },
+    "validation": {
+      "titleRequired": "Укажите название",
+      "dateRequired": "Укажите дату",
+      "timeRequired": "Укажите время"
+    },
     "wizard": {
       "mainColumn": "Основное",
       "additionalColumn": "Дополнительно",

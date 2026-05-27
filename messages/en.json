@@ -49,6 +49,11 @@
       "meeting": "Meeting",
       "other": "Other"
     },
+    "validation": {
+      "titleRequired": "Title is required",
+      "dateRequired": "Date is required",
+      "timeRequired": "Time is required"
+    },
     "wizard": {
       "mainColumn": "Main",
       "additionalColumn": "Additional",

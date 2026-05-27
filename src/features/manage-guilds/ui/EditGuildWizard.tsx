@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import * as Form from '@radix-ui/react-form';
 import { X, Image as ImageIcon, Users, Settings } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { Input } from '@/shared/ui/Input';
+import { Textarea } from '@/shared/ui/Textarea';
+import { FormField } from '@/shared/ui/FormField';
 import { GuildMembersSection } from './GuildMembersSection';
 import styles from './EditGuildWizard.module.css';
 
@@ -94,29 +98,23 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
 
           <div className={styles.body}>
             <div className={styles.column}>
-              <form id="guild-wizard-form" onSubmit={handleSubmit}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="guild-wizard-name">{t('nameLabel')}</label>
-                  <input
-                    id="guild-wizard-name"
+              <Form.Root id="guild-wizard-form" onSubmit={handleSubmit}>
+                <FormField name="name" label={t('nameLabel')} className={styles.formGroup}>
+                  <Input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className={styles.input}
                     required
                     autoFocus
                   />
-                </div>
-                <div className={styles.formGroup}>
-                  <label htmlFor="guild-wizard-description">{t('descriptionLabel')}</label>
-                  <textarea
-                    id="guild-wizard-description"
+                </FormField>
+                <FormField name="description" label={t('descriptionLabel')} className={styles.formGroup}>
+                  <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className={styles.textarea}
                   />
-                </div>
-              </form>
+                </FormField>
+              </Form.Root>
             </div>
 
             <div className={styles.column}>
@@ -144,8 +142,8 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   ? <GuildMembersSection guildId={guild.id} />
                   : (
                     <div>
-                      <form onSubmit={handleAddPending} className={styles.pendingForm}>
-                        <input
+                      <Form.Root onSubmit={handleAddPending} className={styles.pendingForm}>
+                        <Input
                           type="email"
                           value={pendingInput}
                           onChange={(e) => setPendingInput(e.target.value)}
@@ -155,7 +153,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                         <Button type="submit" variant="primary" disabled={!pendingInput.trim()}>
                           Add
                         </Button>
-                      </form>
+                      </Form.Root>
                       {pendingEmails.length > 0 && (
                         <ul className={styles.pendingList}>
                           {pendingEmails.map((email) => (

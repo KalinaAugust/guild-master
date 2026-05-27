@@ -15,7 +15,26 @@
   min-height: 200px;
   max-height: 420px;
   overflow-y: auto;
-  padding: 4px 0;
+  padding: 4px 4px 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.3) transparent;
+}
+
+.messages::-webkit-scrollbar {
+  width: 4px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.3);
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.55);
 }
 
 .empty {

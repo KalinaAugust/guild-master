@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { UserMinus } from 'lucide-react';
 import { toast } from 'sonner';
+import * as Form from '@radix-ui/react-form';
 import {
   useGetGuildMembersQuery,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
 } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { Input } from '@/shared/ui/Input';
 import styles from './GuildMembersSection.module.css';
 
 interface GuildMembersSectionProps {
@@ -45,8 +47,8 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
 
   return (
     <div className={styles.root}>
-      <form onSubmit={handleAdd} className={styles.addForm}>
-        <input
+      <Form.Root onSubmit={handleAdd} className={styles.addForm}>
+        <Input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +58,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         <Button type="submit" variant="primary" disabled={!email.trim() || isAdding}>
           Add
         </Button>
-      </form>
+      </Form.Root>
 
       {isLoading ? (
         <p className={styles.loading}>Loading…</p>

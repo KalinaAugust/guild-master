@@ -1,12 +1,6 @@
-import { ActivityType, ActivityEvent } from '@/shared/types';
-
-export interface EventFormData {
-  title: string;
-  date: string;
-  time: string;
-  type: ActivityType;
-  description: string;
-}
+import { ActivityEvent } from '@/shared/types';
+import type { EventFormData } from './schema';
+export type { EventFormData } from './schema';
 
 export interface EventFormProps {
   initialData?: Partial<ActivityEvent>;
