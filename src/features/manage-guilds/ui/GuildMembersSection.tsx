@@ -66,7 +66,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         <p className={styles.empty}>No members yet.</p>
       ) : (
         <ul className={styles.list}>
-          {members.map((member) => (
+          {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => (
             <li key={member.userId} className={styles.item}>
               <span className={styles.name}>
                 {member.profile.fullName ?? member.userId}

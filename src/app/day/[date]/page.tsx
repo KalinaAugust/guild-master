@@ -31,9 +31,7 @@ export default async function DayPage({ params }: DayPageProps) {
         {t('backToCalendar')}
       </Link>
 
-      <div className={styles.card}>
-        <DayEventsList date={date} guildId={currentGuildId} />
-      </div>
+      <DayEventsList date={date} guildId={currentGuildId} />
 
       <EventWizard isDayView />
     </main>

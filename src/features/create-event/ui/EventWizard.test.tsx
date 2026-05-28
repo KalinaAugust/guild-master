@@ -9,6 +9,7 @@ import { baseApi } from '@/shared/api/baseApi';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
 }));
 
 vi.mock('sonner', () => ({

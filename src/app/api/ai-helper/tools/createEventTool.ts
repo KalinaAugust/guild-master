@@ -22,7 +22,7 @@ export const createEventTool: ChatCompletionTool = {
         },
         type: {
           type: 'string',
-          enum: ['raid', 'game', 'meeting', 'other'],
+          enum: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport'],
           description: 'Event type. Choose the closest match to what the user described.',
         },
         description: {

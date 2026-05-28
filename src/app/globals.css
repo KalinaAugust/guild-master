@@ -33,6 +33,12 @@
   --event-game-border: #4a9068;
   --event-other: #1a5272;
   --event-other-border: #4a85a8;
+  --event-dungeon: #2d1250;
+  --event-dungeon-border: #a855f7;
+  --event-party: #4d1a3a;
+  --event-party-border: #f472b6;
+  --event-sport: #0f3d2e;
+  --event-sport-border: #34d399;
 }
 
 * {

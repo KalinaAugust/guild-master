@@ -9,6 +9,7 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  align-items: center;
 }
 
 .card:hover {
@@ -52,6 +53,24 @@
   color: #ffb347;
   background: rgba(255, 179, 71, 0.1);
   box-shadow: 0 0 15px rgba(255, 179, 71, 0.2);
+}
+
+.type_dungeon .iconWrapper {
+  color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+.type_party .iconWrapper {
+  color: #f472b6;
+  background: rgba(244, 114, 182, 0.1);
+  box-shadow: 0 0 15px rgba(244, 114, 182, 0.2);
+}
+
+.type_sport .iconWrapper {
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
 }
 
 .content {

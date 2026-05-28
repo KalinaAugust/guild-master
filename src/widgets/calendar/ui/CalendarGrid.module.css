@@ -170,6 +170,9 @@
 .event_game { background: var(--event-game); border-left-color: var(--event-game-border); }
 .event_meeting { background: var(--event-meeting); border-left-color: var(--event-meeting-border); }
 .event_other { background: var(--event-other); border-left-color: var(--event-other-border); }
+.event_dungeon { background: var(--event-dungeon); border-left-color: var(--event-dungeon-border); }
+.event_party { background: var(--event-party); border-left-color: var(--event-party-border); }
+.event_sport { background: var(--event-sport); border-left-color: var(--event-sport-border); }
 
 .tooltipEventsList {
   display: flex;

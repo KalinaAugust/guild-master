@@ -19,7 +19,7 @@ export const findEventsTool: ChatCompletionTool = {
         },
         type: {
           type: 'string',
-          enum: ['raid', 'game', 'meeting', 'other'],
+          enum: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport'],
           description: 'Filter by event type. Omit to match all types.',
         },
         keyword: {
