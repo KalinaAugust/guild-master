@@ -5,8 +5,8 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as Form from '@radix-ui/react-form';
-import { X, Image as ImageIcon, Users, Settings } from 'lucide-react';
-import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation } from '@/entities/guild';
+import { X, Image as ImageIcon, Users, Settings, Trash2 } from 'lucide-react';
+import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
@@ -32,10 +32,23 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
   const [activeTab, setActiveTab] = useState<Tab>('members');
   const [pendingEmails, setPendingEmails] = useState<string[]>([]);
   const [pendingInput, setPendingInput] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [createGuild, { isLoading: isCreating }] = useCreateGuildMutation();
   const [updateGuild, { isLoading: isUpdating }] = useUpdateGuildMutation();
   const [addMember] = useAddGuildMemberMutation();
+  const [deleteGuild, { isLoading: isDeleting }] = useDeleteGuildMutation();
   const isLoading = isCreating || isUpdating;
+
+  const handleDeleteGuild = async () => {
+    if (!guild) return;
+    try {
+      await deleteGuild(guild.id).unwrap();
+      toast.success(t('deleteSuccess'));
+      handleClose();
+    } catch {
+      toast.error(t('errorCreate'));
+    }
+  };
 
   const handleClose = () => {
     if (!isEdit) {
@@ -176,13 +189,41 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
               )}
 
               {activeTab === 'settings' && (
-                <div className={styles.stubGroup}>
-                  <div className={styles.stubHeader}>
-                    <ImageIcon size={16} aria-hidden="true" />
-                    <span className={styles.stubLabel}>{t('avatarSection')}</span>
+                <>
+                  <div className={styles.stubGroup}>
+                    <div className={styles.stubHeader}>
+                      <ImageIcon size={16} aria-hidden="true" />
+                      <span className={styles.stubLabel}>{t('avatarSection')}</span>
+                    </div>
+                    <div className={styles.stubField}>{t('comingSoon')}</div>
                   </div>
-                  <div className={styles.stubField}>{t('comingSoon')}</div>
-                </div>
+
+                  {isEdit && (
+                    <div className={styles.dangerZone}>
+                      <div className={styles.dangerZoneHeader}>
+                        <Trash2 size={16} aria-hidden="true" />
+                        <span className={styles.dangerZoneLabel}>{t('deleteLabel')}</span>
+                      </div>
+                      {showDeleteConfirm ? (
+                        <div className={styles.deleteConfirm}>
+                          <p className={styles.deleteConfirmText}>{t('deleteConfirm')}</p>
+                          <div className={styles.deleteConfirmActions}>
+                            <Button type="button" variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
+                              {commonT('cancel')}
+                            </Button>
+                            <Button type="button" variant="danger" onClick={handleDeleteGuild} disabled={isDeleting}>
+                              {commonT('delete')}
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <Button type="button" variant="danger" onClick={() => setShowDeleteConfirm(true)}>
+                          {t('deleteLabel')}
+                        </Button>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

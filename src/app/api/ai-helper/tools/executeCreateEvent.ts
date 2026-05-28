@@ -5,7 +5,7 @@ export interface CreateEventArgs {
   title: string;
   date: string;
   time: string;
-  type: 'raid' | 'game' | 'meeting' | 'other';
+  type: 'raid' | 'game' | 'meeting' | 'other' | 'dungeon' | 'party' | 'sport';
   description: string;
 }
 

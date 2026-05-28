@@ -37,6 +37,9 @@ export const EventForm: React.FC<EventFormProps> = ({
     { label: t('types.game'), value: 'game' as ActivityType },
     { label: t('types.raid'), value: 'raid' as ActivityType },
     { label: t('types.meeting'), value: 'meeting' as ActivityType },
+    { label: t('types.dungeon'), value: 'dungeon' as ActivityType },
+    { label: t('types.party'), value: 'party' as ActivityType },
+    { label: t('types.sport'), value: 'sport' as ActivityType },
     { label: t('types.other'), value: 'other' as ActivityType },
   ], [t]);
 

@@ -131,6 +131,48 @@
   font-size: 0.85rem;
 }
 
+.dangerZone {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.dangerZoneHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(220, 38, 38, 0.8);
+}
+
+.dangerZoneLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.deleteConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: rgba(220, 38, 38, 0.06);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 10px;
+}
+
+.deleteConfirmText {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.deleteConfirmActions {
+  display: flex;
+  gap: 8px;
+}
+
 .footer {
   display: flex;
   justify-content: flex-end;

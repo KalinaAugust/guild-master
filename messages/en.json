@@ -47,6 +47,9 @@
       "game": "Game",
       "raid": "Raid",
       "meeting": "Meeting",
+      "dungeon": "Dungeon",
+      "party": "Party",
+      "sport": "Sport",
       "other": "Other"
     },
     "validation": {
