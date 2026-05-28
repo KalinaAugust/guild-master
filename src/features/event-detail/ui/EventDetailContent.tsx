@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
 import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
@@ -54,6 +55,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [updateStatus] = useUpdateParticipantStatusMutation();
   const [deleteEvent] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const locale = useLocale();
+  const formattedDateTime = event
+    ? dayjs(`${event.date} ${event.time}`).locale(locale).format('dddd, D MMMM · HH:mm')
+    : '';
 
   const handleEdit = () => {
     if (!event) return;
@@ -129,9 +135,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
           <div className={styles.infoGroup}>
             <span className={styles.label}>{t('dateTime')}</span>
-            <span className={styles.dateTime}>
-              <span>{event.date}</span>{' '}<span>{event.time}</span>
-            </span>
+            <span className={styles.dateTime}>{formattedDateTime}</span>
           </div>
 
           {event.description && (
