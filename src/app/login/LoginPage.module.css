@@ -2,6 +2,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Subtract the sticky header height (~69px) so the page doesn't overflow 100vh. */
-  min-height: calc(100vh - 69px);
+  /* Subtract the sticky header height so the page doesn't overflow 100vh. */
+  min-height: calc(100vh - var(--header-height));
 }
