@@ -1,7 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGuildMembers } from '@/entities/guild/api/getGuildMembers';
-import { createClient } from '@/shared/api/supabase/server';
 import { createAdminClient } from '@/shared/api/supabase/admin';
+import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
+
+const USER_LOOKUP_PAGE_SIZE = 1000;
+const USER_LOOKUP_MAX_PAGES = 100;
+
+/**
+ * Looks up an auth user by email. supabase-js v2 admin API has no email filter,
+ * so we page through listUsers until a match is found or the list is exhausted.
+ */
+async function findUserByEmail(
+  adminClient: ReturnType<typeof createAdminClient>,
+  email: string,
+) {
+  for (let page = 1; page <= USER_LOOKUP_MAX_PAGES; page++) {
+    const { data, error } = await adminClient.auth.admin.listUsers({
+      page,
+      perPage: USER_LOOKUP_PAGE_SIZE,
+    });
+    if (error) return null;
+
+    const match = data.users.find((u) => u.email === email);
+    if (match) return match;
+
+    if (data.users.length < USER_LOOKUP_PAGE_SIZE) break;
+  }
+  return null;
+}
 
 export async function GET(
   _: NextRequest,
@@ -20,33 +46,20 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+  const { supabase, user } = auth;
 
   const { id: guildId } = await params;
   const body = await request.json();
   const email: string | undefined = body?.email;
   if (!email) return NextResponse.json({ error: 'email required' }, { status: 400 });
 
-  const { data: callerMembership } = await supabase
-    .from('guild_members')
-    .select('role')
-    .eq('guild_id', guildId)
-    .eq('user_id', user.id)
-    .single();
-
-  if (!callerMembership || !['OWNER', 'ADMIN'].includes(callerMembership.role ?? '')) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const forbidden = await requireGuildRole(supabase, guildId, user.id, ['OWNER', 'ADMIN']);
+  if (forbidden) return forbidden;
 
   const adminClient = createAdminClient();
-  const { data: listData, error: lookupError } =
-    await adminClient.auth.admin.listUsers({ perPage: 1000 });
-
-  const targetUser = lookupError
-    ? null
-    : listData.users.find((u) => u.email === email) ?? null;
+  const targetUser = await findUserByEmail(adminClient, email);
 
   if (!targetUser) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
