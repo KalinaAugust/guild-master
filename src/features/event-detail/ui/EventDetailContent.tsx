@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell } from 'lucide-react';
+import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
 import {
@@ -18,6 +20,16 @@ import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { useUpdateParticipantStatusMutation } from '../api/detailApi';
 import { ParticipantItem } from './ParticipantItem';
 import styles from './EventDetailContent.module.css';
+
+const typeIcons: Record<ActivityType, React.ReactNode> = {
+  raid:    <Sword size={32} />,
+  game:    <Gamepad2 size={32} />,
+  meeting: <Users size={32} />,
+  other:   <Calendar size={32} />,
+  dungeon: <Skull size={32} />,
+  party:   <PartyPopper size={32} />,
+  sport:   <Dumbbell size={32} />,
+};
 
 interface EventDetailContentProps {
   eventId: string;
@@ -43,6 +55,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [updateStatus] = useUpdateParticipantStatusMutation();
   const [deleteEvent] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const locale = useLocale();
+  const formattedDateTime = event
+    ? dayjs(`${event.date} ${event.time}`).locale(locale).format('dddd, D MMMM · HH:mm')
+    : '';
 
   const handleEdit = () => {
     if (!event) return;
@@ -110,16 +127,15 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         <div className={styles.column}>
           <div className={styles.infoGroup}>
             <span className={styles.label}>{t('type')}</span>
-            <span className={`${styles.typeBadge} ${styles[`type_${event.type}`]}`}>
-              {typeLabel}
-            </span>
+            <div className={`${styles.typeHero} ${styles[`typeHero_${event.type}`]}`}>
+              <span className={styles.typeHeroIcon}>{typeIcons[event.type]}</span>
+              <span className={styles.typeHeroLabel}>{typeLabel}</span>
+            </div>
           </div>
 
           <div className={styles.infoGroup}>
             <span className={styles.label}>{t('dateTime')}</span>
-            <span className={styles.dateTime}>
-              <span>{event.date}</span>{' '}<span>{event.time}</span>
-            </span>
+            <span className={styles.dateTime}>{formattedDateTime}</span>
           </div>
 
           {event.description && (

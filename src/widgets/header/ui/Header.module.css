@@ -1,5 +1,6 @@
 .header {
-  padding: 1rem 2rem;
+  height: var(--header-height);
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -11,10 +12,24 @@
 }
 
 .logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
-  color: inherit;
+}
+
+.logoText {
+  background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logoIcon {
+  color: #93c5fd;
+  flex-shrink: 0;
 }
 
 .nav {

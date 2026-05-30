@@ -53,6 +53,25 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
 }
 
 .column {
@@ -79,23 +98,35 @@
   display: block;
 }
 
-.typeBadge {
-  display: inline-flex;
+.typeHero {
+  display: flex;
   align-items: center;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  background: rgba(108, 99, 255, 0.2);
-  color: #a89fff;
-  border: 1px solid rgba(108, 99, 255, 0.3);
-  width: fit-content;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  border-left: 4px solid transparent;
+  background: rgba(255, 255, 255, 0.04);
 }
 
-.type_raid    { background: rgba(255, 101, 132, 0.2); color: #ff9ab0; border-color: rgba(255, 101, 132, 0.3); }
-.type_game    { background: rgba(108, 99, 255, 0.2);  color: #a89fff; border-color: rgba(108, 99, 255, 0.3); }
-.type_meeting { background: rgba(67, 170, 139, 0.2);  color: #6fd4b2; border-color: rgba(67, 170, 139, 0.3); }
-.type_other   { background: rgba(87, 117, 144, 0.2);  color: #8fb5d0; border-color: rgba(87, 117, 144, 0.3); }
+.typeHeroIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.typeHeroLabel {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.typeHero_raid    { border-left-color: #ff4d4d; background: rgba(255, 77,  77,  0.08); color: #ff4d4d; }
+.typeHero_game    { border-left-color: #4da3ff; background: rgba(77,  163, 255, 0.08); color: #4da3ff; }
+.typeHero_meeting { border-left-color: #4dff88; background: rgba(77,  255, 136, 0.08); color: #4dff88; }
+.typeHero_other   { border-left-color: #ffb347; background: rgba(255, 179, 71,  0.08); color: #ffb347; }
+.typeHero_dungeon { border-left-color: #a855f7; background: rgba(168, 85,  247, 0.08); color: #a855f7; }
+.typeHero_party   { border-left-color: #f472b6; background: rgba(244, 114, 182, 0.08); color: #f472b6; }
+.typeHero_sport   { border-left-color: #34d399; background: rgba(52,  211, 153, 0.08); color: #34d399; }
 
 .dateTime {
   font-size: 1rem;

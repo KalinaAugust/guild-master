@@ -24,7 +24,10 @@ export const Modal: React.FC<ModalProps> = ({
     <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className={styles.overlay} />
-        <DialogPrimitive.Content className={`${styles.content} ${className || ''}`}>
+        <DialogPrimitive.Content
+          className={`${styles.content} ${className || ''}`}
+          aria-describedby={undefined}
+        >
           <div className={styles.header}>
             {title && <DialogPrimitive.Title className={styles.title}>{title}</DialogPrimitive.Title>}
             <DialogPrimitive.Close className={styles.closeButton}>
