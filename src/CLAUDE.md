@@ -17,6 +17,20 @@ This project does **NOT** use the standard `middleware.ts`.
 2. To protect new routes or change redirect logic — edit `src/proxy.ts`.
 3. Do not create `middleware.ts` in the project root.
 
+## Route Handler Authorization Model
+
+Authorization in `src/app/api/*` route handlers follows a two-tier model — do not add redundant checks that contradict it:
+
+1. **Baseline (RLS):** Every data-layer function (`fetchEvents`, `createEvent`, `getGuildMembers`, …) talks to Supabase through the **user-session** `createClient()`. Row-Level Security therefore governs every read and write. Plain read endpoints (`GET /api/events`, `GET /api/guilds/[id]/members`) rely on RLS alone and intentionally carry no explicit `auth.getUser()` call.
+2. **Role elevation:** Endpoints that mutate guild membership or settings add an **explicit** role gate on top of RLS via the helpers in `src/shared/api/guildAuth.ts`:
+   - `requireUser()` → resolves the session or returns a 401 response.
+   - `requireGuildRole(supabase, guildId, userId, roles)` → 403 unless the caller holds one of `roles`.
+   - `requireGuildOwner(supabase, guildId, userId)` → 403 unless the caller owns the guild.
+
+The AI helper (`POST /api/ai-helper`) is an authenticated, guild-scoped endpoint: it requires a session and guild membership, and validates that any event it edits belongs to the requested `guildId`.
+
+When adding a route, pick the tier deliberately: pure reads → RLS only; privileged mutations → `requireUser` + the matching role helper.
+
 ## Supabase (SSR)
 
 When creating a Supabase client on the server (Server Components or `proxy.ts`):

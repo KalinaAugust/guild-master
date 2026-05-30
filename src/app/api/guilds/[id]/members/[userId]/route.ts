@@ -1,26 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/shared/api/supabase/server';
+import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
 
 export async function DELETE(
   _: NextRequest,
   { params }: { params: Promise<{ id: string; userId: string }> }
 ) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+  const { supabase, user } = auth;
 
   const { id: guildId, userId } = await params;
 
-  const { data: callerMembership } = await supabase
-    .from('guild_members')
-    .select('role')
-    .eq('guild_id', guildId)
-    .eq('user_id', user.id)
-    .single();
-
-  if (!callerMembership || !['OWNER', 'ADMIN'].includes(callerMembership.role ?? '')) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const forbidden = await requireGuildRole(supabase, guildId, user.id, ['OWNER', 'ADMIN']);
+  if (forbidden) return forbidden;
 
   const { data: targetMembership } = await supabase
     .from('guild_members')

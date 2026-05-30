@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { getEventById } from '@/entities/event/api/getEventById';
+import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
 import { getSystemPrompt } from './systemPrompt';
 import { createEventTool } from './tools/createEventTool';
 import { executeCreateEvent, CreateEventArgs } from './tools/executeCreateEvent';
@@ -13,8 +15,59 @@ interface ChatMessage {
   content: string;
 }
 
-const DEEPSEEK_MODEL = 'deepseek-v4-flash';
+const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL ?? 'deepseek-v4-flash';
+const DEEPSEEK_BASE_URL = process.env.DEEPSEEK_BASE_URL ?? 'https://api.deepseek.com';
 const MAX_TOOL_TURNS = 5;
+
+type ToolOutcome = { content: string; eventCreated?: boolean; eventUpdated?: boolean };
+
+/** Dispatches a single tool call. Returns `null` if the model produced invalid JSON args. */
+async function handleToolCall(
+  name: string,
+  rawArgs: string,
+  guildId: string,
+): Promise<ToolOutcome | null> {
+  let args: unknown;
+  try {
+    args = JSON.parse(rawArgs);
+  } catch {
+    return null;
+  }
+
+  switch (name) {
+    case 'createEvent': {
+      const result = await executeCreateEvent(args as CreateEventArgs, guildId);
+      return {
+        content: result.success
+          ? `Event created successfully with id ${result.eventId}`
+          : `Failed to create event: ${result.error}`,
+        eventCreated: result.success,
+      };
+    }
+    case 'findEvents': {
+      const result = await executeFindEvents(args as FindEventsArgs, guildId);
+      return { content: JSON.stringify(result) };
+    }
+    case 'editEvent': {
+      const editArgs = args as EditEventArgs;
+      // Ensure the targeted event belongs to the caller's guild before mutating.
+      const found = await getEventById(editArgs.id);
+      if (!found || found.guildId !== guildId) {
+        return { content: 'Failed to update event: event not found in this guild' };
+      }
+      const result = await executeEditEvent(editArgs);
+      return {
+        content: result.success
+          ? `Event updated successfully with id ${result.eventId}`
+          : `Failed to update event: ${result.error}`,
+        eventUpdated: result.success,
+      };
+    }
+    default:
+      console.error('[ai-helper] Unexpected tool name:', name);
+      return { content: 'Unknown tool' };
+  }
+}
 
 export async function POST(request: NextRequest) {
   const apiKey = process.env.DEEPSEEK_API_KEY;
@@ -37,7 +90,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'guildId required' }, { status: 400 });
   }
 
-  const client = new OpenAI({ apiKey, baseURL: 'https://api.deepseek.com' });
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
+  const forbidden = await requireGuildRole(auth.supabase, guildId, auth.user.id, [
+    'OWNER',
+    'ADMIN',
+    'MEMBER',
+  ]);
+  if (forbidden) return forbidden;
+
+  const client = new OpenAI({ apiKey, baseURL: DEEPSEEK_BASE_URL });
 
   try {
     let currentMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
@@ -76,42 +138,14 @@ export async function POST(request: NextRequest) {
       if (toolCall.type !== 'function') {
         console.error('[ai-helper] Unexpected non-function tool call type:', toolCall.type);
         toolResultContent = 'Unknown tool type';
-      } else if (toolCall.function.name === 'createEvent') {
-        let args: CreateEventArgs;
-        try {
-          args = JSON.parse(toolCall.function.arguments);
-        } catch {
-          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
-        }
-        const result = await executeCreateEvent(args, guildId);
-        eventCreated = result.success;
-        toolResultContent = result.success
-          ? `Event created successfully with id ${result.eventId}`
-          : `Failed to create event: ${result.error}`;
-      } else if (toolCall.function.name === 'findEvents') {
-        let args: FindEventsArgs;
-        try {
-          args = JSON.parse(toolCall.function.arguments);
-        } catch {
-          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
-        }
-        const result = await executeFindEvents(args, guildId);
-        toolResultContent = JSON.stringify(result);
-      } else if (toolCall.function.name === 'editEvent') {
-        let args: EditEventArgs;
-        try {
-          args = JSON.parse(toolCall.function.arguments);
-        } catch {
-          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
-        }
-        const result = await executeEditEvent(args);
-        eventUpdated = result.success;
-        toolResultContent = result.success
-          ? `Event updated successfully with id ${result.eventId}`
-          : `Failed to update event: ${result.error}`;
       } else {
-        console.error('[ai-helper] Unexpected tool name:', toolCall.function.name);
-        toolResultContent = 'Unknown tool';
+        const outcome = await handleToolCall(toolCall.function.name, toolCall.function.arguments, guildId);
+        if (!outcome) {
+          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
+        }
+        toolResultContent = outcome.content;
+        if (outcome.eventCreated) eventCreated = true;
+        if (outcome.eventUpdated) eventUpdated = true;
       }
 
       currentMessages = [

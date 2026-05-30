@@ -38,6 +38,10 @@ export function getSystemPrompt(): string {
   - If changing date or time, always provide BOTH date AND time fields together (use the existing value for the one not being changed)
   - After successfully editing an event include an HTML link: You can view the updated event here (translate this phrase to the user's language): <a href="/events/{id}" target="_blank" rel="noopener noreferrer">{title}</a>
 
+  Formatting:
+  - Do NOT use Markdown syntax in your responses (e.g. **bold**, *italic*, # headings, - lists, \`code\`)
+  - To emphasize, bold, or italicize text, use HTML tags instead: <b>...</b> for bold, <i>...</i> for italic, <ul>/<li> for lists, etc.
+
   Constraints:
   - Stay focused on guild and calendar-related topics
   - Do not perform or suggest actions outside the app's scope
