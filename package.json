@@ -23,6 +23,7 @@
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.105.1",
+    "@tsparticles/engine": "^4.0.5",
     "@tsparticles/react": "^4.0.5",
     "@tsparticles/slim": "^4.0.5",
     "@types/dompurify": "^3.0.5",
