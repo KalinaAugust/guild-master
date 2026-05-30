@@ -1,5 +1,6 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
+import { EditableName } from '@/features/update-profile-name';
 import styles from './ProfilePage.module.css';
 import { Mail, Calendar, User } from 'lucide-react';
 
@@ -58,15 +59,13 @@ export default async function ProfilePage() {
         </div>
 
         <div className={styles.infoGrid}>
-          {profile?.full_name && (
-            <div className={styles.infoItem}>
-              <User className={styles.icon} size={20} />
-              <div>
-                <label>Name</label>
-                <p>{profile.full_name}</p>
-              </div>
+          <div className={styles.infoItem}>
+            <User className={styles.icon} size={20} />
+            <div>
+              <label>Name</label>
+              <EditableName initialFullName={profile?.full_name ?? null} userId={user.id} />
             </div>
-          )}
+          </div>
           <div className={styles.infoItem}>
             <Mail className={styles.icon} size={20} />
             <div>
