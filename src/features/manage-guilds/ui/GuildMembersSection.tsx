@@ -16,7 +16,7 @@ import styles from './GuildMembersSection.module.css';
 
 interface GuildMembersSectionProps {
   guildId: string;
-  userId: string;
+  userId?: string;
 }
 
 export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildId, userId }) => {
@@ -25,6 +25,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember] = useRemoveGuildMemberMutation();
   const { canManageMembers } = useGuildPermissions(guildId, userId);
+  const effectiveCanManage = !userId || canManageMembers;
 
   const handleAdd = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -50,7 +51,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
 
   return (
     <div className={styles.root}>
-      {canManageMembers && (
+      {effectiveCanManage && (
         <Form.Root onSubmit={handleAdd} className={styles.addForm}>
           <Input
             type="email"
@@ -77,7 +78,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 {member.profile.fullName ?? member.userId}
               </span>
               <span className={styles.role}>{member.role}</span>
-              {canManageMembers && member.role !== 'OWNER' && (
+              {effectiveCanManage && member.role !== 'OWNER' && (
                 <button
                   type="button"
                   className={styles.removeBtn}
