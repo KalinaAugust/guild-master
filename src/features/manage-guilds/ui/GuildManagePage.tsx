@@ -65,8 +65,6 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
       <GuildList
         title={t('memberSection')}
         guilds={member}
-        onEdit={openEdit}
-        onDelete={setDeletingGuild}
         emptyMessage={t('emptyMember')}
       />
 
