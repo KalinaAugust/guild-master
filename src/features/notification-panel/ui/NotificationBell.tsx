@@ -16,7 +16,6 @@ export const NotificationBell = () => {
   const unreadCount = knownNotifications.filter((n) => !n.is_read).length;
 
   const handleToggle = () => {
-    if (!isOpen && unreadCount > 0) markAllRead();
     setIsOpen((prev) => !prev);
   };
 

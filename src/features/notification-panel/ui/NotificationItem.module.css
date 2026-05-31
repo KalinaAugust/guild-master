@@ -17,7 +17,6 @@
 }
 
 .itemRead {
-  opacity: 0.55;
   background: transparent;
 }
 
@@ -36,7 +35,7 @@
 }
 
 .label {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
@@ -45,7 +44,7 @@
 }
 
 .sub {
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;

@@ -2,7 +2,7 @@
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  width: 320px;
+  width: 640px;
   background: var(--modal-bg);
   border: 1px solid var(--glass-border);
   border-radius: 12px;
@@ -22,7 +22,7 @@
 }
 
 .title {
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -30,7 +30,7 @@
 .markAllRead {
   background: none;
   border: none;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   color: var(--accent-primary);
   cursor: pointer;
   padding: 0;
@@ -52,6 +52,6 @@
 .empty {
   padding: 1.5rem 0.875rem;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 1rem;
   color: var(--text-muted);
 }

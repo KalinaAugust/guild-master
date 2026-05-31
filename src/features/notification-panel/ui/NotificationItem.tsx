@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
-import { NOTIFICATION_TYPE_CONFIG, type Notification, type NotificationTranslationFn } from '@/entities/notification';
+import { NOTIFICATION_TYPE_CONFIG, useMarkAsReadMutation, type Notification, type NotificationTranslationFn } from '@/entities/notification';
 import styles from './NotificationItem.module.css';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 
 export const NotificationItem = ({ notification }: Props) => {
   const t = useTranslations('Notifications');
+  const [markAsRead] = useMarkAsReadMutation();
   const config = NOTIFICATION_TYPE_CONFIG[notification.type];
 
   if (!config) return null;
@@ -20,8 +21,15 @@ export const NotificationItem = ({ notification }: Props) => {
   // due to overloaded signatures; the cast is intentional.
   const label = getLabel(t as unknown as NotificationTranslationFn, notification);
 
+  const handleMouseEnter = () => {
+    if (!notification.is_read) markAsRead(notification.id);
+  };
+
   return (
-    <div className={`${styles.item} ${notification.is_read ? styles.itemRead : ''}`}>
+    <div
+      className={`${styles.item} ${notification.is_read ? styles.itemRead : ''}`}
+      onMouseEnter={handleMouseEnter}
+    >
       <Icon size={16} className={styles.icon} />
       <div className={styles.content}>
         <span className={styles.label}>{label}</span>
