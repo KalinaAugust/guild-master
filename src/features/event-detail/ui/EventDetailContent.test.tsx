@@ -7,6 +7,7 @@ import { calendarReducer } from '@/entities/calendar';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
 }));
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
@@ -74,7 +75,7 @@ describe('EventDetailContent', () => {
         <EventDetailContent eventId="e1" />
       </Provider>
     );
-    expect(screen.getByText('20:00')).toBeInTheDocument();
+    expect(screen.getByText(/20:00/)).toBeInTheDocument();
   });
 
   it('renders back link to day page', () => {
