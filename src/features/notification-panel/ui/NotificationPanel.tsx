@@ -8,9 +8,10 @@ import styles from './NotificationPanel.module.css';
 interface Props {
   notifications: Notification[];
   onMarkAllRead?: () => void;
+  onClose?: () => void;
 }
 
-export const NotificationPanel = ({ notifications, onMarkAllRead }: Props) => {
+export const NotificationPanel = ({ notifications, onMarkAllRead, onClose }: Props) => {
   const t = useTranslations('Notifications');
   const hasUnread = notifications.some((n) => !n.is_read);
 
@@ -30,7 +31,7 @@ export const NotificationPanel = ({ notifications, onMarkAllRead }: Props) => {
         <ul className={styles.list}>
           {notifications.map((n) => (
             <li key={n.id}>
-              <NotificationItem notification={n} />
+              <NotificationItem notification={n} onClose={onClose} />
             </li>
           ))}
         </ul>

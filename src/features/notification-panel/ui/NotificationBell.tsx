@@ -37,7 +37,7 @@ export const NotificationBell = () => {
           <span className={styles.badge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
         )}
       </button>
-      {isOpen && <NotificationPanel notifications={knownNotifications} onMarkAllRead={markAllRead} />}
+      {isOpen && <NotificationPanel notifications={knownNotifications} onMarkAllRead={markAllRead} onClose={() => setIsOpen(false)} />}
     </div>
   );
 };

@@ -49,6 +49,10 @@
   overflow-y: auto;
 }
 
+.list li:last-child > * {
+  border-bottom: none;
+}
+
 .empty {
   padding: 1.5rem 0.875rem;
   text-align: center;
