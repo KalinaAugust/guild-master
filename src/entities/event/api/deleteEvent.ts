@@ -12,4 +12,4 @@ export const deleteEvent = async (id: string) => {
     throw error;
   }
   return true;
-}
+};

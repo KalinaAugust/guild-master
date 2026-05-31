@@ -5,12 +5,20 @@ interface ChatMessage {
   content: string;
 }
 
+interface SendAiMessageResponse {
+  message: string;
+  eventCreated: boolean;
+  eventUpdated: boolean;
+}
+
+interface SendAiMessageRequest {
+  messages: ChatMessage[];
+  guildId: string;
+}
+
 export const aiHelperApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    sendAiMessage: builder.mutation<
-      { message: string; eventCreated: boolean; eventUpdated: boolean },
-      { messages: ChatMessage[]; guildId: string }
-    >({
+    sendAiMessage: builder.mutation<SendAiMessageResponse, SendAiMessageRequest>({
       query: ({ messages, guildId }) => ({
         url: 'ai-helper',
         method: 'POST',
@@ -18,7 +26,7 @@ export const aiHelperApi = baseApi.injectEndpoints({
       }),
     }),
   }),
-  overrideExisting: true,
+  overrideExisting: false,
 });
 
 export const { useSendAiMessageMutation } = aiHelperApi;

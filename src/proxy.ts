@@ -1,19 +1,19 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr';
+import { NextResponse, type NextRequest } from 'next/server';
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
-  })
+  });
 
   // Handle locale initialization
-  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value
+  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value;
   if (!localeCookie) {
-    const acceptLanguage = request.headers.get('accept-language')
-    const preferredLocale = acceptLanguage?.startsWith('ru') ? 'ru' : 'en'
-    response.cookies.set('NEXT_LOCALE', preferredLocale)
+    const acceptLanguage = request.headers.get('accept-language');
+    const preferredLocale = acceptLanguage?.startsWith('ru') ? 'ru' : 'en';
+    response.cookies.set('NEXT_LOCALE', preferredLocale);
   }
 
   const supabase = createServerClient(
@@ -22,38 +22,38 @@ export async function proxy(request: NextRequest) {
     {
       cookies: {
         getAll() {
-          return request.cookies.getAll()
+          return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) =>
             request.cookies.set({ name, value, ...options })
-          )
+          );
           response = NextResponse.next({
             request,
-          })
+          });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
-          )
+          );
         },
       },
     }
-  )
+  );
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser();
 
   // Protect all routes except /login and /auth/callback
-  const isLoginPage = request.nextUrl.pathname === '/login'
-  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth')
+  const isLoginPage = request.nextUrl.pathname === '/login';
+  const isAuthCallback = request.nextUrl.pathname.startsWith('/auth');
 
   if (!user && !isLoginPage && !isAuthCallback) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   if (user && isLoginPage) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
-  return response
+  return response;
 }
 
 export const config = {
@@ -67,4 +67,4 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
-}
+};

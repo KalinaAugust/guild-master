@@ -88,6 +88,9 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
           {isLoading && (
             <div className={`${styles.messageAssistant} ${styles.thinking}`}>
               {t('thinking')}
+              <span className={styles.dot}>.</span>
+              <span className={styles.dot}>.</span>
+              <span className={styles.dot}>.</span>
             </div>
           )}
           <div ref={messagesEndRef} />

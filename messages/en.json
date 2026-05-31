@@ -120,8 +120,15 @@
     "modalTitle": "AI Assistant",
     "placeholder": "Type your message...",
     "send": "Send",
-    "thinking": "Thinking...",
+    "thinking": "Thinking",
     "error": "Something went wrong, try again",
     "emptyHint": "Ask me to create, edit, or find an event on the calendar."
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "newEvent": "New event in «{guildName}»",
+    "invitation": "You're invited to an event",
+    "empty": "No notifications",
+    "markAllRead": "Mark all as read"
   }
 }

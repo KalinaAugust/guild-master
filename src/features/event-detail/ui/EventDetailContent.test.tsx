@@ -21,15 +21,6 @@ vi.mock('next/link', () => ({
   ),
 }));
 
-const mockEvent = {
-  id: 'e1',
-  title: 'Morning Raid',
-  date: '2026-05-28',
-  time: '20:00',
-  type: 'raid' as const,
-  description: 'Bring potions',
-};
-
 vi.mock('@/entities/event', () => ({
   useGetEventByIdQuery: vi.fn().mockReturnValue({
     data: { event: { id: 'e1', title: 'Morning Raid', date: '2026-05-28', time: '20:00', type: 'raid', description: 'Bring potions' }, guildId: 'g1' },

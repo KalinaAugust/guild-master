@@ -13,4 +13,4 @@ export const fetchEvents = async (guildId: string) => {
     throw error;
   }
   return data;
-}
+};

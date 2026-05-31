@@ -4,6 +4,7 @@ import { Shield } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { UserMenu } from './UserMenu';
 import { AiHelperButton } from '@/features/ai-helper';
+import { NotificationBell } from '@/features/notification-panel';
 import styles from './Header.module.css';
 
 export const Header = async () => {
@@ -22,6 +23,7 @@ export const Header = async () => {
         {user ? (
           <>
             <AiHelperButton />
+            <NotificationBell />
             <UserMenu email={user.email} />
           </>
         ) : (
