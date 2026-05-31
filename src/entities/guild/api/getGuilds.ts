@@ -31,4 +31,4 @@ export const getMyGuilds = async (): Promise<Guild[]> => {
     }
     return acc;
   }, []);
-}
+};

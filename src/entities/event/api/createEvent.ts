@@ -25,4 +25,4 @@ export const createEvent = async (event: Omit<ActivityEvent, 'id'> & { guild_id:
     throw error;
   }
   return data;
-}
+};

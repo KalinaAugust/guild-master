@@ -57,4 +57,4 @@ export const createGuild = async (name: string, description?: string): Promise<G
     ownerId: createdGuild.owner_id,
     description: createdGuild.description || undefined,
   };
-}
+};

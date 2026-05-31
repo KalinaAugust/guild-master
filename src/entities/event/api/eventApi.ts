@@ -96,7 +96,7 @@ export const eventApi = baseApi.injectEndpoints({
       providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
     }),
   }),
-  overrideExisting: true,
+  overrideExisting: false,
 });
 
 export const {

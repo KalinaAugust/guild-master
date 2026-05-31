@@ -27,4 +27,4 @@ export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent,
   }
 
   return data;
-}
+};
