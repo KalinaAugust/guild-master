@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
+import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventCard, useDeleteEventMutation, useGetEventsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
@@ -30,6 +31,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
 
   const activeGuildId = currentGuildId || propGuildId;
+  const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
 
   const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
@@ -87,7 +89,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         <h2 className={styles.title}>
           {day} <span className={styles.dateHighlight}>{month}</span> {year}
         </h2>
-        {!isPastDate && (
+        {!isPastDate && canManageEvents && (
           <Button variant="primary" size="sm" onClick={handleAddEvent} className={styles.addBtn}>
             <Plus size={18} strokeWidth={2.5} />
             <span>{t('addEvent')}</span>
@@ -102,15 +104,15 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
               key={event.id}
               event={event}
               onClick={handleViewEvent}
-              onEdit={!isPastDate ? handleEditEvent : undefined}
-              onDelete={handleDeleteClick}
+              onEdit={!isPastDate && canManageEvents ? handleEditEvent : undefined}
+              onDelete={canManageEvents ? handleDeleteClick : undefined}
             />
           ))}
         </div>
       ) : (
         <div className={styles.empty}>
           <p>{t('noEvents')}</p>
-          {!isPastDate && (
+          {!isPastDate && canManageEvents && (
             <Button variant="secondary" onClick={handleAddEvent}>
               {t('createFirst')}
             </Button>
