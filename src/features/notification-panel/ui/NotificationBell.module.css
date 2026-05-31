@@ -6,28 +6,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  color: var(--text-primary);
+  background: none;
+  border: none;
   cursor: pointer;
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  transition: all 0.2s ease;
+  color: inherit;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: opacity 0.2s, color 0.2s;
   position: relative;
 }
 
 .bell:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.bell:focus {
-  border-color: var(--accent-primary);
-  outline: none;
-  box-shadow: 0 0 10px var(--accent-glow);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .badge {

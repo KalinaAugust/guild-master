@@ -17,8 +17,9 @@ import { EventsTooltipContent } from './EventsTooltipContent';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection } from '../model/useGuildSelection';
+import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 
-export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
+export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ guilds, userId }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const t = useTranslations('Event');
@@ -26,6 +27,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
   const { now, months, years, handlePrevMonth, handleNextMonth, handleMonthChange, handleYearChange } = useCalendarNavigation();
   const { days, DAYS_OF_WEEK } = useCalendarDays(now);
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds);
+  const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
 
   const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
@@ -107,7 +109,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[] }> = ({ guilds }) => {
               onClick={() => handleDayClick(day.fullDate)}
             >
               <span className={styles.dateNumber}>{day.date}</span>
-              {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && (
+              {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && canManageEvents && (
                 <Tooltip content={t('addEvent')} side="top">
                   <Button
                     variant="icon_floating"

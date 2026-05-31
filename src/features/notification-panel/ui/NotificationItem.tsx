@@ -1,15 +1,18 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { NOTIFICATION_TYPE_CONFIG, useMarkAsReadMutation, type Notification, type NotificationTranslationFn } from '@/entities/notification';
 import styles from './NotificationItem.module.css';
 
 interface Props {
   notification: Notification;
+  onClose?: () => void;
 }
 
-export const NotificationItem = ({ notification }: Props) => {
+export const NotificationItem = ({ notification, onClose }: Props) => {
   const t = useTranslations('Notifications');
   const [markAsRead] = useMarkAsReadMutation();
   const config = NOTIFICATION_TYPE_CONFIG[notification.type];
@@ -20,6 +23,9 @@ export const NotificationItem = ({ notification }: Props) => {
   // next-intl's typed t function is not directly assignable to NotificationTranslationFn
   // due to overloaded signatures; the cast is intentional.
   const label = getLabel(t as unknown as NotificationTranslationFn, notification);
+
+  const locale = useLocale();
+  const timeAgo = dayjs(notification.created_at).locale(locale).fromNow();
 
   const handleMouseEnter = () => {
     if (!notification.is_read) markAsRead(notification.id);
@@ -32,6 +38,7 @@ export const NotificationItem = ({ notification }: Props) => {
     >
       <Icon size={16} className={styles.icon} />
       <div className={styles.content}>
+        <span className={styles.time}>{timeAgo}</span>
         <span className={styles.label}>{label}</span>
         {notification.event_title && (
           <span className={styles.sub}>
@@ -40,7 +47,14 @@ export const NotificationItem = ({ notification }: Props) => {
           </span>
         )}
       </div>
-      {!notification.is_read && <span className={styles.dot} />}
+      <div className={styles.actions}>
+        {!notification.is_read && <span className={styles.dot} />}
+        {notification.entity_type === 'event' && notification.entity_id && (
+          <Link href={`/events/${notification.entity_id}`} className={styles.link} onClick={onClose}>
+            <ArrowUpRight size={14} />
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

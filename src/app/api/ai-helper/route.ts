@@ -26,6 +26,7 @@ async function handleToolCall(
   name: string,
   rawArgs: string,
   guildId: string,
+  canManageEvents: boolean,
 ): Promise<ToolOutcome | null> {
   let args: unknown;
   try {
@@ -36,6 +37,9 @@ async function handleToolCall(
 
   switch (name) {
     case 'createEvent': {
+      if (!canManageEvents) {
+        return { content: 'Permission denied: only guild owners and admins can create events.' };
+      }
       const result = await executeCreateEvent(args as CreateEventArgs, guildId);
       return {
         content: result.success
@@ -49,6 +53,9 @@ async function handleToolCall(
       return { content: JSON.stringify(result) };
     }
     case 'editEvent': {
+      if (!canManageEvents) {
+        return { content: 'Permission denied: only guild owners and admins can edit events.' };
+      }
       const editArgs = args as EditEventArgs;
       // Ensure the targeted event belongs to the caller's guild before mutating.
       const found = await getEventById(editArgs.id);
@@ -99,6 +106,14 @@ export async function POST(request: NextRequest) {
   ]);
   if (forbidden) return forbidden;
 
+  const { data: membership } = await auth.supabase
+    .from('guild_members')
+    .select('role')
+    .eq('guild_id', guildId)
+    .eq('user_id', auth.user.id)
+    .single();
+  const canManageEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
+
   const client = new OpenAI({ apiKey, baseURL: DEEPSEEK_BASE_URL });
 
   try {
@@ -139,7 +154,7 @@ export async function POST(request: NextRequest) {
         console.error('[ai-helper] Unexpected non-function tool call type:', toolCall.type);
         toolResultContent = 'Unknown tool type';
       } else {
-        const outcome = await handleToolCall(toolCall.function.name, toolCall.function.arguments, guildId);
+        const outcome = await handleToolCall(toolCall.function.name, toolCall.function.arguments, guildId, canManageEvents);
         if (!outcome) {
           return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
         }

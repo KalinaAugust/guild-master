@@ -5,6 +5,7 @@ import { DayEventsList } from '@/widgets/day-events';
 import { EventWizard } from '@/features/create-event';
 import { ChevronLeft } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { createClient } from '@/shared/api/supabase/server';
 import styles from './DayPage.module.css';
 
 interface DayPageProps {
@@ -15,14 +16,19 @@ interface DayPageProps {
 
 export default async function DayPage({ params }: DayPageProps) {
   const { date } = await params;
-  const guilds = await getMyGuilds();
-  const t = await getTranslations('Common');
+
+  const supabase = await createClient();
+  const [{ data: { user } }, guilds] = await Promise.all([
+    supabase.auth.getUser(),
+    getMyGuilds(),
+  ]);
 
   if (guilds.length === 0) {
     redirect('/guilds');
   }
 
   const currentGuildId = guilds[0].id;
+  const t = await getTranslations('Common');
 
   return (
     <main className={styles.main}>
@@ -31,7 +37,7 @@ export default async function DayPage({ params }: DayPageProps) {
         {t('backToCalendar')}
       </Link>
 
-      <DayEventsList date={date} guildId={currentGuildId} />
+      <DayEventsList date={date} guildId={currentGuildId} userId={user?.id} />
 
       <EventWizard isDayView />
     </main>

@@ -20,9 +20,10 @@ interface GuildWizardProps {
   open: boolean;
   guild: Guild | null;
   onClose: () => void;
+  userId: string;
 }
 
-export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClose }) => {
+export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClose, userId }) => {
   const t = useTranslations('Guild');
   const commonT = useTranslations('Common');
   const isEdit = guild !== null;
@@ -152,7 +153,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
 
               {activeTab === 'members' && (
                 guild
-                  ? <GuildMembersSection guildId={guild.id} />
+                  ? <GuildMembersSection guildId={guild.id} userId={userId} />
                   : (
                     <div>
                       <Form.Root onSubmit={handleAddPending} className={styles.pendingForm}>

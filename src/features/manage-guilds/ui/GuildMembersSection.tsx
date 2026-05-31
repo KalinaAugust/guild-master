@@ -9,19 +9,23 @@ import {
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
 } from '@/entities/guild';
+import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import styles from './GuildMembersSection.module.css';
 
 interface GuildMembersSectionProps {
   guildId: string;
+  userId?: string;
 }
 
-export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildId }) => {
+export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildId, userId }) => {
   const [email, setEmail] = useState('');
   const { data: members = [], isLoading } = useGetGuildMembersQuery(guildId);
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember] = useRemoveGuildMemberMutation();
+  const { canManageMembers } = useGuildPermissions(guildId, userId);
+  const effectiveCanManage = !userId || canManageMembers;
 
   const handleAdd = async (e: React.SubmitEvent) => {
     e.preventDefault();
@@ -47,18 +51,20 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
 
   return (
     <div className={styles.root}>
-      <Form.Root onSubmit={handleAdd} className={styles.addForm}>
-        <Input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="user@example.com"
-          className={styles.emailInput}
-        />
-        <Button type="submit" variant="primary" disabled={!email.trim() || isAdding}>
-          Add
-        </Button>
-      </Form.Root>
+      {effectiveCanManage && (
+        <Form.Root onSubmit={handleAdd} className={styles.addForm}>
+          <Input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="user@example.com"
+            className={styles.emailInput}
+          />
+          <Button type="submit" variant="primary" disabled={!email.trim() || isAdding}>
+            Add
+          </Button>
+        </Form.Root>
+      )}
 
       {isLoading ? (
         <p className={styles.loading}>Loading…</p>
@@ -72,7 +78,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 {member.profile.fullName ?? member.userId}
               </span>
               <span className={styles.role}>{member.role}</span>
-              {member.role !== 'OWNER' && (
+              {effectiveCanManage && member.role !== 'OWNER' && (
                 <button
                   type="button"
                   className={styles.removeBtn}
