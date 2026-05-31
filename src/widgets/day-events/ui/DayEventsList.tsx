@@ -17,9 +17,10 @@ import styles from './DayEventsList.module.css';
 interface DayEventsListProps {
   date: string;
   guildId?: string;
+  userId?: string;
 }
 
-export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: propGuildId }) => {
+export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: propGuildId, userId }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const t = useTranslations('Event');
