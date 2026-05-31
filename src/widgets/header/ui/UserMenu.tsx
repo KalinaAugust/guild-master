@@ -6,6 +6,8 @@ import { User, LogOut, ChevronDown, Languages, ShieldPlus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { createClient } from '@/shared/api/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/shared/lib/hooks';
+import { baseApi } from '@/shared/api/baseApi';
 import Link from 'next/link';
 import { setUserLocale } from '@/features/language-switcher/api/setLocale';
 import styles from './UserMenu.module.css';
@@ -19,12 +21,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
   const t = useTranslations('Common');
   const guildT = useTranslations('Guild');
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const supabase = createClient();
   const [isPending, startTransition] = React.useTransition();
   const [isLanguageOpen, setIsLanguageOpen] = React.useState(false);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    dispatch(baseApi.util.resetApiState());
     router.refresh();
   };
 
