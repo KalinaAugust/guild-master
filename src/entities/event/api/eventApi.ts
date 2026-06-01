@@ -95,6 +95,10 @@ export const eventApi = baseApi.injectEndpoints({
       query: (id) => `events/${id}`,
       providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
     }),
+    getMyEventIds: builder.query<{ eventIds: string[] }, string>({
+      query: (guildId) => `my-event-ids?guildId=${guildId}`,
+      providesTags: [{ type: 'Event' as const, id: 'MY-IDS' }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -107,4 +111,5 @@ export const {
   useGetParticipantsQuery,
   useSyncParticipantsMutation,
   useGetEventByIdQuery,
+  useGetMyEventIdsQuery,
 } = eventApi;
