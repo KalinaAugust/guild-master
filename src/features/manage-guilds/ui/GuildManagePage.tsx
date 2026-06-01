@@ -24,7 +24,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
   const [deletingGuild, setDeletingGuild] = useState<Guild | null>(null);
 
   const { data: guilds = [] } = useGetGuildsQuery();
-  const [deleteGuild] = useDeleteGuildMutation();
+  const [deleteGuild, { isLoading: isDeleting }] = useDeleteGuildMutation();
 
   const owned = guilds.filter((g) => g.ownerId === userId);
   const member = guilds.filter((g) => g.ownerId !== userId);
@@ -77,6 +77,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
         description={t('deleteConfirm')}
         confirmLabel={commonT('delete')}
         variant="danger"
+        isLoading={isDeleting}
       />
     </div>
   );

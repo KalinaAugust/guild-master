@@ -42,7 +42,8 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   });
 
   const [submitJoinRequest, { isLoading: isSubmitting }] = useSubmitJoinRequestMutation();
-  const [resolveJoinRequest] = useResolveJoinRequestMutation();
+  const [resolveJoinRequest, { isLoading: isResolving }] = useResolveJoinRequestMutation();
+  const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
 
   const handleApply = async () => {
     if (membershipStatus === 'guest') {
@@ -59,11 +60,14 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   };
 
   const handleResolve = async (requestId: string, action: 'approve' | 'decline') => {
+    setResolvingState({ id: requestId, action });
     try {
       await resolveJoinRequest({ guildId, requestId, action }).unwrap();
       toast.success(t('resolveSuccess'));
     } catch {
       toast.error(t('resolveError'));
+    } finally {
+      setResolvingState(null);
     }
   };
 
@@ -142,6 +146,9 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
                       request={req}
                       onAccept={() => handleResolve(req.id, 'approve')}
                       onDecline={() => handleResolve(req.id, 'decline')}
+                      isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                      isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                      disabled={resolvingState?.id === req.id}
                     />
                   ))
                 )}
@@ -181,7 +188,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
             type="button"
             variant="primary"
             onClick={handleApply}
-            disabled={isSubmitting}
+            isLoading={isSubmitting}
           >
             {t('applyToJoin')}
           </Button>

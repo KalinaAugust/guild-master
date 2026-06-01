@@ -60,4 +60,19 @@ describe('ConfirmModal', () => {
     render(<ConfirmModal {...base} isOpen={false} />);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('applies loading states and does not call onClose when isLoading is true', async () => {
+    render(<ConfirmModal {...base} isLoading={true} confirmLabel="Yes" cancelLabel="No" />);
+    
+    const cancelButton = screen.getByRole('button', { name: 'No' });
+    const confirmButton = screen.getByRole('button', { name: 'Yes' });
+    
+    expect(cancelButton).toBeDisabled();
+    expect(confirmButton).toBeDisabled();
+    
+    fireEvent.click(confirmButton);
+    expect(base.onConfirm).not.toHaveBeenCalled();
+    expect(base.onClose).not.toHaveBeenCalled();
+  });
 });
+

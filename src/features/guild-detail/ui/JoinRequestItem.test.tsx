@@ -56,4 +56,22 @@ describe('JoinRequestItem', () => {
     render(<JoinRequestItem request={{ ...request, userName: null }} onAccept={vi.fn()} onDecline={vi.fn()} />);
     expect(screen.getByText('—')).toBeInTheDocument();
   });
+
+  it('disables buttons when disabled prop is true', () => {
+    render(
+      <JoinRequestItem
+        request={request}
+        onAccept={vi.fn()}
+        onDecline={vi.fn()}
+        disabled={true}
+        isAccepting={true}
+      />
+    );
+    const acceptBtn = screen.getByRole('button', { name: 'accept' });
+    const declineBtn = screen.getByRole('button', { name: 'decline' });
+
+    expect(acceptBtn).toBeDisabled();
+    expect(declineBtn).toBeDisabled();
+  });
 });
+

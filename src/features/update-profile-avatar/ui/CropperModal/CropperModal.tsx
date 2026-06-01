@@ -81,7 +81,7 @@ export const CropperModal: React.FC<CropperModalProps> = ({
           <Button variant="secondary" onClick={onClose} disabled={isProcessing}>
             Отмена
           </Button>
-          <Button onClick={handleSave} disabled={isProcessing}>
+          <Button onClick={handleSave} isLoading={isProcessing}>
             {isProcessing ? 'Сохранение...' : 'Сохранить'}
           </Button>
         </div>

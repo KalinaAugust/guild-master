@@ -73,7 +73,7 @@ export const EditableName = ({ initialFullName, userId }: EditableNameProps) => 
         disabled={isSaving}
       />
       <div className={styles.actions}>
-        <Button size="sm" onClick={handleSave} disabled={isSaving || isUnchanged}>
+        <Button size="sm" onClick={handleSave} isLoading={isSaving} disabled={isUnchanged}>
           Save
         </Button>
         <Button size="sm" variant="ghost" onClick={handleCancel} disabled={isSaving}>

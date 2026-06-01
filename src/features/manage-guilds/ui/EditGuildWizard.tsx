@@ -212,7 +212,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                             <Button type="button" variant="secondary" onClick={() => setShowDeleteConfirm(false)}>
                               {commonT('cancel')}
                             </Button>
-                            <Button type="button" variant="danger" onClick={handleDeleteGuild} disabled={isDeleting}>
+                            <Button type="button" variant="danger" onClick={handleDeleteGuild} isLoading={isDeleting}>
                               {commonT('delete')}
                             </Button>
                           </div>
@@ -237,7 +237,8 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
               type="submit"
               variant="primary"
               form="guild-wizard-form"
-              disabled={!name.trim() || isLoading}
+              isLoading={isLoading}
+              disabled={!name.trim()}
             >
               {isEdit
                 ? isLoading ? commonT('saving') : commonT('save')

@@ -52,4 +52,23 @@ describe('Button Component', () => {
     render(<Button type="submit">Submit</Button>);
     expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
   });
+
+  it('renders spinner when isLoading is true', () => {
+    render(<Button isLoading>Click me</Button>);
+    expect(screen.getByTestId('button-spinner')).toBeInTheDocument();
+  });
+
+  it('is disabled when isLoading is true', () => {
+    render(<Button isLoading>Click me</Button>);
+    expect(screen.getByRole('button', { name: 'Click me' })).toBeDisabled();
+  });
+
+  it('does not call onClick when isLoading is true', async () => {
+    const user = userEvent.setup();
+    const handleClick = vi.fn();
+    render(<Button isLoading onClick={handleClick}>Click me</Button>);
+    await user.click(screen.getByRole('button', { name: 'Click me' }));
+    expect(handleClick).not.toHaveBeenCalled();
+  });
 });
+

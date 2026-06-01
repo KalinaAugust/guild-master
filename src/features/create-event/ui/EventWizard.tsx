@@ -57,9 +57,11 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     skip: !isOpen || !editingEvent,
   });
 
-  const [createEvent] = useCreateEventMutation();
-  const [updateEvent] = useUpdateEventMutation();
-  const [syncParticipants] = useSyncParticipantsMutation();
+  const [createEvent, { isLoading: isCreating }] = useCreateEventMutation();
+  const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
+  const [syncParticipants, { isLoading: isSyncing }] = useSyncParticipantsMutation();
+
+  const isSaving = isCreating || isUpdating || isSyncing;
 
   useEffect(() => {
     if (isOpen) {
@@ -203,7 +205,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
             <Button type="button" variant="secondary" onClick={handleClose}>
               {commonT('cancel')}
             </Button>
-            <Button type="submit" variant="primary" form={FORM_ID}>
+            <Button type="submit" variant="primary" form={FORM_ID} isLoading={isSaving}>
               {editingEvent ? commonT('save') : t('submit')}
             </Button>
           </div>

@@ -7,6 +7,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon_sm';
   fullWidth?: boolean;
   asChild?: boolean;
+  isLoading?: boolean;
 }
 
 export const Button = ({
@@ -16,6 +17,8 @@ export const Button = ({
   fullWidth = false,
   asChild = false,
   className = '',
+  isLoading = false,
+  disabled,
   ...props
 }: ButtonProps) => {
   const Comp = asChild ? Slot : 'button';
@@ -24,12 +27,32 @@ export const Button = ({
     styles[`variant_${variant}`],
     styles[`size_${size}`],
     fullWidth ? styles.fullWidth : '',
+    isLoading ? styles.loading : '',
     className
   ].filter(Boolean).join(' ');
 
   return (
-    <Comp className={classes} {...props}>
-      {children}
+    <Comp 
+      className={classes} 
+      disabled={disabled || isLoading} 
+      {...props}
+    >
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {isLoading && <span className={styles.spinner} data-testid="button-spinner" />}
+          {isLoading ? (
+            <span className={styles.contentHidden}>
+              {children}
+            </span>
+          ) : (
+            children
+          )}
+        </>
+      )}
     </Comp>
   );
 };
+
+

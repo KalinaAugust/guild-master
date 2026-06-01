@@ -8,9 +8,19 @@ interface JoinRequestItemProps {
   request: JoinRequest;
   onAccept: () => void;
   onDecline: () => void;
+  isAccepting?: boolean;
+  isDeclining?: boolean;
+  disabled?: boolean;
 }
 
-export const JoinRequestItem: React.FC<JoinRequestItemProps> = ({ request, onAccept, onDecline }) => {
+export const JoinRequestItem: React.FC<JoinRequestItemProps> = ({
+  request,
+  onAccept,
+  onDecline,
+  isAccepting = false,
+  isDeclining = false,
+  disabled = false,
+}) => {
   const t = useTranslations('GuildDetail');
 
   return (
@@ -26,10 +36,24 @@ export const JoinRequestItem: React.FC<JoinRequestItemProps> = ({ request, onAcc
       </div>
       <span className={styles.name}>{request.userName ?? '—'}</span>
       <div className={styles.actions}>
-        <Button type="button" variant="primary" size="sm" onClick={onAccept}>
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          onClick={onAccept}
+          isLoading={isAccepting}
+          disabled={disabled && !isAccepting}
+        >
           {t('accept')}
         </Button>
-        <Button type="button" variant="secondary" size="sm" onClick={onDecline}>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          onClick={onDecline}
+          isLoading={isDeclining}
+          disabled={disabled && !isDeclining}
+        >
           {t('decline')}
         </Button>
       </div>

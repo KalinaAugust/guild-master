@@ -36,7 +36,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
-  const [deleteEvent] = useDeleteEventMutation();
+  const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
@@ -127,6 +127,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         title={commonT('delete')}
         description={commonT('confirmDelete')}
         confirmLabel={commonT('delete')}
+        isLoading={isDeleting}
       />
     </div>
   );

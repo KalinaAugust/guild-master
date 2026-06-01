@@ -53,7 +53,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
 
   const [updateStatus] = useUpdateParticipantStatusMutation();
-  const [deleteEvent] = useDeleteEventMutation();
+  const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const locale = useLocale();
@@ -188,6 +188,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         title={commonT('delete')}
         description={commonT('confirmDelete')}
         confirmLabel={commonT('delete')}
+        isLoading={isDeleting}
       />
     </div>
   );

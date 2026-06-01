@@ -23,7 +23,8 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const [email, setEmail] = useState('');
   const { data: members = [], isLoading } = useGetGuildMembersQuery(guildId);
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
-  const [removeMember] = useRemoveGuildMemberMutation();
+  const [removeMember, { isLoading: isRemoving }] = useRemoveGuildMemberMutation();
+  const [removingId, setRemovingId] = useState<string | null>(null);
   const { canManageMembers } = useGuildPermissions(guildId, userId);
   const effectiveCanManage = !userId || canManageMembers;
 
@@ -42,10 +43,13 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   };
 
   const handleRemove = async (userId: string) => {
+    setRemovingId(userId);
     try {
       await removeMember({ guildId, userId }).unwrap();
     } catch {
       toast.error('Failed to remove member');
+    } finally {
+      setRemovingId(null);
     }
   };
 
@@ -60,7 +64,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
             placeholder="user@example.com"
             className={styles.emailInput}
           />
-          <Button type="submit" variant="primary" disabled={!email.trim() || isAdding}>
+          <Button type="submit" variant="primary" isLoading={isAdding} disabled={!email.trim()}>
             Add
           </Button>
         </Form.Root>
@@ -79,14 +83,18 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               </span>
               <span className={styles.role}>{member.role}</span>
               {effectiveCanManage && member.role !== 'OWNER' && (
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon_sm"
                   className={styles.removeBtn}
                   onClick={() => handleRemove(member.userId)}
                   aria-label="Remove member"
+                  isLoading={removingId === member.userId && isRemoving}
+                  disabled={removingId !== null && removingId !== member.userId}
                 >
                   <UserMinus size={14} />
-                </button>
+                </Button>
               )}
             </li>
           ))}
