@@ -59,6 +59,7 @@
 }
 
 .infoItem {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -70,6 +71,11 @@
 
 .icon {
   color: var(--accent-primary);
+}
+
+.infoContent {
+  flex: 1;
+  min-width: 0;
 }
 
 .infoItem label {

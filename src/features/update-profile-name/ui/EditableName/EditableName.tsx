@@ -50,10 +50,11 @@ export const EditableName = ({ initialFullName, userId }: EditableNameProps) => 
           {initialFullName || 'Add your name'}
         </span>
         <Button
-          variant="icon"
+          variant="ghost"
           size="icon_sm"
           onClick={() => setIsEditing(true)}
           aria-label="Edit name"
+          className={styles.editButton}
         >
           <Pencil size={16} />
         </Button>

@@ -14,6 +14,7 @@ interface Props {
 
 export const NotificationItem = ({ notification, onClose }: Props) => {
   const t = useTranslations('Notifications');
+  const locale = useLocale();
   const [markAsRead] = useMarkAsReadMutation();
   const config = NOTIFICATION_TYPE_CONFIG[notification.type];
 
@@ -23,8 +24,6 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
   // next-intl's typed t function is not directly assignable to NotificationTranslationFn
   // due to overloaded signatures; the cast is intentional.
   const label = getLabel(t as unknown as NotificationTranslationFn, notification);
-
-  const locale = useLocale();
   const timeAgo = dayjs(notification.created_at).locale(locale).fromNow();
 
   const handleMouseEnter = () => {
@@ -48,12 +47,12 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
         )}
       </div>
       <div className={styles.actions}>
-        {!notification.is_read && <span className={styles.dot} />}
         {notification.entity_type === 'event' && notification.entity_id && (
           <Link href={`/events/${notification.entity_id}`} className={styles.link} onClick={onClose}>
             <ArrowUpRight size={14} />
           </Link>
         )}
+        {!notification.is_read && <span className={styles.dot} />}
       </div>
     </div>
   );
