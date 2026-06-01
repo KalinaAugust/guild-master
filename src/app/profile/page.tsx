@@ -61,7 +61,7 @@ export default async function ProfilePage() {
         <div className={styles.infoGrid}>
           <div className={styles.infoItem}>
             <User className={styles.icon} size={20} />
-            <div>
+            <div className={styles.infoContent}>
               <label>Name</label>
               <EditableName initialFullName={profile?.full_name ?? null} userId={user.id} />
             </div>
