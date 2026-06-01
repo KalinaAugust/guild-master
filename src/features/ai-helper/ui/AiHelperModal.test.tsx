@@ -195,4 +195,23 @@ describe('AiHelperModal', () => {
     renderModal();
     expect(screen.getByText('thinking')).toBeInTheDocument();
   });
+
+  it('Shift+Enter does not submit the form', () => {
+    renderModal();
+    const textarea = screen.getByPlaceholderText('placeholder');
+    fireEvent.change(textarea, { target: { value: 'Hello' } });
+    fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: true });
+    expect(mockSendMessage).not.toHaveBeenCalled();
+  });
+
+  it('Enter without Shift submits the form', async () => {
+    mockSendMessage.mockReturnValue({
+      unwrap: () => Promise.resolve({ message: 'ok', eventCreated: false }),
+    });
+    renderModal();
+    const textarea = screen.getByPlaceholderText('placeholder');
+    fireEvent.change(textarea, { target: { value: 'Hello' } });
+    fireEvent.keyDown(textarea, { key: 'Enter', shiftKey: false });
+    expect(mockSendMessage).toHaveBeenCalledOnce();
+  });
 });

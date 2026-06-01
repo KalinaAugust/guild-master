@@ -109,7 +109,7 @@ describe('getMyGuilds', () => {
     const mockGuildsData = [
       {
         guild_id: 'guild-1',
-        guilds: { id: 'guild-1', name: 'Valid Guild' },
+        guilds: { id: 'guild-1', name: 'Valid Guild', owner_id: 'owner-1', description: null },
       },
       {
         guild_id: 'guild-2',
@@ -130,6 +130,6 @@ describe('getMyGuilds', () => {
     const result = await getMyGuilds();
 
     expect(result).toHaveLength(1);
-    expect(result[0]).toEqual(mockGuildsData[0].guilds);
+    expect(result[0]).toEqual({ id: 'guild-1', name: 'Valid Guild', ownerId: 'owner-1' });
   });
 });
