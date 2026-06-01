@@ -73,6 +73,7 @@ export const guildApi = baseApi.injectEndpoints({
       invalidatesTags: (_, __, { guildId }) => [
         { type: 'JoinRequest' as const, id: `LIST-${guildId}` },
         { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+        { type: 'Guild' as const, id: guildId },
       ],
     }),
   }),

@@ -33,6 +33,17 @@ export async function PATCH(
     return NextResponse.json({ error: 'Request not found' }, { status: 404 });
   }
 
+  if (action === 'approve') {
+    const { error: memberError } = await supabase
+      .from('guild_members')
+      .insert({ guild_id: guildId, user_id: joinRequest.user_id, role: 'MEMBER' });
+
+    // Unique constraint violation (already a member) is treated as success
+    if (memberError && !memberError.message.includes('duplicate key')) {
+      return NextResponse.json({ error: 'Failed to add member' }, { status: 500 });
+    }
+  }
+
   const status = action === 'approve' ? 'approved' : 'declined';
 
   const { error: updateError } = await supabase
@@ -42,16 +53,6 @@ export async function PATCH(
 
   if (updateError) {
     return NextResponse.json({ error: 'Failed to update request' }, { status: 500 });
-  }
-
-  if (action === 'approve') {
-    const { error: memberError } = await supabase
-      .from('guild_members')
-      .insert({ guild_id: guildId, user_id: joinRequest.user_id, role: 'MEMBER' });
-
-    if (memberError) {
-      return NextResponse.json({ error: 'Failed to add member' }, { status: 500 });
-    }
   }
 
   const adminClient = createAdminClient();
