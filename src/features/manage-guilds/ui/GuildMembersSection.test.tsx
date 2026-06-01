@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GuildMembersSection } from './GuildMembersSection';
 
@@ -75,5 +75,53 @@ describe('GuildMembersSection', () => {
     render(<GuildMembersSection guildId="g1" />);
     fireEvent.click(screen.getByRole('button', { name: 'Remove member' }));
     expect(removeMemberMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2' });
+  });
+
+  it('shows "user not found" toast on 404 error', async () => {
+    const { toast } = await import('sonner');
+    const failMock = vi.fn().mockReturnValue({
+      unwrap: vi.fn().mockRejectedValue({ status: 404 }),
+    });
+    vi.mocked(useAddGuildMemberMutation).mockReturnValue([failMock, { isLoading: false }] as never);
+
+    render(<GuildMembersSection guildId="g1" />);
+    fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('User with this email not found');
+    });
+  });
+
+  it('shows "already a member" toast on 409 error', async () => {
+    const { toast } = await import('sonner');
+    const failMock = vi.fn().mockReturnValue({
+      unwrap: vi.fn().mockRejectedValue({ status: 409 }),
+    });
+    vi.mocked(useAddGuildMemberMutation).mockReturnValue([failMock, { isLoading: false }] as never);
+
+    render(<GuildMembersSection guildId="g1" />);
+    fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('User is already a member');
+    });
+  });
+
+  it('shows generic error toast on unknown add error', async () => {
+    const { toast } = await import('sonner');
+    const failMock = vi.fn().mockReturnValue({
+      unwrap: vi.fn().mockRejectedValue({ status: 500 }),
+    });
+    vi.mocked(useAddGuildMemberMutation).mockReturnValue([failMock, { isLoading: false }] as never);
+
+    render(<GuildMembersSection guildId="g1" />);
+    fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to add member');
+    });
   });
 });

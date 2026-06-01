@@ -21,6 +21,7 @@ describe('executeFindEvents', () => {
     vi.mocked(fetchEvents).mockResolvedValue(EVENTS as never);
     const result = await executeFindEvents({ dateFrom: '2026-06-01' }, 'g1');
     expect('events' in result && result.events).toHaveLength(2);
+    expect('events' in result && result.events.map((e: { id: string }) => e.id)).toEqual(['1', '2']);
   });
 
   it('filters by dateTo (inclusive)', async () => {
