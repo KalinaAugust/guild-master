@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { EventForm } from './EventForm';
 
@@ -28,5 +28,49 @@ describe('EventForm', () => {
   it('sets form id when formId prop is provided', () => {
     render(<EventForm {...baseProps} formId="test-form" />);
     expect(document.getElementById('test-form')).toBeInTheDocument();
+  });
+
+  it('does not call onSubmit when title is empty', () => {
+    const onSubmit = vi.fn();
+    render(<EventForm {...baseProps} onSubmit={onSubmit} />);
+    fireEvent.submit(screen.getByRole('button', { name: 'Submit' }).closest('form')!);
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('calls onSubmit with form data when all required fields are valid', () => {
+    const onSubmit = vi.fn();
+    render(<EventForm {...baseProps} onSubmit={onSubmit} />);
+    fireEvent.change(screen.getByPlaceholderText('titlePlaceholder'), { target: { value: 'Raid Night' } });
+    const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
+    fireEvent.change(dateInput, { target: { value: '2026-06-01' } });
+    const form = screen.getByRole('button', { name: 'Submit' }).closest('form')!;
+    fireEvent.submit(form);
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ title: 'Raid Night', date: '2026-06-01' })
+    );
+  });
+
+  it('shows title error when submitting empty title', () => {
+    render(<EventForm {...baseProps} initialData={{ date: '2026-06-01', time: '20:00', type: 'raid', description: '' }} />);
+    const form = screen.getByRole('button', { name: 'Submit' }).closest('form')!;
+    fireEvent.submit(form);
+    expect(screen.getByText('validation.titleRequired')).toBeInTheDocument();
+  });
+
+  it('hides date input in isDayView mode (not edit)', () => {
+    render(<EventForm {...baseProps} isDayView={true} isEdit={false} />);
+    expect(document.querySelector('input[type="date"]')).not.toBeInTheDocument();
+  });
+
+  it('calls onCancel when cancel button is clicked', () => {
+    const onCancel = vi.fn();
+    render(<EventForm {...baseProps} onCancel={onCancel} />);
+    fireEvent.click(screen.getByRole('button', { name: 'cancel' }));
+    expect(onCancel).toHaveBeenCalledOnce();
+  });
+
+  it('pre-fills form with initialData', () => {
+    render(<EventForm {...baseProps} initialData={{ title: 'Pre-filled', date: '2026-06-01', time: '18:00', type: 'raid', description: 'Desc' }} />);
+    expect(screen.getByDisplayValue('Pre-filled')).toBeInTheDocument();
   });
 });
