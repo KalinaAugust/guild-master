@@ -133,5 +133,24 @@
     "joinRequest": "New join request in «{guildName}»",
     "joinRequestApproved": "Your request to join «{guildName}» was approved",
     "joinRequestDeclined": "Your request to join «{guildName}» was declined"
+  },
+  "GuildDetail": {
+    "backToGuilds": "Back to guilds",
+    "owner": "Owner",
+    "members": "Members",
+    "description": "Description",
+    "applyToJoin": "Apply to Join",
+    "requestSent": "Request Sent",
+    "youAreMember": "You are a member",
+    "youAreOwner": "You are the owner",
+    "signInToApply": "Sign in to apply for membership",
+    "pendingRequests": "Pending Requests",
+    "noPendingRequests": "No pending requests",
+    "accept": "Accept",
+    "decline": "Decline",
+    "joinRequestSuccess": "Join request sent",
+    "joinRequestError": "Failed to send join request",
+    "resolveSuccess": "Request resolved",
+    "resolveError": "Failed to resolve request"
   }
 }

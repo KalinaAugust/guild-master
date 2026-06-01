@@ -44,8 +44,9 @@ export async function proxy(request: NextRequest) {
   // Protect all routes except /login and /auth/callback
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth');
+  const isGuildDetailPage = request.nextUrl.pathname.match(/^\/guilds\/[^/]+/) !== null;
 
-  if (!user && !isLoginPage && !isAuthCallback) {
+  if (!user && !isLoginPage && !isAuthCallback && !isGuildDetailPage) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 

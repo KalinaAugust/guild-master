@@ -133,5 +133,24 @@
     "joinRequest": "Новая заявка на вступление в «{guildName}»",
     "joinRequestApproved": "Ваша заявка в «{guildName}» принята",
     "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена"
+  },
+  "GuildDetail": {
+    "backToGuilds": "Назад к гильдиям",
+    "owner": "Владелец",
+    "members": "Участников",
+    "description": "Описание",
+    "applyToJoin": "Подать заявку",
+    "requestSent": "Заявка отправлена",
+    "youAreMember": "Вы участник",
+    "youAreOwner": "Вы владелец",
+    "signInToApply": "Войдите, чтобы подать заявку",
+    "pendingRequests": "Заявки на вступление",
+    "noPendingRequests": "Нет заявок",
+    "accept": "Принять",
+    "decline": "Отклонить",
+    "joinRequestSuccess": "Заявка отправлена",
+    "joinRequestError": "Не удалось отправить заявку",
+    "resolveSuccess": "Заявка обработана",
+    "resolveError": "Не удалось обработать заявку"
   }
 }
