@@ -129,6 +129,9 @@
     "newEvent": "New event in «{guildName}»",
     "invitation": "You're invited to an event",
     "empty": "No notifications",
-    "markAllRead": "Mark all as read"
+    "markAllRead": "Mark all as read",
+    "joinRequest": "New join request in «{guildName}»",
+    "joinRequestApproved": "Your request to join «{guildName}» was approved",
+    "joinRequestDeclined": "Your request to join «{guildName}» was declined"
   }
 }

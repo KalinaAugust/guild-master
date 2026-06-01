@@ -129,6 +129,9 @@
     "newEvent": "Новое событие в «{guildName}»",
     "invitation": "Вас пригласили на событие",
     "empty": "Нет уведомлений",
-    "markAllRead": "Отметить все прочитанными"
+    "markAllRead": "Отметить все прочитанными",
+    "joinRequest": "Новая заявка на вступление в «{guildName}»",
+    "joinRequestApproved": "Ваша заявка в «{guildName}» принята",
+    "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена"
   }
 }
