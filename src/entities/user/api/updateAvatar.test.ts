@@ -71,6 +71,8 @@ describe('updateAvatar', () => {
 
     await updateAvatar('u1', new Blob(['img']));
     expect(mock._list).toHaveBeenCalledWith('u1');
-    expect(mock._remove).toHaveBeenCalled();
+    expect(mock._remove).toHaveBeenCalledWith(
+      expect.arrayContaining(['u1/old-avatar.png'])
+    );
   });
 });

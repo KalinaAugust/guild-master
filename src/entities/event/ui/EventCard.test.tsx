@@ -44,7 +44,7 @@ describe('EventCard', () => {
     const onEdit = vi.fn();
     render(<EventCard event={event} onClick={onClick} onEdit={onEdit} />);
     const editBtn = screen.getByRole('button', { name: '' });
-    fireEvent.click(editBtn.closest('button')!);
+    fireEvent.click(editBtn);
     expect(onEdit).toHaveBeenCalledWith(event);
     expect(onClick).not.toHaveBeenCalled();
   });

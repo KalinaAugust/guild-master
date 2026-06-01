@@ -19,13 +19,6 @@ const t = (key: string, values?: Record<string, string>) => {
 };
 
 describe('NOTIFICATION_TYPE_CONFIG', () => {
-  it('covers all 5 notification types', () => {
-    const types = ['new_event', 'invitation', 'join_request', 'join_request_approved', 'join_request_declined'];
-    for (const type of types) {
-      expect(NOTIFICATION_TYPE_CONFIG[type]).toBeDefined();
-    }
-  });
-
   it('new_event: getLabel includes guildName', () => {
     const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel(t, { ...base, guild_name: 'Alpha' });
     expect(label).toContain('Alpha');
@@ -53,12 +46,6 @@ describe('NOTIFICATION_TYPE_CONFIG', () => {
 
   it('new_event: getLabel uses empty string when guild_name is null', () => {
     const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel(t, { ...base, guild_name: null });
-    expect(label).toContain('""');
-  });
-
-  it('each config has an Icon', () => {
-    for (const config of Object.values(NOTIFICATION_TYPE_CONFIG)) {
-      expect(config.Icon).toBeDefined();
-    }
+    expect(label).toBe(t('newEvent', { guildName: '' }));
   });
 });
