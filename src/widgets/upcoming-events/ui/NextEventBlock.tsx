@@ -43,7 +43,7 @@ export const NextEventBlock: React.FC<Props> = ({ event }) => (
     <div className={styles.blockLabel}>Следующее событие</div>
     {event ? (
       <div className={styles.eventRow}>
-        <Link href={`/events/${event.id}`} className={styles.eventLink}>
+        <Link href={`/events/${event.id}`} className={styles.eventLink} target="_blank" rel="noopener noreferrer">
           {event.title}
         </Link>
         <span className={styles.eventMeta}>

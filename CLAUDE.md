@@ -64,7 +64,6 @@ npm run start
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
 - **Type Safety:** Maintain strict TypeScript typing. Interfaces should be defined in `src/shared/types/index.ts` or close to their usage if specific to a single module. `React.FormEvent` is deprecated in React 19 — use `React.SubmitEvent` for form submit handlers instead. `React.MouseEvent` is not deprecated and can be used as-is.
 - **Client Components:** Use the `'use client';` directive only for components that require interactivity or browser APIs (like those using Redux hooks).
-- **Testing:** Do NOT write new unit tests or add new test cases. Existing tests must be kept passing — update mocks and assertions in existing test files when production code changes break them, but do not add new `it()`/`test()` blocks or new test files.
 - **Browser verification:** Do NOT launch the browser to verify changes unless the user explicitly asks. Make the code change and stop; let the user check it in the browser themselves.
 - **CLAUDE.md hygiene:** After any task that changes infrastructure, global state patterns, routing conventions, or other project-wide rules — update this file to reflect the new reality before closing the task.
 
