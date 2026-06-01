@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
 import { getMyGuilds } from '@/entities/guild';
 import { createClient } from '@/shared/api/supabase/server';
 import { CalendarGrid } from '@/widgets/calendar';
 import { EventWizard } from '@/features/create-event';
+import { UpcomingEventsStrip } from '@/widgets/upcoming-events';
 import styles from './HomePage.module.css';
 
 export default async function Home() {
@@ -12,7 +12,6 @@ export default async function Home() {
     supabase.auth.getUser(),
     getMyGuilds(),
   ]);
-  const t = await getTranslations('Common');
 
   if (guilds.length === 0) {
     redirect('/guilds');
@@ -20,7 +19,7 @@ export default async function Home() {
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>{t('title')}</h1>
+      <UpcomingEventsStrip guilds={guilds} userId={user?.id} />
       <CalendarGrid guilds={guilds} userId={user?.id} />
       <EventWizard />
     </main>
