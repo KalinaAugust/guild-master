@@ -150,5 +150,25 @@
     "joinRequestError": "Failed to send join request",
     "resolveSuccess": "Request resolved",
     "resolveError": "Failed to resolve request"
+  },
+  "UpcomingEvents": {
+    "nextEvent": "Next Event",
+    "thisWeek": "This Week",
+    "noUpcoming": "No upcoming events",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "confirmedCount": "{count, plural, =1 {# participant} other {# participants}}",
+    "noConfirmations": "No confirmations",
+    "confirmedLabel": "Confirmed participation",
+    "selectGuild": "Select a guild",
+    "types": {
+      "game": "Games",
+      "raid": "Raids",
+      "meeting": "Meetings",
+      "dungeon": "Dungeons",
+      "party": "Parties",
+      "sport": "Sports",
+      "other": "Other"
+    }
   }
 }

@@ -150,5 +150,25 @@
     "joinRequestError": "Не удалось отправить заявку",
     "resolveSuccess": "Заявка обработана",
     "resolveError": "Не удалось обработать заявку"
+  },
+  "UpcomingEvents": {
+    "nextEvent": "Следующее событие",
+    "thisWeek": "На этой неделе",
+    "noUpcoming": "Событий не запланировано",
+    "today": "Сегодня",
+    "tomorrow": "Завтра",
+    "confirmedCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
+    "noConfirmations": "Нет подтверждений",
+    "confirmedLabel": "Подтвердили участие",
+    "selectGuild": "Выберите гильдию",
+    "types": {
+      "game": "Игры",
+      "raid": "Рейды",
+      "meeting": "Встречи",
+      "dungeon": "Подземелья",
+      "party": "Вечеринки",
+      "sport": "Спорт",
+      "other": "Прочее"
+    }
   }
 }
