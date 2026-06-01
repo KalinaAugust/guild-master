@@ -140,7 +140,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
           {event.description && (
             <div className={styles.infoGroup}>
-              <span className={styles.label}>{t('description')}</span>
+              <span className={styles.label}>{commonT('description')}</span>
               <p className={styles.description}>{event.description}</p>
             </div>
           )}
@@ -176,7 +176,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             {commonT('delete')}
           </Button>
           <Button type="button" variant="primary" onClick={handleEdit}>
-            {t('edit')}
+            {commonT('edit')}
           </Button>
         </div>
       )}

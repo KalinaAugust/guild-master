@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Shield, Pencil, Trash2 } from 'lucide-react';
 import { Guild } from '@/entities/guild';
@@ -26,13 +27,15 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, onD
         <ul className={styles.list}>
           {guilds.map((guild) => (
             <li key={guild.id} className={styles.row}>
-              <Shield size={18} className={styles.icon} />
-              <div className={styles.info}>
-                <span className={styles.name}>{guild.name}</span>
-                {guild.description && (
-                  <span className={styles.description}>{guild.description}</span>
-                )}
-              </div>
+              <Link href={`/guilds/${guild.id}`} className={styles.rowLink}>
+                <Shield size={18} className={styles.icon} />
+                <div className={styles.info}>
+                  <span className={styles.name}>{guild.name}</span>
+                  {guild.description && (
+                    <span className={styles.description}>{guild.description}</span>
+                  )}
+                </div>
+              </Link>
               {(onEdit || onDelete) && (
                 <div className={styles.actions}>
                   {onEdit && (

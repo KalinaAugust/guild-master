@@ -52,6 +52,11 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
             <ArrowUpRight size={14} />
           </Link>
         )}
+        {notification.entity_type === 'guild' && notification.entity_id && (
+          <Link href={`/guilds/${notification.entity_id}`} className={styles.link} onClick={onClose}>
+            <ArrowUpRight size={14} />
+          </Link>
+        )}
         {!notification.is_read && <span className={styles.dot} />}
       </div>
     </div>

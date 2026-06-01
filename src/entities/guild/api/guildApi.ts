@@ -1,5 +1,5 @@
 import { baseApi } from '@/shared/api/baseApi';
-import { Guild, GuildMember } from '../model/types';
+import { Guild, GuildDetail, GuildMember, JoinRequest } from '../model/types';
 
 export const guildApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -48,6 +48,34 @@ export const guildApi = baseApi.injectEndpoints({
         { type: 'GuildMember' as const, id: `LIST-${guildId}` },
       ],
     }),
+    getGuildById: builder.query<GuildDetail, string>({
+      query: (id) => `guilds/${id}`,
+      providesTags: (_, __, id) => [{ type: 'Guild' as const, id }],
+    }),
+    submitJoinRequest: builder.mutation<{ id: string; status: string }, string>({
+      query: (guildId) => ({ url: `guilds/${guildId}/join-requests`, method: 'POST' }),
+    }),
+    getJoinRequests: builder.query<JoinRequest[], string>({
+      query: (guildId) => `guilds/${guildId}/join-requests`,
+      providesTags: (_, __, guildId) => [
+        { type: 'JoinRequest' as const, id: `LIST-${guildId}` },
+      ],
+    }),
+    resolveJoinRequest: builder.mutation<
+      { success: boolean },
+      { guildId: string; requestId: string; action: 'approve' | 'decline' }
+    >({
+      query: ({ guildId, requestId, action }) => ({
+        url: `guilds/${guildId}/join-requests/${requestId}`,
+        method: 'PATCH',
+        body: { action },
+      }),
+      invalidatesTags: (_, __, { guildId }) => [
+        { type: 'JoinRequest' as const, id: `LIST-${guildId}` },
+        { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+        { type: 'Guild' as const, id: guildId },
+      ],
+    }),
   }),
   overrideExisting: false,
 });
@@ -60,4 +88,8 @@ export const {
   useUpdateGuildMutation,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
+  useGetGuildByIdQuery,
+  useSubmitJoinRequestMutation,
+  useGetJoinRequestsQuery,
+  useResolveJoinRequestMutation,
 } = guildApi;

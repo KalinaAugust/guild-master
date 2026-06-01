@@ -102,7 +102,7 @@ export const EventForm: React.FC<EventFormProps> = ({
           options={typeOptions}
         />
       </div>
-      <FormField name="description" label={t('descriptionLabel')}>
+      <FormField name="description" label={commonT('description')}>
         <Textarea
           placeholder={t('descriptionPlaceholder')}
           value={description}

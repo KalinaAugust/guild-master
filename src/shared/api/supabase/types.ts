@@ -169,6 +169,45 @@ export type Database = {
           },
         ]
       }
+      guild_join_requests: {
+        Row: {
+          id: string
+          guild_id: string
+          user_id: string
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          guild_id: string
+          user_id: string
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          guild_id?: string
+          user_id?: string
+          status?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guild_join_requests_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "guild_join_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           created_at: string

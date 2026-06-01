@@ -13,6 +13,8 @@
     "confirmDelete": "Вы уверены, что хотите удалить это событие?",
     "backToCalendar": "Назад в календарь",
     "backToDay": "Назад к дню",
+    "edit": "Редактировать",
+    "description": "Описание",
     "locales": {
       "en": "English",
       "ru": "Русский"
@@ -36,7 +38,6 @@
     "dateLabel": "Дата",
     "timeLabel": "Время",
     "typeLabel": "Тип события",
-    "descriptionLabel": "Описание",
     "descriptionPlaceholder": "Добавьте подробности о событии...",
     "submit": "Создать событие",
     "successCreated": "Событие успешно создано",
@@ -73,11 +74,9 @@
   "EventDetail": {
     "type": "Тип",
     "dateTime": "Дата и время",
-    "description": "Описание",
     "creator": "Создатель",
     "participants": "Участники",
     "noParticipants": "Участников пока нет. Добавьте их при редактировании события.",
-    "edit": "Редактировать",
     "accessDenied": "У вас нет доступа к этому событию.",
     "guildLeaderContact": "Обратитесь к главе гильдии для получения доступа: {name}",
     "goHome": "На главную",
@@ -129,6 +128,27 @@
     "newEvent": "Новое событие в «{guildName}»",
     "invitation": "Вас пригласили на событие",
     "empty": "Нет уведомлений",
-    "markAllRead": "Отметить все прочитанными"
+    "markAllRead": "Отметить все прочитанными",
+    "joinRequest": "Новая заявка на вступление в «{guildName}»",
+    "joinRequestApproved": "Ваша заявка в «{guildName}» принята",
+    "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена"
+  },
+  "GuildDetail": {
+    "backToGuilds": "Назад к гильдиям",
+    "owner": "Владелец",
+    "members": "Участников",
+    "applyToJoin": "Подать заявку",
+    "requestSent": "Заявка отправлена",
+    "youAreMember": "Вы участник",
+    "youAreOwner": "Вы владелец",
+    "signInToApply": "Войдите, чтобы подать заявку",
+    "pendingRequests": "Заявки на вступление",
+    "noPendingRequests": "Нет заявок",
+    "accept": "Принять",
+    "decline": "Отклонить",
+    "joinRequestSuccess": "Заявка отправлена",
+    "joinRequestError": "Не удалось отправить заявку",
+    "resolveSuccess": "Заявка обработана",
+    "resolveError": "Не удалось обработать заявку"
   }
 }

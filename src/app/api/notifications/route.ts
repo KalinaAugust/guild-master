@@ -19,7 +19,14 @@ export async function GET() {
       .map((n) => n.entity_id as string)
   )];
 
+  const guildIds = [...new Set(
+    notifications
+      .filter((n) => n.entity_type === 'guild' && n.entity_id)
+      .map((n) => n.entity_id as string)
+  )];
+
   let eventsMap: Record<string, { title: string; event_date: string; guild_name: string | null }> = {};
+  let guildsMap: Record<string, string> = {};
 
   if (eventIds.length > 0) {
     const { data: events, error: eventsError } = await supabase
@@ -41,11 +48,24 @@ export async function GET() {
     );
   }
 
+  if (guildIds.length > 0) {
+    const { data: guilds } = await supabase
+      .from('guilds')
+      .select('id, name')
+      .in('id', guildIds);
+
+    guildsMap = Object.fromEntries((guilds ?? []).map((g) => [g.id, g.name]));
+  }
+
   const result = notifications.map((n) => ({
     ...n,
     event_title: n.entity_type === 'event' ? (eventsMap[n.entity_id ?? '']?.title ?? null) : null,
     event_date: n.entity_type === 'event' ? (eventsMap[n.entity_id ?? '']?.event_date ?? null) : null,
-    guild_name: n.entity_type === 'event' ? (eventsMap[n.entity_id ?? '']?.guild_name ?? null) : null,
+    guild_name: n.entity_type === 'event'
+      ? (eventsMap[n.entity_id ?? '']?.guild_name ?? null)
+      : n.entity_type === 'guild'
+        ? (guildsMap[n.entity_id ?? ''] ?? null)
+        : null,
   }));
 
   return NextResponse.json(result);
