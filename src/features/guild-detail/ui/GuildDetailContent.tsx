@@ -11,7 +11,9 @@ import {
   useGetJoinRequestsQuery,
   useSubmitJoinRequestMutation,
   useResolveJoinRequestMutation,
+  openGuildEditModal,
 } from '@/entities/guild';
+import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
@@ -28,7 +30,9 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   initialMembershipStatus,
 }) => {
   const t = useTranslations('GuildDetail');
+  const commonT = useTranslations('Common');
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [membershipStatus, setMembershipStatus] = useState<MembershipStatus>(initialMembershipStatus);
 
   const { data: guild, isLoading } = useGetGuildByIdQuery(guildId);
@@ -79,7 +83,12 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
     );
   }
 
-  const showFooter = membershipStatus === 'none' || membershipStatus === 'guest';
+  const handleEdit = () => {
+    if (!guild) return;
+    dispatch(openGuildEditModal(guild));
+  };
+
+  const showApplyFooter = membershipStatus === 'none' || membershipStatus === 'guest';
 
   return (
     <div className={styles.container}>
@@ -95,7 +104,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
         <div className={styles.column}>
           {guild.description && (
             <div className={styles.infoGroup}>
-              <span className={styles.label}>{t('description')}</span>
+              <span className={styles.label}>{commonT('description')}</span>
               <p className={styles.description}>{guild.description}</p>
             </div>
           )}
@@ -158,7 +167,15 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
         </div>
       </div>
 
-      {showFooter && (
+      {membershipStatus === 'owner' && (
+        <div className={styles.footer}>
+          <Button type="button" variant="primary" onClick={handleEdit}>
+            {commonT('edit')}
+          </Button>
+        </div>
+      )}
+
+      {showApplyFooter && (
         <div className={styles.footer}>
           <Button
             type="button"

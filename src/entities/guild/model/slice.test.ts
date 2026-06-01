@@ -12,6 +12,8 @@ describe('guildSlice', () => {
   it('should return the initial state', () => {
     expect(guildReducer(undefined, { type: 'unknown' })).toEqual({
       currentGuildId: null,
+      isGuildEditModalOpen: false,
+      editingGuild: null,
     });
   });
 

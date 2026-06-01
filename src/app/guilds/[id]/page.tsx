@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { createClient } from '@/shared/api/supabase/server';
 import { GuildDetailContent, type MembershipStatus } from '@/features/guild-detail';
+import { GuildEditWizardConnected } from '@/features/manage-guilds';
 import styles from './GuildDetailPage.module.css';
 
 interface GuildDetailPageProps {
@@ -51,6 +52,9 @@ export default async function GuildDetailPage({ params }: GuildDetailPageProps) 
   return (
     <main className={styles.main}>
       <GuildDetailContent guildId={id} initialMembershipStatus={membershipStatus} />
+      {membershipStatus === 'owner' && user && (
+        <GuildEditWizardConnected userId={user.id} />
+      )}
     </main>
   );
 }

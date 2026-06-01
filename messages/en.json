@@ -13,6 +13,8 @@
     "confirmDelete": "Are you sure you want to delete this event?",
     "backToCalendar": "Back to calendar",
     "backToDay": "Back to day",
+    "edit": "Edit",
+    "description": "Description",
     "locales": {
       "en": "English",
       "ru": "Russian"
@@ -36,7 +38,6 @@
     "dateLabel": "Date",
     "timeLabel": "Time",
     "typeLabel": "Event Type",
-    "descriptionLabel": "Description",
     "descriptionPlaceholder": "Add details about the event...",
     "submit": "Create Event",
     "successCreated": "Event created successfully",
@@ -73,11 +74,9 @@
   "EventDetail": {
     "type": "Type",
     "dateTime": "Date & Time",
-    "description": "Description",
     "creator": "Creator",
     "participants": "Participants",
     "noParticipants": "No participants yet. Add them when editing the event.",
-    "edit": "Edit",
     "accessDenied": "You don't have access to this event.",
     "guildLeaderContact": "Contact the guild leader for access: {name}",
     "goHome": "Go home",
@@ -138,7 +137,6 @@
     "backToGuilds": "Back to guilds",
     "owner": "Owner",
     "members": "Members",
-    "description": "Description",
     "applyToJoin": "Apply to Join",
     "requestSent": "Request Sent",
     "youAreMember": "You are a member",
