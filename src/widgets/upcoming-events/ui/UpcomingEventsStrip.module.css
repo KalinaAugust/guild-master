@@ -1,0 +1,209 @@
+.strip {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-glass);
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.blockLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+/* NextEventBlock */
+.nextEventBlock {
+  flex: 1;
+  min-width: 0;
+}
+
+.eventRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.eventLink {
+  font-size: 15px;
+  color: var(--accent-primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.eventLink:hover {
+  color: var(--accent-hover);
+}
+
+.eventMeta {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dot {
+  color: var(--glass-border);
+}
+
+.participantsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.emptyText {
+  font-size: 13px;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 44px;
+  background: var(--glass-border);
+  flex-shrink: 0;
+}
+
+/* WeekByTypeBlock */
+.weekBlock {
+  flex-shrink: 0;
+}
+
+.typeChips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.typeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: default;
+  border: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.typeChip:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.chip_raid    { background: rgba(176, 96, 96, 0.15);   color: var(--event-raid-border); }
+.chip_dungeon { background: rgba(168, 85, 247, 0.15);  color: var(--event-dungeon-border); }
+.chip_party   { background: rgba(244, 114, 182, 0.15); color: var(--event-party-border); }
+.chip_meeting { background: rgba(90, 144, 184, 0.15);  color: var(--event-meeting-border); }
+.chip_game    { background: rgba(74, 144, 104, 0.15);  color: var(--event-game-border); }
+.chip_sport   { background: rgba(52, 211, 153, 0.15);  color: var(--event-sport-border); }
+.chip_other   { background: rgba(74, 133, 168, 0.15);  color: var(--event-other-border); }
+
+/* ParticipantsTooltip */
+.participantsList {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 170px;
+}
+
+.tooltipLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  opacity: 0.6;
+}
+
+.participantRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarInitial {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.participantName {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.tooltipEmpty {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* EventTypeTooltip */
+.typeTooltip {
+  min-width: 190px;
+}
+
+.typeTooltipRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--glass-border);
+  margin-bottom: 7px;
+}
+
+.typeTooltipRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.typeTooltipTitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.typeTooltipTime {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.7;
+}

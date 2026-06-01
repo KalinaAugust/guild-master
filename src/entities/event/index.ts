@@ -7,4 +7,5 @@ export {
   useGetParticipantsQuery,
   useSyncParticipantsMutation,
   useGetEventByIdQuery,
+  useGetMyEventIdsQuery,
 } from './api/eventApi';
