@@ -34,14 +34,14 @@ export const EventForm: React.FC<EventFormProps> = ({
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
   const typeOptions = useMemo(() => [
-    { label: t('types.game'), value: 'game' as ActivityType },
-    { label: t('types.raid'), value: 'raid' as ActivityType },
-    { label: t('types.meeting'), value: 'meeting' as ActivityType },
-    { label: t('types.dungeon'), value: 'dungeon' as ActivityType },
-    { label: t('types.party'), value: 'party' as ActivityType },
-    { label: t('types.sport'), value: 'sport' as ActivityType },
-    { label: t('types.other'), value: 'other' as ActivityType },
-  ], [t]);
+    { label: commonT('eventTypes.game'), value: 'game' as ActivityType },
+    { label: commonT('eventTypes.raid'), value: 'raid' as ActivityType },
+    { label: commonT('eventTypes.meeting'), value: 'meeting' as ActivityType },
+    { label: commonT('eventTypes.dungeon'), value: 'dungeon' as ActivityType },
+    { label: commonT('eventTypes.party'), value: 'party' as ActivityType },
+    { label: commonT('eventTypes.sport'), value: 'sport' as ActivityType },
+    { label: commonT('eventTypes.other'), value: 'other' as ActivityType },
+  ], [commonT]);
 
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();

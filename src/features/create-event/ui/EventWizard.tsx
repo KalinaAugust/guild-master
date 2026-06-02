@@ -15,6 +15,7 @@ import {
 } from '@/entities/event';
 import { useGetGuildMembersQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
 import dayjs from '@/shared/lib/dayjs';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { EventForm } from './EventForm';
@@ -177,11 +178,6 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
                 ) : (
                   <div className={styles.memberList}>
                     {guildMembers.map((member) => {
-                      const initials = (member.profile.fullName || '?')
-                        .split(' ')
-                        .map((w) => w[0])
-                        .join('')
-                        .toUpperCase();
                       const selected = selectedParticipants.includes(member.userId);
                       return (
                         <div
@@ -189,7 +185,11 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
                           className={`${styles.memberItem} ${selected ? styles.memberSelected : ''}`}
                           onClick={() => toggleParticipant(member.userId)}
                         >
-                          <div className={styles.memberAvatar}>{initials}</div>
+                          <UserAvatar
+                            avatarUrl={member.profile.avatarUrl}
+                            name={member.profile.fullName}
+                            size="sm"
+                          />
                           <span className={styles.memberName}>{member.profile.fullName || member.userId}</span>
                           {selected && <span className={styles.memberCheck}>✓</span>}
                         </div>

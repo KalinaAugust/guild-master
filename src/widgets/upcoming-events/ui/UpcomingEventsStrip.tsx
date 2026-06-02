@@ -33,14 +33,6 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId }) => {
   const eventsByType = useWeekEventsByType(events, myIdsData?.eventIds ?? []);
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
 
-  if (!activeGuildId) {
-    return (
-      <div className={styles.strip}>
-        <span className={styles.emptyText}>Выберите гильдию</span>
-      </div>
-    );
-  }
-
   return (
     <div className={styles.strip}>
       <NextEventBlock event={nextEvent} />

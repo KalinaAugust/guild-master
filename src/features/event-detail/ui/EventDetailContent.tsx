@@ -111,7 +111,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
     );
   }
 
-  const typeLabel = eventT(`types.${event.type}` as Parameters<typeof eventT>[0]);
+  const typeLabel = commonT(`eventTypes.${event.type}` as Parameters<typeof commonT>[0]);
 
   return (
     <div className={styles.container}>
