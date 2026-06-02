@@ -1,15 +1,14 @@
-import { createClient } from '@/shared/api/supabase/server';
 import Link from 'next/link';
 import { Shield } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { getUser } from '@/entities/user';
 import { UserMenu } from './UserMenu';
 import { AiHelperButton } from '@/features/ai-helper';
 import { NotificationBell } from '@/features/notification-panel';
 import styles from './Header.module.css';
 
 export const Header = async () => {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getUser();
   const t = await getTranslations('Common');
   const authT = await getTranslations('Auth');
 
@@ -24,7 +23,11 @@ export const Header = async () => {
           <>
             <AiHelperButton />
             <NotificationBell />
-            <UserMenu email={user.email} />
+            <UserMenu
+              email={user.email}
+              avatarUrl={user.profile?.avatarUrl}
+              name={user.profile?.fullName}
+            />
           </>
         ) : (
           <div className={styles.authLinks}>

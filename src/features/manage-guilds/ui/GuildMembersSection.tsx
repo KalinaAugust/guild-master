@@ -12,6 +12,7 @@ import {
 import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
 import styles from './GuildMembersSection.module.css';
 
 interface GuildMembersSectionProps {
@@ -78,6 +79,11 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         <ul className={styles.list}>
           {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => (
             <li key={member.userId} className={styles.item}>
+              <UserAvatar
+                avatarUrl={member.profile.avatarUrl}
+                name={member.profile.fullName}
+                size="sm"
+              />
               <span className={styles.name}>
                 {member.profile.fullName ?? member.userId}
               </span>

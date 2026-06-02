@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { User, LogOut, ChevronDown, Languages, ShieldPlus } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { createClient } from '@/shared/api/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/shared/lib/hooks';
@@ -14,9 +15,11 @@ import styles from './UserMenu.module.css';
 
 interface UserMenuProps {
   email?: string;
+  avatarUrl?: string | null;
+  name?: string | null;
 }
 
-export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
+export const UserMenu: React.FC<UserMenuProps> = ({ email, avatarUrl, name }) => {
   const locale = useLocale();
   const t = useTranslations('Common');
   const guildT = useTranslations('Guild');
@@ -46,7 +49,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email }) => {
     }}>
       <DropdownMenu.Trigger asChild>
         <button className={styles.trigger} aria-label="User menu">
-          <User size={20} />
+          <UserAvatar avatarUrl={avatarUrl} name={name} size="lg" />
         </button>
       </DropdownMenu.Trigger>
 

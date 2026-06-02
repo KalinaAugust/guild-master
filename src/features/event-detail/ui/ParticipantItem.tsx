@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { EventParticipant } from '@/shared/types';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
 import styles from './ParticipantItem.module.css';
 
 interface ParticipantItemProps {
@@ -20,20 +21,17 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
 }) => {
   const t = useTranslations('EventDetail');
 
-  const initials = (participant.profile.fullName || '?')
-    .split(' ')
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
   const showActions = isCurrentUser && participant.status === 'pending';
 
   return (
     <div
       className={`${styles.item} ${isCurrentUser ? styles.currentUser : ''} ${styles[`status_${participant.status}`]}`}
     >
-      <div className={styles.avatar}>{initials}</div>
+      <UserAvatar
+        avatarUrl={participant.profile.avatarUrl}
+        name={participant.profile.fullName}
+        size="md"
+      />
       <div className={styles.info}>
         <span className={styles.name}>{participant.profile.fullName || '—'}</span>
         <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
