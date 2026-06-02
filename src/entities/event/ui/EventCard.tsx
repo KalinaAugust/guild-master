@@ -6,8 +6,14 @@ import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import styles from './EventCard.module.css';
 
+interface ParticipantCount {
+  total: number;
+  confirmed: number;
+}
+
 interface EventCardProps {
   event: ActivityEvent;
+  participantCount?: ParticipantCount;
   onClick?: (event: ActivityEvent) => void;
   onEdit?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
@@ -23,7 +29,7 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   sport: <Dumbbell size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, onClick, onEdit, onDelete }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onEdit, onDelete }) => {
   return (
     <div
       className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
@@ -32,16 +38,24 @@ export const EventCard: React.FC<EventCardProps> = ({ event, onClick, onEdit, on
       <div className={styles.iconWrapper}>
         {typeIcons[event.type]}
       </div>
-      
+
       <div className={styles.content}>
         <div className={styles.header}>
           <h3 className={styles.title}>{event.title}</h3>
-          <div className={styles.timeWrapper}>
-            <Clock size={14} />
-            <span>{event.time}</span>
+          <div className={styles.meta}>
+            <div className={styles.timeWrapper}>
+              <Clock size={14} />
+              <span>{event.time}</span>
+            </div>
+            {participantCount !== undefined && (
+              <div className={styles.participantWrapper}>
+                <Users size={14} />
+                <span>{participantCount.confirmed} / {participantCount.total}</span>
+              </div>
+            )}
           </div>
         </div>
-        
+
         {event.description && (
           <p className={styles.description}>{event.description}</p>
         )}
