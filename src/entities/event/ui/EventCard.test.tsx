@@ -70,4 +70,19 @@ describe('EventCard', () => {
     expect(onDelete).toHaveBeenCalledWith('e1');
     expect(onClick).not.toHaveBeenCalled();
   });
+
+  it('renders participant count when provided', () => {
+    render(<EventCard event={event} participantCount={{ total: 5, confirmed: 3 }} />);
+    expect(screen.getByText('3 / 5')).toBeInTheDocument();
+  });
+
+  it('renders 0 / 0 when participantCount is zero', () => {
+    render(<EventCard event={event} participantCount={{ total: 0, confirmed: 0 }} />);
+    expect(screen.getByText('0 / 0')).toBeInTheDocument();
+  });
+
+  it('does not render participant count when prop is absent', () => {
+    render(<EventCard event={event} />);
+    expect(screen.queryByText(/\d+ \/ \d+/)).not.toBeInTheDocument();
+  });
 });

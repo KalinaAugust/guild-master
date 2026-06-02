@@ -22,7 +22,7 @@ describe('JoinRequestItem', () => {
 
   it('shows fallback initial when no avatarUrl', () => {
     render(<JoinRequestItem request={request} onAccept={vi.fn()} onDecline={vi.fn()} />);
-    expect(screen.getByText('A')).toBeInTheDocument();
+    expect(screen.getByText('AS')).toBeInTheDocument();
   });
 
   it('renders avatar image when avatarUrl is provided', () => {

@@ -8,12 +8,34 @@ import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
-import { EventCard, useDeleteEventMutation, useGetEventsQuery } from '@/entities/event';
+import { EventCard, useDeleteEventMutation, useGetEventsQuery, useGetParticipantsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './DayEventsList.module.css';
+
+const EventCardWithCounts: React.FC<{
+  event: ActivityEvent;
+  onClick?: (event: ActivityEvent) => void;
+  onEdit?: (event: ActivityEvent) => void;
+  onDelete?: (id: string) => void;
+}> = ({ event, onClick, onEdit, onDelete }) => {
+  const { data } = useGetParticipantsQuery(event.id);
+  const participants = data?.participants ?? [];
+  const total = participants.length;
+  const confirmed = participants.filter((p) => p.status === 'confirmed').length;
+
+  return (
+    <EventCard
+      event={event}
+      onClick={onClick}
+      onEdit={onEdit}
+      onDelete={onDelete}
+      participantCount={data ? { total, confirmed } : undefined}
+    />
+  );
+};
 
 interface DayEventsListProps {
   date: string;
@@ -100,7 +122,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
       {dayEvents.length > 0 ? (
         <div className={styles.list}>
           {dayEvents.map(event => (
-            <EventCard
+            <EventCardWithCounts
               key={event.id}
               event={event}
               onClick={handleViewEvent}
