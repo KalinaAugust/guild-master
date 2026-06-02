@@ -18,6 +18,24 @@
     "locales": {
       "en": "English",
       "ru": "Русский"
+    },
+    "eventTypes": {
+      "game": "Игра",
+      "raid": "Рейд",
+      "meeting": "Встреча",
+      "dungeon": "Подземелье",
+      "party": "Вечеринка",
+      "sport": "Спорт",
+      "other": "Другое"
+    },
+    "eventTypesPlural": {
+      "game": "Игры",
+      "raid": "Рейды",
+      "meeting": "Встречи",
+      "dungeon": "Подземелья",
+      "party": "Вечеринки",
+      "sport": "Спорт",
+      "other": "Прочее"
     }
   },
   "Auth": {
@@ -44,15 +62,6 @@
     "successUpdated": "Событие обновлено",
     "successDeleted": "Событие удалено",
     "error": "Произошла ошибка",
-    "types": {
-      "game": "Игра",
-      "raid": "Рейд",
-      "meeting": "Встреча",
-      "dungeon": "Подземелье",
-      "party": "Вечеринка",
-      "sport": "Спорт",
-      "other": "Другое"
-    },
     "validation": {
       "titleRequired": "Укажите название",
       "dateRequired": "Укажите дату",
@@ -159,16 +168,6 @@
     "tomorrow": "Завтра",
     "confirmedCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
     "noConfirmations": "Нет подтверждений",
-    "confirmedLabel": "Подтвердили участие",
-    "selectGuild": "Выберите гильдию",
-    "types": {
-      "game": "Игры",
-      "raid": "Рейды",
-      "meeting": "Встречи",
-      "dungeon": "Подземелья",
-      "party": "Вечеринки",
-      "sport": "Спорт",
-      "other": "Прочее"
-    }
+    "confirmedLabel": "Подтвердили участие"
   }
 }
