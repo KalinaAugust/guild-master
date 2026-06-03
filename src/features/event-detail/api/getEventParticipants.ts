@@ -3,13 +3,20 @@ import { EventParticipant, ParticipantStatus } from '@/shared/types';
 
 export const getEventParticipants = async (
   eventId: string
-): Promise<{ participants: EventParticipant[]; currentUserId: string }> => {
+): Promise<{
+  participants: EventParticipant[];
+  currentUserId: string;
+  viewerIsGuildMember: boolean;
+  viewerHasPendingRequest: boolean;
+}> => {
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error('Not authenticated');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any)
+  const db = supabase as any;
+
+  const { data, error } = await db
     .from('event_participants')
     .select('id, event_id, user_id, status, profiles(full_name, avatar_url)')
     .eq('event_id', eventId);
@@ -30,5 +37,35 @@ export const getEventParticipants = async (
     };
   });
 
-  return { participants, currentUserId: user?.id ?? '' };
+  const { data: eventRow } = await db
+    .from('events')
+    .select('guild_id')
+    .eq('id', eventId)
+    .single();
+
+  let viewerIsGuildMember = false;
+  if (eventRow?.guild_id) {
+    const { data: membership } = await db
+      .from('guild_members')
+      .select('id')
+      .eq('guild_id', eventRow.guild_id)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    viewerIsGuildMember = !!membership;
+  }
+
+  const { data: pendingRequest } = await db
+    .from('event_join_requests')
+    .select('id')
+    .eq('event_id', eventId)
+    .eq('user_id', user.id)
+    .eq('status', 'pending')
+    .maybeSingle();
+
+  return {
+    participants,
+    currentUserId: user.id,
+    viewerIsGuildMember,
+    viewerHasPendingRequest: !!pendingRequest,
+  };
 };

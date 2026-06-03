@@ -14,6 +14,8 @@ type RawEvent = {
 interface ParticipantsResponse {
   participants: EventParticipant[];
   currentUserId: string;
+  viewerIsGuildMember: boolean;
+  viewerHasPendingRequest: boolean;
 }
 
 function transformEvent(raw: RawEvent): ActivityEvent {
