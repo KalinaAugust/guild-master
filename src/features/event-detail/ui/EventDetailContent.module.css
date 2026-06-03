@@ -150,6 +150,32 @@
   margin-top: 4px;
 }
 
+.participantList {
+  margin-top: 12px;
+  /* show at most 5 items (48px row + 8px gap) before scrolling */
+  max-height: calc((48px + 8px) * 5);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.participantList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.participantList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.participantList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.participantList::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
 .skeleton {
   height: 44px;
   border-radius: 8px;

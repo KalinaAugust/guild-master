@@ -39,7 +39,7 @@ export default async function DayPage({ params }: DayPageProps) {
 
       <DayEventsList date={date} guildId={currentGuildId} userId={user?.id} />
 
-      <EventWizard isDayView />
+      <EventWizard isDayView userId={user?.id} />
     </main>
   );
 }

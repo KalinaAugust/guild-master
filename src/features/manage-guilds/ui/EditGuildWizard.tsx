@@ -11,7 +11,7 @@ import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
 import { FormField } from '@/shared/ui/FormField';
-import { GuildMembersSection } from './GuildMembersSection';
+import { GuildMembersSection } from '@/widgets/guild-members';
 import styles from './EditGuildWizard.module.css';
 
 type Tab = 'members' | 'settings';
@@ -92,8 +92,9 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
         toast.success(t('successCreated'));
       }
       handleClose();
-    } catch {
-      toast.error(t('errorCreate'));
+    } catch (err) {
+      const status = (err as { status?: number })?.status;
+      toast.error(status === 403 ? t('errorLimit') : t('errorCreate'));
     }
   };
 

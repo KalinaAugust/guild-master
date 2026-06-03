@@ -57,7 +57,7 @@ export default async function EventPage({ params }: EventPageProps) {
   return (
     <main className={styles.main}>
       <EventDetailContent eventId={id} />
-      <EventWizard />
+      <EventWizard userId={user.id} />
     </main>
   );
 }
