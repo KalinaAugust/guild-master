@@ -30,6 +30,13 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
     if (!notification.is_read) markAsRead(notification.id);
   };
 
+  const href =
+    notification.entity_id && notification.entity_type === 'event'
+      ? `/events/${notification.entity_id}`
+      : notification.entity_id && notification.entity_type === 'guild'
+        ? `/guilds/${notification.entity_id}`
+        : null;
+
   return (
     <div
       className={`${styles.item} ${notification.is_read ? styles.itemRead : ''}`}
@@ -41,19 +48,32 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
         <span className={styles.label}>{label}</span>
         {notification.event_title && (
           <span className={styles.sub}>
-            {notification.event_title}
+            {href ? (
+              <Link
+                href={href}
+                className={styles.titleLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onClose}
+              >
+                {notification.event_title}
+              </Link>
+            ) : (
+              notification.event_title
+            )}
             {notification.event_date && ` · ${dayjs(notification.event_date).format('D MMM')}`}
           </span>
         )}
       </div>
       <div className={styles.actions}>
-        {notification.entity_type === 'event' && notification.entity_id && (
-          <Link href={`/events/${notification.entity_id}`} className={styles.link} onClick={onClose}>
-            <ArrowUpRight size={14} />
-          </Link>
-        )}
-        {notification.entity_type === 'guild' && notification.entity_id && (
-          <Link href={`/guilds/${notification.entity_id}`} className={styles.link} onClick={onClose}>
+        {href && (
+          <Link
+            href={href}
+            className={styles.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+          >
             <ArrowUpRight size={14} />
           </Link>
         )}

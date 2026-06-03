@@ -1,4 +1,4 @@
-import { Calendar, Mail, UserPlus, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, UserRoundPlus, UserPlus, CheckCircle, XCircle } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface Notification {
@@ -24,7 +24,7 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
     getLabel: (t, n) => t('newEvent', { guildName: n.guild_name ?? '' }),
   },
   invitation: {
-    Icon: Mail,
+    Icon: UserRoundPlus,
     getLabel: (t) => t('invitation'),
   },
   join_request: {
