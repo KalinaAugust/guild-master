@@ -59,23 +59,3 @@
   flex-shrink: 0;
 }
 
-.confirmBtn,
-.declineBtn {
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 11px;
-  cursor: pointer;
-  border: none;
-  font-weight: 600;
-}
-
-.confirmBtn {
-  background: #43aa8b;
-  color: #fff;
-}
-
-.declineBtn {
-  background: rgba(255, 80, 80, 0.15);
-  color: #ff8080;
-  border: 1px solid rgba(255, 80, 80, 0.3);
-}

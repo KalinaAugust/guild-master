@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { EventParticipant } from '@/shared/types';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { Button } from '@/shared/ui/Button';
 import styles from './ParticipantItem.module.css';
 
 interface ParticipantItemProps {
@@ -11,6 +12,8 @@ interface ParticipantItemProps {
   isCurrentUser: boolean;
   onConfirm?: () => void;
   onDecline?: () => void;
+  isConfirming?: boolean;
+  isDeclining?: boolean;
 }
 
 export const ParticipantItem: React.FC<ParticipantItemProps> = ({
@@ -18,6 +21,8 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
   isCurrentUser,
   onConfirm,
   onDecline,
+  isConfirming = false,
+  isDeclining = false,
 }) => {
   const t = useTranslations('EventDetail');
 
@@ -40,12 +45,26 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
       </div>
       {showActions && (
         <div className={styles.actions}>
-          <button className={styles.confirmBtn} onClick={onConfirm}>
+          <Button
+            type="button"
+            variant="primary"
+            size="xs"
+            onClick={onConfirm}
+            isLoading={isConfirming}
+            disabled={isDeclining}
+          >
             {t('confirmBtn')}
-          </button>
-          <button className={styles.declineBtn} onClick={onDecline}>
+          </Button>
+          <Button
+            type="button"
+            variant="danger"
+            size="xs"
+            onClick={onDecline}
+            isLoading={isDeclining}
+            disabled={isConfirming}
+          >
             {t('declineBtn')}
-          </button>
+          </Button>
         </div>
       )}
     </div>

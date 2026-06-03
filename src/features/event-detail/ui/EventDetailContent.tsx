@@ -79,6 +79,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
 
   const [updateStatus] = useUpdateParticipantStatusMutation();
+  const [statusAction, setStatusAction] = useState<'confirmed' | 'declined' | null>(null);
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -94,19 +95,25 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const handleConfirm = async () => {
     if (!event) return;
+    setStatusAction('confirmed');
     try {
       await updateStatus({ eventId: event.id, status: 'confirmed' }).unwrap();
     } catch {
       toast.error(eventT('error'));
+    } finally {
+      setStatusAction(null);
     }
   };
 
   const handleDecline = async () => {
     if (!event) return;
+    setStatusAction('declined');
     try {
       await updateStatus({ eventId: event.id, status: 'declined' }).unwrap();
     } catch {
       toast.error(eventT('error'));
+    } finally {
+      setStatusAction(null);
     }
   };
 
@@ -276,6 +283,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                   isCurrentUser={p.user_id === currentUserId}
                   onConfirm={handleConfirm}
                   onDecline={handleDecline}
+                  isConfirming={statusAction === 'confirmed'}
+                  isDeclining={statusAction === 'declined'}
                 />
               ))}
             </div>

@@ -4,7 +4,7 @@ import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'ghost' | 'icon' | 'icon_floating' | 'danger';
-  size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon_sm';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon_sm';
   fullWidth?: boolean;
   asChild?: boolean;
   isLoading?: boolean;
