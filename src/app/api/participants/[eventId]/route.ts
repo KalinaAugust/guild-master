@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getEventParticipants } from '@/features/event-detail/api/getEventParticipants';
 import { updateParticipantStatus } from '@/features/event-detail/api/updateParticipantStatus';
+import { addSelfAsParticipant } from '@/features/event-detail/api/addSelfAsParticipant';
 
 export async function GET(
   _: NextRequest,
@@ -27,5 +28,18 @@ export async function PATCH(
     return NextResponse.json({ updated: true });
   } catch {
     return NextResponse.json({ error: 'Failed to update status' }, { status: 500 });
+  }
+}
+
+export async function POST(
+  _: NextRequest,
+  { params }: { params: Promise<{ eventId: string }> }
+) {
+  try {
+    const { eventId } = await params;
+    await addSelfAsParticipant(eventId);
+    return NextResponse.json({ added: true }, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: 'Failed to add participant' }, { status: 500 });
   }
 }

@@ -98,7 +98,20 @@
       "declined": "Not coming"
     },
     "confirmBtn": "Coming",
-    "declineBtn": "Not coming"
+    "declineBtn": "Not coming",
+    "applyToParticipate": "Apply to participate",
+    "addSelf": "Add myself",
+    "addSelfSuccess": "You joined the event",
+    "addSelfError": "Failed to join the event",
+    "applySuccess": "Application submitted",
+    "applyError": "Failed to submit application",
+    "requestSent": "Application sent. Waiting for the administrator's decision.",
+    "requests": "Applications",
+    "noRequests": "No applications",
+    "acceptRequest": "Accept",
+    "declineRequest": "Decline",
+    "resolveSuccess": "Application updated",
+    "resolveError": "Failed to update application"
   },
   "Guild": {
     "createTitle": "Create New Guild",
@@ -144,7 +157,10 @@
     "markAllRead": "Mark all as read",
     "joinRequest": "New join request in «{guildName}»",
     "joinRequestApproved": "Your request to join «{guildName}» was approved",
-    "joinRequestDeclined": "Your request to join «{guildName}» was declined"
+    "joinRequestDeclined": "Your request to join «{guildName}» was declined",
+    "eventJoinRequest": "New application for «{eventTitle}»",
+    "eventJoinRequestApproved": "Your application for «{eventTitle}» was approved",
+    "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",

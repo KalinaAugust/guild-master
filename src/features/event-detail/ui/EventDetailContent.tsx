@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell } from 'lucide-react';
+import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, CheckCircle } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
@@ -17,8 +17,15 @@ import {
 } from '@/entities/event';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
-import { useUpdateParticipantStatusMutation } from '../api/detailApi';
+import {
+  useUpdateParticipantStatusMutation,
+  useAddSelfAsParticipantMutation,
+  useSubmitEventJoinRequestMutation,
+  useGetEventJoinRequestsQuery,
+  useResolveEventJoinRequestMutation,
+} from '../api/detailApi';
 import { ParticipantItem } from './ParticipantItem';
+import { EventJoinRequestItem } from './EventJoinRequestItem';
 import styles from './EventDetailContent.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -55,7 +62,24 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
 
+  const viewerIsGuildMember = participantsData?.viewerIsGuildMember ?? false;
+  const viewerHasPendingRequest = participantsData?.viewerHasPendingRequest ?? false;
+  const isParticipant =
+    !!currentUserId && participants.some((p) => p.user_id === currentUserId);
+  const canApply =
+    !!currentUserId && viewerIsGuildMember && !isCreator && !isParticipant && !viewerHasPendingRequest;
+  const canAddSelf = isCreator && !isParticipant;
+
+  const { data: joinRequests = [] } = useGetEventJoinRequestsQuery(eventId, {
+    skip: !isCreator,
+  });
+  const [addSelf, { isLoading: isAddingSelf }] = useAddSelfAsParticipantMutation();
+  const [submitJoinRequest, { isLoading: isApplying }] = useSubmitEventJoinRequestMutation();
+  const [resolveJoinRequest] = useResolveEventJoinRequestMutation();
+  const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
+
   const [updateStatus] = useUpdateParticipantStatusMutation();
+  const [statusAction, setStatusAction] = useState<'confirmed' | 'declined' | null>(null);
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -71,19 +95,55 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const handleConfirm = async () => {
     if (!event) return;
+    setStatusAction('confirmed');
     try {
       await updateStatus({ eventId: event.id, status: 'confirmed' }).unwrap();
     } catch {
       toast.error(eventT('error'));
+    } finally {
+      setStatusAction(null);
     }
   };
 
   const handleDecline = async () => {
     if (!event) return;
+    setStatusAction('declined');
     try {
       await updateStatus({ eventId: event.id, status: 'declined' }).unwrap();
     } catch {
       toast.error(eventT('error'));
+    } finally {
+      setStatusAction(null);
+    }
+  };
+
+  const handleApply = async () => {
+    try {
+      await submitJoinRequest(eventId).unwrap();
+      toast.success(t('applySuccess'));
+    } catch {
+      toast.error(t('applyError'));
+    }
+  };
+
+  const handleAddSelf = async () => {
+    try {
+      await addSelf(eventId).unwrap();
+      toast.success(t('addSelfSuccess'));
+    } catch {
+      toast.error(t('addSelfError'));
+    }
+  };
+
+  const handleResolve = async (requestId: string, action: 'approve' | 'decline') => {
+    setResolvingState({ id: requestId, action });
+    try {
+      await resolveJoinRequest({ eventId, requestId, action }).unwrap();
+      toast.success(t('resolveSuccess'));
+    } catch {
+      toast.error(t('resolveError'));
+    } finally {
+      setResolvingState(null);
     }
   };
 
@@ -150,6 +210,60 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         </div>
 
         <div className={styles.column}>
+          {isCreator && (
+            <div className={styles.requestsGroup}>
+              <span className={styles.label}>{t('requests')}</span>
+              {joinRequests.length === 0 ? (
+                <p className={styles.empty}>{t('noRequests')}</p>
+              ) : (
+                joinRequests.map((req) => (
+                  <EventJoinRequestItem
+                    key={req.id}
+                    request={req}
+                    onAccept={() => handleResolve(req.id, 'approve')}
+                    onDecline={() => handleResolve(req.id, 'decline')}
+                    isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                    isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                    disabled={resolvingState?.id === req.id}
+                  />
+                ))
+              )}
+            </div>
+          )}
+
+          {canApply && (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className={styles.actionButton}
+              onClick={handleApply}
+              isLoading={isApplying}
+            >
+              {t('applyToParticipate')}
+            </Button>
+          )}
+
+          {canAddSelf && (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className={styles.actionButton}
+              onClick={handleAddSelf}
+              isLoading={isAddingSelf}
+            >
+              {t('addSelf')}
+            </Button>
+          )}
+
+          {viewerHasPendingRequest && !isCreator && (
+            <div className={styles.requestSentBadge}>
+              <CheckCircle size={20} />
+              <span className={styles.requestSentLabel}>{t('requestSent')}</span>
+            </div>
+          )}
+
           <span className={styles.label}>
             {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
           </span>
@@ -169,6 +283,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                   isCurrentUser={p.user_id === currentUserId}
                   onConfirm={handleConfirm}
                   onDecline={handleDecline}
+                  isConfirming={statusAction === 'confirmed'}
+                  isDeclining={statusAction === 'declined'}
                 />
               ))}
             </div>
