@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell } from 'lucide-react';
+import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, CheckCircle } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
@@ -19,6 +19,7 @@ import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import {
   useUpdateParticipantStatusMutation,
+  useAddSelfAsParticipantMutation,
   useSubmitEventJoinRequestMutation,
   useGetEventJoinRequestsQuery,
   useResolveEventJoinRequestMutation,
@@ -67,10 +68,12 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
     !!currentUserId && participants.some((p) => p.user_id === currentUserId);
   const canApply =
     !!currentUserId && viewerIsGuildMember && !isCreator && !isParticipant && !viewerHasPendingRequest;
+  const canAddSelf = isCreator && !isParticipant;
 
   const { data: joinRequests = [] } = useGetEventJoinRequestsQuery(eventId, {
     skip: !isCreator,
   });
+  const [addSelf, { isLoading: isAddingSelf }] = useAddSelfAsParticipantMutation();
   const [submitJoinRequest, { isLoading: isApplying }] = useSubmitEventJoinRequestMutation();
   const [resolveJoinRequest] = useResolveEventJoinRequestMutation();
   const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
@@ -113,6 +116,15 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
       toast.success(t('applySuccess'));
     } catch {
       toast.error(t('applyError'));
+    }
+  };
+
+  const handleAddSelf = async () => {
+    try {
+      await addSelf(eventId).unwrap();
+      toast.success(t('addSelfSuccess'));
+    } catch {
+      toast.error(t('addSelfError'));
     }
   };
 
@@ -216,6 +228,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             <Button
               type="button"
               variant="primary"
+              size="sm"
+              className={styles.actionButton}
               onClick={handleApply}
               isLoading={isApplying}
             >
@@ -223,8 +237,24 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             </Button>
           )}
 
+          {canAddSelf && (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className={styles.actionButton}
+              onClick={handleAddSelf}
+              isLoading={isAddingSelf}
+            >
+              {t('addSelf')}
+            </Button>
+          )}
+
           {viewerHasPendingRequest && !isCreator && (
-            <div className={styles.requestSentBadge}>{t('requestSent')}</div>
+            <div className={styles.requestSentBadge}>
+              <CheckCircle size={20} />
+              <span className={styles.requestSentLabel}>{t('requestSent')}</span>
+            </div>
           )}
 
           <span className={styles.label}>

@@ -35,6 +35,7 @@ vi.mock('@/entities/event', () => ({
 }));
 vi.mock('../api/detailApi', () => ({
   useUpdateParticipantStatusMutation: vi.fn().mockReturnValue([vi.fn()]),
+  useAddSelfAsParticipantMutation: vi.fn().mockReturnValue([vi.fn(), {}]),
   useGetEventJoinRequestsQuery: vi.fn().mockReturnValue({ data: [] }),
   useSubmitEventJoinRequestMutation: vi.fn().mockReturnValue([vi.fn(), {}]),
   useResolveEventJoinRequestMutation: vi.fn().mockReturnValue([vi.fn(), {}]),

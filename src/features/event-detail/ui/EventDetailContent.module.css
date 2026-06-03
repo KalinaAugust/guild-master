@@ -206,12 +206,25 @@
 }
 
 .requestSentBadge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border-left: 4px solid #34d399;
+  background: rgba(52, 211, 153, 0.08);
+  color: #34d399;
+}
+
+.requestSentLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.actionButton {
   align-self: flex-start;
-  padding: 0.4rem 0.85rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--color-text-secondary, #b8c0e0);
+  margin-bottom: 24px;
 }
 
 @media (max-width: 768px) {
