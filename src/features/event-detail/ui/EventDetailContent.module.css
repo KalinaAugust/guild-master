@@ -198,6 +198,22 @@
   50%       { opacity: 0.8; }
 }
 
+.requestsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.requestSentBadge {
+  align-self: flex-start;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-secondary, #b8c0e0);
+}
+
 @media (max-width: 768px) {
   .body {
     grid-template-columns: 1fr;

@@ -17,8 +17,14 @@ import {
 } from '@/entities/event';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
-import { useUpdateParticipantStatusMutation } from '../api/detailApi';
+import {
+  useUpdateParticipantStatusMutation,
+  useSubmitEventJoinRequestMutation,
+  useGetEventJoinRequestsQuery,
+  useResolveEventJoinRequestMutation,
+} from '../api/detailApi';
 import { ParticipantItem } from './ParticipantItem';
+import { EventJoinRequestItem } from './EventJoinRequestItem';
 import styles from './EventDetailContent.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -55,6 +61,20 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
 
+  const viewerIsGuildMember = participantsData?.viewerIsGuildMember ?? false;
+  const viewerHasPendingRequest = participantsData?.viewerHasPendingRequest ?? false;
+  const isParticipant =
+    !!currentUserId && participants.some((p) => p.user_id === currentUserId);
+  const canApply =
+    !!currentUserId && viewerIsGuildMember && !isCreator && !isParticipant && !viewerHasPendingRequest;
+
+  const { data: joinRequests = [] } = useGetEventJoinRequestsQuery(eventId, {
+    skip: !isCreator,
+  });
+  const [submitJoinRequest, { isLoading: isApplying }] = useSubmitEventJoinRequestMutation();
+  const [resolveJoinRequest] = useResolveEventJoinRequestMutation();
+  const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
+
   const [updateStatus] = useUpdateParticipantStatusMutation();
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -84,6 +104,27 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
       await updateStatus({ eventId: event.id, status: 'declined' }).unwrap();
     } catch {
       toast.error(eventT('error'));
+    }
+  };
+
+  const handleApply = async () => {
+    try {
+      await submitJoinRequest(eventId).unwrap();
+      toast.success(t('applySuccess'));
+    } catch {
+      toast.error(t('applyError'));
+    }
+  };
+
+  const handleResolve = async (requestId: string, action: 'approve' | 'decline') => {
+    setResolvingState({ id: requestId, action });
+    try {
+      await resolveJoinRequest({ eventId, requestId, action }).unwrap();
+      toast.success(t('resolveSuccess'));
+    } catch {
+      toast.error(t('resolveError'));
+    } finally {
+      setResolvingState(null);
     }
   };
 
@@ -150,6 +191,42 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         </div>
 
         <div className={styles.column}>
+          {isCreator && (
+            <div className={styles.requestsGroup}>
+              <span className={styles.label}>{t('requests')}</span>
+              {joinRequests.length === 0 ? (
+                <p className={styles.empty}>{t('noRequests')}</p>
+              ) : (
+                joinRequests.map((req) => (
+                  <EventJoinRequestItem
+                    key={req.id}
+                    request={req}
+                    onAccept={() => handleResolve(req.id, 'approve')}
+                    onDecline={() => handleResolve(req.id, 'decline')}
+                    isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                    isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                    disabled={resolvingState?.id === req.id}
+                  />
+                ))
+              )}
+            </div>
+          )}
+
+          {canApply && (
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleApply}
+              isLoading={isApplying}
+            >
+              {t('applyToParticipate')}
+            </Button>
+          )}
+
+          {viewerHasPendingRequest && !isCreator && (
+            <div className={styles.requestSentBadge}>{t('requestSent')}</div>
+          )}
+
           <span className={styles.label}>
             {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
           </span>
