@@ -39,4 +39,16 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
     Icon: XCircle,
     getLabel: (t, n) => t('joinRequestDeclined', { guildName: n.guild_name ?? '' }),
   },
+  event_join_request: {
+    Icon: UserPlus,
+    getLabel: (t, n) => t('eventJoinRequest', { eventTitle: n.event_title ?? '' }),
+  },
+  event_join_request_approved: {
+    Icon: CheckCircle,
+    getLabel: (t, n) => t('eventJoinRequestApproved', { eventTitle: n.event_title ?? '' }),
+  },
+  event_join_request_declined: {
+    Icon: XCircle,
+    getLabel: (t, n) => t('eventJoinRequestDeclined', { eventTitle: n.event_title ?? '' }),
+  },
 };

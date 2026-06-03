@@ -98,7 +98,17 @@
       "declined": "Не придёт"
     },
     "confirmBtn": "Приду",
-    "declineBtn": "Не приду"
+    "declineBtn": "Не приду",
+    "applyToParticipate": "Подать заявку на участие",
+    "applySuccess": "Заявка отправлена",
+    "applyError": "Не удалось отправить заявку",
+    "requestSent": "Заявка отправлена",
+    "requests": "Заявки",
+    "noRequests": "Нет заявок",
+    "acceptRequest": "Принять",
+    "declineRequest": "Отклонить",
+    "resolveSuccess": "Заявка обновлена",
+    "resolveError": "Не удалось обновить заявку"
   },
   "Guild": {
     "createTitle": "Создание новой гильдии",
@@ -144,7 +154,10 @@
     "markAllRead": "Отметить все прочитанными",
     "joinRequest": "Новая заявка на вступление в «{guildName}»",
     "joinRequestApproved": "Ваша заявка в «{guildName}» принята",
-    "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена"
+    "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена",
+    "eventJoinRequest": "Новая заявка на «{eventTitle}»",
+    "eventJoinRequestApproved": "Ваша заявка на «{eventTitle}» одобрена",
+    "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",
