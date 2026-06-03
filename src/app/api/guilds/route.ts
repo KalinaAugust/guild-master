@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/api/supabase/server';
 
+const MAX_GUILDS_PER_USER = 10;
+
 export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -46,6 +48,22 @@ export async function POST(request: NextRequest) {
 
   const { name, description } = await request.json();
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 });
+
+  const { count, error: countError } = await supabase
+    .from('guilds')
+    .select('id', { count: 'exact', head: true })
+    .eq('owner_id', user.id);
+
+  if (countError) {
+    return NextResponse.json({ error: 'Failed to verify guild limit' }, { status: 500 });
+  }
+
+  if ((count ?? 0) >= MAX_GUILDS_PER_USER) {
+    return NextResponse.json(
+      { error: `Guild limit reached. You can create up to ${MAX_GUILDS_PER_USER} guilds.` },
+      { status: 403 }
+    );
+  }
 
   await supabase.from('profiles').upsert({
     id: user.id,

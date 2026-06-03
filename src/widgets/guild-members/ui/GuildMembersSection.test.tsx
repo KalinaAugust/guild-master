@@ -10,6 +10,10 @@ vi.mock('@/entities/guild', () => ({
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
 import {
   useGetGuildMembersQuery,
   useAddGuildMemberMutation,
@@ -26,6 +30,8 @@ describe('GuildMembersSection', () => {
   const removeMemberMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
 
   beforeEach(() => {
+    addMemberMock.mockClear();
+    removeMemberMock.mockClear();
     vi.mocked(useGetGuildMembersQuery).mockReturnValue(
       { data: mockMembers, isLoading: false } as never
     );
@@ -45,7 +51,7 @@ describe('GuildMembersSection', () => {
 
   it('Add button is disabled when email input is empty', () => {
     render(<GuildMembersSection guildId="g1" />);
-    expect(screen.getByRole('button', { name: 'Add' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'add' })).toBeDisabled();
   });
 
   it('Add button is enabled after typing email', () => {
@@ -53,7 +59,7 @@ describe('GuildMembersSection', () => {
     fireEvent.change(screen.getByPlaceholderText('user@example.com'), {
       target: { value: 'test@test.com' },
     });
-    expect(screen.getByRole('button', { name: 'Add' })).not.toBeDisabled();
+    expect(screen.getByRole('button', { name: 'add' })).not.toBeDisabled();
   });
 
   it('calls addGuildMember with guildId and email on submit', () => {
@@ -61,19 +67,38 @@ describe('GuildMembersSection', () => {
     fireEvent.change(screen.getByPlaceholderText('user@example.com'), {
       target: { value: 'new@example.com' },
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+    fireEvent.click(screen.getByRole('button', { name: 'add' }));
     expect(addMemberMock).toHaveBeenCalledWith({ guildId: 'g1', email: 'new@example.com' });
+  });
+
+  it('rejects invalid email and shows validation toast', async () => {
+    const { toast } = await import('sonner');
+    render(<GuildMembersSection guildId="g1" />);
+    fireEvent.change(screen.getByPlaceholderText('user@example.com'), {
+      target: { value: 'not-an-email' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'add' }));
+    expect(addMemberMock).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith('invalidEmail');
   });
 
   it('does not show remove button for OWNER', () => {
     render(<GuildMembersSection guildId="g1" />);
-    const removeButtons = screen.getAllByRole('button', { name: 'Remove member' });
+    const removeButtons = screen.getAllByRole('button', { name: 'removeMember' });
     expect(removeButtons).toHaveLength(1);
   });
 
-  it('calls removeGuildMember with correct ids when remove clicked', () => {
+  it('asks for confirmation before removing and does not remove on open', () => {
     render(<GuildMembersSection guildId="g1" />);
-    fireEvent.click(screen.getByRole('button', { name: 'Remove member' }));
+    fireEvent.click(screen.getByRole('button', { name: 'removeMember' }));
+    expect(removeMemberMock).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: 'remove' })).toBeInTheDocument();
+  });
+
+  it('calls removeGuildMember with correct ids after confirming', () => {
+    render(<GuildMembersSection guildId="g1" />);
+    fireEvent.click(screen.getByRole('button', { name: 'removeMember' }));
+    fireEvent.click(screen.getByRole('button', { name: 'remove' }));
     expect(removeMemberMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2' });
   });
 
@@ -86,10 +111,10 @@ describe('GuildMembersSection', () => {
 
     render(<GuildMembersSection guildId="g1" />);
     fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+    fireEvent.click(screen.getByRole('button', { name: 'add' }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('User with this email not found');
+      expect(toast.error).toHaveBeenCalledWith('userNotFound');
     });
   });
 
@@ -102,10 +127,10 @@ describe('GuildMembersSection', () => {
 
     render(<GuildMembersSection guildId="g1" />);
     fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+    fireEvent.click(screen.getByRole('button', { name: 'add' }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('User is already a member');
+      expect(toast.error).toHaveBeenCalledWith('alreadyMember');
     });
   });
 
@@ -118,10 +143,10 @@ describe('GuildMembersSection', () => {
 
     render(<GuildMembersSection guildId="g1" />);
     fireEvent.change(screen.getByPlaceholderText('user@example.com'), { target: { value: 'x@x.com' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Add' }));
+    fireEvent.click(screen.getByRole('button', { name: 'add' }));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to add member');
+      expect(toast.error).toHaveBeenCalledWith('addError');
     });
   });
 });

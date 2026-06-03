@@ -77,7 +77,10 @@
       "invitedLabel": "Invited users",
       "invitedPlaceholder": "Add members…",
       "memberSearch": "Search members…",
-      "noMembers": "No guild members found"
+      "noMembers": "No guild members found",
+      "filterPlaceholder": "Search members...",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all"
     }
   },
   "EventDetail": {
@@ -105,6 +108,7 @@
     "submit": "Create Guild",
     "creating": "Creating...",
     "errorCreate": "Error creating guild",
+    "errorLimit": "Limit reached: you can create up to 10 guilds",
     "manageTitle": "Manage Guilds",
     "ownerSection": "You are the owner",
     "memberSection": "You are a member",
@@ -149,7 +153,6 @@
     "applyToJoin": "Apply to Join",
     "requestSent": "Request Sent",
     "youAreMember": "You are a member",
-    "youAreOwner": "You are the owner",
     "signInToApply": "Sign in to apply for membership",
     "pendingRequests": "Pending Requests",
     "noPendingRequests": "No pending requests",
@@ -159,6 +162,19 @@
     "joinRequestError": "Failed to send join request",
     "resolveSuccess": "Request resolved",
     "resolveError": "Failed to resolve request"
+  },
+  "GuildMembers": {
+    "add": "Add",
+    "loading": "Loading…",
+    "empty": "No members yet.",
+    "removeMember": "Remove member",
+    "remove": "Remove",
+    "removeConfirm": "Remove {name} from the guild?",
+    "invalidEmail": "Please enter a valid email address",
+    "userNotFound": "User with this email not found",
+    "alreadyMember": "User is already a member",
+    "addError": "Failed to add member",
+    "removeError": "Failed to remove member"
   },
   "UpcomingEvents": {
     "nextEvent": "Next Event",

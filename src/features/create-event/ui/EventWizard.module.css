@@ -239,14 +239,40 @@
 
 .memberName {
   flex: 1;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-primary);
 }
 
+.memberFilter {
+  margin-bottom: 8px;
+}
+
 .memberCheck {
-  font-size: 12px;
-  color: #43aa8b;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.invitedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.selectAllButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #38bdf8;
+  transition: color 0.15s ease;
+}
+
+.selectAllButton:hover {
+  color: #7dd3fc;
 }
 
 .noMembers {

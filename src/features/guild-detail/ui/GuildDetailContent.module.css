@@ -125,12 +125,6 @@
   margin-bottom: 24px;
 }
 
-.statusOwner {
-  background: rgba(255, 179, 71, 0.12);
-  color: #ffb347;
-  border: 1px solid rgba(255, 179, 71, 0.3);
-}
-
 .statusMember {
   background: rgba(77, 255, 136, 0.1);
   color: #4dff88;

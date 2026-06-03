@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { ChevronLeft, Users, Shield } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useGetGuildByIdQuery,
@@ -15,6 +15,7 @@ import {
 } from '@/entities/guild';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
+import { GuildMembersSection } from '@/widgets/guild-members';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
 
@@ -118,23 +119,11 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
             <span className={styles.value}>{guild.ownerName ?? '—'}</span>
           </div>
 
-          <div className={styles.infoGroup}>
-            <span className={styles.label}>{t('members')}</span>
-            <div className={styles.memberCount}>
-              <Users size={16} />
-              <span>{guild.memberCount}</span>
-            </div>
-          </div>
         </div>
 
         <div className={styles.column}>
           {membershipStatus === 'owner' && (
             <>
-              <div className={`${styles.statusBadge} ${styles.statusOwner}`}>
-                <Shield size={14} />
-                {t('youAreOwner')}
-              </div>
-
               <div className={styles.infoGroup}>
                 <span className={styles.label}>{t('pendingRequests')}</span>
                 {joinRequests.length === 0 ? (
@@ -152,6 +141,11 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
                     />
                   ))
                 )}
+              </div>
+
+              <div className={styles.infoGroup}>
+                <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
+                <GuildMembersSection guildId={guildId} readOnly />
               </div>
             </>
           )}

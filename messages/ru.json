@@ -77,7 +77,10 @@
       "invitedLabel": "Приглашённые участники",
       "invitedPlaceholder": "Добавить участников…",
       "memberSearch": "Поиск участников…",
-      "noMembers": "Участников гильдии не найдено"
+      "noMembers": "Участников гильдии не найдено",
+      "filterPlaceholder": "Поиск участников...",
+      "selectAll": "Выбрать всех",
+      "deselectAll": "Снять выбор"
     }
   },
   "EventDetail": {
@@ -105,6 +108,7 @@
     "submit": "Создать гильдию",
     "creating": "Создание...",
     "errorCreate": "Ошибка при создании гильдии",
+    "errorLimit": "Достигнут лимит: можно создать не более 10 гильдий",
     "manageTitle": "Управление гильдиями",
     "ownerSection": "Вы владелец",
     "memberSection": "Вы участник",
@@ -149,7 +153,6 @@
     "applyToJoin": "Подать заявку",
     "requestSent": "Заявка отправлена",
     "youAreMember": "Вы участник",
-    "youAreOwner": "Вы владелец",
     "signInToApply": "Войдите, чтобы подать заявку",
     "pendingRequests": "Заявки на вступление",
     "noPendingRequests": "Нет заявок",
@@ -159,6 +162,19 @@
     "joinRequestError": "Не удалось отправить заявку",
     "resolveSuccess": "Заявка обработана",
     "resolveError": "Не удалось обработать заявку"
+  },
+  "GuildMembers": {
+    "add": "Добавить",
+    "loading": "Загрузка…",
+    "empty": "Пока нет участников.",
+    "removeMember": "Удалить участника",
+    "remove": "Удалить",
+    "removeConfirm": "Удалить {name} из гильдии?",
+    "invalidEmail": "Введите корректный email",
+    "userNotFound": "Пользователь с таким email не найден",
+    "alreadyMember": "Пользователь уже состоит в гильдии",
+    "addError": "Не удалось добавить участника",
+    "removeError": "Не удалось удалить участника"
   },
   "UpcomingEvents": {
     "nextEvent": "Следующее событие",

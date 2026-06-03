@@ -21,7 +21,7 @@ export default async function Home() {
     <main className={styles.main}>
       <UpcomingEventsStrip guilds={guilds} userId={user?.id} />
       <CalendarGrid guilds={guilds} userId={user?.id} />
-      <EventWizard />
+      <EventWizard userId={user?.id} />
     </main>
   );
 }

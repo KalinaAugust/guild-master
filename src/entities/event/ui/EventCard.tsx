@@ -56,8 +56,10 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
           </div>
         </div>
 
-        {event.description && (
+        {event.description ? (
           <p className={styles.description}>{event.description}</p>
+        ) : (
+          <div className={styles.descriptionPlaceholder} aria-hidden="true" />
         )}
       </div>
 

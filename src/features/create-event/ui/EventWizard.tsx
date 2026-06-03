@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
@@ -15,6 +15,7 @@ import {
 } from '@/entities/event';
 import { useGetGuildMembersQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import dayjs from '@/shared/lib/dayjs';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
@@ -32,9 +33,10 @@ const COLOR_DOTS = [
 
 const FORM_ID = 'event-wizard-form';
 
-export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = ({
+export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; userId?: string }> = ({
   guildId: propGuildId,
   isDayView,
+  userId,
 }) => {
   const dispatch = useAppDispatch();
   const isOpen = useAppSelector((state) => state.ui.isEventModalOpen);
@@ -49,6 +51,9 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
   const dayLabels = useWeekdayLabels();
 
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+  const [filterQuery, setFilterQuery] = useState('');
+  const [deferredQuery, setDeferredQuery] = useState('');
+  const [, startTransition] = useTransition();
 
   const { data: guildMembers = [] } = useGetGuildMembersQuery(activeGuildId ?? '', {
     skip: !isOpen || !activeGuildId,
@@ -82,11 +87,41 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
     }
   }, [participantsData, editingEvent]);
 
-  const handleClose = () => dispatch(closeEventModal());
+  const sortedMembers = useMemo(() => {
+    if (!userId) return guildMembers;
+    return [...guildMembers].sort((a, b) => {
+      if (a.userId === userId) return -1;
+      if (b.userId === userId) return 1;
+      return 0;
+    });
+  }, [guildMembers, userId]);
+
+  const filteredMembers = useMemo(() => {
+    const q = deferredQuery.trim().toLowerCase();
+    return q ? sortedMembers.filter((m) => (m.profile.fullName ?? '').toLowerCase().includes(q)) : sortedMembers;
+  }, [deferredQuery, sortedMembers]);
+
+  const handleClose = () => {
+    setFilterQuery('');
+    setDeferredQuery('');
+    dispatch(closeEventModal());
+  };
 
   const toggleParticipant = (userId: string) => {
     setSelectedParticipants((prev) =>
       prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
+    );
+  };
+
+  const visibleIds = useMemo(() => filteredMembers.map((m) => m.userId), [filteredMembers]);
+  const allVisibleSelected =
+    visibleIds.length > 0 && visibleIds.every((id) => selectedParticipants.includes(id));
+
+  const toggleSelectAll = () => {
+    setSelectedParticipants((prev) =>
+      allVisibleSelected
+        ? prev.filter((id) => !visibleIds.includes(id))
+        : [...new Set([...prev, ...visibleIds])]
     );
   };
 
@@ -172,12 +207,30 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
               </div>
 
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
+                <div className={styles.invitedHeader}>
+                  <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
+                  {filteredMembers.length > 0 && (
+                    <button type="button" className={styles.selectAllButton} onClick={toggleSelectAll}>
+                      {allVisibleSelected ? t('wizard.deselectAll') : t('wizard.selectAll')}
+                    </button>
+                  )}
+                </div>
                 {guildMembers.length === 0 ? (
                   <p className={styles.noMembers}>{t('wizard.noMembers')}</p>
                 ) : (
-                  <div className={styles.memberList}>
-                    {guildMembers.map((member) => {
+                  <>
+                    <Input
+                      className={styles.memberFilter}
+                      type="text"
+                      value={filterQuery}
+                      onChange={(e) => {
+                        setFilterQuery(e.target.value);
+                        startTransition(() => setDeferredQuery(e.target.value));
+                      }}
+                      placeholder={t('wizard.filterPlaceholder')}
+                    />
+                    <div className={styles.memberList}>
+                    {filteredMembers.map((member) => {
                       const selected = selectedParticipants.includes(member.userId);
                       return (
                         <div
@@ -191,11 +244,19 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean }> = 
                             size="sm"
                           />
                           <span className={styles.memberName}>{member.profile.fullName || member.userId}</span>
-                          {selected && <span className={styles.memberCheck}>✓</span>}
+                          {selected && (
+                            <span className={styles.memberCheck}>
+                              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="11" cy="11" r="10" fill="#38bdf8" fillOpacity="0.2" stroke="#38bdf8" strokeWidth="1.5"/>
+                                <path d="M6.5 11L9.5 14L15.5 8" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </span>
+                          )}
                         </div>
                       );
                     })}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

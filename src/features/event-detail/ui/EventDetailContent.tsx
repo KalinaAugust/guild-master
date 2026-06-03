@@ -47,8 +47,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const { data: participantsData, isLoading: isParticipantsLoading } =
     useGetParticipantsQuery(eventId, { skip: !event });
-  const participants = participantsData?.participants ?? [];
   const currentUserId = participantsData?.currentUserId ?? '';
+  const participants = [...(participantsData?.participants ?? [])].sort(
+    (a, b) =>
+      Number(b.user_id === currentUserId) - Number(a.user_id === currentUserId),
+  );
 
   const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
 
@@ -157,16 +160,19 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             <p className={styles.empty}>{t('noParticipants')}</p>
           )}
 
-          {!isParticipantsLoading &&
-            participants.map((p) => (
-              <ParticipantItem
-                key={p.id}
-                participant={p}
-                isCurrentUser={p.user_id === currentUserId}
-                onConfirm={handleConfirm}
-                onDecline={handleDecline}
-              />
-            ))}
+          {!isParticipantsLoading && participants.length > 0 && (
+            <div className={styles.participantList}>
+              {participants.map((p) => (
+                <ParticipantItem
+                  key={p.id}
+                  participant={p}
+                  isCurrentUser={p.user_id === currentUserId}
+                  onConfirm={handleConfirm}
+                  onDecline={handleDecline}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
