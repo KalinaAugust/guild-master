@@ -11,8 +11,7 @@ export interface EventJoinRequestRow {
 export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRequestRow[]> => {
   const supabase = await createClient();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (supabase as any)
+  const { data, error } = await supabase
     .from('event_join_requests')
     .select('id, user_id, created_at, profiles(full_name, avatar_url)')
     .eq('event_id', eventId)
@@ -21,14 +20,7 @@ export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRe
 
   if (error) throw error;
 
-  type Row = {
-    id: string;
-    user_id: string;
-    created_at: string;
-    profiles: { full_name: string | null; avatar_url: string | null } | null;
-  };
-
-  return ((data as Row[]) || []).map((r) => ({
+  return (data ?? []).map((r) => ({
     id: r.id,
     userId: r.user_id,
     userName: r.profiles?.full_name ?? null,

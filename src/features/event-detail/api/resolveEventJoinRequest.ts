@@ -15,17 +15,14 @@ export const resolveEventJoinRequest = async (
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-
-  const { data: event } = await db
+  const { data: event } = await supabase
     .from('events')
     .select('created_by')
     .eq('id', eventId)
     .single();
   if (!event || event.created_by !== user.id) throw new ResolveForbiddenError('Forbidden');
 
-  const { data: request } = await db
+  const { data: request } = await supabase
     .from('event_join_requests')
     .select('user_id')
     .eq('id', requestId)
@@ -35,7 +32,7 @@ export const resolveEventJoinRequest = async (
   if (!request) throw new ResolveNotFoundError('Request not found');
 
   if (action === 'approve') {
-    const { error: insertError } = await db
+    const { error: insertError } = await supabase
       .from('event_participants')
       .insert({ event_id: eventId, user_id: request.user_id, status: 'confirmed' });
     // Duplicate key (already a participant) is treated as success.
@@ -44,7 +41,7 @@ export const resolveEventJoinRequest = async (
     }
   }
 
-  const { error: updateError } = await db
+  const { error: updateError } = await supabase
     .from('event_join_requests')
     .update({ status: action === 'approve' ? 'approved' : 'declined' })
     .eq('id', requestId);

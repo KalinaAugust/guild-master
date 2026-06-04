@@ -9,10 +9,7 @@ export const submitEventJoinRequest = async (eventId: string): Promise<{ id: str
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-
-  const { data: existingParticipant } = await db
+  const { data: existingParticipant } = await supabase
     .from('event_participants')
     .select('id')
     .eq('event_id', eventId)
@@ -20,7 +17,7 @@ export const submitEventJoinRequest = async (eventId: string): Promise<{ id: str
     .maybeSingle();
   if (existingParticipant) throw new JoinRequestConflictError('Already a participant');
 
-  const { data: existingRequest } = await db
+  const { data: existingRequest } = await supabase
     .from('event_join_requests')
     .select('id')
     .eq('event_id', eventId)
@@ -29,14 +26,14 @@ export const submitEventJoinRequest = async (eventId: string): Promise<{ id: str
     .maybeSingle();
   if (existingRequest) throw new JoinRequestConflictError('Request already pending');
 
-  const { data: request, error } = await db
+  const { data: request, error } = await supabase
     .from('event_join_requests')
     .insert({ event_id: eventId, user_id: user.id, status: 'pending' })
     .select('id')
     .single();
   if (error || !request) throw new Error('Failed to create request');
 
-  const { data: event } = await db
+  const { data: event } = await supabase
     .from('events')
     .select('created_by')
     .eq('id', eventId)
@@ -52,5 +49,5 @@ export const submitEventJoinRequest = async (eventId: string): Promise<{ id: str
     });
   }
 
-  return { id: request.id as string };
+  return { id: request.id };
 };
