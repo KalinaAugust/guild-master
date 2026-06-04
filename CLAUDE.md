@@ -58,7 +58,7 @@ npm run start
 
 ## Development Conventions
 
-- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering. The detailed FSD rules below are enforced — see the `fsd-reviewer` agent (`.claude/agents/fsd-reviewer.md`) for an automated check.
+- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering. The detailed FSD rules below are enforced — the `fsd-reviewer` agent provides an automated check, and `pnpm lint:fsd` runs steiger.
 
 ### FSD Rules
 
