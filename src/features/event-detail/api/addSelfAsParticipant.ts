@@ -6,8 +6,7 @@ export const addSelfAsParticipant = async (eventId: string): Promise<void> => {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from('event_participants')
     .insert({ event_id: eventId, user_id: user.id, status: 'confirmed' });
 

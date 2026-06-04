@@ -13,31 +13,25 @@ export const getEventParticipants = async (
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error('Not authenticated');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const db = supabase as any;
-
-  const { data, error } = await db
+  const { data, error } = await supabase
     .from('event_participants')
     .select('id, event_id, user_id, status, profiles(full_name, avatar_url)')
     .eq('event_id', eventId);
 
   if (error) throw error;
 
-  const participants: EventParticipant[] = ((data as Record<string, unknown>[]) || []).map((row) => {
-    const profile = row['profiles'] as { full_name: string | null; avatar_url: string | null } | null;
-    return {
-      id: row['id'] as string,
-      event_id: row['event_id'] as string,
-      user_id: row['user_id'] as string,
-      status: row['status'] as ParticipantStatus,
-      profile: {
-        fullName: profile?.full_name ?? null,
-        avatarUrl: profile?.avatar_url ?? null,
-      },
-    };
-  });
+  const participants: EventParticipant[] = (data ?? []).map((row) => ({
+    id: row.id,
+    event_id: row.event_id,
+    user_id: row.user_id,
+    status: row.status as ParticipantStatus,
+    profile: {
+      fullName: row.profiles?.full_name ?? null,
+      avatarUrl: row.profiles?.avatar_url ?? null,
+    },
+  }));
 
-  const { data: eventRow } = await db
+  const { data: eventRow } = await supabase
     .from('events')
     .select('guild_id')
     .eq('id', eventId)
@@ -45,7 +39,7 @@ export const getEventParticipants = async (
 
   let viewerIsGuildMember = false;
   if (eventRow?.guild_id) {
-    const { data: membership } = await db
+    const { data: membership } = await supabase
       .from('guild_members')
       .select('id')
       .eq('guild_id', eventRow.guild_id)
@@ -54,7 +48,7 @@ export const getEventParticipants = async (
     viewerIsGuildMember = !!membership;
   }
 
-  const { data: pendingRequest } = await db
+  const { data: pendingRequest } = await supabase
     .from('event_join_requests')
     .select('id')
     .eq('event_id', eventId)

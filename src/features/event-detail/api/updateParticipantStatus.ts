@@ -9,8 +9,7 @@ export const updateParticipantStatus = async (
 
   if (!user) throw new Error('Not authenticated');
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from('event_participants')
     .update({ status })
     .eq('event_id', eventId)
