@@ -17,7 +17,12 @@ export type NotificationTranslationFn = (key: string, values?: Record<string, st
 
 export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   Icon: LucideIcon;
-  getLabel: (t: NotificationTranslationFn, n: Notification) => string;
+  getLabel?: (t: NotificationTranslationFn, n: Notification) => string;
+  // Guild-membership notifications render the guild name as an inline link.
+  // The label is rendered via `t.rich` in the component, so only the message
+  // key is stored here (the `<guild>` tag wraps `{guildName}`).
+  messageKey?: string;
+  linksToGuild?: boolean;
 }> = {
   new_event: {
     Icon: Calendar,
@@ -29,15 +34,18 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   },
   join_request: {
     Icon: UserPlus,
-    getLabel: (t, n) => t('joinRequest', { guildName: n.guild_name ?? '' }),
+    messageKey: 'joinRequest',
+    linksToGuild: true,
   },
   join_request_approved: {
     Icon: CheckCircle,
-    getLabel: (t, n) => t('joinRequestApproved', { guildName: n.guild_name ?? '' }),
+    messageKey: 'joinRequestApproved',
+    linksToGuild: true,
   },
   join_request_declined: {
     Icon: XCircle,
-    getLabel: (t, n) => t('joinRequestDeclined', { guildName: n.guild_name ?? '' }),
+    messageKey: 'joinRequestDeclined',
+    linksToGuild: true,
   },
   event_join_request: {
     Icon: UserPlus,

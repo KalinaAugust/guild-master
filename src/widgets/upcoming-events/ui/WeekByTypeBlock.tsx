@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sword, Layers, Music, Users, Gamepad2, Activity, CalendarDays } from 'lucide-react';
+import { Sword, Layers, Music, Users, Gamepad2, Activity, CalendarDays, Dices, Puzzle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import type { ActivityEvent, ActivityType } from '@/shared/types';
@@ -15,6 +15,8 @@ const TYPE_ICON: Record<ActivityType, React.ReactNode> = {
   meeting: <Users size={13} />,
   game:    <Gamepad2 size={13} />,
   sport:   <Activity size={13} />,
+  dnd:     <Dices size={13} />,
+  boardgame: <Puzzle size={13} />,
   other:   <CalendarDays size={13} />,
 };
 

@@ -27,7 +27,7 @@ export const editEventTool: ChatCompletionTool = {
         },
         type: {
           type: 'string',
-          enum: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport'],
+          enum: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame'],
           description: 'New event type.',
         },
         description: {

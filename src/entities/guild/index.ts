@@ -9,6 +9,7 @@ export {
   useUpdateGuildMutation,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
+  useLeaveGuildMutation,
   useGetGuildByIdQuery,
   useSubmitJoinRequestMutation,
   useGetJoinRequestsQuery,

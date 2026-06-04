@@ -11,10 +11,12 @@ import {
   useGetJoinRequestsQuery,
   useSubmitJoinRequestMutation,
   useResolveJoinRequestMutation,
+  useLeaveGuildMutation,
   openGuildEditModal,
 } from '@/entities/guild';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { GuildMembersSection } from '@/widgets/guild-members';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
@@ -44,6 +46,8 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
   const [submitJoinRequest, { isLoading: isSubmitting }] = useSubmitJoinRequestMutation();
   const [resolveJoinRequest, { isLoading: isResolving }] = useResolveJoinRequestMutation();
+  const [leaveGuild, { isLoading: isLeaving }] = useLeaveGuildMutation();
+  const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = useState(false);
   const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
 
   const handleApply = async () => {
@@ -69,6 +73,16 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
       toast.error(t('resolveError'));
     } finally {
       setResolvingState(null);
+    }
+  };
+
+  const handleLeave = async () => {
+    try {
+      await leaveGuild(guildId).unwrap();
+      toast.success(t('leaveSuccess'));
+      router.push('/guilds');
+    } catch {
+      toast.error(t('leaveError'));
     }
   };
 
@@ -151,9 +165,16 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
           )}
 
           {membershipStatus === 'member' && (
-            <div className={`${styles.statusBadge} ${styles.statusMember}`}>
-              {t('youAreMember')}
-            </div>
+            <>
+              <div className={`${styles.statusBadge} ${styles.statusMember}`}>
+                {t('youAreMember')}
+              </div>
+
+              <div className={styles.infoGroup}>
+                <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
+                <GuildMembersSection guildId={guildId} readOnly />
+              </div>
+            </>
           )}
 
           {membershipStatus === 'pending' && (
@@ -188,6 +209,29 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
           </Button>
         </div>
       )}
+
+      {membershipStatus === 'member' && (
+        <div className={styles.footer}>
+          <Button
+            type="button"
+            variant="danger"
+            onClick={() => setIsLeaveConfirmOpen(true)}
+          >
+            {t('leaveGuild')}
+          </Button>
+        </div>
+      )}
+
+      <ConfirmModal
+        isOpen={isLeaveConfirmOpen}
+        onClose={() => setIsLeaveConfirmOpen(false)}
+        onConfirm={handleLeave}
+        title={t('leaveConfirmTitle')}
+        description={t('leaveConfirmDescription')}
+        confirmLabel={t('leaveGuild')}
+        variant="danger"
+        isLoading={isLeaving}
+      />
     </div>
   );
 };

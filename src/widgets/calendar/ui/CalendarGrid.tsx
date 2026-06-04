@@ -13,7 +13,7 @@ import { Guild } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
-import { EventsTooltipContent } from './EventsTooltipContent';
+import { EventsTooltipContent, typeIcons } from './EventsTooltipContent';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection } from '../model/useGuildSelection';
@@ -123,7 +123,18 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
               )}
               <div className={styles.eventsList}>
                 {displayedEvents.map(event => (
-                  <Tooltip key={event.id} content={`${event.time} - ${event.title}`} side="top">
+                  <Tooltip
+                    key={event.id}
+                    side="top"
+                    content={
+                      <span className={styles.simpleTooltip}>
+                        <span>{event.time} - {event.title}</span>
+                        <span className={`${styles.tooltipIcon} ${styles[`iconType_${event.type}`]}`} aria-hidden="true">
+                          {typeIcons[event.type]}
+                        </span>
+                      </span>
+                    }
+                  >
                     <div
                       className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
                     >

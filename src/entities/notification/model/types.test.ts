@@ -20,32 +20,32 @@ const t = (key: string, values?: Record<string, string>) => {
 
 describe('NOTIFICATION_TYPE_CONFIG', () => {
   it('new_event: getLabel includes guildName', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel(t, { ...base, guild_name: 'Alpha' });
+    const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel!(t, { ...base, guild_name: 'Alpha' });
     expect(label).toContain('Alpha');
   });
 
   it('invitation: getLabel returns invitation key', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.invitation.getLabel(t, base);
+    const label = NOTIFICATION_TYPE_CONFIG.invitation.getLabel!(t, base);
     expect(label).toBe('invitation');
   });
 
-  it('join_request: getLabel includes guildName', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.join_request.getLabel(t, { ...base, guild_name: 'Beta' });
-    expect(label).toContain('Beta');
+  it('join_request: links to guild via rich message', () => {
+    expect(NOTIFICATION_TYPE_CONFIG.join_request.linksToGuild).toBe(true);
+    expect(NOTIFICATION_TYPE_CONFIG.join_request.messageKey).toBe('joinRequest');
   });
 
-  it('join_request_approved: getLabel includes guildName', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.join_request_approved.getLabel(t, { ...base, guild_name: 'Gamma' });
-    expect(label).toContain('Gamma');
+  it('join_request_approved: links to guild via rich message', () => {
+    expect(NOTIFICATION_TYPE_CONFIG.join_request_approved.linksToGuild).toBe(true);
+    expect(NOTIFICATION_TYPE_CONFIG.join_request_approved.messageKey).toBe('joinRequestApproved');
   });
 
-  it('join_request_declined: getLabel includes guildName', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.join_request_declined.getLabel(t, { ...base, guild_name: 'Delta' });
-    expect(label).toContain('Delta');
+  it('join_request_declined: links to guild via rich message', () => {
+    expect(NOTIFICATION_TYPE_CONFIG.join_request_declined.linksToGuild).toBe(true);
+    expect(NOTIFICATION_TYPE_CONFIG.join_request_declined.messageKey).toBe('joinRequestDeclined');
   });
 
   it('new_event: getLabel uses empty string when guild_name is null', () => {
-    const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel(t, { ...base, guild_name: null });
+    const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel!(t, { ...base, guild_name: null });
     expect(label).toBe(t('newEvent', { guildName: '' }));
   });
 });

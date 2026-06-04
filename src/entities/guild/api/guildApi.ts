@@ -48,6 +48,14 @@ export const guildApi = baseApi.injectEndpoints({
         { type: 'GuildMember' as const, id: `LIST-${guildId}` },
       ],
     }),
+    leaveGuild: builder.mutation<{ success: boolean }, string>({
+      query: (guildId) => ({ url: `guilds/${guildId}/leave`, method: 'POST' }),
+      invalidatesTags: (_, __, guildId) => [
+        { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+        { type: 'Guild' as const, id: guildId },
+        { type: 'Guild' as const, id: 'LIST' },
+      ],
+    }),
     getGuildById: builder.query<GuildDetail, string>({
       query: (id) => `guilds/${id}`,
       providesTags: (_, __, id) => [{ type: 'Guild' as const, id }],
@@ -88,6 +96,7 @@ export const {
   useUpdateGuildMutation,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
+  useLeaveGuildMutation,
   useGetGuildByIdQuery,
   useSubmitJoinRequestMutation,
   useGetJoinRequestsQuery,

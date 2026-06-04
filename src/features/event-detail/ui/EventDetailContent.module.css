@@ -127,6 +127,8 @@
 .typeHero_dungeon { border-left-color: #a855f7; background: rgba(168, 85,  247, 0.08); color: #a855f7; }
 .typeHero_party   { border-left-color: #f472b6; background: rgba(244, 114, 182, 0.08); color: #f472b6; }
 .typeHero_sport   { border-left-color: #34d399; background: rgba(52,  211, 153, 0.08); color: #34d399; }
+.typeHero_dnd     { border-left-color: #f59e0b; background: rgba(245, 158, 11,  0.08); color: #f59e0b; }
+.typeHero_boardgame { border-left-color: #818cf8; background: rgba(129, 140, 248, 0.08); color: #818cf8; }
 
 .dateTime {
   font-size: 1rem;
@@ -225,6 +227,11 @@
 .actionButton {
   align-self: flex-start;
   margin-bottom: 24px;
+}
+
+.addSelfButton {
+  align-self: flex-start;
+  margin-top: 12px;
 }
 
 @media (max-width: 768px) {
