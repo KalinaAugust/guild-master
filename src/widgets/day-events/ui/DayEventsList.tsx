@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
-import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
+import { useGuildPermissions } from '@/entities/guild';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventCard, useDeleteEventMutation, useGetEventsQuery, useGetParticipantsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';

@@ -6,6 +6,7 @@ vi.mock('@/entities/guild', () => ({
   useGetGuildMembersQuery: vi.fn(),
   useAddGuildMemberMutation: vi.fn(),
   useRemoveGuildMemberMutation: vi.fn(),
+  useGuildPermissions: vi.fn(() => ({ canManageMembers: false })),
 }));
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));

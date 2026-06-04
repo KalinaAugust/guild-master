@@ -9,7 +9,7 @@ import styles from './CalendarGrid.module.css';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { useGetEventsQuery } from '@/entities/event';
-import { Guild } from '@/entities/guild';
+import { Guild, useGuildPermissions } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
@@ -17,7 +17,6 @@ import { EventsTooltipContent, typeIcons } from './EventsTooltipContent';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection } from '../model/useGuildSelection';
-import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 
 export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ guilds, userId }) => {
   const dispatch = useAppDispatch();

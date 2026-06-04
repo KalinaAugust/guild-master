@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetGuildMembersQuery } from '@/entities/guild';
+import { useGetGuildMembersQuery } from '../api/guildApi';
 
 export function useGuildPermissions(
   guildId: string | null | undefined,

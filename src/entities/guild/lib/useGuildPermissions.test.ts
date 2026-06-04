@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook } from '@testing-library/react';
 
-vi.mock('@/entities/guild', () => ({
+vi.mock('../api/guildApi', () => ({
   useGetGuildMembersQuery: vi.fn(),
 }));
 
-import { useGetGuildMembersQuery } from '@/entities/guild';
+import { useGetGuildMembersQuery } from '../api/guildApi';
 import { useGuildPermissions } from './useGuildPermissions';
 
 type MockReturnValue = { data: { userId: string; role: string }[] };

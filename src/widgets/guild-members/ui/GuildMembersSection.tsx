@@ -10,8 +10,8 @@ import {
   useGetGuildMembersQuery,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
+  useGuildPermissions,
 } from '@/entities/guild';
-import { useGuildPermissions } from '@/shared/lib/useGuildPermissions';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
