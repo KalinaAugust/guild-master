@@ -26,6 +26,8 @@
       "dungeon": "Подземелье",
       "party": "Вечеринка",
       "sport": "Спорт",
+      "dnd": "D&D",
+      "boardgame": "Настольная игра",
       "other": "Другое"
     },
     "eventTypesPlural": {
@@ -35,6 +37,8 @@
       "dungeon": "Подземелья",
       "party": "Вечеринки",
       "sport": "Спорт",
+      "dnd": "D&D",
+      "boardgame": "Настольные игры",
       "other": "Прочее"
     }
   },
@@ -107,7 +111,6 @@
     "applyError": "Не удалось отправить заявку",
     "requestSent": "Заявка отправлена. Ждём решения администратора.",
     "requests": "Заявки",
-    "noRequests": "Нет заявок",
     "acceptRequest": "Принять",
     "declineRequest": "Отклонить",
     "resolveSuccess": "Заявка обновлена",
@@ -155,9 +158,9 @@
     "invitation": "Вас пригласили на событие",
     "empty": "Нет уведомлений",
     "markAllRead": "Отметить все прочитанными",
-    "joinRequest": "Новая заявка на вступление в «{guildName}»",
-    "joinRequestApproved": "Ваша заявка в «{guildName}» принята",
-    "joinRequestDeclined": "Ваша заявка в «{guildName}» отклонена",
+    "joinRequest": "Новая заявка на вступление в «<guild>{guildName}</guild>»",
+    "joinRequestApproved": "Ваша заявка в «<guild>{guildName}</guild>» принята",
+    "joinRequestDeclined": "Ваша заявка в «<guild>{guildName}</guild>» отклонена",
     "eventJoinRequest": "Новая заявка на «{eventTitle}»",
     "eventJoinRequestApproved": "Ваша заявка на «{eventTitle}» одобрена",
     "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена"
@@ -177,7 +180,12 @@
     "joinRequestSuccess": "Заявка отправлена",
     "joinRequestError": "Не удалось отправить заявку",
     "resolveSuccess": "Заявка обработана",
-    "resolveError": "Не удалось обработать заявку"
+    "resolveError": "Не удалось обработать заявку",
+    "leaveGuild": "Покинуть гильдию",
+    "leaveConfirmTitle": "Покинуть гильдию",
+    "leaveConfirmDescription": "Вы уверены, что хотите покинуть эту гильдию?",
+    "leaveSuccess": "Вы покинули гильдию",
+    "leaveError": "Не удалось покинуть гильдию"
   },
   "GuildMembers": {
     "add": "Добавить",

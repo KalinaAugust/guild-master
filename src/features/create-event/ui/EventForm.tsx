@@ -40,6 +40,8 @@ export const EventForm: React.FC<EventFormProps> = ({
     { label: commonT('eventTypes.dungeon'), value: 'dungeon' as ActivityType },
     { label: commonT('eventTypes.party'), value: 'party' as ActivityType },
     { label: commonT('eventTypes.sport'), value: 'sport' as ActivityType },
+    { label: commonT('eventTypes.dnd'), value: 'dnd' as ActivityType },
+    { label: commonT('eventTypes.boardgame'), value: 'boardgame' as ActivityType },
     { label: commonT('eventTypes.other'), value: 'other' as ActivityType },
   ], [commonT]);
 

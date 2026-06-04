@@ -115,6 +115,8 @@
 .chip_meeting { background: rgba(90, 144, 184, 0.15);  color: var(--event-meeting-border); }
 .chip_game    { background: rgba(74, 144, 104, 0.15);  color: var(--event-game-border); }
 .chip_sport   { background: rgba(52, 211, 153, 0.15);  color: var(--event-sport-border); }
+.chip_dnd     { background: rgba(245, 158, 11, 0.15);  color: var(--event-dnd-border); }
+.chip_boardgame { background: rgba(129, 140, 248, 0.15); color: var(--event-boardgame-border); }
 .chip_other   { background: rgba(74, 133, 168, 0.15);  color: var(--event-other-border); }
 
 /* ParticipantsTooltip */

@@ -30,7 +30,13 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
 
   return (
     <div
-      className={`${styles.item} ${isCurrentUser ? styles.currentUser : ''} ${styles[`status_${participant.status}`]}`}
+      className={[
+        styles.item,
+        isCurrentUser && styles.currentUser,
+        styles[`status_${participant.status}`],
+      ]
+        .filter(Boolean)
+        .join(' ')}
     >
       <UserAvatar
         avatarUrl={participant.profile.avatarUrl}

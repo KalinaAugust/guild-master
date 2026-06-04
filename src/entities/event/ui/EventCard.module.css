@@ -73,6 +73,18 @@
   box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
 }
 
+.type_dnd .iconWrapper {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+
+.type_boardgame .iconWrapper {
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.1);
+  box-shadow: 0 0 15px rgba(129, 140, 248, 0.2);
+}
+
 .content {
   flex-grow: 1;
   min-width: 0;

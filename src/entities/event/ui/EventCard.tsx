@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sword, Gamepad2, Users, Calendar, Clock, Trash2, Edit2, Skull, PartyPopper, Dumbbell } from 'lucide-react';
+import { Sword, Gamepad2, Users, Calendar, Clock, Trash2, Edit2, Skull, PartyPopper, Dumbbell, Dices, Puzzle } from 'lucide-react';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import styles from './EventCard.module.css';
@@ -27,6 +27,8 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   dungeon: <Skull size={20} />,
   party: <PartyPopper size={20} />,
   sport: <Dumbbell size={20} />,
+  dnd: <Dices size={20} />,
+  boardgame: <Puzzle size={20} />,
 };
 
 export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onEdit, onDelete }) => {

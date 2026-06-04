@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, CheckCircle } from 'lucide-react';
+import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle, CheckCircle } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
@@ -36,6 +36,8 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   dungeon: <Skull size={32} />,
   party:   <PartyPopper size={32} />,
   sport:   <Dumbbell size={32} />,
+  dnd:     <Dices size={32} />,
+  boardgame: <Puzzle size={32} />,
 };
 
 interface EventDetailContentProps {
@@ -210,24 +212,20 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         </div>
 
         <div className={styles.column}>
-          {isCreator && (
+          {isCreator && joinRequests.length > 0 && (
             <div className={styles.requestsGroup}>
               <span className={styles.label}>{t('requests')}</span>
-              {joinRequests.length === 0 ? (
-                <p className={styles.empty}>{t('noRequests')}</p>
-              ) : (
-                joinRequests.map((req) => (
-                  <EventJoinRequestItem
-                    key={req.id}
-                    request={req}
-                    onAccept={() => handleResolve(req.id, 'approve')}
-                    onDecline={() => handleResolve(req.id, 'decline')}
-                    isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
-                    isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
-                    disabled={resolvingState?.id === req.id}
-                  />
-                ))
-              )}
+              {joinRequests.map((req) => (
+                <EventJoinRequestItem
+                  key={req.id}
+                  request={req}
+                  onAccept={() => handleResolve(req.id, 'approve')}
+                  onDecline={() => handleResolve(req.id, 'decline')}
+                  isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                  isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                  disabled={resolvingState?.id === req.id}
+                />
+              ))}
             </div>
           )}
 
@@ -244,19 +242,6 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             </Button>
           )}
 
-          {canAddSelf && (
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              className={styles.actionButton}
-              onClick={handleAddSelf}
-              isLoading={isAddingSelf}
-            >
-              {t('addSelf')}
-            </Button>
-          )}
-
           {viewerHasPendingRequest && !isCreator && (
             <div className={styles.requestSentBadge}>
               <CheckCircle size={20} />
@@ -267,6 +252,19 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           <span className={styles.label}>
             {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
           </span>
+
+          {canAddSelf && (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              className={styles.addSelfButton}
+              onClick={handleAddSelf}
+              isLoading={isAddingSelf}
+            >
+              {t('addSelf')}
+            </Button>
+          )}
 
           {isParticipantsLoading && <div className={styles.skeleton} />}
 

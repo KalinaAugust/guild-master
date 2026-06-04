@@ -42,6 +42,10 @@
   --event-party-border: #f472b6;
   --event-sport: #0f3d2e;
   --event-sport-border: #34d399;
+  --event-dnd: #3d2c0a;
+  --event-dnd-border: #f59e0b;
+  --event-boardgame: #232450;
+  --event-boardgame-border: #818cf8;
 }
 
 * {

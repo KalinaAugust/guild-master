@@ -173,12 +173,49 @@
 .event_dungeon { background: var(--event-dungeon); border-left-color: var(--event-dungeon-border); }
 .event_party { background: var(--event-party); border-left-color: var(--event-party-border); }
 .event_sport { background: var(--event-sport); border-left-color: var(--event-sport-border); }
+.event_dnd { background: var(--event-dnd); border-left-color: var(--event-dnd-border); }
+.event_boardgame { background: var(--event-boardgame); border-left-color: var(--event-boardgame-border); }
 
 .tooltipEventsList {
   display: flex;
   flex-direction: column;
   gap: 3px;
   min-width: 140px;
+}
+
+.tooltipEventItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tooltipEventText {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tooltipIcon {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.iconType_raid { color: var(--event-raid-border); }
+.iconType_game { color: var(--event-game-border); }
+.iconType_meeting { color: var(--event-meeting-border); }
+.iconType_other { color: var(--event-other-border); }
+.iconType_dungeon { color: var(--event-dungeon-border); }
+.iconType_party { color: var(--event-party-border); }
+.iconType_sport { color: var(--event-sport-border); }
+.iconType_dnd { color: var(--event-dnd-border); }
+.iconType_boardgame { color: var(--event-boardgame-border); }
+
+.simpleTooltip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .moreEvents {

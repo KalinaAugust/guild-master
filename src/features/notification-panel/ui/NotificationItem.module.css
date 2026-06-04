@@ -56,6 +56,15 @@
   text-decoration: underline;
 }
 
+.guildLink {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.guildLink:hover {
+  text-decoration: underline;
+}
+
 .sub {
   font-size: 0.85rem;
   color: var(--text-muted);

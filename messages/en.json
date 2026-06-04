@@ -26,6 +26,8 @@
       "dungeon": "Dungeon",
       "party": "Party",
       "sport": "Sport",
+      "dnd": "D&D",
+      "boardgame": "Board Game",
       "other": "Other"
     },
     "eventTypesPlural": {
@@ -35,6 +37,8 @@
       "dungeon": "Dungeons",
       "party": "Parties",
       "sport": "Sports",
+      "dnd": "D&D",
+      "boardgame": "Board Games",
       "other": "Other"
     }
   },
@@ -107,7 +111,6 @@
     "applyError": "Failed to submit application",
     "requestSent": "Application sent. Waiting for the administrator's decision.",
     "requests": "Applications",
-    "noRequests": "No applications",
     "acceptRequest": "Accept",
     "declineRequest": "Decline",
     "resolveSuccess": "Application updated",
@@ -155,9 +158,9 @@
     "invitation": "You're invited to an event",
     "empty": "No notifications",
     "markAllRead": "Mark all as read",
-    "joinRequest": "New join request in «{guildName}»",
-    "joinRequestApproved": "Your request to join «{guildName}» was approved",
-    "joinRequestDeclined": "Your request to join «{guildName}» was declined",
+    "joinRequest": "New join request in «<guild>{guildName}</guild>»",
+    "joinRequestApproved": "Your request to join «<guild>{guildName}</guild>» was approved",
+    "joinRequestDeclined": "Your request to join «<guild>{guildName}</guild>» was declined",
     "eventJoinRequest": "New application for «{eventTitle}»",
     "eventJoinRequestApproved": "Your application for «{eventTitle}» was approved",
     "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined"
@@ -177,7 +180,12 @@
     "joinRequestSuccess": "Join request sent",
     "joinRequestError": "Failed to send join request",
     "resolveSuccess": "Request resolved",
-    "resolveError": "Failed to resolve request"
+    "resolveError": "Failed to resolve request",
+    "leaveGuild": "Leave guild",
+    "leaveConfirmTitle": "Leave guild",
+    "leaveConfirmDescription": "Are you sure you want to leave this guild?",
+    "leaveSuccess": "You have left the guild",
+    "leaveError": "Failed to leave guild"
   },
   "GuildMembers": {
     "add": "Add",

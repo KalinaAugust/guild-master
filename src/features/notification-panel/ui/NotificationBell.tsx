@@ -8,7 +8,11 @@ import styles from './NotificationBell.module.css';
 
 export const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { data: notifications = [] } = useGetNotificationsQuery();
+  const { data: notifications = [] } = useGetNotificationsQuery(undefined, {
+    refetchOnFocus: true,
+    pollingInterval: 60_000,
+    skipPollingIfUnfocused: true,
+  });
   const [markAllRead] = useMarkAllReadMutation();
   const wrapperRef = useRef<HTMLDivElement>(null);
 

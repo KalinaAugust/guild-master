@@ -20,10 +20,7 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
 
   if (!config) return null;
 
-  const { Icon, getLabel } = config;
-  // next-intl's typed t function is not directly assignable to NotificationTranslationFn
-  // due to overloaded signatures; the cast is intentional.
-  const label = getLabel(t as unknown as NotificationTranslationFn, notification);
+  const { Icon } = config;
   const timeAgo = dayjs(notification.created_at).locale(locale).fromNow();
 
   const handleMouseEnter = () => {
@@ -36,6 +33,29 @@ export const NotificationItem = ({ notification, onClose }: Props) => {
       : notification.entity_id && notification.entity_type === 'guild'
         ? `/guilds/${notification.entity_id}`
         : null;
+
+  const label =
+    config.linksToGuild && config.messageKey
+      ? t.rich(config.messageKey, {
+          guildName: notification.guild_name ?? '',
+          guild: (chunks) =>
+            href ? (
+              <Link
+                href={href}
+                className={styles.guildLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={onClose}
+              >
+                {chunks}
+              </Link>
+            ) : (
+              chunks
+            ),
+        })
+      : // next-intl's typed t function is not directly assignable to NotificationTranslationFn
+        // due to overloaded signatures; the cast is intentional.
+        config.getLabel?.(t as unknown as NotificationTranslationFn, notification);
 
   return (
     <div
