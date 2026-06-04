@@ -45,7 +45,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   });
 
   const [submitJoinRequest, { isLoading: isSubmitting }] = useSubmitJoinRequestMutation();
-  const [resolveJoinRequest, { isLoading: isResolving }] = useResolveJoinRequestMutation();
+  const [resolveJoinRequest] = useResolveJoinRequestMutation();
   const [leaveGuild, { isLoading: isLeaving }] = useLeaveGuildMutation();
   const [isLeaveConfirmOpen, setIsLeaveConfirmOpen] = useState(false);
   const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);

@@ -58,7 +58,16 @@ npm run start
 
 ## Development Conventions
 
-- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering.
+- **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering. The detailed FSD rules below are enforced — see the `fsd-reviewer` agent (`.claude/agents/fsd-reviewer.md`) for an automated check.
+
+### FSD Rules
+
+- **Layer order (top → bottom):** `app` → `pages` → `widgets` → `features` → `entities` → `shared`. This project uses the Next.js App Router, so `pages` is replaced by `src/app/` (route handlers + page composition); active slice layers are `widgets`, `features`, `entities`, `shared`. The `processes` layer is deprecated (FSD v2.1) — do not introduce it.
+- **Import direction:** A module may import from another slice **only if that slice is on a strictly lower layer.** Same-layer cross-imports are forbidden — a feature must not import another feature, a widget another widget, an entity another entity. Lift shared logic down a layer or compose both in a higher one. `shared` (no slices, segments only) and `app` (may import everything) are exempt.
+- **Public API:** Import a slice only through its `index.ts` barrel — never reach into its internal files (e.g. import from `entities/event`, not `entities/event/ui/EventCard`).
+- **Entity cross-imports (`@x`):** The only legitimate same-layer import, and only on `entities`. When entity A needs entity B, expose `entities/B/@x/A` and import `import type { ... } from "entities/B/@x/A"`. Keep these minimal; never use `@x` outside `entities`.
+- **Segments (technical purpose, not type):** Inside a slice use `ui/`, `model/` (store, schemas, business logic), `api/`, `lib/` (internal helpers), `config/`. Do not create top-level segments named after types (`components/`, `hooks/`, `types/`).
+- **Slices** are named by business domain and must be mutually independent within a layer. **`shared`** holds only reusable, domain-agnostic code — never let business-coupled code accumulate there.
 - **Data Fetching:** Use RTK Query for all server data. Add endpoints via `injectEndpoints` on `baseApi` (`src/shared/api/baseApi.ts`) within the relevant FSD slice (`entities/*/api/*Api.ts`, `features/*/api/*Api.ts`). Never use `createAsyncThunk` for data fetching. Route handlers in `src/app/api/` are the transport layer — Supabase calls belong there, not in client components.
 - **State Management:** Use Redux Toolkit slices only for pure UI/client state (e.g., selected date, active guild). Custom hooks `useAppDispatch` and `useAppSelector` from `src/shared/lib/hooks.ts` should be used for type-safe store interaction.
 - **Component Styling:** Use CSS Modules (`*.module.css`) for component-specific styles to ensure scoping and prevent collisions. **NEVER use inline styles.**
