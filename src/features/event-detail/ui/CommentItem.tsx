@@ -13,7 +13,7 @@ import styles from './CommentItem.module.css';
 interface CommentItemProps {
   comment: EventComment;
   isOwn: boolean;
-  onSave?: (body: string) => void;
+  onSave?: (body: string) => void | Promise<void>;
   onDelete?: () => void;
   isSaving?: boolean;
   isDeleting?: boolean;
@@ -36,11 +36,15 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   const isEdited = dayjs(comment.updatedAt).diff(dayjs(comment.createdAt), 'second') > 2;
   const time = dayjs(comment.createdAt).locale(locale).fromNow();
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const trimmed = draft.trim();
     if (!trimmed) return;
-    onSave?.(trimmed);
-    setIsEditing(false);
+    try {
+      await onSave?.(trimmed);
+      setIsEditing(false);
+    } catch {
+      // Keep edit mode open so the draft is preserved; CommentsTab shows the error toast.
+    }
   };
 
   const handleCancel = () => {

@@ -27,17 +27,24 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
     skipPollingIfUnfocused: true,
   });
   const [addComment, { isLoading: isAdding }] = useAddCommentMutation();
-  const [updateComment] = useUpdateCommentMutation();
-  const [deleteComment] = useDeleteCommentMutation();
+  const [updateComment, updateState] = useUpdateCommentMutation();
+  const [deleteComment, deleteState] = useDeleteCommentMutation();
   const listRef = useRef<HTMLDivElement>(null);
+  // Scroll to the latest comment on initial load and after the viewer sends one,
+  // but not when a poll pulls in someone else's comment (would hijack scroll).
+  const pendingScrollRef = useRef(true);
 
   useEffect(() => {
-    if (listRef.current) listRef.current.scrollTop = listRef.current.scrollHeight;
+    if (pendingScrollRef.current && listRef.current) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+      pendingScrollRef.current = false;
+    }
   }, [comments.length]);
 
   const handleAdd = async (body: string) => {
     try {
       await addComment({ eventId, body }).unwrap();
+      pendingScrollRef.current = true;
     } catch {
       toast.error(t('sendError'));
     }
@@ -46,8 +53,9 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   const handleUpdate = async (commentId: string, body: string) => {
     try {
       await updateComment({ eventId, commentId, body }).unwrap();
-    } catch {
+    } catch (e) {
       toast.error(t('updateError'));
+      throw e;
     }
   };
 
@@ -70,6 +78,8 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
             isOwn={c.userId === currentUserId}
             onSave={(body) => handleUpdate(c.id, body)}
             onDelete={() => handleDelete(c.id)}
+            isSaving={updateState.isLoading && updateState.originalArgs?.commentId === c.id}
+            isDeleting={deleteState.isLoading && deleteState.originalArgs?.commentId === c.id}
           />
         ))}
       </div>

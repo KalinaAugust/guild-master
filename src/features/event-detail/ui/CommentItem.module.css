@@ -34,12 +34,7 @@
   line-height: 1.4;
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
-}
-
+.actions,
 .editActions {
   display: flex;
   gap: 8px;
