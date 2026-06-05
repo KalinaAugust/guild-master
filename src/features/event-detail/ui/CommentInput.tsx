@@ -30,18 +30,18 @@ export const CommentInput: React.FC<CommentInputProps> = ({ canWrite, onSubmit, 
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
-      <div className={styles.field}>
-        <Textarea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={t('placeholder')}
-          rows={2}
-          maxLength={2000}
-        />
+      <Textarea
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={t('placeholder')}
+        rows={2}
+        maxLength={2000}
+      />
+      <div className={styles.actions}>
+        <Button type="submit" size="sm" variant="primary" isLoading={isSubmitting}>
+          {t('send')}
+        </Button>
       </div>
-      <Button type="submit" size="sm" variant="primary" isLoading={isSubmitting}>
-        {t('send')}
-      </Button>
     </form>
   );
 };
