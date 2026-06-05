@@ -6,6 +6,7 @@ import {
   useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useMarkCommentsReadMutation,
 } from '@/entities/comment';
 
 vi.mock('next-intl', () => ({
@@ -18,6 +19,7 @@ vi.mock('@/entities/comment', () => ({
   useAddCommentMutation: vi.fn(),
   useUpdateCommentMutation: vi.fn(),
   useDeleteCommentMutation: vi.fn(),
+  useMarkCommentsReadMutation: vi.fn(),
 }));
 
 beforeEach(() => {
@@ -26,6 +28,7 @@ beforeEach(() => {
   vi.mocked(useAddCommentMutation).mockReturnValue([vi.fn(unwrap), {}] as never);
   vi.mocked(useUpdateCommentMutation).mockReturnValue([vi.fn(unwrap), {}] as never);
   vi.mocked(useDeleteCommentMutation).mockReturnValue([vi.fn(unwrap), {}] as never);
+  vi.mocked(useMarkCommentsReadMutation).mockReturnValue([vi.fn(), {}] as never);
 });
 
 describe('CommentsTab', () => {
@@ -45,6 +48,14 @@ describe('CommentsTab', () => {
     vi.mocked(useGetCommentsQuery).mockReturnValue({ data: [], isLoading: false } as never);
     render(<CommentsTab eventId="e1" canWrite={false} currentUserId="u1" />);
     expect(screen.getByText('lockedPrompt')).toBeInTheDocument();
+  });
+
+  it('marks comments read on mount', () => {
+    const markRead = vi.fn();
+    vi.mocked(useMarkCommentsReadMutation).mockReturnValue([markRead, {}] as never);
+    vi.mocked(useGetCommentsQuery).mockReturnValue({ data: [], isLoading: false } as never);
+    render(<CommentsTab eventId="e1" canWrite currentUserId="u1" />);
+    expect(markRead).toHaveBeenCalledWith('e1');
   });
 
   it('renders a list of comments', () => {

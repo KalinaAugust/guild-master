@@ -301,6 +301,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
           {canReadComments ? (
             <EventTabs
+              eventId={eventId}
+              currentUserId={currentUserId}
               participants={participantsBlock}
               comments={
                 <CommentsTab

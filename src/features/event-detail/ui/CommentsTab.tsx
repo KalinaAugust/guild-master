@@ -8,6 +8,7 @@ import {
   useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useMarkCommentsReadMutation,
 } from '@/entities/comment';
 import { CommentItem } from './CommentItem';
 import { CommentInput } from './CommentInput';
@@ -29,7 +30,14 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   const [addComment, { isLoading: isAdding }] = useAddCommentMutation();
   const [updateComment, updateState] = useUpdateCommentMutation();
   const [deleteComment, deleteState] = useDeleteCommentMutation();
+  const [markCommentsRead] = useMarkCommentsReadMutation();
   const listRef = useRef<HTMLDivElement>(null);
+
+  // Opening the tab (and any comment arriving while it stays open) marks the
+  // thread read for this user, clearing the tab badge and bell notification.
+  useEffect(() => {
+    markCommentsRead(eventId);
+  }, [eventId, comments.length, markCommentsRead]);
   // Scroll to the latest comment on initial load and after the viewer sends one,
   // but not when a poll pulls in someone else's comment (would hijack scroll).
   const pendingScrollRef = useRef(true);
