@@ -16,9 +16,6 @@ function query(result: { data?: unknown; error?: unknown; count?: number }) {
   b.then = (resolve: (v: unknown) => void) => resolve(result);
   return b;
 }
-function client(user: { id: string; user_metadata?: Record<string, unknown> } | null, from: ReturnType<typeof vi.fn>) {
-  return { auth: { getUser: vi.fn().mockResolvedValue({ data: { user } }) }, from };
-}
 const params = (id: string) => ({ params: Promise.resolve({ id }) });
 const body = (b: unknown) => ({ json: () => Promise.resolve(b) }) as never;
 const authed = (from: ReturnType<typeof vi.fn>) =>
