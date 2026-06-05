@@ -2,7 +2,10 @@
   position: relative;
   display: flex;
   gap: 12px;
-  padding: 10px 0;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
 }
 
 .body {
@@ -43,8 +46,8 @@
 
 .actions {
   position: absolute;
-  top: 6px;
-  right: 0;
+  top: 8px;
+  right: 8px;
   display: flex;
   gap: 4px;
   opacity: 0;
