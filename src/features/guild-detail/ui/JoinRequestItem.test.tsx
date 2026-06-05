@@ -12,6 +12,7 @@ const request: JoinRequest = {
   userId: 'u1',
   userName: 'Alice Smith',
   avatarUrl: null,
+  createdAt: '2026-01-01T00:00:00Z',
 };
 
 describe('JoinRequestItem', () => {

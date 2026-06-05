@@ -8,13 +8,12 @@ vi.mock('../api/guildApi', () => ({
 import { useGetGuildMembersQuery } from '../api/guildApi';
 import { useGuildPermissions } from './useGuildPermissions';
 
-type MockReturnValue = { data: { userId: string; role: string }[] };
 
 describe('useGuildPermissions', () => {
   it('OWNER has elevated permissions', () => {
     vi.mocked(useGetGuildMembersQuery).mockReturnValue({
       data: [{ userId: 'u1', role: 'OWNER' }],
-    } as unknown as MockReturnValue);
+    } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
     expect(result.current.canManageEvents).toBe(true);
@@ -24,7 +23,7 @@ describe('useGuildPermissions', () => {
   it('ADMIN has elevated permissions', () => {
     vi.mocked(useGetGuildMembersQuery).mockReturnValue({
       data: [{ userId: 'u1', role: 'ADMIN' }],
-    } as unknown as MockReturnValue);
+    } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
     expect(result.current.canManageEvents).toBe(true);
@@ -34,7 +33,7 @@ describe('useGuildPermissions', () => {
   it('MEMBER does not have elevated permissions', () => {
     vi.mocked(useGetGuildMembersQuery).mockReturnValue({
       data: [{ userId: 'u1', role: 'MEMBER' }],
-    } as unknown as MockReturnValue);
+    } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
     expect(result.current.canManageEvents).toBe(false);
@@ -44,21 +43,21 @@ describe('useGuildPermissions', () => {
   it('returns false when user is not in members list', () => {
     vi.mocked(useGetGuildMembersQuery).mockReturnValue({
       data: [{ userId: 'u2', role: 'OWNER' }],
-    } as unknown as MockReturnValue);
+    } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
     expect(result.current.canManageEvents).toBe(false);
   });
 
   it('skips query when guildId is null', () => {
-    vi.mocked(useGetGuildMembersQuery).mockReturnValue({ data: [] } as unknown as MockReturnValue);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue({ data: [] } as never);
 
     renderHook(() => useGuildPermissions(null, 'u1'));
     expect(useGetGuildMembersQuery).toHaveBeenCalledWith('', { skip: true });
   });
 
   it('skips query when userId is null', () => {
-    vi.mocked(useGetGuildMembersQuery).mockReturnValue({ data: [] } as unknown as MockReturnValue);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue({ data: [] } as never);
 
     renderHook(() => useGuildPermissions('g1', null));
     expect(useGetGuildMembersQuery).toHaveBeenCalledWith('g1', { skip: true });

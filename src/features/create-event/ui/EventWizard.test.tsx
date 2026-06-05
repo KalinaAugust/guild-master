@@ -57,7 +57,7 @@ function makeStore(uiOverrides = {}) {
         viewDate: '2026-05-20T00:00:00.000Z',
         ...uiOverrides,
       },
-      guild: { currentGuildId: null },
+      guild: { currentGuildId: null, isGuildEditModalOpen: false, editingGuild: null },
     },
   });
 }

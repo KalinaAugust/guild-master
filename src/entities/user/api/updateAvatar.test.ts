@@ -13,6 +13,11 @@ function makeSupabase({
   updateError = null,
   publicUrl = 'https://example.com/avatar.png',
   files = [] as { name: string }[],
+}: {
+  uploadError?: Error | null;
+  updateError?: Error | null;
+  publicUrl?: string;
+  files?: { name: string }[];
 } = {}) {
   const removeFn = vi.fn().mockResolvedValue({});
   const listFn = vi.fn().mockResolvedValue({ data: files });

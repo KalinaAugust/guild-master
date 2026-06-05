@@ -17,8 +17,9 @@ function makeStore(currentGuildId: string | null = null) {
 }
 
 function wrapper(store: ReturnType<typeof makeStore>) {
-  const Wrapper = ({ children }: { children: React.ReactNode }) =>
-    React.createElement(Provider, { store }, children);
+  const Wrapper = ({ children }: { children: React.ReactNode }) => (
+    <Provider store={store}>{children}</Provider>
+  );
   Wrapper.displayName = 'TestWrapper';
   return Wrapper;
 }

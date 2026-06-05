@@ -19,7 +19,7 @@ describe('guildSlice', () => {
   });
 
   it('should handle setCurrentGuild', () => {
-    const prevState = { currentGuildId: null };
+    const prevState = { currentGuildId: null, isGuildEditModalOpen: false, editingGuild: null };
     const nextState = guildReducer(prevState, setCurrentGuild('guild-123'));
 
     expect(nextState.currentGuildId).toBe('guild-123');

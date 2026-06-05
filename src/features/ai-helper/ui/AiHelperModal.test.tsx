@@ -36,7 +36,6 @@ vi.mock('../api/aiHelperApi', () => ({
   useSendAiMessageMutation: vi.fn(() => [mockSendMessage, { isLoading: false }]),
 }));
 
-type MockMutationHook = [typeof mockSendMessage, { isLoading: boolean }];
 
 const ModalWrapper = ({ isOpen = true, onClose = vi.fn() }: { isOpen?: boolean; onClose?: () => void }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -50,7 +49,7 @@ describe('AiHelperModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(useSendAiMessageMutation).mockReturnValue(
-      [mockSendMessage, { isLoading: false }] as unknown as MockMutationHook
+      [mockSendMessage, { isLoading: false }] as never
     );
   });
 
@@ -189,7 +188,7 @@ describe('AiHelperModal', () => {
 
   it('shows thinking bubble while loading', () => {
     vi.mocked(useSendAiMessageMutation).mockReturnValue(
-      [mockSendMessage, { isLoading: true }] as unknown as MockMutationHook
+      [mockSendMessage, { isLoading: true }] as never
     );
 
     renderModal();
