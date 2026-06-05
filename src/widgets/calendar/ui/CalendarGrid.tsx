@@ -6,14 +6,16 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './CalendarGrid.module.css';
-import { useAppDispatch } from '@/shared/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
+import { EventFilterDropdown } from '@/features/filter-events';
 import { useGetEventsQuery } from '@/entities/event';
 import { Guild, useGuildPermissions } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
-import { EventsTooltipContent, typeIcons } from './EventsTooltipContent';
+import { EventsTooltipContent } from './EventsTooltipContent';
+import { typeIcons } from '@/entities/event';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection } from '../model/useGuildSelection';
@@ -27,6 +29,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
   const { days, DAYS_OF_WEEK } = useCalendarDays(now);
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds);
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
+  const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
 
   const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
@@ -72,6 +75,9 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
               truncate
             />
           </div>
+          <div className={styles.filterDropdown}>
+            <EventFilterDropdown />
+          </div>
         </div>
         <div className={styles.controlsRight}>
           <Button variant="icon" size="icon" onClick={handlePrevMonth}>
@@ -93,7 +99,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
         ))}
         {days.map((day, index) => {
           const dayEvents = events
-            .filter(event => event.date === day.fullDate)
+            .filter(event => event.date === day.fullDate && !excludedEventTypes.includes(event.type))
             .sort((a, b) => a.time.localeCompare(b.time));
 
           const displayedEvents = dayEvents.slice(0, 2);

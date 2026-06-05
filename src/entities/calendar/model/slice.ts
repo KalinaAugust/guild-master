@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UIState, ActivityEvent } from '@/shared/types';
+import { UIState, ActivityEvent, ActivityType } from '@/shared/types';
 import dayjs from 'dayjs';
+
+const ALL_TYPES: ActivityType[] = ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame'];
 
 const initialState: UIState = {
   isEventModalOpen: false,
   selectedDate: null,
   viewDate: dayjs().toISOString(),
+  excludedEventTypes: [],
 };
 
 export const uiSlice = createSlice({
@@ -35,6 +38,21 @@ export const uiSlice = createSlice({
     setViewDate: (state, action: PayloadAction<string>) => {
       state.viewDate = action.payload;
     },
+    toggleEventType: (state, action: PayloadAction<ActivityType>) => {
+      const type = action.payload;
+      if (state.excludedEventTypes.includes(type)) {
+        state.excludedEventTypes = state.excludedEventTypes.filter(t => t !== type);
+      } else {
+        state.excludedEventTypes.push(type);
+      }
+    },
+    setAllEventTypesEnabled: (state, action: PayloadAction<boolean>) => {
+      if (action.payload) {
+        state.excludedEventTypes = [];
+      } else {
+        state.excludedEventTypes = [...ALL_TYPES];
+      }
+    },
   },
 });
 
@@ -45,5 +63,8 @@ export const {
   nextMonth,
   prevMonth,
   setViewDate,
+  toggleEventType,
+  setAllEventTypesEnabled,
 } = uiSlice.actions;
 export default uiSlice.reducer;
+

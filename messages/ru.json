@@ -85,6 +85,13 @@
       "filterPlaceholder": "Поиск участников...",
       "selectAll": "Выбрать всех",
       "deselectAll": "Снять выбор"
+    },
+    "filter": {
+      "all": "Все",
+      "enableAll": "Включить все",
+      "disableAll": "Выключить все",
+      "triggerLabel": "Фильтровать события по типу",
+      "ariaLabel": "Фильтр типов событий"
     }
   },
   "EventDetail": {
