@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import { Manrope, Unbounded } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Toaster } from 'sonner';
 import "./globals.css";
+
+const manrope = Manrope({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const unbounded = Unbounded({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-unbounded",
+  display: "swap",
+});
 import StoreProvider from "./providers/StoreProvider";
 import { Header } from "@/widgets/header";
 import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
@@ -22,7 +35,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${manrope.variable} ${unbounded.variable}`}>
       <body>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
