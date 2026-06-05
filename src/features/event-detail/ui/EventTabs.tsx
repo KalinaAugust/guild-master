@@ -29,11 +29,16 @@ export const EventTabs: React.FC<EventTabsProps> = ({
     skipPollingIfUnfocused: true,
   });
   const { data: readState } = useGetCommentReadStateQuery(eventId);
-  const lastReadAt = readState?.lastReadAt ?? null;
 
-  const unreadCount = commentList.filter(
-    (c) => c.userId !== currentUserId && (!lastReadAt || c.createdAt > lastReadAt),
-  ).length;
+  // Until the read state resolves, show no badge — otherwise an undefined
+  // `lastReadAt` briefly counts every comment as unread on load.
+  const unreadCount = readState
+    ? commentList.filter(
+        (c) =>
+          c.userId !== currentUserId &&
+          (!readState.lastReadAt || c.createdAt > readState.lastReadAt),
+      ).length
+    : 0;
 
   return (
     <div className={styles.root}>
