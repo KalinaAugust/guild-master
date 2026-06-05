@@ -56,6 +56,39 @@ export type Database = {
           },
         ]
       }
+      event_comment_reads: {
+        Row: {
+          event_id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          event_id: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          event_id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_comment_reads_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_comment_reads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_join_requests: {
         Row: {
           created_at: string
