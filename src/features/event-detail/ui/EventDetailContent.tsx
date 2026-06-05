@@ -261,7 +261,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           )}
         </div>
 
-        <div className={styles.column}>
+        <div className={`${styles.column} ${styles.columnRight}`}>
           {isCreator && joinRequests.length > 0 && (
             <div className={styles.requestsGroup}>
               <span className={styles.label}>{t('requests')}</span>

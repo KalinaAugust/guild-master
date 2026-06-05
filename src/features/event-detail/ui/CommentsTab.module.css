@@ -1,13 +1,28 @@
 .container {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  max-height: 420px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
+}
+
+/* Stacked mobile layout: the page body scrolls, so cap the list instead. */
+@media (max-width: 768px) {
+  .container {
+    flex: none;
+  }
+
+  .list {
+    flex: none;
+    max-height: 60vh;
+  }
 }
 
 .empty {

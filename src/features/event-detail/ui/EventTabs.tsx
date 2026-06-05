@@ -14,7 +14,7 @@ export const EventTabs: React.FC<EventTabsProps> = ({ participants, comments }) 
   const [active, setActive] = useState<'participants' | 'comments'>('participants');
 
   return (
-    <div>
+    <div className={styles.root}>
       <div className={styles.tabs} role="tablist">
         <button
           type="button"
@@ -35,7 +35,9 @@ export const EventTabs: React.FC<EventTabsProps> = ({ participants, comments }) 
           {t('tabComments')}
         </button>
       </div>
-      {active === 'participants' ? participants : comments}
+      <div className={styles.content}>
+        {active === 'participants' ? participants : comments}
+      </div>
     </div>
   );
 };

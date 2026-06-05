@@ -82,6 +82,15 @@
   border-right: 1px solid var(--glass-border);
 }
 
+/* Right column hosts the tabs; let the comments chat fill the full height
+   with its composer pinned at the bottom and the message list scrolling. */
+.columnRight {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .infoGroup {
   display: flex;
   flex-direction: column;
@@ -242,6 +251,12 @@
   .column:first-child {
     border-right: none;
     border-bottom: 1px solid var(--glass-border);
+  }
+
+  /* Stacked layout scrolls the whole body — drop the full-height clipping. */
+  .columnRight {
+    display: block;
+    overflow: visible;
   }
 
   .title {
