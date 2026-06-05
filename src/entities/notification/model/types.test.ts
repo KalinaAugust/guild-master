@@ -48,4 +48,9 @@ describe('NOTIFICATION_TYPE_CONFIG', () => {
     const label = NOTIFICATION_TYPE_CONFIG.new_event.getLabel!(t, { ...base, guild_name: null });
     expect(label).toBe(t('newEvent', { guildName: '' }));
   });
+
+  it('event_comment: getLabel uses the event title', () => {
+    const label = NOTIFICATION_TYPE_CONFIG.event_comment.getLabel!(t, { ...base, event_title: 'Raid' });
+    expect(label).toBe(t('eventComment', { eventTitle: 'Raid' }));
+  });
 });

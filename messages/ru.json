@@ -180,7 +180,8 @@
     "joinRequestDeclined": "Ваша заявка в «<guild>{guildName}</guild>» отклонена",
     "eventJoinRequest": "Новая заявка на «{eventTitle}»",
     "eventJoinRequestApproved": "Ваша заявка на «{eventTitle}» одобрена",
-    "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена"
+    "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена",
+    "eventComment": "Новые комментарии в «{eventTitle}»"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",

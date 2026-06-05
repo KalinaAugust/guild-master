@@ -180,7 +180,8 @@
     "joinRequestDeclined": "Your request to join «<guild>{guildName}</guild>» was declined",
     "eventJoinRequest": "New application for «{eventTitle}»",
     "eventJoinRequestApproved": "Your application for «{eventTitle}» was approved",
-    "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined"
+    "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined",
+    "eventComment": "New comments in «{eventTitle}»"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",
