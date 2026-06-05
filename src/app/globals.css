@@ -27,6 +27,10 @@
   /* Modal */
   --modal-bg: #051020;
 
+  /* Typography */
+  --font-body: var(--font-manrope), sans-serif;
+  --font-display: var(--font-unbounded), sans-serif;
+
   /* Events */
   --event-raid: #5c3030;
   --event-raid-border: #b06060;
@@ -62,8 +66,12 @@ html, body {
 
 body {
   position: relative;
-  font-family: sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
 }
 
 @keyframes move-blob {
