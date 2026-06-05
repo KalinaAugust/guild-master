@@ -116,6 +116,23 @@
     "resolveSuccess": "Application updated",
     "resolveError": "Failed to update application"
   },
+  "EventComments": {
+    "tabParticipants": "Participants",
+    "tabComments": "Comments",
+    "empty": "No comments yet. Start the discussion.",
+    "placeholder": "Write a comment…",
+    "send": "Send",
+    "edited": "edited",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete this comment?",
+    "lockedPrompt": "Confirm participation to write comments",
+    "sendError": "Failed to send comment",
+    "updateError": "Failed to update comment",
+    "deleteError": "Failed to delete comment"
+  },
   "Guild": {
     "createTitle": "Create New Guild",
     "welcomeText": "It looks like you don't belong to any guilds yet. Create your own to start working with the calendar!",
