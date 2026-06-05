@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.empty {
+  font-size: 0.85rem;
+  opacity: 0.6;
+  padding: 16px 0;
+  text-align: center;
+}
