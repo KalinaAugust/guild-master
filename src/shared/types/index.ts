@@ -15,6 +15,7 @@ export interface UIState {
   selectedDate: string | null;
   viewDate: string;
   editingEvent?: ActivityEvent;
+  excludedEventTypes: ActivityType[];
 }
 
 export type ParticipantStatus = 'pending' | 'confirmed' | 'declined';

@@ -1,4 +1,5 @@
 export { EventCard } from './ui/EventCard';
+export { ACTIVITY_TYPES, typeIcons } from './config/activityTypes';
 export {
   useGetEventsQuery,
   useCreateEventMutation,
@@ -9,3 +10,4 @@ export {
   useGetEventByIdQuery,
   useGetMyEventIdsQuery,
 } from './api/eventApi';
+

@@ -7,6 +7,8 @@ import reducer, {
   nextMonth,
   prevMonth,
   setViewDate,
+  toggleEventType,
+  setAllEventTypesEnabled,
 } from './slice';
 
 describe('uiSlice', () => {
@@ -14,11 +16,13 @@ describe('uiSlice', () => {
     isEventModalOpen: false,
     selectedDate: null,
     viewDate: dayjs('2026-05-01').toISOString(),
+    excludedEventTypes: [],
   };
 
   it('should return the initial state', () => {
     expect(reducer(undefined, { type: 'unknown' })).toEqual(expect.objectContaining({
       isEventModalOpen: false,
+      excludedEventTypes: [],
     }));
   });
 
@@ -56,4 +60,21 @@ describe('uiSlice', () => {
     const actual = reducer(initialState, setViewDate(newDate));
     expect(actual.viewDate).toBe(newDate);
   });
+
+  it('should handle toggleEventType', () => {
+    let state = reducer(undefined, toggleEventType('raid'));
+    expect(state.excludedEventTypes).toEqual(['raid']);
+
+    state = reducer(state, toggleEventType('raid'));
+    expect(state.excludedEventTypes).toEqual([]);
+  });
+
+  it('should handle setAllEventTypesEnabled', () => {
+    let state = reducer(undefined, setAllEventTypesEnabled(false));
+    expect(state.excludedEventTypes).toEqual(['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame']);
+
+    state = reducer(state, setAllEventTypesEnabled(true));
+    expect(state.excludedEventTypes).toEqual([]);
+  });
 });
+

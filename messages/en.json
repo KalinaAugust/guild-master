@@ -85,6 +85,14 @@
       "filterPlaceholder": "Search members...",
       "selectAll": "Select all",
       "deselectAll": "Deselect all"
+    },
+    "filter": {
+      "all": "All",
+      "none": "None",
+      "enableAll": "Enable all",
+      "disableAll": "Disable all",
+      "triggerLabel": "Filter events by type",
+      "ariaLabel": "Event type filter"
     }
   },
   "EventDetail": {

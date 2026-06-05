@@ -43,6 +43,10 @@
   flex-shrink: 0;
 }
 
+.filterDropdown {
+  flex-shrink: 0;
+}
+
 .separator {
   width: 1px;
   height: 24px;
