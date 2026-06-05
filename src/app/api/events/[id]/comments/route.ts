@@ -25,6 +25,9 @@ export async function POST(
   try {
     const { id } = await params;
     const { body } = await request.json();
+    if (typeof body !== 'string') {
+      return NextResponse.json({ error: 'Invalid comment body' }, { status: 400 });
+    }
     const comment = await createComment(id, body);
     return NextResponse.json(comment, { status: 201 });
   } catch (e) {

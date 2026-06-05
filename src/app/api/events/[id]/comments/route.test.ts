@@ -43,6 +43,11 @@ describe('POST /api/events/[id]/comments', () => {
     vi.mocked(createComment).mockRejectedValue(new InvalidCommentError('bad'));
     expect((await POST(body({ body: '' }), params('e1'))).status).toBe(400);
   });
+  it('returns 400 when body is not a string', async () => {
+    okAuth();
+    expect((await POST(body({ body: null }), params('e1'))).status).toBe(400);
+    expect(createComment).not.toHaveBeenCalled();
+  });
   it('returns 500 on other failure', async () => {
     okAuth();
     vi.mocked(createComment).mockRejectedValue(new Error('x'));

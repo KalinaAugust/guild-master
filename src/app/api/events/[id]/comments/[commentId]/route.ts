@@ -13,6 +13,9 @@ export async function PATCH(
   try {
     const { commentId } = await params;
     const { body } = await request.json();
+    if (typeof body !== 'string') {
+      return NextResponse.json({ error: 'Invalid comment body' }, { status: 400 });
+    }
     const comment = await updateComment(commentId, body);
     return NextResponse.json(comment);
   } catch (e) {

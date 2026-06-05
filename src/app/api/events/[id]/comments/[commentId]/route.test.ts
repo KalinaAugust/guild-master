@@ -33,6 +33,11 @@ describe('PATCH /api/events/[id]/comments/[commentId]', () => {
     vi.mocked(updateComment).mockRejectedValue(new InvalidCommentError('bad'));
     expect((await PATCH(body({ body: '' }), params('e1', 'c1'))).status).toBe(400);
   });
+  it('returns 400 when body is not a string', async () => {
+    okAuth();
+    expect((await PATCH(body({ body: null }), params('e1', 'c1'))).status).toBe(400);
+    expect(updateComment).not.toHaveBeenCalled();
+  });
   it('returns 500 on other failure', async () => {
     okAuth();
     vi.mocked(updateComment).mockRejectedValue(new Error('x'));
