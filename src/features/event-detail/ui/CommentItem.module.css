@@ -1,0 +1,65 @@
+.item {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.meta {
+  font-size: 0.75rem;
+  opacity: 0.6;
+}
+
+.text {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.editActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.actions {
+  position: absolute;
+  top: 6px;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.item:hover .actions,
+.item:focus-within .actions {
+  opacity: 1;
+}
+
+.actionBtn:hover {
+  color: var(--accent-primary);
+}
+
+.deleteBtn:hover {
+  color: #ff4d4d;
+}

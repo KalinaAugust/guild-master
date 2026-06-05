@@ -9,7 +9,7 @@ import { vi } from 'vitest';
  */
 export function query(result: { data?: unknown; error?: unknown }) {
   const builder: Record<string, unknown> = {};
-  for (const m of ['select', 'eq', 'delete', 'insert', 'update', 'in', 'order']) {
+  for (const m of ['select', 'eq', 'delete', 'insert', 'update', 'upsert', 'in', 'order']) {
     builder[m] = vi.fn(() => builder);
   }
   builder.maybeSingle = vi.fn(() => Promise.resolve(result));

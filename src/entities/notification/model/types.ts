@@ -1,4 +1,4 @@
-import { Calendar, UserRoundPlus, UserPlus, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, UserRoundPlus, UserPlus, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface Notification {
@@ -58,5 +58,9 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   event_join_request_declined: {
     Icon: XCircle,
     getLabel: (t, n) => t('eventJoinRequestDeclined', { eventTitle: n.event_title ?? '' }),
+  },
+  event_comment: {
+    Icon: MessageSquare,
+    getLabel: (t, n) => t('eventComment', { eventTitle: n.event_title ?? '' }),
   },
 };

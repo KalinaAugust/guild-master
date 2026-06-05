@@ -26,6 +26,8 @@ import {
 } from '../api/detailApi';
 import { ParticipantItem } from './ParticipantItem';
 import { EventJoinRequestItem } from './EventJoinRequestItem';
+import { CommentsTab } from './CommentsTab';
+import { EventTabs } from './EventTabs';
 import styles from './EventDetailContent.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -71,6 +73,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const canApply =
     !!currentUserId && viewerIsGuildMember && !isCreator && !isParticipant && !viewerHasPendingRequest;
   const canAddSelf = isCreator && !isParticipant;
+
+  const currentUserStatus = participants.find((p) => p.user_id === currentUserId)?.status;
+  const canReadComments =
+    isCreator || currentUserStatus === 'pending' || currentUserStatus === 'confirmed';
+  const canWriteComments = isCreator || currentUserStatus === 'confirmed';
 
   const { data: joinRequests = [] } = useGetEventJoinRequestsQuery(eventId, {
     skip: !isCreator,
@@ -178,6 +185,49 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   const typeLabel = commonT(`eventTypes.${event.type}` as Parameters<typeof commonT>[0]);
 
+  const participantsBlock = (
+    <>
+      <span className={styles.label}>
+        {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
+      </span>
+
+      {canAddSelf && (
+        <Button
+          type="button"
+          variant="primary"
+          size="sm"
+          className={styles.addSelfButton}
+          onClick={handleAddSelf}
+          isLoading={isAddingSelf}
+        >
+          {t('addSelf')}
+        </Button>
+      )}
+
+      {isParticipantsLoading && <div className={styles.skeleton} />}
+
+      {!isParticipantsLoading && participants.length === 0 && (
+        <p className={styles.empty}>{t('noParticipants')}</p>
+      )}
+
+      {!isParticipantsLoading && participants.length > 0 && (
+        <div className={styles.participantList}>
+          {participants.map((p) => (
+            <ParticipantItem
+              key={p.id}
+              participant={p}
+              isCurrentUser={p.user_id === currentUserId}
+              onConfirm={handleConfirm}
+              onDecline={handleDecline}
+              isConfirming={statusAction === 'confirmed'}
+              isDeclining={statusAction === 'declined'}
+            />
+          ))}
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -211,7 +261,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           )}
         </div>
 
-        <div className={styles.column}>
+        <div className={`${styles.column} ${styles.columnRight}`}>
           {isCreator && joinRequests.length > 0 && (
             <div className={styles.requestsGroup}>
               <span className={styles.label}>{t('requests')}</span>
@@ -249,43 +299,21 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             </div>
           )}
 
-          <span className={styles.label}>
-            {t('participants')}{!isParticipantsLoading && ` (${participants.length})`}
-          </span>
-
-          {canAddSelf && (
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              className={styles.addSelfButton}
-              onClick={handleAddSelf}
-              isLoading={isAddingSelf}
-            >
-              {t('addSelf')}
-            </Button>
-          )}
-
-          {isParticipantsLoading && <div className={styles.skeleton} />}
-
-          {!isParticipantsLoading && participants.length === 0 && (
-            <p className={styles.empty}>{t('noParticipants')}</p>
-          )}
-
-          {!isParticipantsLoading && participants.length > 0 && (
-            <div className={styles.participantList}>
-              {participants.map((p) => (
-                <ParticipantItem
-                  key={p.id}
-                  participant={p}
-                  isCurrentUser={p.user_id === currentUserId}
-                  onConfirm={handleConfirm}
-                  onDecline={handleDecline}
-                  isConfirming={statusAction === 'confirmed'}
-                  isDeclining={statusAction === 'declined'}
+          {canReadComments ? (
+            <EventTabs
+              eventId={eventId}
+              currentUserId={currentUserId}
+              participants={participantsBlock}
+              comments={
+                <CommentsTab
+                  eventId={eventId}
+                  canWrite={canWriteComments}
+                  currentUserId={currentUserId}
                 />
-              ))}
-            </div>
+              }
+            />
+          ) : (
+            participantsBlock
           )}
         </div>
       </div>
