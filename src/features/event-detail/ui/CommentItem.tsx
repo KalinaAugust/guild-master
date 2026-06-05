@@ -84,32 +84,33 @@ export const CommentItem: React.FC<CommentItemProps> = ({
           <p className={styles.text}>{comment.body}</p>
         )}
 
-        {isOwn && !isEditing && (
-          <div className={styles.actions}>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon_sm"
-              aria-label={t('edit')}
-              className={styles.actionBtn}
-              onClick={() => setIsEditing(true)}
-            >
-              <Edit2 size={16} />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon_sm"
-              aria-label={t('delete')}
-              className={styles.deleteBtn}
-              onClick={() => setConfirmOpen(true)}
-              isLoading={isDeleting}
-            >
-              <Trash2 size={16} />
-            </Button>
-          </div>
-        )}
       </div>
+
+      {isOwn && !isEditing && (
+        <div className={styles.actions}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon_sm"
+            aria-label={t('edit')}
+            className={styles.actionBtn}
+            onClick={() => setIsEditing(true)}
+          >
+            <Edit2 size={16} />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon_sm"
+            aria-label={t('delete')}
+            className={styles.deleteBtn}
+            onClick={() => setConfirmOpen(true)}
+            isLoading={isDeleting}
+          >
+            <Trash2 size={16} />
+          </Button>
+        </div>
+      )}
 
       <ConfirmModal
         isOpen={confirmOpen}
