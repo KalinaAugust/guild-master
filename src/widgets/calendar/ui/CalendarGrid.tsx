@@ -75,6 +75,7 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
               truncate
             />
           </div>
+          <div className={styles.separator} />
           <div className={styles.filterDropdown}>
             <EventFilterDropdown />
           </div>
