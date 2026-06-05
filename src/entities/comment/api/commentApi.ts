@@ -44,6 +44,19 @@ export const commentApi = baseApi.injectEndpoints({
         { type: 'Comment' as const, id: `LIST-${eventId}` },
       ],
     }),
+    getCommentReadState: builder.query<{ lastReadAt: string | null }, string>({
+      query: (eventId) => `events/${eventId}/comments/read`,
+      providesTags: (_, __, eventId) => [
+        { type: 'CommentRead' as const, id: `LIST-${eventId}` },
+      ],
+    }),
+    markCommentsRead: builder.mutation<{ marked: boolean }, string>({
+      query: (eventId) => ({ url: `events/${eventId}/comments/read`, method: 'POST' }),
+      invalidatesTags: (_, __, eventId) => [
+        { type: 'CommentRead' as const, id: `LIST-${eventId}` },
+        { type: 'Notification' as const, id: 'LIST' },
+      ],
+    }),
   }),
   overrideExisting: false,
 });
@@ -53,4 +66,6 @@ export const {
   useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
+  useGetCommentReadStateQuery,
+  useMarkCommentsReadMutation,
 } = commentApi;
