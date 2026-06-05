@@ -30,29 +30,29 @@ export const EventFilterDropdown: React.FC = () => {
     dispatch(setAllEventTypesEnabled(false));
   };
 
-  const isAllEnabled = excludedEventTypes.length === 0;
+  const includedEventTypes = ACTIVITY_TYPES.filter((type) => !excludedEventTypes.includes(type));
 
   const renderTriggerContent = () => {
-    if (isAllEnabled) {
+    if (includedEventTypes.length === 0) {
       return (
         <span className={styles.triggerText}>
           <Filter size={16} className={styles.filterIcon} />
-          {t('filter.all')}
+          {t('filter.none')}
         </span>
       );
     }
 
-    const visibleExcluded = excludedEventTypes.slice(0, 3);
-    const extraCount = excludedEventTypes.length - 3;
+    const visibleIncluded = includedEventTypes.slice(0, 3);
+    const extraCount = includedEventTypes.length - 3;
 
     return (
       <div className={styles.triggerIcons}>
         <Filter size={16} className={styles.filterIcon} />
         <div className={styles.iconsRow}>
-          {visibleExcluded.map((type) => (
+          {visibleIncluded.map((type) => (
             <span
               key={type}
-              className={`${styles.mutedIcon} ${styles[`iconType_${type}`] || ''}`}
+              className={`${styles.activeIcon} ${styles[`iconType_${type}`] || ''}`}
               title={tCommon(`eventTypes.${type}`)}
             >
               {typeIcons[type]}

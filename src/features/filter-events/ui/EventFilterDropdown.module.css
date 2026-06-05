@@ -50,11 +50,10 @@
   gap: 6px;
 }
 
-.mutedIcon {
+.activeIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.6;
 }
 
 .extraCount {

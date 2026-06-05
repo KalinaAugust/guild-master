@@ -61,14 +61,23 @@ function renderDropdown(uiOverrides = {}) {
 }
 
 describe('EventFilterDropdown', () => {
-  it('renders "All" when excludedEventTypes is empty', () => {
+  it('renders active icons when excludedEventTypes is empty (all enabled)', () => {
     renderDropdown({ excludedEventTypes: [] });
-    expect(screen.getByText('Event.filter.all')).toBeInTheDocument();
+    expect(screen.queryByText('Event.filter.all')).not.toBeInTheDocument();
+    expect(screen.getByText('+6')).toBeInTheDocument();
   });
 
-  it('renders disabled type count or icons when excludedEventTypes is not empty', () => {
+  it('renders active icons when some types are disabled', () => {
     renderDropdown({ excludedEventTypes: ['raid', 'game'] });
-    expect(screen.queryByText('Event.filter.all')).not.toBeInTheDocument();
+    // Out of 9 types, 2 are excluded, leaving 7 active. 3 displayed, +4 in counter.
+    expect(screen.getByText('+4')).toBeInTheDocument();
+  });
+
+  it('renders "None" when all event types are excluded', () => {
+    renderDropdown({
+      excludedEventTypes: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame'],
+    });
+    expect(screen.getByText('Event.filter.none')).toBeInTheDocument();
   });
 
   it('opens popover on click and shows all event types', () => {

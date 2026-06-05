@@ -88,6 +88,7 @@
     },
     "filter": {
       "all": "All",
+      "none": "None",
       "enableAll": "Enable all",
       "disableAll": "Disable all",
       "triggerLabel": "Filter events by type",
