@@ -4,13 +4,16 @@
   gap: 12px;
   padding: 12px 14px;
   max-width: 90%;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--glass-border);
-  border-radius: 10px;
+  border-radius: 16px 16px 16px 4px;
 }
 
 .own {
   align-self: flex-end;
+  background: rgba(96, 165, 250, 0.18);
+  border-color: rgba(96, 165, 250, 0.35);
+  border-radius: 16px 16px 4px 16px;
 }
 
 .body {
