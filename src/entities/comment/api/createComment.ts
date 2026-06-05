@@ -25,6 +25,7 @@ export const createComment = async (
     .select(COMMENT_SELECT)
     .single();
 
-  if (error || !data) throw new Error('Failed to create comment');
+  if (error) throw error;
+  if (!data) throw new Error('Failed to create comment');
   return mapCommentRow(data);
 };
