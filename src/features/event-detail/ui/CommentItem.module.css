@@ -9,6 +9,10 @@
   border-radius: 10px;
 }
 
+.own {
+  align-self: flex-end;
+}
+
 .body {
   flex: 1;
   min-width: 0;

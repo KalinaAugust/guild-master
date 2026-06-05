@@ -54,7 +54,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
   };
 
   return (
-    <div className={styles.item}>
+    <div className={`${styles.item} ${isOwn ? styles.own : ''}`}>
       <UserAvatar avatarUrl={comment.profile.avatarUrl} name={comment.profile.fullName} size="md" />
       <div className={styles.body}>
         <div className={styles.head}>
