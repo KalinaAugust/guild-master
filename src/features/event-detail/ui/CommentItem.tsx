@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { Edit2, Trash2 } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { Button } from '@/shared/ui/Button';
@@ -85,11 +86,26 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
         {isOwn && !isEditing && (
           <div className={styles.actions}>
-            <Button type="button" size="xs" variant="secondary" onClick={() => setIsEditing(true)}>
-              {t('edit')}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon_sm"
+              aria-label={t('edit')}
+              className={styles.actionBtn}
+              onClick={() => setIsEditing(true)}
+            >
+              <Edit2 size={16} />
             </Button>
-            <Button type="button" size="xs" variant="danger" onClick={() => setConfirmOpen(true)} isLoading={isDeleting}>
-              {t('delete')}
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon_sm"
+              aria-label={t('delete')}
+              className={styles.deleteBtn}
+              onClick={() => setConfirmOpen(true)}
+              isLoading={isDeleting}
+            >
+              <Trash2 size={16} />
             </Button>
           </div>
         )}

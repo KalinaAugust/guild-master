@@ -34,9 +34,29 @@
   line-height: 1.4;
 }
 
-.actions,
 .editActions {
   display: flex;
   gap: 8px;
   margin-top: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.item:hover .actions,
+.item:focus-within .actions {
+  opacity: 1;
+}
+
+.actionBtn:hover {
+  color: var(--accent-primary);
+}
+
+.deleteBtn:hover {
+  color: #ff4d4d;
 }
