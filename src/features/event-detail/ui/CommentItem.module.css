@@ -57,7 +57,7 @@
   right: 8px;
   display: flex;
   gap: 4px;
-  padding: 2px;
+  padding: 2px 8px;
   border-radius: 999px;
   background: rgba(20, 28, 46, 0.85);
   opacity: 0;
