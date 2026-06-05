@@ -28,4 +28,21 @@ describe('Tabs', () => {
     await user.click(screen.getByRole('tab', { name: 'Second' }));
     expect(onChange).toHaveBeenCalledWith('b');
   });
+
+  it('renders a badge when count > 0 and caps it at 9+', () => {
+    render(
+      <Tabs
+        tabs={[{ id: 'a', label: 'First', badge: 3 }, { id: 'b', label: 'Second', badge: 42 }]}
+        activeId="a"
+        onChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.getByText('9+')).toBeInTheDocument();
+  });
+
+  it('does not render a badge when count is 0 or undefined', () => {
+    render(<Tabs tabs={[{ id: 'a', label: 'First', badge: 0 }, { id: 'b', label: 'Second' }]} activeId="a" onChange={vi.fn()} />);
+    expect(screen.queryByText('0')).not.toBeInTheDocument();
+  });
 });

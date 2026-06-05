@@ -5,6 +5,8 @@ export interface TabItem {
   id: string;
   label: React.ReactNode;
   icon?: React.ReactNode;
+  /** When > 0, renders a small unread badge after the label (capped at "9+"). */
+  badge?: number;
 }
 
 export interface TabsProps {
@@ -29,6 +31,9 @@ export const Tabs: React.FC<TabsProps> = ({ tabs, activeId, onChange, className 
       >
         {tab.icon}
         {tab.label}
+        {tab.badge != null && tab.badge > 0 && (
+          <span className={styles.badge}>{tab.badge > 9 ? '9+' : tab.badge}</span>
+        )}
       </button>
     ))}
   </div>
