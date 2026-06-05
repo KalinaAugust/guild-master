@@ -4,6 +4,7 @@ import { createClient } from '@/shared/api/supabase/server';
 import { query, mockClient } from '@/shared/lib/test/supabaseMock';
 
 vi.mock('@/shared/api/supabase/server');
+vi.mock('./notifyEventComment', () => ({ notifyEventComment: vi.fn() }));
 beforeEach(() => vi.clearAllMocks());
 
 const useClient = (user: { id: string } | null, from: ReturnType<typeof vi.fn>) =>

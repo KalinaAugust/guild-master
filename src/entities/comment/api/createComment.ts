@@ -1,6 +1,7 @@
 import { createClient } from '@/shared/api/supabase/server';
 import type { EventComment } from '../model/types';
 import { COMMENT_SELECT, mapCommentRow } from './mapCommentRow';
+import { notifyEventComment } from './notifyEventComment';
 
 export const MAX_COMMENT_LENGTH = 2000;
 
@@ -27,5 +28,13 @@ export const createComment = async (
 
   if (error) throw error;
   if (!data) throw new Error('Failed to create comment');
+
+  // Best effort — never fail comment creation if notification fan-out errors.
+  try {
+    await notifyEventComment(eventId, user.id);
+  } catch {
+    // ignored
+  }
+
   return mapCommentRow(data);
 };
