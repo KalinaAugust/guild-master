@@ -365,21 +365,32 @@ export type Database = {
           avatar_url: string | null
           full_name: string | null
           id: string
+          last_active_guild_id: string | null
           updated_at: string | null
         }
         Insert: {
           avatar_url?: string | null
           full_name?: string | null
           id: string
+          last_active_guild_id?: string | null
           updated_at?: string | null
         }
         Update: {
           avatar_url?: string | null
           full_name?: string | null
           id?: string
+          last_active_guild_id?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_last_active_guild_id_fkey"
+            columns: ["last_active_guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {

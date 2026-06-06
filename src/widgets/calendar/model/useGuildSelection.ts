@@ -2,11 +2,13 @@ import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { Guild, setCurrentGuild } from '@/entities/guild';
 
-export const useGuildSelection = (guilds: Guild[]) => {
+import { updateLastActiveGuild } from "@/entities/user";
+
+export const useGuildSelection = (guilds: Guild[], initialGuildId?: string, userId?: string) => {
   const dispatch = useAppDispatch();
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
 
-  const activeGuildId = useMemo(() => currentGuildId || guilds[0]?.id, [currentGuildId, guilds]);
+  const activeGuildId = useMemo(() => currentGuildId || initialGuildId || guilds[0]?.id, [currentGuildId, initialGuildId, guilds]);
 
   const guildOptions = useMemo(() => guilds.map(guild => ({
     label: guild.name,
@@ -16,6 +18,11 @@ export const useGuildSelection = (guilds: Guild[]) => {
 
   const handleGuildChange = (guildId: string) => {
     dispatch(setCurrentGuild(guildId));
+    if (userId) {
+      updateLastActiveGuild(userId, guildId).catch((err) => {
+        console.error("Failed to update last active guild:", err);
+      });
+    }
   };
 
   return { activeGuildId, guildOptions, handleGuildChange };

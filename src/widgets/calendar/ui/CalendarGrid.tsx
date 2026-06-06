@@ -33,7 +33,7 @@ export const CalendarGrid: React.FC<{
 
   const { now, months, years, handlePrevMonth, handleNextMonth, handleMonthChange, handleYearChange } = useCalendarNavigation();
   const { days, DAYS_OF_WEEK } = useCalendarDays(now);
-  const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds);
+  const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
   const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
 

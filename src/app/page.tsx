@@ -15,7 +15,10 @@ export default async function Home() {
     redirect('/guilds');
   }
 
-  const defaultGuildId = guilds[0].id;
+  const lastActiveGuildId = user?.profile?.lastActiveGuildId;
+  const defaultGuildId = lastActiveGuildId && guilds.some(g => g.id === lastActiveGuildId)
+    ? lastActiveGuildId
+    : guilds[0].id;
   const initialEvents = await getServerEvents(defaultGuildId);
 
   return (
