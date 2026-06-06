@@ -5,29 +5,31 @@ import { DayEventsList } from '@/widgets/day-events';
 import { EventWizard } from '@/features/create-event';
 import { ChevronLeft } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { createClient } from '@/shared/api/supabase/server';
+import { getUser } from '@/entities/user';
 import styles from './DayPage.module.css';
 
 interface DayPageProps {
   params: Promise<{
     date: string;
   }>;
+  searchParams: Promise<{
+    guildId?: string;
+  }>;
 }
 
-export default async function DayPage({ params }: DayPageProps) {
+export default async function DayPage({ params, searchParams }: DayPageProps) {
   const { date } = await params;
+  const { guildId } = await searchParams;
 
-  const supabase = await createClient();
-  const [{ data: { user } }, guilds] = await Promise.all([
-    supabase.auth.getUser(),
-    getMyGuilds(),
-  ]);
+  const user = await getUser();
+  const guilds = await getMyGuilds(user?.id);
 
   if (guilds.length === 0) {
     redirect('/guilds');
   }
 
-  const currentGuildId = guilds[0].id;
+  const activeGuild = guilds.find((g) => g.id === guildId) || guilds[0];
+  const currentGuildId = activeGuild.id;
   const t = await getTranslations('Common');
 
   return (

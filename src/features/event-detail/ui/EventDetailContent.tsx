@@ -175,7 +175,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
     try {
       await deleteEvent(event.id).unwrap();
       toast.success(eventT('successDeleted'));
-      router.push(`/day/${event.date}`);
+      router.push(`/day/${event.date}?guildId=${data.guildId}`);
     } catch {
       toast.error(eventT('error'));
     }
@@ -247,7 +247,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Link href={`/day/${event.date}`} className={styles.backLink}>
+        <Link href={`/day/${event.date}?guildId=${data.guildId}`} className={styles.backLink}>
           <ChevronLeft size={20} />
           {commonT('backToDay')}
         </Link>

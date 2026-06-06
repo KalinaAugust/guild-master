@@ -1,7 +1,8 @@
+import { cache } from 'react';
 import { createClient } from '@/shared/api/supabase/server';
 import { User } from '../model/types';
 
-export const getUser = async (): Promise<User | null> => {
+export const getUser = cache(async (): Promise<User | null> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -28,4 +29,4 @@ export const getUser = async (): Promise<User | null> => {
         }
       : null,
   };
-};
+});

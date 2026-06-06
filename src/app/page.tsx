@@ -1,26 +1,27 @@
 import { redirect } from 'next/navigation';
 import { getMyGuilds } from '@/entities/guild';
-import { createClient } from '@/shared/api/supabase/server';
+import { getUser } from '@/entities/user';
+import { getServerEvents } from '@/entities/event';
 import { CalendarGrid } from '@/widgets/calendar';
 import { EventWizard } from '@/features/create-event';
 import { UpcomingEventsStrip } from '@/widgets/upcoming-events';
 import styles from './HomePage.module.css';
 
 export default async function Home() {
-  const supabase = await createClient();
-  const [{ data: { user } }, guilds] = await Promise.all([
-    supabase.auth.getUser(),
-    getMyGuilds(),
-  ]);
+  const user = await getUser();
+  const guilds = await getMyGuilds(user?.id);
 
   if (guilds.length === 0) {
     redirect('/guilds');
   }
 
+  const defaultGuildId = guilds[0].id;
+  const initialEvents = await getServerEvents(defaultGuildId);
+
   return (
     <main className={styles.main}>
-      <UpcomingEventsStrip guilds={guilds} userId={user?.id} />
-      <CalendarGrid guilds={guilds} userId={user?.id} />
+      <UpcomingEventsStrip guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
+      <CalendarGrid guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
       <EventWizard userId={user?.id} />
     </main>
   );

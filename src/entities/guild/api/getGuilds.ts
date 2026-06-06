@@ -2,16 +2,20 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { Guild } from '../model/types';
 
-export const getMyGuilds = async (): Promise<Guild[]> => {
+export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) return [];
+  let finalUserId = userId;
+
+  if (!finalUserId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return [];
+    finalUserId = user.id;
+  }
 
   const { data, error } = await supabase
     .from('guild_members')
     .select('guild_id, guilds (*)')
-    .eq('user_id', user.id);
+    .eq('user_id', finalUserId);
     
   if (error || !data) {
     console.error('Error fetching guilds:', error);
