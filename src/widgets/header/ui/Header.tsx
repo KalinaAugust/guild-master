@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Shield } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { getUser } from '@/entities/user';
+import { getUser } from '@/entities/user/api/getUser';
 import { UserMenu } from './UserMenu';
 import { AiHelperButton } from '@/features/ai-helper';
 import { NotificationBell } from '@/features/notification-panel';

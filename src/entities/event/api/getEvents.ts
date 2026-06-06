@@ -24,7 +24,7 @@ export const getServerEvents = async (guildId: string): Promise<ActivityEvent[]>
       type: raw.type as ActivityType,
       date: d.format('YYYY-MM-DD'),
       time: d.format('HH:mm'),
-      createdBy: raw.created_by,
+      createdBy: raw.created_by || undefined,
     };
   });
 };

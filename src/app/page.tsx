@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getMyGuilds } from '@/entities/guild';
-import { getUser } from '@/entities/user';
-import { getServerEvents } from '@/entities/event';
+import { getUser } from '@/entities/user/api/getUser';
+import { getServerEvents } from '@/entities/event/api/getEvents';
 import { CalendarGrid } from '@/widgets/calendar';
 import { EventWizard } from '@/features/create-event';
 import { UpcomingEventsStrip } from '@/widgets/upcoming-events';

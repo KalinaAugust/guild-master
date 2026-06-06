@@ -5,7 +5,7 @@ import { DayEventsList } from '@/widgets/day-events';
 import { EventWizard } from '@/features/create-event';
 import { ChevronLeft } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { getUser } from '@/entities/user';
+import { getUser } from '@/entities/user/api/getUser';
 import styles from './DayPage.module.css';
 
 interface DayPageProps {

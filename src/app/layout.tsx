@@ -37,8 +37,8 @@ export default async function RootLayout({
   const requiredNamespaces = ['Common', 'Event', 'Guild', 'GuildDetail', 'EventComments'];
   const filteredMessages = Object.keys(messages)
     .filter((key) => requiredNamespaces.includes(key))
-    .reduce((obj, key) => {
-      obj[key] = messages[key];
+    .reduce<Record<string, any>>((obj, key) => {
+      obj[key] = (messages as Record<string, any>)[key];
       return obj;
     }, {});
 
