@@ -90,7 +90,7 @@ describe('EventDetailContent', () => {
       </Provider>
     );
     const backLink = screen.getByRole('link', { name: /backToDay/i });
-    expect(backLink).toHaveAttribute('href', '/day/2026-05-28');
+    expect(backLink).toHaveAttribute('href', '/day/2026-05-28?guildId=g1');
   });
 
   it('shows empty participants message when list is empty', () => {

@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { useGetEventsQuery, useGetMyEventIdsQuery } from '@/entities/event';
 import { useAppSelector } from '@/shared/lib/hooks';
 import type { Guild } from '@/entities/guild';
+import type { ActivityEvent } from '@/shared/types';
 import { useNextEvent } from '../lib/useNextEvent';
 import { useWeekEventsByType } from '../lib/useWeekEventsByType';
 import { NextEventBlock } from './NextEventBlock';
@@ -13,21 +14,25 @@ import styles from './UpcomingEventsStrip.module.css';
 interface Props {
   guilds: Guild[];
   userId?: string;
+  initialEvents?: ActivityEvent[];
+  initialGuildId?: string;
 }
 
-export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId }) => {
+export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
   const currentGuildId = useAppSelector(state => state.guild.currentGuildId);
   const activeGuildId = useMemo(
     () => currentGuildId || guilds[0]?.id,
     [currentGuildId, guilds]
   );
 
-  const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
+  const { data: fetchedEvents } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
   const { data: myIdsData } = useGetMyEventIdsQuery(activeGuildId ?? '', {
     skip: !activeGuildId || !userId,
   });
+
+  const events = fetchedEvents ?? (activeGuildId === initialGuildId ? initialEvents : []);
 
   const nextEvent = useNextEvent(events);
   const eventsByType = useWeekEventsByType(events, myIdsData?.eventIds ?? []);

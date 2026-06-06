@@ -34,13 +34,21 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
+  const requiredNamespaces = ['Common', 'Event', 'Guild', 'GuildDetail', 'EventComments'];
+  const filteredMessages = Object.keys(messages)
+    .filter((key) => requiredNamespaces.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = messages[key];
+      return obj;
+    }, {});
+
   return (
     <html lang={locale} className={`${manrope.variable} ${unbounded.variable}`}>
       <body>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
         <ParticlesBackground />
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={filteredMessages}>
           <StoreProvider>
             <Toaster position="top-right" richColors closeButton theme="dark" />
             <Header />

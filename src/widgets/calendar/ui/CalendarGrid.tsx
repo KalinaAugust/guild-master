@@ -11,6 +11,7 @@ import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventFilterDropdown } from '@/features/filter-events';
 import { useGetEventsQuery } from '@/entities/event';
 import { Guild, useGuildPermissions } from '@/entities/guild';
+import { ActivityEvent } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
@@ -20,7 +21,12 @@ import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection } from '../model/useGuildSelection';
 
-export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ guilds, userId }) => {
+export const CalendarGrid: React.FC<{
+  guilds: Guild[];
+  userId?: string;
+  initialEvents?: ActivityEvent[];
+  initialGuildId?: string;
+}> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const t = useTranslations('Event');
@@ -31,12 +37,14 @@ export const CalendarGrid: React.FC<{ guilds: Guild[]; userId?: string }> = ({ g
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
   const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
 
-  const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
+  const { data: fetchedEvents } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
 
+  const events = fetchedEvents ?? (activeGuildId === initialGuildId ? initialEvents : []);
+
   const handleDayClick = (dateStr: string) => {
-    router.push(`/day/${dateStr}`);
+    router.push(`/day/${dateStr}?guildId=${activeGuildId}`);
   };
 
   const handleAddEventClick = (e: React.MouseEvent, dateStr: string) => {
