@@ -7,14 +7,14 @@ export const useWeekEventsByType = (
   myEventIds: string[]
 ): Partial<Record<ActivityType, ActivityEvent[]>> =>
   useMemo(() => {
-    const startOfWeek = dayjs().startOf('isoWeek');
+    const now = dayjs();
     const endOfWeek = dayjs().endOf('isoWeek');
     const myIdSet = new Set(myEventIds);
 
     return events
       .filter(e => {
-        const d = dayjs(e.date);
-        return myIdSet.has(e.id) && !d.isBefore(startOfWeek) && !d.isAfter(endOfWeek);
+        const eventTime = dayjs(`${e.date}T${e.time}`);
+        return myIdSet.has(e.id) && eventTime.isAfter(now) && !eventTime.isAfter(endOfWeek);
       })
       .reduce<Partial<Record<ActivityType, ActivityEvent[]>>>((acc, e) => {
         if (!acc[e.type]) acc[e.type] = [];
