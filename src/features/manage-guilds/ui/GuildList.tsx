@@ -1,9 +1,7 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Shield, Pencil, Trash2 } from 'lucide-react';
+import { Shield, Pencil } from 'lucide-react';
 import { Guild } from '@/entities/guild';
 import styles from './GuildList.module.css';
 
@@ -11,11 +9,10 @@ interface GuildListProps {
   title: string;
   guilds: Guild[];
   onEdit?: (guild: Guild) => void;
-  onDelete?: (guild: Guild) => void;
   emptyMessage: string;
 }
 
-export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, onDelete, emptyMessage }) => {
+export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, emptyMessage }) => {
   const t = useTranslations('Guild');
 
   return (
@@ -36,26 +33,15 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, onD
                   )}
                 </div>
               </Link>
-              {(onEdit || onDelete) && (
+              {onEdit && (
                 <div className={styles.actions}>
-                  {onEdit && (
-                    <button
-                      className={styles.actionBtn}
-                      aria-label={t('editLabel')}
-                      onClick={() => onEdit(guild)}
-                    >
-                      <Pencil size={16} />
-                    </button>
-                  )}
-                  {onDelete && (
-                    <button
-                      className={styles.actionBtn}
-                      aria-label={t('deleteLabel')}
-                      onClick={() => onDelete(guild)}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  )}
+                  <button
+                    className={styles.actionBtn}
+                    aria-label={t('editLabel')}
+                    onClick={() => onEdit(guild)}
+                  >
+                    <Pencil size={16} />
+                  </button>
                 </div>
               )}
             </li>

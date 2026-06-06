@@ -2,10 +2,8 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
-import { useGetGuildsQuery, useDeleteGuildMutation, Guild } from '@/entities/guild';
-import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { useGetGuildsQuery, Guild } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { GuildList } from './GuildList';
 import { EditGuildWizard } from './EditGuildWizard';
@@ -17,14 +15,11 @@ interface GuildManagePageProps {
 
 export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
   const t = useTranslations('Guild');
-  const commonT = useTranslations('Common');
 
   const [wizardOpen, setWizardOpen] = useState(false);
   const [editingGuild, setEditingGuild] = useState<Guild | null>(null);
-  const [deletingGuild, setDeletingGuild] = useState<Guild | null>(null);
 
   const { data: guilds = [] } = useGetGuildsQuery();
-  const [deleteGuild, { isLoading: isDeleting }] = useDeleteGuildMutation();
 
   const owned = guilds.filter((g) => g.ownerId === userId);
   const member = guilds.filter((g) => g.ownerId !== userId);
@@ -32,17 +27,6 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
   const openCreate = () => { setEditingGuild(null); setWizardOpen(true); };
   const openEdit = (guild: Guild) => { setEditingGuild(guild); setWizardOpen(true); };
   const closeWizard = () => { setWizardOpen(false); setEditingGuild(null); };
-
-  const handleDelete = async () => {
-    if (!deletingGuild) return;
-    try {
-      await deleteGuild(deletingGuild.id).unwrap();
-      toast.success(t('deleteSuccess'));
-    } catch {
-      toast.error(t('errorCreate'));
-    }
-    setDeletingGuild(null);
-  };
 
   return (
     <div className={styles.container}>
@@ -58,7 +42,6 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
         title={t('ownerSection')}
         guilds={owned}
         onEdit={openEdit}
-        onDelete={setDeletingGuild}
         emptyMessage={t('emptyOwned')}
       />
 
@@ -69,16 +52,6 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
       />
 
       <EditGuildWizard key={editingGuild?.id ?? 'new'} open={wizardOpen} guild={editingGuild} onClose={closeWizard} userId={userId} />
-      <ConfirmModal
-        isOpen={!!deletingGuild}
-        onClose={() => setDeletingGuild(null)}
-        onConfirm={handleDelete}
-        title={commonT('delete')}
-        description={t('deleteConfirm')}
-        confirmLabel={commonT('delete')}
-        variant="danger"
-        isLoading={isDeleting}
-      />
     </div>
   );
 };

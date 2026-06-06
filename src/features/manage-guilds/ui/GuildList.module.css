@@ -78,6 +78,22 @@
   gap: 4px;
   flex-shrink: 0;
   padding-right: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.row:hover .actions,
+.row:focus-within .actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .actionBtn {

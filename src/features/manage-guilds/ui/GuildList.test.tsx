@@ -20,7 +20,7 @@ const guilds: Guild[] = [
 describe('GuildList', () => {
   it('renders title and guild names', () => {
     render(
-      <GuildList title="You are the owner" guilds={guilds} onEdit={vi.fn()} onDelete={vi.fn()} emptyMessage="No guilds" />
+      <GuildList title="You are the owner" guilds={guilds} onEdit={vi.fn()} emptyMessage="No guilds" />
     );
     expect(screen.getByText('You are the owner')).toBeInTheDocument();
     expect(screen.getByText('Alpha Guild')).toBeInTheDocument();
@@ -29,14 +29,14 @@ describe('GuildList', () => {
 
   it('renders description when present', () => {
     render(
-      <GuildList title="Owner" guilds={guilds} onEdit={vi.fn()} onDelete={vi.fn()} emptyMessage="No guilds" />
+      <GuildList title="Owner" guilds={guilds} onEdit={vi.fn()} emptyMessage="No guilds" />
     );
     expect(screen.getByText('A great guild')).toBeInTheDocument();
   });
 
   it('renders empty message when guild list is empty', () => {
     render(
-      <GuildList title="Owner" guilds={[]} onEdit={vi.fn()} onDelete={vi.fn()} emptyMessage="No guilds yet" />
+      <GuildList title="Owner" guilds={[]} onEdit={vi.fn()} emptyMessage="No guilds yet" />
     );
     expect(screen.getByText('No guilds yet')).toBeInTheDocument();
   });
@@ -44,20 +44,10 @@ describe('GuildList', () => {
   it('calls onEdit with the correct guild when edit button clicked', () => {
     const onEdit = vi.fn();
     render(
-      <GuildList title="Owner" guilds={guilds} onEdit={onEdit} onDelete={vi.fn()} emptyMessage="No guilds" />
+      <GuildList title="Owner" guilds={guilds} onEdit={onEdit} emptyMessage="No guilds" />
     );
     const editButtons = screen.getAllByRole('button', { name: 'editLabel' });
     fireEvent.click(editButtons[0]);
     expect(onEdit).toHaveBeenCalledWith(guilds[0]);
-  });
-
-  it('calls onDelete with the correct guild when delete button clicked', () => {
-    const onDelete = vi.fn();
-    render(
-      <GuildList title="Owner" guilds={guilds} onEdit={vi.fn()} onDelete={onDelete} emptyMessage="No guilds" />
-    );
-    const deleteButtons = screen.getAllByRole('button', { name: 'deleteLabel' });
-    fireEvent.click(deleteButtons[0]);
-    expect(onDelete).toHaveBeenCalledWith(guilds[0]);
   });
 });
