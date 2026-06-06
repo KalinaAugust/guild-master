@@ -2,9 +2,11 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
+import { LogOut } from 'lucide-react';
 import { EventParticipant } from '@/shared/types';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { Button } from '@/shared/ui/Button';
+import { Tooltip } from '@/shared/ui/Tooltip';
 import styles from './ParticipantItem.module.css';
 
 interface ParticipantItemProps {
@@ -12,8 +14,10 @@ interface ParticipantItemProps {
   isCurrentUser: boolean;
   onConfirm?: () => void;
   onDecline?: () => void;
+  onLeave?: () => void;
   isConfirming?: boolean;
   isDeclining?: boolean;
+  isLeaving?: boolean;
 }
 
 export const ParticipantItem: React.FC<ParticipantItemProps> = ({
@@ -21,12 +25,17 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
   isCurrentUser,
   onConfirm,
   onDecline,
+  onLeave,
   isConfirming = false,
   isDeclining = false,
+  isLeaving = false,
 }) => {
   const t = useTranslations('EventDetail');
 
   const showActions = isCurrentUser && participant.status === 'pending';
+  const showLeave =
+    isCurrentUser &&
+    (participant.status === 'confirmed' || participant.status === 'declined');
 
   return (
     <div
@@ -72,6 +81,19 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
             {t('declineBtn')}
           </Button>
         </div>
+      )}
+      {showLeave && (
+        <Tooltip content={t('leave')}>
+          <button
+            type="button"
+            className={styles.leaveButton}
+            onClick={onLeave}
+            disabled={isLeaving}
+            aria-label={t('leave')}
+          >
+            <LogOut size={16} />
+          </button>
+        </Tooltip>
       )}
     </div>
   );

@@ -89,6 +89,10 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+}
+
+/* Tighter top padding only when the tab bar is present. */
+.columnRightTabs {
   padding-top: 10px;
 }
 

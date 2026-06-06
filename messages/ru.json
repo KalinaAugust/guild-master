@@ -122,7 +122,11 @@
     "acceptRequest": "Принять",
     "declineRequest": "Отклонить",
     "resolveSuccess": "Заявка обновлена",
-    "resolveError": "Не удалось обновить заявку"
+    "resolveError": "Не удалось обновить заявку",
+    "leave": "Покинуть",
+    "confirmLeave": "Вы уверены, что хотите покинуть это событие?",
+    "leaveSuccess": "Вы покинули событие",
+    "leaveError": "Не удалось покинуть событие"
   },
   "EventComments": {
     "tabParticipants": "Участники",
@@ -228,7 +232,7 @@
   },
   "UpcomingEvents": {
     "nextEvent": "Следующее событие",
-    "thisWeek": "На этой неделе",
+    "thisWeek": "Осталось на неделе",
     "noUpcoming": "Событий не запланировано",
     "today": "Сегодня",
     "tomorrow": "Завтра",

@@ -59,3 +59,27 @@
   flex-shrink: 0;
 }
 
+.leaveButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.leaveButton:hover:not(:disabled) {
+  background: rgba(255, 128, 128, 0.12);
+  color: #ff8080;
+}
+
+.leaveButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+

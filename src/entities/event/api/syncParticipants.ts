@@ -3,6 +3,13 @@ import { createClient } from '@/shared/api/supabase/server';
 export const syncParticipants = async (eventId: string, userIds: string[]): Promise<void> => {
   const supabase = await createClient();
 
+  const { data: event, error: eventError } = await supabase
+    .from('events')
+    .select('created_by')
+    .eq('id', eventId)
+    .single();
+  if (eventError) throw eventError;
+
   const { data: current, error: fetchError } = await supabase
     .from('event_participants')
     .select('user_id')
@@ -26,7 +33,11 @@ export const syncParticipants = async (eventId: string, userIds: string[]): Prom
   if (toInsert.length > 0) {
     const { error } = await supabase
       .from('event_participants')
-      .insert(toInsert.map((user_id) => ({ event_id: eventId, user_id, status: 'pending' })));
+      .insert(toInsert.map((user_id) => ({
+        event_id: eventId,
+        user_id,
+        status: user_id === event.created_by ? 'confirmed' : 'pending',
+      })));
     if (error) throw error;
   }
 };

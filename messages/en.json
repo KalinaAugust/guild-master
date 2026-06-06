@@ -122,7 +122,11 @@
     "acceptRequest": "Accept",
     "declineRequest": "Decline",
     "resolveSuccess": "Application updated",
-    "resolveError": "Failed to update application"
+    "resolveError": "Failed to update application",
+    "leave": "Leave",
+    "confirmLeave": "Are you sure you want to leave this event?",
+    "leaveSuccess": "You left the event",
+    "leaveError": "Failed to leave the event"
   },
   "EventComments": {
     "tabParticipants": "Participants",
@@ -228,7 +232,7 @@
   },
   "UpcomingEvents": {
     "nextEvent": "Next Event",
-    "thisWeek": "This Week",
+    "thisWeek": "Remaining This Week",
     "noUpcoming": "No upcoming events",
     "today": "Today",
     "tomorrow": "Tomorrow",
