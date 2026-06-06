@@ -38,13 +38,23 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   useEffect(() => {
     markCommentsRead(eventId);
   }, [eventId, comments.length, markCommentsRead]);
-  // Scroll to the latest comment on initial load and after the viewer sends one,
-  // but not when a poll pulls in someone else's comment (would hijack scroll).
+  // Auto-scroll to the latest comment on initial load, after the viewer sends
+  // one, or when a new comment arrives while the viewer is already at the bottom.
+  // If the viewer has scrolled up to read older comments, leave scroll untouched.
   const pendingScrollRef = useRef(true);
+  const isAtBottomRef = useRef(true);
+
+  const handleScroll = () => {
+    const el = listRef.current;
+    if (!el) return;
+    isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
 
   useEffect(() => {
-    if (pendingScrollRef.current && listRef.current) {
-      listRef.current.scrollTop = listRef.current.scrollHeight;
+    const el = listRef.current;
+    if (!el) return;
+    if (pendingScrollRef.current || isAtBottomRef.current) {
+      el.scrollTop = el.scrollHeight;
       pendingScrollRef.current = false;
     }
   }, [comments.length]);
@@ -77,7 +87,7 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
 
   return (
     <div className={styles.container}>
-      <div className={styles.list} ref={listRef}>
+      <div className={styles.list} ref={listRef} onScroll={handleScroll}>
         {!isLoading && comments.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
         {comments.map((c) => (
           <CommentItem

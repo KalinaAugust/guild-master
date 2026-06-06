@@ -89,6 +89,7 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+  padding-top: 10px;
 }
 
 .infoGroup {
@@ -163,8 +164,9 @@
 
 .participantList {
   margin-top: 12px;
-  /* show at most 5 items (48px row + 8px gap) before scrolling */
-  max-height: calc((48px + 8px) * 5);
+  /* fill the remaining tab height; scroll only when items overflow */
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
@@ -257,6 +259,12 @@
   .columnRight {
     display: block;
     overflow: visible;
+  }
+
+  /* No flex parent height to fill here — cap the list and let the body scroll. */
+  .participantList {
+    flex: none;
+    max-height: 60vh;
   }
 
   .title {

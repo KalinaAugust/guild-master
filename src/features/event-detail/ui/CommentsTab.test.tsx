@@ -41,7 +41,7 @@ describe('CommentsTab', () => {
   it('renders the input when canWrite is true', () => {
     vi.mocked(useGetCommentsQuery).mockReturnValue({ data: [], isLoading: false } as never);
     render(<CommentsTab eventId="e1" canWrite currentUserId="u1" />);
-    expect(screen.getByText('send')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'send' })).toBeInTheDocument();
   });
 
   it('renders the locked prompt when canWrite is false', () => {
