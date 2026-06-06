@@ -20,6 +20,7 @@ import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
+  useLeaveEventMutation,
   useSubmitEventJoinRequestMutation,
   useGetEventJoinRequestsQuery,
   useResolveEventJoinRequestMutation,
@@ -88,9 +89,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [resolvingState, setResolvingState] = useState<{ id: string; action: 'approve' | 'decline' } | null>(null);
 
   const [updateStatus] = useUpdateParticipantStatusMutation();
+  const [leaveEvent, { isLoading: isLeaving }] = useLeaveEventMutation();
   const [statusAction, setStatusAction] = useState<'confirmed' | 'declined' | null>(null);
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [leaveModalOpen, setLeaveModalOpen] = useState(false);
 
   const locale = useLocale();
   const formattedDateTime = event
@@ -123,6 +126,17 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
       toast.error(eventT('error'));
     } finally {
       setStatusAction(null);
+    }
+  };
+
+  const handleLeave = async () => {
+    if (!event) return;
+    try {
+      await leaveEvent(event.id).unwrap();
+      setLeaveModalOpen(false);
+      toast.success(t('leaveSuccess'));
+    } catch {
+      toast.error(t('leaveError'));
     }
   };
 
@@ -219,8 +233,10 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               isCurrentUser={p.user_id === currentUserId}
               onConfirm={handleConfirm}
               onDecline={handleDecline}
+              onLeave={() => setLeaveModalOpen(true)}
               isConfirming={statusAction === 'confirmed'}
               isDeclining={statusAction === 'declined'}
+              isLeaving={isLeaving}
             />
           ))}
         </div>
@@ -261,7 +277,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           )}
         </div>
 
-        <div className={`${styles.column} ${styles.columnRight}`}>
+        <div className={`${styles.column} ${styles.columnRight}${canReadComments ? ` ${styles.columnRightTabs}` : ''}`}>
           {isCreator && joinRequests.length > 0 && (
             <div className={styles.requestsGroup}>
               <span className={styles.label}>{t('requests')}</span>
@@ -337,6 +353,16 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         description={commonT('confirmDelete')}
         confirmLabel={commonT('delete')}
         isLoading={isDeleting}
+      />
+
+      <ConfirmModal
+        isOpen={leaveModalOpen}
+        onClose={() => setLeaveModalOpen(false)}
+        onConfirm={handleLeave}
+        title={t('leave')}
+        description={t('confirmLeave')}
+        confirmLabel={t('leave')}
+        isLoading={isLeaving}
       />
     </div>
   );

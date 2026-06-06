@@ -30,6 +30,12 @@ export const detailApi = baseApi.injectEndpoints({
         { type: 'Participant' as const, id: `LIST-${eventId}` },
       ],
     }),
+    leaveEvent: builder.mutation<{ left: boolean }, string>({
+      query: (eventId) => ({ url: `participants/${eventId}`, method: 'DELETE' }),
+      invalidatesTags: (_, __, eventId) => [
+        { type: 'Participant' as const, id: `LIST-${eventId}` },
+      ],
+    }),
     submitEventJoinRequest: builder.mutation<{ id: string }, string>({
       query: (eventId) => ({ url: `events/${eventId}/join-requests`, method: 'POST' }),
       invalidatesTags: (_, __, eventId) => [
@@ -63,6 +69,7 @@ export const detailApi = baseApi.injectEndpoints({
 export const {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
+  useLeaveEventMutation,
   useSubmitEventJoinRequestMutation,
   useGetEventJoinRequestsQuery,
   useResolveEventJoinRequestMutation,

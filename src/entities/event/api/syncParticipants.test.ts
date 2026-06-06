@@ -8,7 +8,7 @@ vi.mock('@/shared/api/supabase/server', () => ({
 
 beforeEach(() => vi.clearAllMocks());
 
-function makeDb(currentRows: { user_id: string }[]) {
+function makeDb(currentRows: { user_id: string }[], createdBy: string | null = null) {
   const insertFn = vi.fn().mockResolvedValue({ error: null });
   const deleteFn = vi.fn();
   const inFn = vi.fn().mockResolvedValue({ error: null });
@@ -19,10 +19,19 @@ function makeDb(currentRows: { user_id: string }[]) {
     eq: vi.fn().mockResolvedValue({ data: currentRows, error: null }),
   });
 
+  const eventSelectFn = vi.fn().mockReturnValue({
+    eq: vi.fn().mockReturnValue({
+      single: vi.fn().mockResolvedValue({ data: { created_by: createdBy }, error: null }),
+    }),
+  });
+
   return {
     from: vi.fn((table: string) => {
       if (table === 'event_participants') {
         return { select: selectFn, insert: insertFn, delete: deleteFn };
+      }
+      if (table === 'events') {
+        return { select: eventSelectFn };
       }
       return {};
     }),
@@ -41,6 +50,18 @@ describe('syncParticipants', () => {
 
     expect(mock._insert).toHaveBeenCalledWith([
       { event_id: 'e1', user_id: 'u1', status: 'pending' },
+      { event_id: 'e1', user_id: 'u2', status: 'pending' },
+    ]);
+  });
+
+  it('auto-confirms the event creator and leaves others pending', async () => {
+    const mock = makeDb([], 'u1');
+    vi.mocked(createClient).mockResolvedValue(mock as never);
+
+    await syncParticipants('e1', ['u1', 'u2']);
+
+    expect(mock._insert).toHaveBeenCalledWith([
+      { event_id: 'e1', user_id: 'u1', status: 'confirmed' },
       { event_id: 'e1', user_id: 'u2', status: 'pending' },
     ]);
   });

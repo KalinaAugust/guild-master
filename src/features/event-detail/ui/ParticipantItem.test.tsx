@@ -1,12 +1,16 @@
-import { render, screen } from '@testing-library/react';
+import { render as rtlRender, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
+import type { ReactElement } from 'react';
 import { ParticipantItem } from './ParticipantItem';
+import { TooltipProvider } from '@/shared/ui/Tooltip';
 import { EventParticipant } from '@/shared/types';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
+
+const render = (ui: ReactElement) => rtlRender(<TooltipProvider>{ui}</TooltipProvider>);
 
 const base: EventParticipant = {
   id: 'p1',
@@ -84,5 +88,59 @@ describe('ParticipantItem', () => {
     );
     await user.click(screen.getByText('declineBtn'));
     expect(onDecline).toHaveBeenCalledOnce();
+  });
+
+  it('shows the leave button for current user who confirmed or declined', () => {
+    const { rerender } = render(
+      <ParticipantItem
+        participant={{ ...base, status: 'confirmed' }}
+        isCurrentUser={true}
+        onLeave={vi.fn()}
+      />
+    );
+    expect(screen.getByLabelText('leave')).toBeInTheDocument();
+
+    rerender(
+      <TooltipProvider>
+        <ParticipantItem
+          participant={{ ...base, status: 'declined' }}
+          isCurrentUser={true}
+          onLeave={vi.fn()}
+        />
+      </TooltipProvider>
+    );
+    expect(screen.getByLabelText('leave')).toBeInTheDocument();
+  });
+
+  it('does NOT show the leave button for pending status or other users', () => {
+    const { rerender } = render(
+      <ParticipantItem participant={base} isCurrentUser={true} onLeave={vi.fn()} />
+    );
+    expect(screen.queryByLabelText('leave')).not.toBeInTheDocument();
+
+    rerender(
+      <TooltipProvider>
+        <ParticipantItem
+          participant={{ ...base, status: 'confirmed' }}
+          isCurrentUser={false}
+          onLeave={vi.fn()}
+        />
+      </TooltipProvider>
+    );
+    expect(screen.queryByLabelText('leave')).not.toBeInTheDocument();
+  });
+
+  it('calls onLeave when the leave button clicked', async () => {
+    const user = userEvent.setup();
+    const onLeave = vi.fn();
+    render(
+      <ParticipantItem
+        participant={{ ...base, status: 'confirmed' }}
+        isCurrentUser={true}
+        onLeave={onLeave}
+      />
+    );
+    await user.click(screen.getByLabelText('leave'));
+    expect(onLeave).toHaveBeenCalledOnce();
   });
 });
