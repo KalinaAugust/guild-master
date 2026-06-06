@@ -13,14 +13,15 @@ A guild management system built with Next.js and Feature-Sliced Design. Helps gu
 - **Styling:** CSS Modules
 - **Testing:** [Vitest](https://vitest.dev/)
 - **i18n:** [next-intl](https://next-intl.dev/) (English + Russian)
+- **Package Manager:** [pnpm](https://pnpm.io/)
 
 ## Getting Started
 
-**Prerequisites:** Node.js v18+, a Supabase project.
+**Prerequisites:** Node.js v18+, pnpm, a Supabase project.
 
 1. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. Copy the environment template and fill in your Supabase credentials:
@@ -30,7 +31,7 @@ A guild management system built with Next.js and Feature-Sliced Design. Helps gu
 
 3. Start the dev server:
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
 App runs at [http://localhost:3000](http://localhost:3000).
@@ -54,13 +55,13 @@ RTK Query endpoints live in `entities/*/api/` and `features/*/api/`, all injecte
 
 | Command | Description |
 | --- | --- |
-| `npm run dev` | Start dev server with hot reload |
-| `npm run build` | Production build |
-| `npm run start` | Run production build |
-| `npm run lint` | ESLint check |
-| `npm test` | Run tests in watch mode |
-| `npm run test:run` | Run all tests once |
-| `npm run test:ui` | Vitest UI for interactive debugging |
+| `pnpm dev` | Start dev server with hot reload |
+| `pnpm build` | Production build |
+| `pnpm start` | Run production build |
+| `pnpm lint` | ESLint check |
+| `pnpm test` | Run tests in watch mode |
+| `pnpm test:run` | Run all tests once |
+| `pnpm test:ui` | Vitest UI for interactive debugging |
 
 ## Contributing
 

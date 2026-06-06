@@ -29,18 +29,18 @@ Guild Master is a guild management system built with Next.js, following the **Fe
 ### Prerequisites
 
 - Node.js (v18 or later recommended)
-- npm (installed with Node.js)
+- pnpm (recommended package manager)
 
 ### Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Running the Development Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000).
@@ -48,8 +48,8 @@ The application will be available at [http://localhost:3000](http://localhost:30
 ### Building for Production
 
 ```bash
-npm run build
-npm run start
+pnpm build
+pnpm start
 ```
 
 ## Git Workflow
@@ -80,10 +80,10 @@ npm run start
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Starts the development server with hot-reloading. |
-| `npm run build` | Compiles the application for production deployment. |
-| `npm run start` | Runs the production-ready build. |
-| `npm run lint` | Runs ESLint to check for code quality and style issues. |
-| `npm test` | Runs tests in watch mode. |
-| `npm run test:run` | Runs all tests once. |
-| `npm run test:ui` | Starts Vitest UI for interactive test debugging. |
+| `pnpm dev` | Starts the development server with hot-reloading. |
+| `pnpm build` | Compiles the application for production deployment. |
+| `pnpm start` | Runs the production-ready build. |
+| `pnpm lint` | Runs ESLint to check for code quality and style issues. |
+| `pnpm test` | Runs tests in watch mode. |
+| `pnpm test:run` | Runs all tests once. |
+| `pnpm test:ui` | Starts Vitest UI for interactive test debugging. |
