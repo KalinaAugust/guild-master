@@ -4,6 +4,11 @@
   gap: 16px;
 }
 
+.rootFill {
+  flex: 1;
+  min-height: 0;
+}
+
 .addForm {
   display: flex;
   gap: 8px;
@@ -39,6 +44,20 @@
   /* 5 items (42px each) + 4 gaps (6px) */
   max-height: 234px;
   overflow-y: auto;
+}
+
+/* Fill mode: grow to the parent's height, scroll only on overflow. */
+.listFill {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+@media (max-width: 768px) {
+  .listFill {
+    flex: none;
+    max-height: 60vh;
+  }
 }
 
 .item {

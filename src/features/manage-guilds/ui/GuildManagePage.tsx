@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
-import { useGetGuildsQuery, Guild } from '@/entities/guild';
+import { useGetGuildsQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { GuildList } from './GuildList';
 import { EditGuildWizard } from './EditGuildWizard';
@@ -17,16 +17,14 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
   const t = useTranslations('Guild');
 
   const [wizardOpen, setWizardOpen] = useState(false);
-  const [editingGuild, setEditingGuild] = useState<Guild | null>(null);
 
-  const { data: guilds = [] } = useGetGuildsQuery();
+  const { data: guilds = [], isLoading } = useGetGuildsQuery();
 
   const owned = guilds.filter((g) => g.ownerId === userId);
   const member = guilds.filter((g) => g.ownerId !== userId);
 
-  const openCreate = () => { setEditingGuild(null); setWizardOpen(true); };
-  const openEdit = (guild: Guild) => { setEditingGuild(guild); setWizardOpen(true); };
-  const closeWizard = () => { setWizardOpen(false); setEditingGuild(null); };
+  const openCreate = () => setWizardOpen(true);
+  const closeWizard = () => setWizardOpen(false);
 
   return (
     <div className={styles.container}>
@@ -38,20 +36,27 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
         </Button>
       </div>
 
-      <GuildList
-        title={t('ownerSection')}
-        guilds={owned}
-        onEdit={openEdit}
-        emptyMessage={t('emptyOwned')}
-      />
+      {isLoading ? (
+        <div className={styles.loader}>
+          <span className={styles.spinner} />
+        </div>
+      ) : (
+        <>
+          <GuildList
+            title={t('ownerSection')}
+            guilds={owned}
+            emptyMessage={t('emptyOwned')}
+          />
 
-      <GuildList
-        title={t('memberSection')}
-        guilds={member}
-        emptyMessage={t('emptyMember')}
-      />
+          <GuildList
+            title={t('memberSection')}
+            guilds={member}
+            emptyMessage={t('emptyMember')}
+          />
+        </>
+      )}
 
-      <EditGuildWizard key={editingGuild?.id ?? 'new'} open={wizardOpen} guild={editingGuild} onClose={closeWizard} userId={userId} />
+      <EditGuildWizard open={wizardOpen} guild={null} onClose={closeWizard} userId={userId} />
     </div>
   );
 };

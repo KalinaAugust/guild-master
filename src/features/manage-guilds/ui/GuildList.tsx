@@ -1,20 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { Shield, Pencil } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { Guild } from '@/entities/guild';
 import styles from './GuildList.module.css';
 
 interface GuildListProps {
   title: string;
   guilds: Guild[];
-  onEdit?: (guild: Guild) => void;
   emptyMessage: string;
 }
 
-export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, emptyMessage }) => {
-  const t = useTranslations('Guild');
-
+export const GuildList: React.FC<GuildListProps> = ({ title, guilds, emptyMessage }) => {
   return (
     <section className={styles.section}>
       <h2 className={styles.title}>{title}</h2>
@@ -33,17 +29,6 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, onEdit, emp
                   )}
                 </div>
               </Link>
-              {onEdit && (
-                <div className={styles.actions}>
-                  <button
-                    className={styles.actionBtn}
-                    aria-label={t('editLabel')}
-                    onClick={() => onEdit(guild)}
-                  >
-                    <Pencil size={16} />
-                  </button>
-                </div>
-              )}
             </li>
           ))}
         </ul>

@@ -22,9 +22,11 @@ interface GuildMembersSectionProps {
   guildId: string;
   userId?: string;
   readOnly?: boolean;
+  /** Fill the parent's height and scroll only when members overflow. */
+  fill?: boolean;
 }
 
-export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildId, userId, readOnly = false }) => {
+export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildId, userId, readOnly = false, fill = false }) => {
   const t = useTranslations('GuildMembers');
   const [email, setEmail] = useState('');
   const { data: members = [], isLoading } = useGetGuildMembersQuery(guildId);
@@ -64,7 +66,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   };
 
   return (
-    <div className={styles.root}>
+    <div className={`${styles.root} ${fill ? styles.rootFill : ''}`}>
       {effectiveCanManage && (
         <Form.Root onSubmit={handleAdd} className={styles.addForm} noValidate>
           <Input
@@ -85,7 +87,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
       ) : members.length === 0 ? (
         <p className={styles.empty}>{t('empty')}</p>
       ) : (
-        <ul className={styles.list}>
+        <ul className={`${styles.list} ${fill ? styles.listFill : ''}`}>
           {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => (
             <li key={member.userId} className={styles.item}>
               <UserAvatar

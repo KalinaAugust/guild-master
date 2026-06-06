@@ -60,9 +60,11 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const { data: participantsData, isLoading: isParticipantsLoading } =
     useGetParticipantsQuery(eventId, { skip: !event });
   const currentUserId = participantsData?.currentUserId ?? '';
+  // Order: the viewer first, then confirmed participants, then everyone else.
+  const participantRank = (p: { user_id: string; status: string }) =>
+    p.user_id === currentUserId ? 0 : p.status === 'confirmed' ? 1 : 2;
   const participants = [...(participantsData?.participants ?? [])].sort(
-    (a, b) =>
-      Number(b.user_id === currentUserId) - Number(a.user_id === currentUserId),
+    (a, b) => participantRank(a) - participantRank(b),
   );
 
   const isCreator = !!event && !!currentUserId && event.createdBy === currentUserId;
@@ -96,9 +98,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [leaveModalOpen, setLeaveModalOpen] = useState(false);
 
   const locale = useLocale();
-  const formattedDateTime = event
-    ? dayjs(`${event.date} ${event.time}`).locale(locale).format('dddd, D MMMM · HH:mm')
-    : '';
+  const eventDate = event ? dayjs(`${event.date} ${event.time}`).locale(locale) : null;
 
   const handleEdit = () => {
     if (!event) return;
@@ -266,7 +266,10 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
           <div className={styles.infoGroup}>
             <span className={styles.label}>{t('dateTime')}</span>
-            <span className={styles.dateTime}>{formattedDateTime}</span>
+            <span className={styles.dateTime}>
+              {eventDate?.format('dddd')}, <span className={styles.dateNum}>{eventDate?.format('D')}</span>{' '}
+              {eventDate?.format('MMMM')} · <span className={styles.dateNum}>{eventDate?.format('HH:mm')}</span>
+            </span>
           </div>
 
           {event.description && (

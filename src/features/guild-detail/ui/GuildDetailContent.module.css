@@ -73,11 +73,25 @@
   border-right: 1px solid var(--glass-border);
 }
 
+/* Right column lets the members list fill the full height and scroll on its own. */
+.columnRight {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .infoGroup {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-bottom: 24px;
+}
+
+.infoGroupGrow {
+  flex: 1;
+  min-height: 0;
+  margin-bottom: 0;
 }
 
 .label {
@@ -179,6 +193,16 @@
   .column:first-child {
     border-right: none;
     border-bottom: 1px solid var(--glass-border);
+  }
+
+  /* Stacked layout scrolls the whole body — drop the full-height clipping. */
+  .columnRight {
+    display: block;
+    overflow: visible;
+  }
+
+  .infoGroupGrow {
+    flex: none;
   }
 
   .title {

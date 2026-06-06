@@ -135,7 +135,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
         </div>
 
-        <div className={styles.column}>
+        <div className={`${styles.column} ${styles.columnRight}`}>
           {membershipStatus === 'owner' && (
             <>
               <div className={styles.infoGroup}>
@@ -157,9 +157,9 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
                 )}
               </div>
 
-              <div className={styles.infoGroup}>
+              <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
                 <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                <GuildMembersSection guildId={guildId} readOnly />
+                <GuildMembersSection guildId={guildId} readOnly fill />
               </div>
             </>
           )}
@@ -170,9 +170,9 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
                 {t('youAreMember')}
               </div>
 
-              <div className={styles.infoGroup}>
+              <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
                 <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                <GuildMembersSection guildId={guildId} readOnly />
+                <GuildMembersSection guildId={guildId} readOnly fill />
               </div>
             </>
           )}

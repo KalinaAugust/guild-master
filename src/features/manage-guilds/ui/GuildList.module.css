@@ -73,47 +73,6 @@
   text-overflow: ellipsis;
 }
 
-.actions {
-  display: flex;
-  gap: 4px;
-  flex-shrink: 0;
-  padding-right: 8px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-
-.row:hover .actions,
-.row:focus-within .actions {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-@media (hover: none) {
-  .actions {
-    opacity: 1;
-    pointer-events: auto;
-  }
-}
-
-.actionBtn {
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  padding: 6px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease;
-}
-
-.actionBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
-}
-
 .empty {
   font-size: 0.9rem;
   color: var(--text-secondary);

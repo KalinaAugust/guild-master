@@ -55,7 +55,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const activeGuildId = currentGuildId || propGuildId;
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
 
-  const { data: events = [] } = useGetEventsQuery(activeGuildId ?? '', {
+  const { data: events = [], isLoading } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
@@ -119,7 +119,11 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         )}
       </div>
 
-      {dayEvents.length > 0 ? (
+      {isLoading || !activeGuildId ? (
+        <div className={styles.loader}>
+          <span className={styles.spinner} />
+        </div>
+      ) : dayEvents.length > 0 ? (
         <div className={styles.list}>
           {dayEvents.map(event => (
             <EventCardWithCounts

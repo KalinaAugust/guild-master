@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
   useGetCommentsQuery,
+  useGetCommentReadStateQuery,
   useAddCommentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
@@ -31,13 +32,24 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   const [updateComment, updateState] = useUpdateCommentMutation();
   const [deleteComment, deleteState] = useDeleteCommentMutation();
   const [markCommentsRead] = useMarkCommentsReadMutation();
+  const { data: readState } = useGetCommentReadStateQuery(eventId);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Opening the tab (and any comment arriving while it stays open) marks the
-  // thread read for this user, clearing the tab badge and bell notification.
+  // Whether the thread holds comments from others the viewer hasn't seen yet.
+  const hasUnread =
+    !!readState &&
+    comments.some(
+      (c) =>
+        c.userId !== currentUserId &&
+        (!readState.lastReadAt || c.createdAt > readState.lastReadAt),
+    );
+
+  // Mark the thread read only when there is something unread — opening (or
+  // re-opening) an already-read thread must not fire a write + cache refetches.
+  // Clearing the read state also clears the tab badge and bell notification.
   useEffect(() => {
-    markCommentsRead(eventId);
-  }, [eventId, comments.length, markCommentsRead]);
+    if (hasUnread) markCommentsRead(eventId);
+  }, [eventId, hasUnread, markCommentsRead]);
   // Auto-scroll to the latest comment on initial load, after the viewer sends
   // one, or when a new comment arrives while the viewer is already at the bottom.
   // If the viewer has scrolled up to read older comments, leave scroll untouched.

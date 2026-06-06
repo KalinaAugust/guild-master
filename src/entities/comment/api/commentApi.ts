@@ -65,10 +65,23 @@ export const commentApi = baseApi.injectEndpoints({
     }),
     markCommentsRead: builder.mutation<{ marked: boolean }, string>({
       query: (eventId) => ({ url: `events/${eventId}/comments/read`, method: 'POST' }),
-      invalidatesTags: (_, __, eventId) => [
-        { type: 'CommentRead' as const, id: `LIST-${eventId}` },
-        { type: 'Notification' as const, id: 'LIST' },
-      ],
+      // Write the new read timestamp straight into the cache instead of
+      // invalidating it — the server value matches `now`, so refetching the
+      // read state we just set is wasted. The bell still refetches via the
+      // Notification tag, since clearing unread notifications needs fresh data.
+      async onQueryStarted(eventId, { dispatch, queryFulfilled }) {
+        const patch = dispatch(
+          commentApi.util.updateQueryData('getCommentReadState', eventId, (draft) => {
+            draft.lastReadAt = new Date().toISOString();
+          }),
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patch.undo();
+        }
+      },
+      invalidatesTags: () => [{ type: 'Notification' as const, id: 'LIST' }],
     }),
   }),
   overrideExisting: false,
