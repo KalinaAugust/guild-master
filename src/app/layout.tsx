@@ -34,7 +34,19 @@ export default async function RootLayout({
   const locale = await getLocale();
   const messages = await getMessages();
 
-  const requiredNamespaces = ['Common', 'Event', 'Guild', 'GuildDetail', 'EventComments'];
+  const requiredNamespaces = [
+    'Common',
+    'Event',
+    'Guild',
+    'GuildDetail',
+    'EventComments',
+    'EventDetail',
+    'GuildMembers',
+    'UpcomingEvents',
+    'Notifications',
+    'AiHelper',
+    'Auth'
+  ];
   const filteredMessages = Object.keys(messages)
     .filter((key) => requiredNamespaces.includes(key))
     .reduce<Record<string, any>>((obj, key) => {
