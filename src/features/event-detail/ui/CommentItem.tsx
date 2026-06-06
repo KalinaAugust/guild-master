@@ -20,7 +20,7 @@ interface CommentItemProps {
   isDeleting?: boolean;
 }
 
-const CommentItemComponent: React.FC<CommentItemProps> = ({
+export const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   isOwn,
   onSave,
@@ -123,17 +123,3 @@ const CommentItemComponent: React.FC<CommentItemProps> = ({
     </div>
   );
 };
-
-// CommentsTab passes fresh inline callbacks each render, so compare the data
-// props explicitly: an unchanged comment never re-renders when a sibling is added.
-export const CommentItem = React.memo(
-  CommentItemComponent,
-  (prev, next) =>
-    prev.comment.id === next.comment.id &&
-    prev.comment.body === next.comment.body &&
-    prev.comment.updatedAt === next.comment.updatedAt &&
-    prev.isOwn === next.isOwn &&
-    prev.isSaving === next.isSaving &&
-    prev.isDeleting === next.isDeleting
-);
-CommentItem.displayName = 'CommentItem';
