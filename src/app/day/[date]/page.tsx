@@ -28,7 +28,12 @@ export default async function DayPage({ params, searchParams }: DayPageProps) {
     redirect('/guilds');
   }
 
-  const activeGuild = guilds.find((g) => g.id === guildId) || guilds[0];
+  const lastActiveGuildId = user?.profile?.lastActiveGuildId;
+  const defaultGuild = lastActiveGuildId && guilds.some(g => g.id === lastActiveGuildId)
+    ? guilds.find(g => g.id === lastActiveGuildId) || guilds[0]
+    : guilds[0];
+
+  const activeGuild = guilds.find((g) => g.id === guildId) || defaultGuild;
   const currentGuildId = activeGuild.id;
   const t = await getTranslations('Common');
 

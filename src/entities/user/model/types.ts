@@ -2,6 +2,7 @@ export interface UserProfile {
   id: string;
   fullName: string | null;
   avatarUrl: string | null;
+  lastActiveGuildId?: string | null;
 }
 
 export interface User {
