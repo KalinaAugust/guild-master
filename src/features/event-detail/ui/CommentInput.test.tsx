@@ -17,7 +17,7 @@ describe('CommentInput', () => {
   it('renders an input and send button when canWrite is true', () => {
     render(<CommentInput canWrite onSubmit={vi.fn()} />);
     expect(screen.getByRole('textbox')).toBeInTheDocument();
-    expect(screen.getByText('send')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'send' })).toBeInTheDocument();
   });
 
   it('calls onSubmit with trimmed text and clears the field', async () => {

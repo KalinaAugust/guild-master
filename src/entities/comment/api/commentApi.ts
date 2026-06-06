@@ -15,9 +15,22 @@ export const commentApi = baseApi.injectEndpoints({
         method: 'POST',
         body: { body },
       }),
-      invalidatesTags: (_, __, { eventId }) => [
-        { type: 'Comment' as const, id: `LIST-${eventId}` },
-      ],
+      // Append the created comment to the cached list instead of invalidating
+      // (which would refetch the whole thread and remount every avatar image).
+      async onQueryStarted({ eventId }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: created } = await queryFulfilled;
+          dispatch(
+            commentApi.util.updateQueryData('getComments', eventId, (draft) => {
+              if (!draft.some((c) => c.id === created.id)) {
+                draft.push(created);
+              }
+            })
+          );
+        } catch {
+          // Mutation failed; CommentsTab surfaces the error toast.
+        }
+      },
     }),
     updateComment: builder.mutation<
       EventComment,

@@ -2,8 +2,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 10px;
   font-weight: 600;
+  line-height: 1.2;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
@@ -21,25 +22,25 @@
 
 /* Sizes */
 .size_xs {
-  padding: 5px 10px;
-  font-size: 11px;
-  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 10px;
+  border-radius: 5px;
 }
 
 .size_sm {
-  padding: 8px 16px;
-  font-size: 0.85rem;
-  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  border-radius: 7px;
 }
 
 .size_md {
-  padding: 12px 24px;
-  font-size: 1rem;
+  padding: 9px 18px;
+  font-size: 0.9rem;
 }
 
 .size_lg {
-  padding: 16px 32px;
-  font-size: 1.1rem;
+  padding: 12px 24px;
+  font-size: 1rem;
 }
 
 .size_icon {
