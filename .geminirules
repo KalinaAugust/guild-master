@@ -1,0 +1,3 @@
+# Project Rules for Gemini
+
+- The contents of the root CLAUDE.md file are automatically injected into the context at the start of the session.
