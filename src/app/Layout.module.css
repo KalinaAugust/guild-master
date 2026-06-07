@@ -1,3 +1,31 @@
+.appShell {
+  margin-left: var(--rail-width);
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
 .content {
-  padding: 0 2rem;
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.copyright {
+  text-align: center;
+  margin-top: 50px;
+  padding: 1.5rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.copyrightLink {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.copyrightLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
 }

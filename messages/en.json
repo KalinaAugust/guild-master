@@ -1,6 +1,7 @@
 {
   "Common": {
     "title": "Guild Master",
+    "calendar": "Calendar",
     "logout": "Logout",
     "profile": "Profile",
     "language": "Language",
@@ -146,6 +147,7 @@
     "deleteError": "Failed to delete comment"
   },
   "Guild": {
+    "title": "Guilds",
     "createTitle": "Create New Guild",
     "welcomeText": "It looks like you don't belong to any guilds yet. Create your own to start working with the calendar!",
     "nameLabel": "Guild Name",

@@ -1,7 +1,7 @@
 .container {
   position: fixed;
-  top: 4.5rem;
-  left: 0;
+  top: var(--header-height);
+  left: var(--rail-width);
   right: 0;
   bottom: 0;
   display: flex;

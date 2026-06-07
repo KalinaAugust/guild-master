@@ -1,0 +1,93 @@
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100dvh;
+  width: var(--rail-width);
+  overflow: hidden;
+  transition: width 200ms ease;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--header-height) + 0.5rem) 0 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.sidebar:hover,
+.sidebar:has([data-state="open"]) {
+  width: 260px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.footer {
+  margin-top: auto;
+  display: flex;
+  /* matches the nav list inset so the profile pill floats off the rail edges */
+  padding: 0 12px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 48px;
+  /* center the 22px icon in the collapsed rail, accounting for the 12px list inset on each side */
+  padding: 0 calc((var(--rail-width) - 24px - 22px) / 2);
+  text-decoration: none;
+  color: inherit;
+  white-space: nowrap;
+  border-radius: 16px;
+  transition: background-color 150ms ease;
+}
+
+.item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.active {
+  background-color: rgba(147, 197, 253, 0.15);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.sidebar:hover .label,
+.sidebar:has([data-state="open"]) .label {
+  opacity: 1;
+}
+
+.badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: #93c5fd;
+  color: #0b1120;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.sidebar:hover .badge,
+.sidebar:has([data-state="open"]) .badge {
+  opacity: 1;
+}
