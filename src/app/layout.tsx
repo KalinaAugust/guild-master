@@ -17,7 +17,10 @@ const unbounded = Unbounded({
   display: "swap",
 });
 import StoreProvider from "./providers/StoreProvider";
-import { Header } from "@/widgets/header";
+import { Header, UserMenu } from "@/widgets/header";
+import { Sidebar } from "@/widgets/sidebar";
+import { CopyrightFooter } from "./CopyrightFooter";
+import { getUser } from "@/entities/user/api/getUser";
 import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
 import styles from './Layout.module.css';
 
@@ -33,6 +36,7 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
   const messages = await getMessages();
+  const user = await getUser();
 
   const requiredNamespaces = [
     'Common',
@@ -63,9 +67,21 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={filteredMessages}>
           <StoreProvider>
             <Toaster position="top-right" richColors closeButton theme="dark" />
-            <Header />
-            <div className={styles.content}>
-              {children}
+            <Sidebar
+              footer={
+                <UserMenu
+                  email={user?.email}
+                  avatarUrl={user?.profile?.avatarUrl}
+                  name={user?.profile?.fullName}
+                />
+              }
+            />
+            <div className={styles.appShell}>
+              <Header />
+              <div className={styles.content}>
+                {children}
+              </div>
+              <CopyrightFooter />
             </div>
           </StoreProvider>
         </NextIntlClientProvider>

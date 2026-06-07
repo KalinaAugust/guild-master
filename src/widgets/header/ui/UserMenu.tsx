@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { User, LogOut, ChevronDown, Languages, ShieldPlus } from 'lucide-react';
+import { User, LogOut, ChevronDown, Languages, MoreHorizontal } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { createClient } from '@/shared/api/supabase/client';
@@ -22,7 +22,6 @@ interface UserMenuProps {
 export const UserMenu: React.FC<UserMenuProps> = ({ email, avatarUrl, name }) => {
   const locale = useLocale();
   const t = useTranslations('Common');
-  const guildT = useTranslations('Guild');
   const router = useRouter();
   const dispatch = useAppDispatch();
   const supabase = createClient();
@@ -49,12 +48,14 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email, avatarUrl, name }) =>
     }}>
       <DropdownMenu.Trigger asChild>
         <button className={styles.trigger} aria-label="User menu">
-          <UserAvatar avatarUrl={avatarUrl} name={name} size="lg" />
+          <UserAvatar avatarUrl={avatarUrl} name={name} size="md" />
+          <span className={styles.triggerName}>{name || email}</span>
+          <MoreHorizontal size={18} className={styles.triggerDots} />
         </button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={styles.content} sideOffset={5} align="end">
+        <DropdownMenu.Content className={styles.content} side="top" sideOffset={8} align="start">
           {email && (
             <>
               <DropdownMenu.Item className={styles.item} asChild>
@@ -62,14 +63,6 @@ export const UserMenu: React.FC<UserMenuProps> = ({ email, avatarUrl, name }) =>
                   <div className={styles.itemContent}>
                     <User size={18} />
                     <span>{t('profile')}</span>
-                  </div>
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Item className={styles.item} asChild>
-                <Link href="/guilds" className={styles.link}>
-                  <div className={styles.itemContent}>
-                    <ShieldPlus size={18} />
-                    <span>{guildT('manageTitle')}</span>
                   </div>
                 </Link>
               </DropdownMenu.Item>

@@ -1,27 +1,40 @@
 .trigger {
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  gap: 7px;
+  width: 100%;
+  /* left padding centers the 32px avatar within the collapsed rail (matches the nav list's 12px inset) */
+  padding: 6px 14px 6px calc((var(--rail-width) - 24px - 32px) / 2);
+  background: transparent;
+  border: none;
+  border-radius: 16px;
   color: var(--text-primary);
   cursor: pointer;
-  backdrop-filter: var(--glass-blur);
-  transition: all 0.2s ease;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
 }
 
 .trigger:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
 }
 
-.trigger:focus {
-  border-color: var(--accent-primary);
+.trigger:focus-visible {
   outline: none;
-  box-shadow: 0 0 10px var(--accent-glow);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.triggerName {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 0.95rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.triggerDots {
+  flex-shrink: 0;
+  color: var(--text-muted);
 }
 
 .content {
