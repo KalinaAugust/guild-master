@@ -1,15 +1,18 @@
 .main {
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
   padding-bottom: 1rem;
 }
 
 /* On wide screens fill the available height so the panel reaches the bottom
-   instead of floating with large empty space below it. */
+   instead of floating with large empty space below it. Flex-fill accounts for
+   the header, the upcoming-events strip and the footer automatically. */
 @media (min-width: 961px) {
   .main {
+    flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    min-height: calc(100dvh - var(--header-height) - 1rem);
   }
 }
