@@ -52,10 +52,6 @@ pnpm build
 pnpm start
 ```
 
-## Git Workflow
-
-- **No mid-task commits:** Do NOT create git commits after completing individual subtasks or plan steps. Only commit when explicitly asked by the user.
-
 ## Development Conventions
 
 - **Architecture:** Strictly adhere to **Feature-Sliced Design (FSD)** principles and Next.js App Router patterns. Organize code into standardized layers, keep business logic in slices, and keep components focused on rendering. The detailed FSD rules below are enforced — the `fsd-reviewer` agent provides an automated check, and `pnpm lint:fsd` runs steiger.
