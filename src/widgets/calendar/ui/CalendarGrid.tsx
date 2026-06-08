@@ -15,6 +15,7 @@ import { ActivityEvent } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
+import { Panel } from '@/shared/ui/Panel';
 import { EventsTooltipContent } from './EventsTooltipContent';
 import { typeIcons } from '@/entities/event';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
@@ -54,7 +55,7 @@ export const CalendarGrid: React.FC<{
   };
 
   return (
-    <div className={styles.container}>
+    <Panel>
       <div className={styles.header}>
         <div className={styles.controlsLeft}>
           <div className={styles.monthSelect}>
@@ -170,6 +171,6 @@ export const CalendarGrid: React.FC<{
           );
         })}
       </div>
-    </div>
+    </Panel>
   );
 };
