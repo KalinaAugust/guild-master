@@ -1,4 +1,4 @@
-import { createElement, useMemo } from 'react';
+import { createElement, useEffect, useMemo } from 'react';
 import { Shield } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { Guild, setCurrentGuild } from '@/entities/guild';
@@ -10,6 +10,15 @@ export const useGuildSelection = (guilds: Guild[], initialGuildId?: string, user
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
 
   const activeGuildId = useMemo(() => currentGuildId || initialGuildId || guilds[0]?.id, [currentGuildId, initialGuildId, guilds]);
+
+  // Sync the resolved active guild into the store on mount so the rest of the
+  // app (e.g. the sidebar unread dot) sees it even before the user opens the
+  // guild dropdown. Server-resolved `initialGuildId` otherwise never reaches Redux.
+  useEffect(() => {
+    if (!currentGuildId && activeGuildId) {
+      dispatch(setCurrentGuild(activeGuildId));
+    }
+  }, [currentGuildId, activeGuildId, dispatch]);
 
   const guildOptions = useMemo(() => guilds.map(guild => ({
     label: guild.name,
