@@ -3,8 +3,6 @@
 import React, { useMemo, useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { closeEventModal } from '@/entities/calendar';
 import {
@@ -15,6 +13,7 @@ import {
 } from '@/entities/event';
 import { useGetGuildMembersQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import dayjs from '@/shared/lib/dayjs';
@@ -145,36 +144,38 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
   }, [editingEvent, selectedDate]);
 
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Content className={styles.overlay} aria-describedby={undefined}>
-          <div className={styles.header}>
-            <DialogPrimitive.Close className={styles.closeButton} aria-label="Close">
-              <X size={20} />
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Title className={styles.title}>
-              {editingEvent ? t('editTitle') : t('createTitle')}
-            </DialogPrimitive.Title>
-          </div>
+    <WizardDialog
+      open={isOpen}
+      onClose={handleClose}
+      title={editingEvent ? t('editTitle') : t('createTitle')}
+      footer={
+        <>
+          <Button type="button" variant="secondary" onClick={handleClose}>
+            {commonT('cancel')}
+          </Button>
+          <Button type="submit" variant="primary" form={FORM_ID} isLoading={isSaving}>
+            {editingEvent ? commonT('save') : t('submit')}
+          </Button>
+        </>
+      }
+    >
+      <WizardColumn>
+        {isOpen && (
+          <EventForm
+            key={editingEvent?.id || selectedDate || 'new'}
+            initialData={initialData}
+            onSubmit={handleSubmit}
+            onCancel={handleClose}
+            submitLabel={editingEvent ? commonT('save') : t('submit')}
+            isDayView={isDayView}
+            isEdit={!!editingEvent}
+            hideActions
+            formId={FORM_ID}
+          />
+        )}
+      </WizardColumn>
 
-          <div className={styles.body}>
-            <div className={styles.column}>
-              {isOpen && (
-                <EventForm
-                  key={editingEvent?.id || selectedDate || 'new'}
-                  initialData={initialData}
-                  onSubmit={handleSubmit}
-                  onCancel={handleClose}
-                  submitLabel={editingEvent ? commonT('save') : t('submit')}
-                  isDayView={isDayView}
-                  isEdit={!!editingEvent}
-                  hideActions
-                  formId={FORM_ID}
-                />
-              )}
-            </div>
-
-            <div className={styles.column}>
+      <WizardColumn>
               <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.repeatLabel')}</span>
                 <div className={styles.dayToggles}>
@@ -237,19 +238,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                   </>
                 )}
               </div>
-            </div>
-          </div>
-
-          <div className={styles.footer}>
-            <Button type="button" variant="secondary" onClick={handleClose}>
-              {commonT('cancel')}
-            </Button>
-            <Button type="submit" variant="primary" form={FORM_ID} isLoading={isSaving}>
-              {editingEvent ? commonT('save') : t('submit')}
-            </Button>
-          </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      </WizardColumn>
+    </WizardDialog>
   );
 };

@@ -254,5 +254,33 @@
     "sendError": "Не удалось отправить сообщение",
     "updateError": "Не удалось изменить сообщение",
     "deleteError": "Не удалось удалить сообщение"
+  },
+  "GuildPoll": {
+    "newPoll": "Новый опрос",
+    "createTitle": "Создание опроса",
+    "nameLabel": "Название опроса",
+    "namePlaceholder": "О чём хотите спросить?",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Добавьте контекст к опросу (необязательно)",
+    "createButton": "Создать опрос",
+    "optionsLabel": "Варианты ответа",
+    "optionPlaceholder": "Вариант {index}",
+    "removeOption": "Удалить вариант",
+    "settingsLabel": "Настройки",
+    "anonymousLabel": "Анонимный опрос",
+    "multipleLabel": "Несколько ответов",
+    "customLabel": "Свой вариант ответа",
+    "closeLabel": "Закрыть опрос",
+    "deleteLabel": "Удалить опрос",
+    "closedBadge": "Закрыт",
+    "votesCount": "{count, plural, one {# голос} few {# голоса} many {# голосов} other {# голоса}}",
+    "addCustomPlaceholder": "Добавить свой вариант",
+    "emptyPolls": "Опросов пока нет. Создайте первый!",
+    "voteError": "Не удалось учесть голос",
+    "createError": "Не удалось создать опрос",
+    "deleteError": "Не удалось удалить опрос",
+    "closeError": "Не удалось закрыть опрос",
+    "confirmDelete": "Удалить этот опрос?",
+    "addOptionButton": "Добавить вариант"
   }
 }

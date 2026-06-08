@@ -59,6 +59,9 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `guild_members` | `id`, `guild_id`, `user_id`, `role` (OWNER\|ADMIN\|MEMBER) |
 | `events` | `id`, `guild_id`, `title`, `description`, `event_date`, `type`, `created_by` |
 | `event_participants` | `id`, `event_id`, `user_id`, `status` (pending\|confirmed\|declined) |
+| `polls` | `id`, `guild_id`, `created_by`, `title`, `description`, `is_anonymous`, `allow_multiple`, `allow_custom`, `closed_at`, `created_at` |
+| `poll_options` | `id`, `poll_id`, `body`, `position`, `is_custom`, `created_by` |
+| `poll_votes` | `id`, `poll_id`, `option_id`, `user_id` — `unique(option_id, user_id)` |
 
 All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
 

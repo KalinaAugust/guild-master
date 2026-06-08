@@ -1,12 +1,16 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { toast } from 'sonner';
+import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
+import { Button } from '@/shared/ui/Button';
 import { MessageBubble } from '@/shared/ui/MessageBubble';
 import { MessageComposer } from '@/shared/ui/MessageComposer';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
+import { PollCard, PollWizard } from '@/features/guild-poll';
+import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
 import {
   useGetGuildMessagesQuery,
@@ -26,6 +30,7 @@ interface GuildChatProps {
 
 export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGuildId }) => {
   const t = useTranslations('GuildChat');
+  const pollT = useTranslations('GuildPoll');
   const locale = useLocale();
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
 
@@ -36,10 +41,12 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     skipPollingIfUnfocused: true,
   });
   const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
+  const { data: polls = [] } = useGetGuildPollsQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
   const [markRead] = useMarkGuildChatReadMutation();
+  const [isPollWizardOpen, setIsPollWizardOpen] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
   const hasUnread =
@@ -115,45 +122,74 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
   };
 
   return (
-    <Panel>
+    <Panel className={styles.panel}>
       <div className={styles.header}>
-        <div className={styles.guildSelect}>
-          <GuildSelect value={activeGuildId} onValueChange={handleGuildChange} options={guildOptions} />
+        <div className={styles.headerChat}>
+          <div className={styles.guildSelect}>
+            <GuildSelect value={activeGuildId} onValueChange={handleGuildChange} options={guildOptions} />
+          </div>
+        </div>
+        <div className={styles.headerPolls}>
+          <Button
+            type="button"
+            variant="secondary"
+            className={styles.newPollButton}
+            onClick={() => setIsPollWizardOpen(true)}
+          >
+            <Plus size={16} />
+            {pollT('newPoll')}
+          </Button>
         </div>
       </div>
 
-      <div className={styles.chat}>
-        <div className={styles.list} ref={listRef} onScroll={handleScroll}>
-          {!isLoading && messages.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
-          {messages.map((m) => (
-            <MessageBubble
-              key={m.id}
-              authorName={m.profile.fullName}
-              avatarUrl={m.profile.avatarUrl}
-              body={m.body}
-              createdAt={m.createdAt}
-              updatedAt={m.updatedAt}
-              isOwn={m.userId === userId}
-              locale={locale}
-              labels={labels}
-              maxLength={2000}
-              onSave={(body) => handleUpdate(m.id, body)}
-              onDelete={() => handleDelete(m.id)}
-              isSaving={updateState.isLoading && updateState.originalArgs?.messageId === m.id}
-              isDeleting={deleteState.isLoading && deleteState.originalArgs?.messageId === m.id}
-            />
-          ))}
+      <div className={styles.body}>
+        <div className={styles.chat}>
+          <div className={styles.list} ref={listRef} onScroll={handleScroll}>
+            {!isLoading && messages.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
+            {messages.map((m) => (
+              <MessageBubble
+                key={m.id}
+                authorName={m.profile.fullName}
+                avatarUrl={m.profile.avatarUrl}
+                body={m.body}
+                createdAt={m.createdAt}
+                updatedAt={m.updatedAt}
+                isOwn={m.userId === userId}
+                locale={locale}
+                labels={labels}
+                maxLength={2000}
+                onSave={(body) => handleUpdate(m.id, body)}
+                onDelete={() => handleDelete(m.id)}
+                isSaving={updateState.isLoading && updateState.originalArgs?.messageId === m.id}
+                isDeleting={deleteState.isLoading && deleteState.originalArgs?.messageId === m.id}
+              />
+            ))}
+          </div>
+          <MessageComposer
+            canWrite={!!userId}
+            onSubmit={handleAdd}
+            isSubmitting={isAdding}
+            placeholder={t('placeholder')}
+            sendLabel={t('send')}
+            lockedPrompt={t('lockedPrompt')}
+            maxLength={2000}
+          />
         </div>
-        <MessageComposer
-          canWrite={!!userId}
-          onSubmit={handleAdd}
-          isSubmitting={isAdding}
-          placeholder={t('placeholder')}
-          sendLabel={t('send')}
-          lockedPrompt={t('lockedPrompt')}
-          maxLength={2000}
-        />
+
+        <aside className={styles.polls}>
+          {activeGuildId && polls.length === 0 && <p className={styles.empty}>{pollT('emptyPolls')}</p>}
+          {activeGuildId &&
+            polls.map((poll) => <PollCard key={poll.id} poll={poll} guildId={activeGuildId} />)}
+        </aside>
       </div>
+
+      {activeGuildId && (
+        <PollWizard
+          open={isPollWizardOpen}
+          onClose={() => setIsPollWizardOpen(false)}
+          guildId={activeGuildId}
+        />
+      )}
     </Panel>
   );
 };

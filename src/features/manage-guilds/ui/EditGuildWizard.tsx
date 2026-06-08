@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as Form from '@radix-ui/react-form';
 import { X, Image as ImageIcon, Users, Settings, Trash2 } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation, uploadGuildAvatar } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
 import { FormField } from '@/shared/ui/FormField';
@@ -136,21 +136,31 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
   };
 
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogPrimitive.Portal>
-        <DialogPrimitive.Content className={styles.overlay} aria-describedby={undefined}>
-          <div className={styles.header}>
-            <DialogPrimitive.Close className={styles.closeButton} aria-label="Close">
-              <X size={20} />
-            </DialogPrimitive.Close>
-            <DialogPrimitive.Title className={styles.title}>
-              {isEdit ? t('editTitle') : t('createTitle')}
-            </DialogPrimitive.Title>
-          </div>
-
-          <div className={styles.body}>
-            <div className={styles.column}>
-              <Form.Root id="guild-wizard-form" onSubmit={handleSubmit}>
+    <WizardDialog
+      open={open}
+      onClose={handleClose}
+      title={isEdit ? t('editTitle') : t('createTitle')}
+      footer={
+        <>
+          <Button type="button" variant="secondary" onClick={handleClose}>
+            {commonT('cancel')}
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            form="guild-wizard-form"
+            isLoading={isLoading}
+            disabled={!name.trim()}
+          >
+            {isEdit
+              ? isLoading ? commonT('saving') : commonT('save')
+              : isLoading ? t('creating') : t('submit')}
+          </Button>
+        </>
+      }
+    >
+      <WizardColumn>
+        <Form.Root id="guild-wizard-form" onSubmit={handleSubmit}>
                 <FormField name="name" label={t('nameLabel')} className={styles.formGroup}>
                   <Input
                     type="text"
@@ -167,9 +177,9 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   />
                 </FormField>
               </Form.Root>
-            </div>
+      </WizardColumn>
 
-            <div className={styles.column}>
+      <WizardColumn>
               <div className={styles.tabBar}>
                 <button
                   type="button"
@@ -268,27 +278,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   )}
                 </>
               )}
-            </div>
-          </div>
-
-          <div className={styles.footer}>
-            <Button type="button" variant="secondary" onClick={handleClose}>
-              {commonT('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              form="guild-wizard-form"
-              isLoading={isLoading}
-              disabled={!name.trim()}
-            >
-              {isEdit
-                ? isLoading ? commonT('saving') : commonT('save')
-                : isLoading ? t('creating') : t('submit')}
-            </Button>
-          </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </DialogPrimitive.Root>
+      </WizardColumn>
+    </WizardDialog>
   );
 };
