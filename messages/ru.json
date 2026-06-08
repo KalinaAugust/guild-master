@@ -254,5 +254,28 @@
     "sendError": "Не удалось отправить сообщение",
     "updateError": "Не удалось изменить сообщение",
     "deleteError": "Не удалось удалить сообщение"
+  },
+  "GuildPoll": {
+    "badge": "Опрос",
+    "placeholderQuestion": "В какой вечер гильдии удобнее всего собираться на рейд?",
+    "placeholderOption1": "Вечер пятницы",
+    "placeholderOption2": "День субботы",
+    "placeholderOption3": "Утро воскресенья",
+    "placeholderVotes": "Уже {count} голоса",
+    "newPoll": "Новый опрос",
+    "createTitle": "Создание опроса",
+    "nameLabel": "Название опроса",
+    "namePlaceholder": "О чём хотите спросить?",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Добавьте контекст к опросу (необязательно)",
+    "createButton": "Создать опрос",
+    "optionsLabel": "Варианты ответа",
+    "optionPlaceholder": "Вариант {index}",
+    "addOptionPlaceholder": "Добавить вариант",
+    "removeOption": "Удалить вариант",
+    "settingsLabel": "Настройки",
+    "anonymousLabel": "Анонимный опрос",
+    "multipleLabel": "Несколько ответов",
+    "customLabel": "Свой вариант ответа"
   }
 }
