@@ -175,9 +175,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
         </div>
 
         <aside className={styles.polls}>
-          {Array.from({ length: 6 }).map((_, i) => (
-            <PollCard key={i} />
-          ))}
+          <PollCard />
         </aside>
       </div>
 
