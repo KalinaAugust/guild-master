@@ -6,7 +6,7 @@ import styles from './Layout.module.css';
 export const CopyrightFooter = () => {
   const pathname = usePathname();
 
-  if (pathname !== '/') return null;
+  if (pathname !== '/' && pathname !== '/guild-chat') return null;
 
   return (
     <footer className={styles.copyright}>
