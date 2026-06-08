@@ -13,6 +13,11 @@
   padding-right: 52px;
   overflow-y: auto;
   resize: none;
+  scrollbar-width: none;
+}
+
+.form .textarea::-webkit-scrollbar {
+  display: none;
 }
 
 .sendButton {

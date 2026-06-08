@@ -14,12 +14,14 @@ export default async function GuildsPage() {
   const t = await getTranslations('Common');
 
   return (
-    <main className={styles.main}>
+    <>
       <Link href="/" className={styles.backLink}>
         <ChevronLeft size={20} />
         {t('backToCalendar')}
       </Link>
-      <GuildManagePage userId={user.id} />
-    </main>
+      <main className={styles.main}>
+        <GuildManagePage userId={user.id} />
+      </main>
+    </>
   );
 }

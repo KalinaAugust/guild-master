@@ -1,4 +1,4 @@
-.container {
+.stateContainer {
   position: fixed;
   top: var(--header-height);
   left: var(--rail-width);
@@ -6,88 +6,6 @@
   bottom: 0;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
-}
-
-.header {
-  display: flex;
-  align-items: center;
-  height: 64px;
-  padding: 0 24px;
-  border-bottom: 1px solid var(--glass-border);
-  flex-shrink: 0;
-  position: relative;
-}
-
-.backLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
-  z-index: 1;
-}
-
-.backLink:hover {
-  color: var(--text-primary);
-}
-
-.title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--accent-yellow);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 60%;
-}
-
-.body {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
-
-.body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.body::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.body::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-}
-
-.body::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
-}
-
-.column {
-  padding: 20px;
-}
-
-.column:first-child {
-  border-right: 1px solid var(--glass-border);
-}
-
-/* Right column hosts the tabs; let the comments chat fill the full height
-   with its composer pinned at the bottom and the message list scrolling. */
-.columnRight {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
   overflow: hidden;
 }
 
@@ -206,15 +124,6 @@
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-.footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding: 20px 32px;
-  border-top: 1px solid var(--glass-border);
-  flex-shrink: 0;
-}
-
 @keyframes pulse {
   0%, 100% { opacity: 0.4; }
   50%       { opacity: 0.8; }
@@ -255,28 +164,9 @@
 }
 
 @media (max-width: 768px) {
-  .body {
-    grid-template-columns: 1fr;
-  }
-
-  .column:first-child {
-    border-right: none;
-    border-bottom: 1px solid var(--glass-border);
-  }
-
-  /* Stacked layout scrolls the whole body — drop the full-height clipping. */
-  .columnRight {
-    display: block;
-    overflow: visible;
-  }
-
   /* No flex parent height to fill here — cap the list and let the body scroll. */
   .participantList {
     flex: none;
     max-height: 60vh;
-  }
-
-  .title {
-    max-width: 50%;
   }
 }
