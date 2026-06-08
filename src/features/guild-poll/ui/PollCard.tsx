@@ -1,36 +1,164 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import { Check, Lock, Plus } from 'lucide-react';
+import { Input } from '@/shared/ui/Input';
+import { Button } from '@/shared/ui/Button';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import {
+  useVotePollMutation,
+  useClosePollMutation,
+  useDeletePollMutation,
+  type Poll,
+} from '@/entities/poll';
 import styles from './PollCard.module.css';
 
-export const PollCard: React.FC = () => {
-  const t = useTranslations('GuildPoll');
+interface PollCardProps {
+  poll: Poll;
+  guildId: string;
+}
 
-  const options = [
-    { label: t('placeholderOption1'), percent: 62, fill: styles.fill62 },
-    { label: t('placeholderOption2'), percent: 28, fill: styles.fill28 },
-    { label: t('placeholderOption3'), percent: 10, fill: styles.fill10 },
-  ];
+/** Rounds a percentage to the nearest 5 to select a static fill-width class. */
+const fillClass = (pct: number) => styles[`fill${Math.round(pct / 5) * 5}`];
+
+export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
+  const t = useTranslations('GuildPoll');
+  const [vote, { isLoading: isVoting }] = useVotePollMutation();
+  const [closePoll, { isLoading: isClosing }] = useClosePollMutation();
+  const [deletePoll, { isLoading: isDeleting }] = useDeletePollMutation();
+  const [customBody, setCustomBody] = useState('');
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const closed = !!poll.closedAt;
+
+  const handleVote = async (optionId: string) => {
+    if (closed || isVoting) return;
+    try {
+      await vote({ guildId, pollId: poll.id, vote: { optionId } }).unwrap();
+    } catch {
+      toast.error(t('voteError'));
+    }
+  };
+
+  const handleAddCustom = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    const body = customBody.trim();
+    if (!body || isVoting) return;
+    try {
+      await vote({ guildId, pollId: poll.id, vote: { customBody: body } }).unwrap();
+      setCustomBody('');
+    } catch {
+      toast.error(t('voteError'));
+    }
+  };
+
+  const handleClose = async () => {
+    try {
+      await closePoll({ guildId, pollId: poll.id }).unwrap();
+    } catch {
+      toast.error(t('closeError'));
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deletePoll({ guildId, pollId: poll.id }).unwrap();
+    } catch {
+      toast.error(t('deleteError'));
+    }
+  };
 
   return (
     <article className={styles.card}>
       <header className={styles.head}>
-        <span className={styles.badge}>{t('badge')}</span>
-        <h3 className={styles.question}>{t('placeholderQuestion')}</h3>
+        <div className={styles.badges}>
+          <span className={styles.badge}>{t('badge')}</span>
+          {closed && (
+            <span className={styles.closedBadge}>
+              <Lock size={12} aria-hidden="true" />
+              {t('closedBadge')}
+            </span>
+          )}
+        </div>
+        <h3 className={styles.question}>{poll.title}</h3>
+        {poll.description && <p className={styles.description}>{poll.description}</p>}
       </header>
 
       <ul className={styles.options}>
-        {options.map((o) => (
-          <li key={o.label} className={styles.option}>
-            <div className={`${styles.optionFill} ${o.fill}`} />
-            <span className={styles.optionLabel}>{o.label}</span>
-            <span className={styles.optionPercent}>{o.percent}%</span>
-          </li>
-        ))}
+        {poll.options.map((o) => {
+          const pct = poll.totalVotes > 0 ? (o.voteCount / poll.totalVotes) * 100 : 0;
+          const voted = poll.myVoteOptionIds.includes(o.id);
+          return (
+            <li key={o.id} className={styles.optionItem}>
+              <button
+                type="button"
+                className={`${styles.option} ${voted ? styles.optionVoted : ''}`}
+                onClick={() => handleVote(o.id)}
+                disabled={closed || isVoting}
+              >
+                <span className={`${styles.optionFill} ${fillClass(pct)}`} aria-hidden="true" />
+                <span className={styles.optionCheck}>{voted && <Check size={14} />}</span>
+                <span className={styles.optionLabel}>{o.body}</span>
+                <span className={styles.optionPercent}>{Math.round(pct)}%</span>
+              </button>
+              {!poll.isAnonymous && o.voters.length > 0 && (
+                <div className={styles.voters}>
+                  {o.voters.slice(0, 8).map((v, i) => (
+                    <UserAvatar key={i} avatarUrl={v.avatarUrl} name={v.fullName} size="sm" />
+                  ))}
+                </div>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
-      <footer className={styles.foot}>{t('placeholderVotes', { count: 24 })}</footer>
+      {poll.allowCustom && !closed && (
+        <form className={styles.customForm} onSubmit={handleAddCustom}>
+          <Input
+            type="text"
+            value={customBody}
+            onChange={(e) => setCustomBody(e.target.value)}
+            placeholder={t('addCustomPlaceholder')}
+            className={styles.customInput}
+          />
+          <Button type="submit" variant="secondary" size="sm" disabled={!customBody.trim() || isVoting}>
+            <Plus size={16} />
+          </Button>
+        </form>
+      )}
+
+      <footer className={styles.foot}>
+        <span className={styles.totals}>{t('votesCount', { count: poll.totalVotes })}</span>
+        {poll.canManage && (
+          <div className={styles.actions}>
+            {!closed && (
+              <button type="button" className={styles.action} onClick={handleClose} disabled={isClosing}>
+                {t('closeLabel')}
+              </button>
+            )}
+            <button
+              type="button"
+              className={`${styles.action} ${styles.danger}`}
+              onClick={() => setConfirmOpen(true)}
+            >
+              {t('deleteLabel')}
+            </button>
+          </div>
+        )}
+      </footer>
+
+      <ConfirmModal
+        isOpen={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+        title={t('confirmDelete')}
+        confirmLabel={t('deleteLabel')}
+        isLoading={isDeleting}
+      />
     </article>
   );
 };

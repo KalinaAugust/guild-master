@@ -10,6 +10,7 @@ import { MessageBubble } from '@/shared/ui/MessageBubble';
 import { MessageComposer } from '@/shared/ui/MessageComposer';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { PollCard, PollWizard } from '@/features/guild-poll';
+import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
 import {
   useGetGuildMessagesQuery,
@@ -40,6 +41,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     skipPollingIfUnfocused: true,
   });
   const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
+  const { data: polls = [] } = useGetGuildPollsQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
@@ -175,11 +177,19 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
         </div>
 
         <aside className={styles.polls}>
-          <PollCard />
+          {activeGuildId && polls.length === 0 && <p className={styles.empty}>{pollT('emptyPolls')}</p>}
+          {activeGuildId &&
+            polls.map((poll) => <PollCard key={poll.id} poll={poll} guildId={activeGuildId} />)}
         </aside>
       </div>
 
-      <PollWizard open={isPollWizardOpen} onClose={() => setIsPollWizardOpen(false)} />
+      {activeGuildId && (
+        <PollWizard
+          open={isPollWizardOpen}
+          onClose={() => setIsPollWizardOpen(false)}
+          guildId={activeGuildId}
+        />
+      )}
     </Panel>
   );
 };

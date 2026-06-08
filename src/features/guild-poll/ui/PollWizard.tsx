@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
@@ -9,6 +10,7 @@ import { Textarea } from '@/shared/ui/Textarea';
 import { Switch } from '@/shared/ui/Switch';
 import { FormField } from '@/shared/ui/FormField';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
+import { useCreatePollMutation } from '@/entities/poll';
 import { countFilled, MIN_POLL_OPTIONS } from '../model/options';
 import { PollOptionsField } from './PollOptionsField';
 import styles from './PollWizard.module.css';
@@ -18,11 +20,13 @@ const FORM_ID = 'poll-wizard-form';
 interface PollWizardProps {
   open: boolean;
   onClose: () => void;
+  guildId: string;
 }
 
-export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose }) => {
+export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }) => {
   const t = useTranslations('GuildPoll');
   const commonT = useTranslations('Common');
+  const [createPoll, { isLoading }] = useCreatePollMutation();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -43,10 +47,18 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose }) => {
     onClose();
   };
 
-  const handleSubmit = (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    if (!isValid) return;
-    handleClose();
+    if (!isValid || isLoading) return;
+    try {
+      await createPoll({
+        guildId,
+        input: { title, description, options, isAnonymous, allowMultiple, allowCustom },
+      }).unwrap();
+      handleClose();
+    } catch {
+      toast.error(t('createError'));
+    }
   };
 
   const settings: { key: string; label: string; checked: boolean; onChange: (v: boolean) => void }[] = [
@@ -65,7 +77,7 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose }) => {
           <Button type="button" variant="secondary" onClick={handleClose}>
             {commonT('cancel')}
           </Button>
-          <Button type="submit" variant="primary" form={FORM_ID} disabled={!isValid}>
+          <Button type="submit" variant="primary" form={FORM_ID} disabled={!isValid} isLoading={isLoading}>
             {t('createButton')}
           </Button>
         </>

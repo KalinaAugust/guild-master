@@ -276,6 +276,17 @@
     "settingsLabel": "Настройки",
     "anonymousLabel": "Анонимный опрос",
     "multipleLabel": "Несколько ответов",
-    "customLabel": "Свой вариант ответа"
+    "customLabel": "Свой вариант ответа",
+    "closeLabel": "Закрыть опрос",
+    "deleteLabel": "Удалить опрос",
+    "closedBadge": "Закрыт",
+    "votesCount": "{count, plural, one {# голос} few {# голоса} many {# голосов} other {# голоса}}",
+    "addCustomPlaceholder": "Добавить свой вариант",
+    "emptyPolls": "Опросов пока нет. Создайте первый!",
+    "voteError": "Не удалось учесть голос",
+    "createError": "Не удалось создать опрос",
+    "deleteError": "Не удалось удалить опрос",
+    "closeError": "Не удалось закрыть опрос",
+    "confirmDelete": "Удалить этот опрос?"
   }
 }

@@ -276,6 +276,17 @@
     "settingsLabel": "Settings",
     "anonymousLabel": "Anonymous poll",
     "multipleLabel": "Multiple answers",
-    "customLabel": "Custom answer"
+    "customLabel": "Custom answer",
+    "closeLabel": "Close poll",
+    "deleteLabel": "Delete poll",
+    "closedBadge": "Closed",
+    "votesCount": "{count, plural, one {# vote} other {# votes}}",
+    "addCustomPlaceholder": "Add your own option",
+    "emptyPolls": "No polls yet. Create the first one!",
+    "voteError": "Failed to register your vote",
+    "createError": "Failed to create poll",
+    "deleteError": "Failed to delete poll",
+    "closeError": "Failed to close poll",
+    "confirmDelete": "Delete this poll?"
   }
 }
