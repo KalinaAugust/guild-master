@@ -31,6 +31,10 @@
   flex: 0 0 max(450px, 30%);
   padding-left: 24px;
   border-left: 1px solid var(--glass-border);
+  /* Match the .polls scrollbar gutter so the header divider lines up with the
+     body divider (both shifted 16px right by the negative margin). */
+  margin-right: -16px;
+  padding-right: 16px;
 }
 
 .newPollButton {
@@ -135,6 +139,8 @@
     flex: none;
     padding-left: 0;
     border-left: none;
+    margin-right: 0;
+    padding-right: 0;
   }
   .body { flex-direction: column; }
   .chat { height: auto; }
