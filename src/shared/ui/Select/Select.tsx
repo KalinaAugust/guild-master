@@ -8,7 +8,7 @@ import styles from './Select.module.css';
 interface SelectProps {
   value: string;
   onValueChange: (value: string) => void;
-  options: { label: React.ReactNode; value: string; avatar?: string }[];
+  options: { label: React.ReactNode; value: string; avatar?: string; avatarFallback?: React.ReactNode }[];
   placeholder?: string;
   className?: string;
   centered?: boolean;
@@ -45,7 +45,7 @@ export const Select: React.FC<SelectProps> = ({
             <SelectPrimitive.Item key={opt.value} value={opt.value} className={`${styles.item} ${centered ? styles.itemCentered : ''}`}>
               <SelectPrimitive.ItemText>
                 <span className={styles.itemContent}>
-                  {opt.avatar && (
+                  {opt.avatar ? (
                     <Image
                       src={opt.avatar}
                       alt="avatar"
@@ -53,7 +53,9 @@ export const Select: React.FC<SelectProps> = ({
                       width={20}
                       height={20}
                     />
-                  )}
+                  ) : opt.avatarFallback ? (
+                    <span className={styles.avatarFallback}>{opt.avatarFallback}</span>
+                  ) : null}
                   <span className={styles.label}>{opt.label}</span>
                 </span>
               </SelectPrimitive.ItemText>

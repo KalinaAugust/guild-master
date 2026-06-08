@@ -71,6 +71,7 @@ describe('getMyGuilds', () => {
         name: 'First Guild',
         description: 'Description 1',
         ownerId: 'owner-1',
+        avatarUrl: 'http://avatar1.com',
       },
       {
         id: 'guild-2',

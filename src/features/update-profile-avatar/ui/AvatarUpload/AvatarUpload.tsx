@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 import { User, Camera, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateAvatar } from '@/entities/user/api/updateAvatar';
-import { CropperModal } from '../CropperModal';
+import { CropperModal } from '@/shared/ui/CropperModal';
+import { ACCEPTED_IMAGE_ACCEPT, validateImageFile } from '@/shared/lib/imageValidation';
 import styles from './AvatarUpload.module.css';
 
 interface AvatarUploadProps {
@@ -30,8 +31,10 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
+    const error = validateImageFile(file);
+    if (error) {
+      toast.error(error);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
@@ -96,7 +99,7 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/*"
+          accept={ACCEPTED_IMAGE_ACCEPT}
           className={styles.hiddenInput}
         />
       </div>

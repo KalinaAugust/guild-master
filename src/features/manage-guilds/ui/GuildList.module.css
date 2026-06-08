@@ -46,9 +46,17 @@
   min-width: 0;
 }
 
+.iconWrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .icon {
   color: var(--text-secondary);
-  flex-shrink: 0;
 }
 
 .info {
