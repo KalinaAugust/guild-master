@@ -5,6 +5,7 @@ import { useRef, useState, ChangeEvent } from 'react';
 import { Image as ImageIcon, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { CropperModal } from '@/shared/ui/CropperModal';
+import { ACCEPTED_IMAGE_ACCEPT, validateImageFile } from '@/shared/lib/imageValidation';
 import styles from './GuildAvatarUpload.module.css';
 
 interface GuildAvatarUploadProps {
@@ -29,8 +30,10 @@ export const GuildAvatarUpload = ({ avatarUrl, onSelect, disabled }: GuildAvatar
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please select an image file');
+    const error = validateImageFile(file);
+    if (error) {
+      toast.error(error);
+      e.target.value = '';
       return;
     }
 
@@ -78,7 +81,7 @@ export const GuildAvatarUpload = ({ avatarUrl, onSelect, disabled }: GuildAvatar
           type="file"
           ref={fileInputRef}
           onChange={handleFileChange}
-          accept="image/*"
+          accept={ACCEPTED_IMAGE_ACCEPT}
           className={styles.hiddenInput}
         />
       </div>
