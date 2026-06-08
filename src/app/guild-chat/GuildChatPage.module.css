@@ -3,3 +3,13 @@
   margin: 0 auto;
   padding-bottom: 1rem;
 }
+
+/* On wide screens fill the available height so the panel reaches the bottom
+   instead of floating with large empty space below it. */
+@media (min-width: 961px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - var(--header-height) - 1rem);
+  }
+}
