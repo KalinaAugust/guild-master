@@ -80,7 +80,7 @@
 
 .dayHeader {
   background: transparent;
-  padding: 0 0.75rem 0.5rem 12px;
+  padding: 0 0.75rem 0.5rem 0.75rem;
   text-align: left;
   font-weight: bold;
   font-size: 0.75rem;

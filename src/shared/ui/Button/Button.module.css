@@ -23,7 +23,7 @@
 /* Sizes */
 .size_xs {
   padding: 4px 8px;
-  font-size: 10px;
+  font-size: 0.625rem;
   border-radius: 5px;
 }
 
