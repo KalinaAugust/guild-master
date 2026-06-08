@@ -95,37 +95,6 @@
   color: var(--text-secondary);
 }
 
-.stubField {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  height: 45px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.colorDots {
-  display: flex;
-  gap: 10px;
-  padding: 8px 0;
-}
-
-.colorDot {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-}
-
-.colorDotPurple { background: #6c63ff; }
-.colorDotPink   { background: #ff6584; }
-.colorDotGreen  { background: #43aa8b; }
-.colorDotOrange { background: #f8961e; }
-.colorDotBlue   { background: #577590; }
-
 .dayToggles {
   display: flex;
   gap: 6px;

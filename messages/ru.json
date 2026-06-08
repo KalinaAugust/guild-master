@@ -76,9 +76,6 @@
     "wizard": {
       "mainColumn": "Основное",
       "additionalColumn": "Дополнительно",
-      "iconLabel": "Иконка события",
-      "iconPlaceholder": "Выбрать иконку…",
-      "colorLabel": "Цвет",
       "repeatLabel": "Повтор по дням",
       "invitedLabel": "Приглашённые участники",
       "invitedPlaceholder": "Добавить участников…",
