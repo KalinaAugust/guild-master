@@ -41,7 +41,8 @@
       "dnd": "D&D",
       "boardgame": "Board Games",
       "other": "Other"
-    }
+    },
+    "guildChat": "Guild Chat"
   },
   "Auth": {
     "login": "Login",
@@ -241,5 +242,20 @@
     "confirmedCount": "{count, plural, =1 {# participant} other {# participants}}",
     "noConfirmations": "No confirmations",
     "confirmedLabel": "Confirmed participation"
+  },
+  "GuildChat": {
+    "empty": "No messages yet. Say hello!",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "edited": "edited",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete this message?",
+    "lockedPrompt": "Join this guild to write messages",
+    "sendError": "Failed to send message",
+    "updateError": "Failed to update message",
+    "deleteError": "Failed to delete message"
   }
 }
