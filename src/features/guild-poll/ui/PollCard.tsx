@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 import { Check, Lock, Plus } from 'lucide-react';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
-import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import {
   useVotePollMutation,
@@ -103,13 +102,6 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
                 <span className={styles.optionLabel}>{o.body}</span>
                 <span className={styles.optionPercent}>{Math.round(pct)}%</span>
               </button>
-              {!poll.isAnonymous && o.voters.length > 0 && (
-                <div className={styles.voters}>
-                  {o.voters.slice(0, 8).map((v, i) => (
-                    <UserAvatar key={i} avatarUrl={v.avatarUrl} name={v.fullName} size="sm" />
-                  ))}
-                </div>
-              )}
             </li>
           );
         })}

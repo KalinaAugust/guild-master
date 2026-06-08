@@ -122,13 +122,6 @@
   flex-shrink: 0;
 }
 
-.voters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding-left: 4px;
-}
-
 .customForm {
   display: flex;
   gap: 8px;

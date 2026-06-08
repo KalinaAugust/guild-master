@@ -84,24 +84,16 @@ export const pollApi = baseApi.injectEndpoints({
           : undefined;
         try {
           const { data: updated } = await queryFulfilled;
-          dispatch(
-            pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
-              const index = draft.findIndex((p) => p.id === pollId);
-              if (index === -1) return;
-              if (!vote.optionId) {
-                // Custom answer: take the authoritative poll (new option id + counts).
-                draft[index] = updated;
-                return;
-              }
-              // Existing option: trust the accumulated optimistic counts (so rapid
-              // multi-select votes don't clobber each other) and only reconcile the
-              // voter avatars from the server response.
-              for (const option of draft[index].options) {
-                const fresh = updated.options.find((o) => o.id === option.id);
-                if (fresh) option.voters = fresh.voters;
-              }
-            }),
-          );
+          // Existing-option votes are fully covered by the optimistic patch, so we
+          // only reconcile custom answers (their option id is server-generated).
+          if (!vote.optionId) {
+            dispatch(
+              pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
+                const index = draft.findIndex((p) => p.id === pollId);
+                if (index !== -1) draft[index] = updated;
+              }),
+            );
+          }
         } catch {
           patch?.undo();
         }
