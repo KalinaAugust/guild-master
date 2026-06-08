@@ -1,0 +1,82 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1.25rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.badge {
+  align-self: flex-start;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent-secondary);
+  background: var(--accent-glow);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.question {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.4rem;
+  color: var(--text-primary);
+}
+
+.options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.optionFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: var(--accent-glow);
+  pointer-events: none;
+}
+
+.fill62 { width: 62%; }
+.fill28 { width: 28%; }
+.fill10 { width: 10%; }
+
+.optionLabel {
+  position: relative;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.optionPercent {
+  position: relative;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.foot {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
