@@ -64,7 +64,9 @@ export const guildMessageApi = baseApi.injectEndpoints({
       async onQueryStarted(guildId, { dispatch, queryFulfilled }) {
         const patch = dispatch(
           guildMessageApi.util.updateQueryData('getGuildChatReadState', guildId, (draft) => {
-            draft.lastReadAt = new Date().toISOString();
+            if (draft) {
+              draft.lastReadAt = new Date().toISOString();
+            }
           }),
         );
         try {

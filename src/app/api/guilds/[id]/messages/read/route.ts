@@ -7,6 +7,8 @@ export async function GET(
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
+  const auth = await requireUser();
+  if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
     const state = await getGuildChatReadState(id);

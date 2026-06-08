@@ -57,6 +57,10 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
   const pendingScrollRef = useRef(true);
   const isAtBottomRef = useRef(true);
 
+  useEffect(() => {
+    pendingScrollRef.current = true;
+  }, [activeGuildId]);
+
   const handleScroll = () => {
     const el = listRef.current;
     if (!el) return;
