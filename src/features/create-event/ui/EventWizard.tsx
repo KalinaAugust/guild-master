@@ -184,7 +184,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                 </div>
               </div>
 
-              <div className={styles.stubGroup}>
+              <div className={`${styles.stubGroup} ${styles.invitedGroup}`}>
                 <div className={styles.invitedHeader}>
                   <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
                   {filteredMembers.length > 0 && (
