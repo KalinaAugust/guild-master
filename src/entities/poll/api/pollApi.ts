@@ -87,7 +87,19 @@ export const pollApi = baseApi.injectEndpoints({
           dispatch(
             pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
               const index = draft.findIndex((p) => p.id === pollId);
-              if (index !== -1) draft[index] = updated;
+              if (index === -1) return;
+              if (!vote.optionId) {
+                // Custom answer: take the authoritative poll (new option id + counts).
+                draft[index] = updated;
+                return;
+              }
+              // Existing option: trust the accumulated optimistic counts (so rapid
+              // multi-select votes don't clobber each other) and only reconcile the
+              // voter avatars from the server response.
+              for (const option of draft[index].options) {
+                const fresh = updated.options.find((o) => o.id === option.id);
+                if (fresh) option.voters = fresh.voters;
+              }
             }),
           );
         } catch {

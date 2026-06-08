@@ -35,7 +35,7 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
   const closed = !!poll.closedAt;
 
   const handleVote = async (optionId: string) => {
-    if (closed || isVoting) return;
+    if (closed) return;
     try {
       await vote({ guildId, pollId: poll.id, vote: { optionId } }).unwrap();
     } catch {
@@ -96,7 +96,7 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
                 type="button"
                 className={`${styles.option} ${voted ? styles.optionVoted : ''}`}
                 onClick={() => handleVote(o.id)}
-                disabled={closed || isVoting}
+                disabled={closed}
               >
                 <span className={`${styles.optionFill} ${fillClass(pct)}`} aria-hidden="true" />
                 <span className={styles.optionCheck}>{voted && <Check size={14} />}</span>
