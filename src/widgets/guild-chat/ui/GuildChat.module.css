@@ -103,8 +103,8 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  margin-right: -16px;
-  padding-right: 6px;
+  margin-right: -10px;
+  padding-right: 0;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
