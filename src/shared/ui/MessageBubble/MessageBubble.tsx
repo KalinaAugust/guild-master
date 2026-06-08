@@ -74,10 +74,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
   return (
     <div className={`${styles.item} ${isOwn ? styles.own : ''}`}>
-      <UserAvatar avatarUrl={avatarUrl} name={authorName} size="md" />
+      {!isOwn && <UserAvatar avatarUrl={avatarUrl} name={authorName} size="md" />}
       <div className={styles.body}>
         <div className={styles.head}>
-          <span className={styles.name}>{authorName || '—'}</span>
+          {!isOwn && <span className={styles.name}>{authorName || '—'}</span>}
           <span className={styles.meta}>{time}</span>
           {isEdited && (
             <>
