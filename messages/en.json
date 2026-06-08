@@ -256,7 +256,6 @@
     "deleteError": "Failed to delete message"
   },
   "GuildPoll": {
-    "badge": "Poll",
     "placeholderQuestion": "Which raid night works best for the guild?",
     "placeholderOption1": "Friday evening",
     "placeholderOption2": "Saturday afternoon",

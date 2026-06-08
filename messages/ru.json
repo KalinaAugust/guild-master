@@ -256,7 +256,6 @@
     "deleteError": "Не удалось удалить сообщение"
   },
   "GuildPoll": {
-    "badge": "Опрос",
     "placeholderQuestion": "В какой вечер гильдии удобнее всего собираться на рейд?",
     "placeholderOption1": "Вечер пятницы",
     "placeholderOption2": "День субботы",

@@ -74,15 +74,14 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
   return (
     <article className={styles.card}>
       <header className={styles.head}>
-        <div className={styles.badges}>
-          <span className={styles.badge}>{t('badge')}</span>
-          {closed && (
+        {closed && (
+          <div className={styles.badges}>
             <span className={styles.closedBadge}>
               <Lock size={12} aria-hidden="true" />
               {t('closedBadge')}
             </span>
-          )}
-        </div>
+          </div>
+        )}
         <h3 className={styles.question}>{poll.title}</h3>
         {poll.description && <p className={styles.description}>{poll.description}</p>}
       </header>

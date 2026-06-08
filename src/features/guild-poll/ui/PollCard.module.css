@@ -20,16 +20,6 @@
   gap: 8px;
 }
 
-.badge {
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent-secondary);
-  background: var(--accent-glow);
-  padding: 4px 10px;
-  border-radius: 6px;
-}
-
 .closedBadge {
   display: inline-flex;
   align-items: center;
