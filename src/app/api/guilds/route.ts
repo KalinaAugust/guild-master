@@ -10,20 +10,23 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guild_id, guilds (id, name, owner_id, description)')
+    .select('guild_id, guilds (id, name, owner_id, description, avatar_url)')
     .eq('user_id', user.id);
 
   if (error || !data) {
     return NextResponse.json({ error: 'Failed to fetch guilds' }, { status: 500 });
   }
 
-  const guilds = data.reduce<Array<{ id: string; name: string; ownerId: string; description?: string }>>(
+  const guilds = data.reduce<
+    Array<{ id: string; name: string; ownerId: string; description?: string; avatarUrl?: string }>
+  >(
     (acc, m) => {
       const g = m.guilds as unknown as {
         id: string;
         name: string;
         owner_id: string;
         description: string | null;
+        avatar_url: string | null;
       };
       if (g) {
         acc.push({
@@ -31,6 +34,7 @@ export async function GET() {
           name: g.name,
           ownerId: g.owner_id,
           description: g.description || undefined,
+          avatarUrl: g.avatar_url || undefined,
         });
       }
       return acc;
@@ -95,6 +99,7 @@ export async function POST(request: NextRequest) {
       name: guild.name,
       ownerId: guild.owner_id,
       description: guild.description || undefined,
+      avatarUrl: guild.avatar_url || undefined,
     },
     { status: 201 }
   );

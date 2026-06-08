@@ -6,12 +6,13 @@ import { toast } from 'sonner';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as Form from '@radix-ui/react-form';
 import { X, Image as ImageIcon, Users, Settings, Trash2 } from 'lucide-react';
-import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation } from '@/entities/guild';
+import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation, uploadGuildAvatar } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
 import { FormField } from '@/shared/ui/FormField';
 import { GuildMembersSection } from '@/widgets/guild-members';
+import { GuildAvatarUpload } from './GuildAvatarUpload';
 import styles from './EditGuildWizard.module.css';
 
 type Tab = 'members' | 'settings';
@@ -34,11 +35,22 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
   const [pendingEmails, setPendingEmails] = useState<string[]>([]);
   const [pendingInput, setPendingInput] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [avatarBlob, setAvatarBlob] = useState<Blob | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [createGuild, { isLoading: isCreating }] = useCreateGuildMutation();
   const [updateGuild, { isLoading: isUpdating }] = useUpdateGuildMutation();
   const [addMember] = useAddGuildMemberMutation();
   const [deleteGuild, { isLoading: isDeleting }] = useDeleteGuildMutation();
-  const isLoading = isCreating || isUpdating;
+  const isLoading = isCreating || isUpdating || isUploadingAvatar;
+
+  const handleSelectAvatar = (blob: Blob) => {
+    setAvatarBlob(blob);
+    setAvatarPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return URL.createObjectURL(blob);
+    });
+  };
 
   const handleDeleteGuild = async () => {
     if (!guild) return;
@@ -58,6 +70,9 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
       setPendingEmails([]);
       setPendingInput('');
     }
+    if (avatarPreview) URL.revokeObjectURL(avatarPreview);
+    setAvatarBlob(null);
+    setAvatarPreview(null);
     onClose();
   };
 
@@ -78,10 +93,30 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     if (!name.trim()) return;
     try {
       if (isEdit) {
-        await updateGuild({ id: guild.id, name: name.trim(), description: description.trim() }).unwrap();
+        let avatarUrl: string | undefined;
+        if (avatarBlob) {
+          setIsUploadingAvatar(true);
+          avatarUrl = await uploadGuildAvatar(guild.id, avatarBlob);
+        }
+        await updateGuild({
+          id: guild.id,
+          name: name.trim(),
+          description: description.trim(),
+          ...(avatarUrl !== undefined ? { avatarUrl } : {}),
+        }).unwrap();
         toast.success(t('successUpdated'));
       } else {
         const newGuild = await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
+        if (avatarBlob) {
+          setIsUploadingAvatar(true);
+          const avatarUrl = await uploadGuildAvatar(newGuild.id, avatarBlob);
+          await updateGuild({
+            id: newGuild.id,
+            name: name.trim(),
+            description: description.trim(),
+            avatarUrl,
+          }).unwrap();
+        }
         if (pendingEmails.length > 0) {
           const results = await Promise.allSettled(
             pendingEmails.map((email) => addMember({ guildId: newGuild.id, email }).unwrap())
@@ -95,6 +130,8 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     } catch (err) {
       const status = (err as { status?: number })?.status;
       toast.error(status === 403 ? t('errorLimit') : t('errorCreate'));
+    } finally {
+      setIsUploadingAvatar(false);
     }
   };
 
@@ -154,7 +191,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
 
               {activeTab === 'members' && (
                 guild
-                  ? <GuildMembersSection guildId={guild.id} userId={userId} />
+                  ? <GuildMembersSection guildId={guild.id} userId={userId} fill />
                   : (
                     <div>
                       <Form.Root onSubmit={handleAddPending} className={styles.pendingForm}>
@@ -197,7 +234,11 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                       <ImageIcon size={16} aria-hidden="true" />
                       <span className={styles.stubLabel}>{t('avatarSection')}</span>
                     </div>
-                    <div className={styles.stubField}>{t('comingSoon')}</div>
+                    <GuildAvatarUpload
+                      avatarUrl={avatarPreview ?? guild?.avatarUrl ?? null}
+                      onSelect={handleSelectAvatar}
+                      disabled={isLoading}
+                    />
                   </div>
 
                   {isEdit && (

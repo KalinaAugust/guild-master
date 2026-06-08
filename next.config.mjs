@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: supabaseHostname,
         pathname: '/storage/v1/object/public/avatars/**',
       },
+      {
+        protocol: 'https',
+        hostname: supabaseHostname,
+        pathname: '/storage/v1/object/public/guild-avatars/**',
+      },
     ],
   },
 };

@@ -24,13 +24,14 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
     
   // Map the nested guilds data and ensure it matches the Guild interface
   return data.reduce<Guild[]>((acc, m) => {
-    const g = m.guilds as unknown as { id: string; name: string; owner_id: string; description: string | null };
+    const g = m.guilds as unknown as { id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
     if (g) {
       acc.push({
         id: g.id,
         name: g.name,
         ownerId: g.owner_id,
         description: g.description || undefined,
+        avatarUrl: g.avatar_url || undefined,
       });
     }
     return acc;

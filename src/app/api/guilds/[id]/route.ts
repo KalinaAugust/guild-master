@@ -11,7 +11,7 @@ export async function GET(
 
   const { data: guild, error } = await supabase
     .from('guilds')
-    .select('id, name, description, owner_id, profiles!guilds_owner_id_fkey(full_name)')
+    .select('id, name, description, avatar_url, owner_id, profiles!guilds_owner_id_fkey(full_name)')
     .eq('id', id)
     .maybeSingle();
 
@@ -30,6 +30,7 @@ export async function GET(
     id: guild.id,
     name: guild.name,
     description: guild.description || undefined,
+    avatarUrl: guild.avatar_url || undefined,
     ownerId: guild.owner_id,
     ownerName: (guild.profiles as ProfileShape)?.full_name ?? null,
     memberCount: count ?? 0,
@@ -45,15 +46,21 @@ export async function PATCH(
   const { supabase, user } = auth;
 
   const { id } = await params;
-  const { name, description } = await request.json();
+  const { name, description, avatarUrl } = await request.json();
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 });
 
   const forbidden = await requireGuildOwner(supabase, id, user.id);
   if (forbidden) return forbidden;
 
+  const updates: { name: string; description: string | null; avatar_url?: string | null } = {
+    name,
+    description: description || null,
+  };
+  if (avatarUrl !== undefined) updates.avatar_url = avatarUrl || null;
+
   const { data: guild, error } = await supabase
     .from('guilds')
-    .update({ name, description: description || null })
+    .update(updates)
     .eq('id', id)
     .select()
     .single();
@@ -65,6 +72,7 @@ export async function PATCH(
     name: guild.name,
     ownerId: guild.owner_id,
     description: guild.description || undefined,
+    avatarUrl: guild.avatar_url || undefined,
   });
 }
 

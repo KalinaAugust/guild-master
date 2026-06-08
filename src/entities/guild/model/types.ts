@@ -3,6 +3,7 @@ export interface Guild {
   name: string;
   ownerId: string;
   description?: string;
+  avatarUrl?: string;
 }
 
 export interface GuildDetail {
@@ -11,6 +12,7 @@ export interface GuildDetail {
   ownerId: string;
   ownerName: string | null;
   description?: string;
+  avatarUrl?: string;
   memberCount: number;
 }
 

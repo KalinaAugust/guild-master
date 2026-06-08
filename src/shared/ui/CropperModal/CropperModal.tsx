@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import Cropper, { Point, Area } from 'react-easy-crop';
 import { Modal } from '@/shared/ui/Modal';
 import { Button } from '@/shared/ui/Button';
-import getCroppedImg from '../../lib/getCroppedImg';
+import getCroppedImg from '@/shared/lib/getCroppedImg';
 import styles from './CropperModal.module.css';
 
 interface CropperModalProps {

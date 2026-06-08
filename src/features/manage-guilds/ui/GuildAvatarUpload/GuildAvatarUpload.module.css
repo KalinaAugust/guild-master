@@ -1,0 +1,61 @@
+.container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.container:hover {
+  border-color: var(--primary-color, #00d2ff);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.25);
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: white;
+}
+
+.container:hover .overlay {
+  opacity: 1;
+}
+
+.overlayText {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.disabled {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.hiddenInput {
+  display: none;
+}

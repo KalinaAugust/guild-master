@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { User, Camera, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateAvatar } from '@/entities/user/api/updateAvatar';
-import { CropperModal } from '../CropperModal';
+import { CropperModal } from '@/shared/ui/CropperModal';
 import styles from './AvatarUpload.module.css';
 
 interface AvatarUploadProps {

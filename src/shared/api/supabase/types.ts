@@ -292,6 +292,7 @@ export type Database = {
       }
       guilds: {
         Row: {
+          avatar_url: string | null
           created_at: string
           description: string | null
           id: string
@@ -299,6 +300,7 @@ export type Database = {
           owner_id: string
         }
         Insert: {
+          avatar_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -306,6 +308,7 @@ export type Database = {
           owner_id: string
         }
         Update: {
+          avatar_url?: string | null
           created_at?: string
           description?: string | null
           id?: string
