@@ -19,7 +19,7 @@ import { EventsTooltipContent } from './EventsTooltipContent';
 import { typeIcons } from '@/entities/event';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
-import { useGuildSelection } from '../model/useGuildSelection';
+import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 
 export const CalendarGrid: React.FC<{
   guilds: Guild[];
@@ -75,12 +75,11 @@ export const CalendarGrid: React.FC<{
           </div>
           <div className={styles.separator} />
           <div className={styles.guildSelect}>
-            <Select
+            <GuildSelect
               value={activeGuildId}
               onValueChange={handleGuildChange}
               options={guildOptions}
               placeholder="Выберите гильдию"
-              truncate
             />
           </div>
           <div className={styles.separator} />
