@@ -287,6 +287,7 @@
     "createError": "Failed to create poll",
     "deleteError": "Failed to delete poll",
     "closeError": "Failed to close poll",
-    "confirmDelete": "Delete this poll?"
+    "confirmDelete": "Delete this poll?",
+    "addOptionButton": "Add an option"
   }
 }

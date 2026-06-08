@@ -47,3 +47,26 @@
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.08);
 }
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px dashed var(--glass-border);
+  border-radius: 10px;
+  color: var(--accent-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.addButton:hover {
+  border-color: var(--accent-secondary);
+  color: var(--text-highlight);
+  background: rgba(255, 255, 255, 0.03);
+}

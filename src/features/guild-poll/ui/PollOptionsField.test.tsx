@@ -7,7 +7,7 @@ const messages = {
   GuildPoll: {
     optionsLabel: 'Answer options',
     optionPlaceholder: 'Option {index}',
-    addOptionPlaceholder: 'Add an option',
+    addOptionButton: 'Add an option',
     removeOption: 'Remove option',
   },
 };
@@ -22,21 +22,31 @@ const renderField = (value: string[], onChange = vi.fn()) => {
 };
 
 describe('PollOptionsField', () => {
-  it('renders one input per option', () => {
-    renderField(['A', 'B', '']);
-    expect(screen.getAllByRole('textbox')).toHaveLength(3);
+  it('renders only the add button when there are no options', () => {
+    renderField([]);
+    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    expect(screen.getByRole('button', { name: 'Add an option' })).toBeInTheDocument();
   });
 
-  it('grows a trailing slot when the last input gets text', () => {
-    const onChange = renderField(['A', '']);
-    const inputs = screen.getAllByRole('textbox');
-    fireEvent.change(inputs[1], { target: { value: 'B' } });
-    expect(onChange).toHaveBeenCalledWith(['A', 'B', '']);
+  it('renders one input per option', () => {
+    renderField(['A', 'B']);
+    expect(screen.getAllByRole('textbox')).toHaveLength(2);
+  });
+
+  it('appends an empty option when the add button is clicked', () => {
+    const onChange = renderField(['A']);
+    fireEvent.click(screen.getByRole('button', { name: 'Add an option' }));
+    expect(onChange).toHaveBeenCalledWith(['A', '']);
   });
 
   it('removes an option via its remove button', () => {
-    const onChange = renderField(['A', 'B', '']);
+    const onChange = renderField(['A', 'B']);
     fireEvent.click(screen.getAllByRole('button', { name: 'Remove option' })[0]);
-    expect(onChange).toHaveBeenCalledWith(['B', '']);
+    expect(onChange).toHaveBeenCalledWith(['B']);
+  });
+
+  it('hides the add button at the max of 10 options', () => {
+    renderField(Array.from({ length: 10 }, (_, i) => `O${i}`));
+    expect(screen.queryByRole('button', { name: 'Add an option' })).not.toBeInTheDocument();
   });
 });

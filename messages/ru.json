@@ -287,6 +287,7 @@
     "createError": "Не удалось создать опрос",
     "deleteError": "Не удалось удалить опрос",
     "closeError": "Не удалось закрыть опрос",
-    "confirmDelete": "Удалить этот опрос?"
+    "confirmDelete": "Удалить этот опрос?",
+    "addOptionButton": "Добавить вариант"
   }
 }

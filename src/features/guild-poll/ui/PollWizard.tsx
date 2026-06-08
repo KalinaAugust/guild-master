@@ -30,7 +30,7 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [options, setOptions] = useState<string[]>(['']);
+  const [options, setOptions] = useState<string[]>([]);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [allowCustom, setAllowCustom] = useState(false);
@@ -40,7 +40,7 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }
   const handleClose = () => {
     setTitle('');
     setDescription('');
-    setOptions(['']);
+    setOptions([]);
     setIsAnonymous(false);
     setAllowMultiple(false);
     setAllowCustom(false);
