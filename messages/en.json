@@ -256,11 +256,6 @@
     "deleteError": "Failed to delete message"
   },
   "GuildPoll": {
-    "placeholderQuestion": "Which raid night works best for the guild?",
-    "placeholderOption1": "Friday evening",
-    "placeholderOption2": "Saturday afternoon",
-    "placeholderOption3": "Sunday morning",
-    "placeholderVotes": "{count} votes so far",
     "newPoll": "New poll",
     "createTitle": "Create poll",
     "nameLabel": "Poll title",
@@ -270,7 +265,6 @@
     "createButton": "Create poll",
     "optionsLabel": "Answer options",
     "optionPlaceholder": "Option {index}",
-    "addOptionPlaceholder": "Add an option",
     "removeOption": "Remove option",
     "settingsLabel": "Settings",
     "anonymousLabel": "Anonymous poll",

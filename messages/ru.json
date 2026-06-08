@@ -256,11 +256,6 @@
     "deleteError": "Не удалось удалить сообщение"
   },
   "GuildPoll": {
-    "placeholderQuestion": "В какой вечер гильдии удобнее всего собираться на рейд?",
-    "placeholderOption1": "Вечер пятницы",
-    "placeholderOption2": "День субботы",
-    "placeholderOption3": "Утро воскресенья",
-    "placeholderVotes": "Уже {count} голоса",
     "newPoll": "Новый опрос",
     "createTitle": "Создание опроса",
     "nameLabel": "Название опроса",
@@ -270,7 +265,6 @@
     "createButton": "Создать опрос",
     "optionsLabel": "Варианты ответа",
     "optionPlaceholder": "Вариант {index}",
-    "addOptionPlaceholder": "Добавить вариант",
     "removeOption": "Удалить вариант",
     "settingsLabel": "Настройки",
     "anonymousLabel": "Анонимный опрос",
