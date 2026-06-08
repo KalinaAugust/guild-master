@@ -438,6 +438,151 @@ export type Database = {
           },
         ]
       }
+      poll_options: {
+        Row: {
+          body: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_custom: boolean
+          poll_id: string
+          position: number
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_custom?: boolean
+          poll_id: string
+          position?: number
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_custom?: boolean
+          poll_id?: string
+          position?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_options_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_options_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_votes: {
+        Row: {
+          created_at: string
+          id: string
+          option_id: string
+          poll_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_id: string
+          poll_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_id?: string
+          poll_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_votes_option_id_fkey"
+            columns: ["option_id"]
+            isOneToOne: false
+            referencedRelation: "poll_options"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_votes_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_votes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      polls: {
+        Row: {
+          allow_custom: boolean
+          allow_multiple: boolean
+          closed_at: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          guild_id: string
+          id: string
+          is_anonymous: boolean
+          title: string
+        }
+        Insert: {
+          allow_custom?: boolean
+          allow_multiple?: boolean
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          guild_id: string
+          id?: string
+          is_anonymous?: boolean
+          title: string
+        }
+        Update: {
+          allow_custom?: boolean
+          allow_multiple?: boolean
+          closed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          guild_id?: string
+          id?: string
+          is_anonymous?: boolean
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "polls_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "polls_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
