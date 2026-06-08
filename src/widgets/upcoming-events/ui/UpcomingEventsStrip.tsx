@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useGetEventsQuery, useGetMyEventIdsQuery } from '@/entities/event';
 import { useAppSelector } from '@/shared/lib/hooks';
 import type { Guild } from '@/entities/guild';
@@ -19,6 +19,12 @@ interface Props {
 }
 
 export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const currentGuildId = useAppSelector(state => state.guild.currentGuildId);
   const activeGuildId = useMemo(
     () => currentGuildId || guilds[0]?.id,
@@ -37,6 +43,10 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
   const nextEvent = useNextEvent(events);
   const eventsByType = useWeekEventsByType(events, myIdsData?.eventIds ?? []);
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
+
+  if (!isMounted) {
+    return <div className={styles.strip} style={{ minHeight: '82px' }} />;
+  }
 
   return (
     <div className={styles.strip}>
