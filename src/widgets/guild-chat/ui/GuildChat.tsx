@@ -122,7 +122,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
   };
 
   return (
-    <Panel className={styles.panel}>
+    <Panel>
       <div className={styles.header}>
         <div className={styles.headerChat}>
           <div className={styles.guildSelect}>
