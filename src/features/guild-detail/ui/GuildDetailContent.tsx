@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { ChevronLeft } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useGetGuildByIdQuery,
@@ -17,6 +15,7 @@ import {
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { DetailLayout } from '@/shared/ui/DetailLayout';
 import { GuildMembersSection } from '@/widgets/guild-members';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
@@ -88,7 +87,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
   if (isLoading) {
     return (
-      <div className={styles.container}>
+      <div className={styles.stateContainer}>
         <div className={styles.skeleton} />
       </div>
     );
@@ -96,7 +95,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
   if (!guild) {
     return (
-      <div className={styles.container}>
+      <div className={styles.stateContainer}>
         <p className={styles.empty}>Guild not found</p>
       </div>
     );
@@ -110,117 +109,96 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   const showApplyFooter = membershipStatus === 'none' || membershipStatus === 'guest';
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <Link href="/guilds" className={styles.backLink}>
-          <ChevronLeft size={20} />
-          {t('backToGuilds')}
-        </Link>
-        <h1 className={styles.title}>{guild.name}</h1>
-      </div>
-
-      <div className={styles.body}>
-        <div className={styles.column}>
-          {guild.description && (
-            <div className={styles.infoGroup}>
-              <span className={styles.label}>{commonT('description')}</span>
-              <p className={styles.description}>{guild.description}</p>
-            </div>
-          )}
-
-          <div className={styles.infoGroup}>
-            <span className={styles.label}>{t('owner')}</span>
-            <span className={styles.value}>{guild.ownerName ?? '—'}</span>
-          </div>
-
-        </div>
-
-        <div className={`${styles.column} ${styles.columnRight}`}>
-          {membershipStatus === 'owner' && (
-            <>
+    <>
+      <DetailLayout
+        backHref="/guilds"
+        backLabel={t('backToGuilds')}
+        title={guild.name}
+        left={
+          <>
+            {guild.description && (
               <div className={styles.infoGroup}>
-                <span className={styles.label}>{t('pendingRequests')}</span>
-                {joinRequests.length === 0 ? (
-                  <p className={styles.empty}>{t('noPendingRequests')}</p>
-                ) : (
-                  joinRequests.map((req) => (
-                    <JoinRequestItem
-                      key={req.id}
-                      request={req}
-                      onAccept={() => handleResolve(req.id, 'approve')}
-                      onDecline={() => handleResolve(req.id, 'decline')}
-                      isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
-                      isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
-                      disabled={resolvingState?.id === req.id}
-                    />
-                  ))
-                )}
+                <span className={styles.label}>{commonT('description')}</span>
+                <p className={styles.description}>{guild.description}</p>
               </div>
+            )}
 
-              <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
-                <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                <GuildMembersSection guildId={guildId} readOnly fill />
-              </div>
-            </>
-          )}
-
-          {membershipStatus === 'member' && (
-            <>
-              <div className={`${styles.statusBadge} ${styles.statusMember}`}>
-                {t('youAreMember')}
-              </div>
-
-              <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
-                <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                <GuildMembersSection guildId={guildId} readOnly fill />
-              </div>
-            </>
-          )}
-
-          {membershipStatus === 'pending' && (
-            <div className={`${styles.statusBadge} ${styles.statusPending}`}>
-              {t('requestSent')}
+            <div className={styles.infoGroup}>
+              <span className={styles.label}>{t('owner')}</span>
+              <span className={styles.value}>{guild.ownerName ?? '—'}</span>
             </div>
-          )}
+          </>
+        }
+        right={
+          <>
+            {membershipStatus === 'owner' && (
+              <>
+                <div className={styles.infoGroup}>
+                  <span className={styles.label}>{t('pendingRequests')}</span>
+                  {joinRequests.length === 0 ? (
+                    <p className={styles.empty}>{t('noPendingRequests')}</p>
+                  ) : (
+                    joinRequests.map((req) => (
+                      <JoinRequestItem
+                        key={req.id}
+                        request={req}
+                        onAccept={() => handleResolve(req.id, 'approve')}
+                        onDecline={() => handleResolve(req.id, 'decline')}
+                        isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                        isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                        disabled={resolvingState?.id === req.id}
+                      />
+                    ))
+                  )}
+                </div>
 
-          {membershipStatus === 'guest' && (
-            <p className={styles.signInText}>{t('signInToApply')}</p>
-          )}
-        </div>
-      </div>
+                <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
+                  <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
+                  <GuildMembersSection guildId={guildId} readOnly fill />
+                </div>
+              </>
+            )}
 
-      {membershipStatus === 'owner' && (
-        <div className={styles.footer}>
-          <Button type="button" variant="primary" onClick={handleEdit}>
-            {commonT('edit')}
-          </Button>
-        </div>
-      )}
+            {membershipStatus === 'member' && (
+              <>
+                <div className={`${styles.statusBadge} ${styles.statusMember}`}>
+                  {t('youAreMember')}
+                </div>
 
-      {showApplyFooter && (
-        <div className={styles.footer}>
-          <Button
-            type="button"
-            variant="primary"
-            onClick={handleApply}
-            isLoading={isSubmitting}
-          >
-            {t('applyToJoin')}
-          </Button>
-        </div>
-      )}
+                <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
+                  <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
+                  <GuildMembersSection guildId={guildId} readOnly fill />
+                </div>
+              </>
+            )}
 
-      {membershipStatus === 'member' && (
-        <div className={styles.footer}>
-          <Button
-            type="button"
-            variant="danger"
-            onClick={() => setIsLeaveConfirmOpen(true)}
-          >
-            {t('leaveGuild')}
-          </Button>
-        </div>
-      )}
+            {membershipStatus === 'pending' && (
+              <div className={`${styles.statusBadge} ${styles.statusPending}`}>
+                {t('requestSent')}
+              </div>
+            )}
+
+            {membershipStatus === 'guest' && (
+              <p className={styles.signInText}>{t('signInToApply')}</p>
+            )}
+          </>
+        }
+        footer={
+          membershipStatus === 'owner' ? (
+            <Button type="button" variant="primary" onClick={handleEdit}>
+              {commonT('edit')}
+            </Button>
+          ) : showApplyFooter ? (
+            <Button type="button" variant="primary" onClick={handleApply} isLoading={isSubmitting}>
+              {t('applyToJoin')}
+            </Button>
+          ) : membershipStatus === 'member' ? (
+            <Button type="button" variant="danger" onClick={() => setIsLeaveConfirmOpen(true)}>
+              {t('leaveGuild')}
+            </Button>
+          ) : undefined
+        }
+      />
 
       <ConfirmModal
         isOpen={isLeaveConfirmOpen}
@@ -232,6 +210,6 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
         variant="danger"
         isLoading={isLeaving}
       />
-    </div>
+    </>
   );
 };

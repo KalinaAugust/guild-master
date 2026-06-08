@@ -1,14 +1,14 @@
 .main {
   max-width: 800px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 24px 40px 40px;
 }
 
 .backLink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 32px;
+  padding: 40px 0 0 40px;
   color: var(--text-secondary);
   text-decoration: none;
   font-weight: 500;
@@ -21,6 +21,10 @@
 
 @media (max-width: 640px) {
   .main {
-    padding: 20px;
+    padding: 16px 20px 20px;
+  }
+
+  .backLink {
+    padding: 20px 0 0 20px;
   }
 }

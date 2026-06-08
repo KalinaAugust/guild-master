@@ -38,15 +38,17 @@ export default async function DayPage({ params, searchParams }: DayPageProps) {
   const t = await getTranslations('Common');
 
   return (
-    <main className={styles.main}>
+    <>
       <Link href="/" className={styles.backLink}>
         <ChevronLeft size={20} />
         {t('backToCalendar')}
       </Link>
 
-      <DayEventsList date={date} guildId={currentGuildId} userId={user?.id} />
+      <main className={styles.main}>
+        <DayEventsList date={date} guildId={currentGuildId} userId={user?.id} />
 
-      <EventWizard isDayView userId={user?.id} />
-    </main>
+        <EventWizard isDayView userId={user?.id} />
+      </main>
+    </>
   );
 }

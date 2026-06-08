@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { ChevronLeft, Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle, CheckCircle } from 'lucide-react';
+import { Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle, CheckCircle } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
@@ -17,6 +16,7 @@ import {
 } from '@/entities/event';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { DetailLayout } from '@/shared/ui/DetailLayout';
 import {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
@@ -183,7 +183,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   if (isEventLoading) {
     return (
-      <div className={styles.container}>
+      <div className={styles.stateContainer}>
         <div className={styles.skeleton} />
       </div>
     );
@@ -191,7 +191,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
 
   if (!event) {
     return (
-      <div className={styles.container}>
+      <div className={styles.stateContainer}>
         <p className={styles.empty}>{eventT('error')}</p>
       </div>
     );
@@ -245,108 +245,108 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   );
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <Link href={`/day/${event.date}?guildId=${data.guildId}`} className={styles.backLink}>
-          <ChevronLeft size={20} />
-          {commonT('backToDay')}
-        </Link>
-        <h1 className={styles.title}>{event.title}</h1>
-      </div>
-
-      <div className={styles.body}>
-        <div className={styles.column}>
-          <div className={styles.infoGroup}>
-            <span className={styles.label}>{t('type')}</span>
-            <div className={`${styles.typeHero} ${styles[`typeHero_${event.type}`]}`}>
-              <span className={styles.typeHeroIcon}>{typeIcons[event.type]}</span>
-              <span className={styles.typeHeroLabel}>{typeLabel}</span>
-            </div>
-          </div>
-
-          <div className={styles.infoGroup}>
-            <span className={styles.label}>{t('dateTime')}</span>
-            <span className={styles.dateTime}>
-              {eventDate?.format('dddd')}, <span className={styles.dateNum}>{eventDate?.format('D')}</span>{' '}
-              {eventDate?.format('MMMM')} · <span className={styles.dateNum}>{eventDate?.format('HH:mm')}</span>
-            </span>
-          </div>
-
-          {event.description && (
+    <>
+      <DetailLayout
+        backHref={`/day/${event.date}?guildId=${data.guildId}`}
+        backLabel={commonT('backToDay')}
+        title={event.title}
+        rightClassName={canReadComments ? styles.columnRightTabs : undefined}
+        left={
+          <>
             <div className={styles.infoGroup}>
-              <span className={styles.label}>{commonT('description')}</span>
-              <p className={styles.description}>{event.description}</p>
+              <span className={styles.label}>{t('type')}</span>
+              <div className={`${styles.typeHero} ${styles[`typeHero_${event.type}`]}`}>
+                <span className={styles.typeHeroIcon}>{typeIcons[event.type]}</span>
+                <span className={styles.typeHeroLabel}>{typeLabel}</span>
+              </div>
             </div>
-          )}
-        </div>
 
-        <div className={`${styles.column} ${styles.columnRight}${canReadComments ? ` ${styles.columnRightTabs}` : ''}`}>
-          {isCreator && joinRequests.length > 0 && (
-            <div className={styles.requestsGroup}>
-              <span className={styles.label}>{t('requests')}</span>
-              {joinRequests.map((req) => (
-                <EventJoinRequestItem
-                  key={req.id}
-                  request={req}
-                  onAccept={() => handleResolve(req.id, 'approve')}
-                  onDecline={() => handleResolve(req.id, 'decline')}
-                  isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
-                  isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
-                  disabled={resolvingState?.id === req.id}
-                />
-              ))}
+            <div className={styles.infoGroup}>
+              <span className={styles.label}>{t('dateTime')}</span>
+              <span className={styles.dateTime}>
+                {eventDate?.format('dddd')}, <span className={styles.dateNum}>{eventDate?.format('D')}</span>{' '}
+                {eventDate?.format('MMMM')} · <span className={styles.dateNum}>{eventDate?.format('HH:mm')}</span>
+              </span>
             </div>
-          )}
 
-          {canApply && (
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              className={styles.actionButton}
-              onClick={handleApply}
-              isLoading={isApplying}
-            >
-              {t('applyToParticipate')}
-            </Button>
-          )}
+            {event.description && (
+              <div className={styles.infoGroup}>
+                <span className={styles.label}>{commonT('description')}</span>
+                <p className={styles.description}>{event.description}</p>
+              </div>
+            )}
+          </>
+        }
+        right={
+          <>
+            {isCreator && joinRequests.length > 0 && (
+              <div className={styles.requestsGroup}>
+                <span className={styles.label}>{t('requests')}</span>
+                {joinRequests.map((req) => (
+                  <EventJoinRequestItem
+                    key={req.id}
+                    request={req}
+                    onAccept={() => handleResolve(req.id, 'approve')}
+                    onDecline={() => handleResolve(req.id, 'decline')}
+                    isAccepting={resolvingState?.id === req.id && resolvingState?.action === 'approve'}
+                    isDeclining={resolvingState?.id === req.id && resolvingState?.action === 'decline'}
+                    disabled={resolvingState?.id === req.id}
+                  />
+                ))}
+              </div>
+            )}
 
-          {viewerHasPendingRequest && !isCreator && (
-            <div className={styles.requestSentBadge}>
-              <CheckCircle size={20} />
-              <span className={styles.requestSentLabel}>{t('requestSent')}</span>
-            </div>
-          )}
+            {canApply && (
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                className={styles.actionButton}
+                onClick={handleApply}
+                isLoading={isApplying}
+              >
+                {t('applyToParticipate')}
+              </Button>
+            )}
 
-          {canReadComments ? (
-            <EventTabs
-              eventId={eventId}
-              currentUserId={currentUserId}
-              participants={participantsBlock}
-              comments={
-                <CommentsTab
-                  eventId={eventId}
-                  canWrite={canWriteComments}
-                  currentUserId={currentUserId}
-                />
-              }
-            />
-          ) : (
-            participantsBlock
-          )}
-        </div>
-      </div>
+            {viewerHasPendingRequest && !isCreator && (
+              <div className={styles.requestSentBadge}>
+                <CheckCircle size={20} />
+                <span className={styles.requestSentLabel}>{t('requestSent')}</span>
+              </div>
+            )}
 
-      {isCreator && (
-        <div className={styles.footer}>
-          <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
-            {commonT('delete')}
-          </Button>
-          <Button type="button" variant="primary" onClick={handleEdit}>
-            {commonT('edit')}
-          </Button>
-        </div>
-      )}
+            {canReadComments ? (
+              <EventTabs
+                eventId={eventId}
+                currentUserId={currentUserId}
+                participants={participantsBlock}
+                comments={
+                  <CommentsTab
+                    eventId={eventId}
+                    canWrite={canWriteComments}
+                    currentUserId={currentUserId}
+                  />
+                }
+              />
+            ) : (
+              participantsBlock
+            )}
+          </>
+        }
+        footer={
+          isCreator ? (
+            <>
+              <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
+                {commonT('delete')}
+              </Button>
+              <Button type="button" variant="primary" onClick={handleEdit}>
+                {commonT('edit')}
+              </Button>
+            </>
+          ) : undefined
+        }
+      />
 
       <ConfirmModal
         isOpen={deleteModalOpen}
@@ -367,6 +367,6 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         confirmLabel={t('leave')}
         isLoading={isLeaving}
       />
-    </div>
+    </>
   );
 };
