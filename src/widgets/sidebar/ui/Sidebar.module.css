@@ -91,3 +91,20 @@
 .sidebar:has([data-state="open"]) .badge {
   opacity: 1;
 }
+
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #93c5fd;
+  border: 2px solid var(--bg-primary, #0b1120);
+}

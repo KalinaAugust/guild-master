@@ -10,6 +10,14 @@ vi.mock('next/navigation', () => ({
   usePathname: vi.fn(),
 }));
 
+vi.mock('@/shared/lib/hooks', () => ({
+  useAppSelector: () => null,
+}));
+
+vi.mock('@/entities/guild-message', () => ({
+  useGetGuildChatUnreadQuery: () => ({ data: { hasUnread: false } }),
+}));
+
 import { Sidebar } from './Sidebar';
 
 describe('Sidebar', () => {
