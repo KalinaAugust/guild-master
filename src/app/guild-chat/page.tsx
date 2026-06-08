@@ -4,7 +4,7 @@ import { getUser } from '@/entities/user/api/getUser';
 import { UpcomingEventsStrip } from '@/widgets/upcoming-events';
 import { GuildChat } from '@/widgets/guild-chat';
 import { getServerEvents } from '@/entities/event/api/getEvents';
-import styles from '../HomePage.module.css';
+import styles from './GuildChatPage.module.css';
 
 export default async function GuildChatPage() {
   const user = await getUser();
