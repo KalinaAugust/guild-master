@@ -1,3 +1,13 @@
+/* When the page pins itself to the viewport height (wide screens), the Panel
+   grows to fill it; on narrow screens .main has no fixed height so flex:1 is a
+   no-op and the panel keeps its natural height. */
+.panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -38,6 +48,8 @@
   display: flex;
   gap: 24px;
   align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
 
 .chat {
@@ -45,7 +57,6 @@
   flex-direction: column;
   flex: 1;
   min-width: 0;
-  height: 60vh;
   min-height: 0;
 }
 
@@ -54,7 +65,6 @@
   flex-direction: column;
   gap: 16px;
   flex: 0 0 max(450px, 30%);
-  height: 60vh;
   min-height: 0;
   overflow-y: auto;
   padding-left: 24px;
