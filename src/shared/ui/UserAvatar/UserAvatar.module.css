@@ -1,3 +1,7 @@
+/* 
+ * Keep px unit for font sizes and dimensions in this component because 
+ * avatar text sizes are tightly coupled to the fixed width/height container sizes.
+ */
 .base {
   border-radius: 50%;
   display: flex;

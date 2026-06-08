@@ -1,7 +1,7 @@
 :root {
   /* Layout */
-  --header-height: 48px;
-  --rail-width: 60px;
+  --header-height: 3rem;
+  --rail-width: 3.75rem;
 
   /* Backgrounds */
   --bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);

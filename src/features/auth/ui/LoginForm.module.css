@@ -33,7 +33,7 @@
   background: none;
   border: none;
   font: inherit;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--text-secondary);
   text-decoration: underline;
   cursor: pointer;
