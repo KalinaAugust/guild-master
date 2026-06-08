@@ -15,11 +15,12 @@ import { ActivityEvent } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
+import { Panel } from '@/shared/ui/Panel';
 import { EventsTooltipContent } from './EventsTooltipContent';
 import { typeIcons } from '@/entities/event';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
-import { useGuildSelection } from '../model/useGuildSelection';
+import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 
 export const CalendarGrid: React.FC<{
   guilds: Guild[];
@@ -54,7 +55,7 @@ export const CalendarGrid: React.FC<{
   };
 
   return (
-    <div className={styles.container}>
+    <Panel>
       <div className={styles.header}>
         <div className={styles.controlsLeft}>
           <div className={styles.monthSelect}>
@@ -75,12 +76,11 @@ export const CalendarGrid: React.FC<{
           </div>
           <div className={styles.separator} />
           <div className={styles.guildSelect}>
-            <Select
+            <GuildSelect
               value={activeGuildId}
               onValueChange={handleGuildChange}
               options={guildOptions}
               placeholder="Выберите гильдию"
-              truncate
             />
           </div>
           <div className={styles.separator} />
@@ -171,6 +171,6 @@ export const CalendarGrid: React.FC<{
           );
         })}
       </div>
-    </div>
+    </Panel>
   );
 };

@@ -41,7 +41,8 @@
       "dnd": "D&D",
       "boardgame": "Настольные игры",
       "other": "Прочее"
-    }
+    },
+    "guildChat": "Чат гильдии"
   },
   "Auth": {
     "login": "Вход",
@@ -75,9 +76,6 @@
     "wizard": {
       "mainColumn": "Основное",
       "additionalColumn": "Дополнительно",
-      "iconLabel": "Иконка события",
-      "iconPlaceholder": "Выбрать иконку…",
-      "colorLabel": "Цвет",
       "repeatLabel": "Повтор по дням",
       "invitedLabel": "Приглашённые участники",
       "invitedPlaceholder": "Добавить участников…",
@@ -241,5 +239,20 @@
     "confirmedCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
     "noConfirmations": "Нет подтверждений",
     "confirmedLabel": "Подтвердили участие"
+  },
+  "GuildChat": {
+    "empty": "Пока нет сообщений. Поздоровайтесь!",
+    "placeholder": "Написать сообщение…",
+    "send": "Отправить",
+    "edited": "изменено",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "confirmDelete": "Удалить это сообщение?",
+    "lockedPrompt": "Вступите в гильдию, чтобы писать сообщения",
+    "sendError": "Не удалось отправить сообщение",
+    "updateError": "Не удалось изменить сообщение",
+    "deleteError": "Не удалось удалить сообщение"
   }
 }

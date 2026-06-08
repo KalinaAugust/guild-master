@@ -23,14 +23,6 @@ import { EventForm } from './EventForm';
 import { EventFormData } from '../model/types';
 import styles from './EventWizard.module.css';
 
-const COLOR_DOTS = [
-  { cls: styles.colorDotPurple, label: 'Purple' },
-  { cls: styles.colorDotPink,   label: 'Pink' },
-  { cls: styles.colorDotGreen,  label: 'Green' },
-  { cls: styles.colorDotOrange, label: 'Orange' },
-  { cls: styles.colorDotBlue,   label: 'Blue' },
-];
-
 const FORM_ID = 'event-wizard-form';
 
 export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; userId?: string }> = ({
@@ -184,20 +176,6 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
 
             <div className={styles.column}>
               <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>{t('wizard.iconLabel')}</span>
-                <div className={styles.stubField}>{t('wizard.iconPlaceholder')}</div>
-              </div>
-
-              <div className={styles.stubGroup}>
-                <span className={styles.stubLabel}>{t('wizard.colorLabel')}</span>
-                <div className={styles.colorDots}>
-                  {COLOR_DOTS.map(({ cls, label }) => (
-                    <div key={label} className={`${styles.colorDot} ${cls}`} />
-                  ))}
-                </div>
-              </div>
-
-              <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.repeatLabel')}</span>
                 <div className={styles.dayToggles}>
                   {dayLabels.map((d) => (
@@ -206,7 +184,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                 </div>
               </div>
 
-              <div className={styles.stubGroup}>
+              <div className={`${styles.stubGroup} ${styles.invitedGroup}`}>
                 <div className={styles.invitedHeader}>
                   <span className={styles.stubLabel}>{t('wizard.invitedLabel')}</span>
                   {filteredMembers.length > 0 && (

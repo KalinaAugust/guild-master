@@ -15,28 +15,13 @@
   border-radius: 16px 16px 4px 16px;
 }
 
-.body {
-  flex: 1;
-  min-width: 0;
-}
+.body { flex: 1; min-width: 0; }
 
-.head {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 
-.name {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--accent-primary);
-}
+.name { font-weight: 600; font-size: 0.9rem; color: var(--accent-primary); }
 
-.meta {
-  font-size: 0.75rem;
-  opacity: 0.6;
-}
+.meta { font-size: 0.75rem; opacity: 0.6; }
 
 .text {
   margin: 4px 0 0;
@@ -46,11 +31,7 @@
   line-height: 1.4;
 }
 
-.editActions {
-  display: flex;
-  gap: 8px;
-  margin-top: 6px;
-}
+.editActions { display: flex; gap: 8px; margin-top: 6px; }
 
 .actions {
   position: absolute;
@@ -66,14 +47,8 @@
 }
 
 .item:hover .actions,
-.item:focus-within .actions {
-  opacity: 1;
-}
+.item:focus-within .actions { opacity: 1; }
 
-.actionBtn:hover {
-  color: var(--accent-primary);
-}
+.actionBtn:hover { color: var(--accent-primary); }
 
-.deleteBtn:hover {
-  color: #ff4d4d;
-}
+.deleteBtn:hover { color: #ff4d4d; }
