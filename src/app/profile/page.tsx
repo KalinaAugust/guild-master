@@ -1,8 +1,10 @@
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
 import { EditableName } from '@/features/update-profile-name';
 import styles from './ProfilePage.module.css';
-import { Mail, Calendar, User } from 'lucide-react';
+import { Mail, Calendar, User, ExternalLink } from 'lucide-react';
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -44,6 +46,8 @@ export default async function ProfilePage() {
     .select('*', { count: 'exact', head: true })
     .in('guild_id', guildIds);
 
+  const t = await getTranslations('PublicProfile');
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -55,6 +59,10 @@ export default async function ProfilePage() {
           <div className={styles.titleInfo}>
             <h1>{user.email?.split('@')[0] || 'User Profile'}</h1>
             <p className={styles.status}>Active Member</p>
+            <Link href={`/users/${user.id}`} className={styles.publicProfileLink}>
+              <ExternalLink size={14} />
+              {t('viewPublicProfile')}
+            </Link>
           </div>
         </div>
 

@@ -190,7 +190,8 @@
     "joined": "Дата регистрации",
     "statistics": "Статистика",
     "guilds": "Гильдии",
-    "events": "События"
+    "events": "События",
+    "viewPublicProfile": "Публичный профиль"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",

@@ -190,7 +190,8 @@
     "joined": "Joined",
     "statistics": "Statistics",
     "guilds": "Guilds",
-    "events": "Events"
+    "events": "Events",
+    "viewPublicProfile": "Public profile"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",
