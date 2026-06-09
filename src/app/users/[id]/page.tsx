@@ -38,7 +38,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           <div className={styles.infoItem}>
             <Calendar className={styles.icon} size={20} />
             <div>
-              <label>{t('joined')}</label>
+              <span className={styles.infoLabel}>{t('joined')}</span>
               <p>{new Date(profile.joinedAt).toLocaleDateString(locale)}</p>
             </div>
           </div>
