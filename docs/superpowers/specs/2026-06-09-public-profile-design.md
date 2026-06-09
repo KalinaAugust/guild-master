@@ -79,6 +79,14 @@ Hand-extend the `Functions` section of `src/shared/api/supabase/types.ts` with t
 
 - Unit tests (Vitest) for the data helper that fetches public profile + stats (mock Supabase client): found / not found / anonymous (null counts) cases.
 
+## Amendment (same day)
+
+`/users/[id]` is now the single profile URL:
+
+- The header menu "Profile" item links straight to `/users/<own id>`, so the shareable URL is immediately visible in the address bar.
+- When the viewer is the profile owner, the page renders the full editable profile (`OwnProfile` — avatar upload, editable name, email, stats; formerly the `/profile` page). Everyone else gets the restricted public view described above.
+- `/profile` redirects to `/users/<own id>` (kept for old bookmarks).
+
 ## Out of Scope
 
 - Username slugs (`/u/[nickname]`) — UUID only for now.
