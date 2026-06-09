@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import { useState, useRef, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { User, Camera, Loader2 } from 'lucide-react';
+import { User, Camera } from 'lucide-react';
+import { Spinner } from '@/shared/ui/Spinner';
 import { toast } from 'sonner';
 import { updateAvatar } from '@/entities/user/api/updateAvatar';
 import { CropperModal } from '@/shared/ui/CropperModal';
@@ -86,7 +87,7 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
         
         <div className={styles.overlay}>
           {isUploading ? (
-            <Loader2 size={24} className={styles.spinner} />
+            <Spinner size={24} color="var(--text-primary)" />
           ) : (
             <>
               <Camera size={24} />

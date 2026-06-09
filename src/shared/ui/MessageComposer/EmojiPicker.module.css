@@ -1,0 +1,136 @@
+.trigger {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  position: absolute;
+  left: 8px;
+  top: calc(50% - 17px);
+}
+
+.trigger:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.content {
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-glass);
+  padding: 10px;
+  z-index: 2000;
+  width: 290px;
+  backdrop-filter: var(--glass-blur);
+  animation: slideUpAndFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.tabButton {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 0;
+  border-radius: 8px;
+  background: transparent;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tabButton:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.activeTab {
+  border-color: var(--accent-primary) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.tabIcon {
+  font-size: 1.15rem;
+}
+
+.gridContainer {
+  height: 180px;
+  overflow-y: auto;
+  padding-top: 4px;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar styling for the emoji container */
+.gridContainer::-webkit-scrollbar {
+  width: 5px;
+}
+
+.gridContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.gridContainer::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.gridContainer::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.emojiButton {
+  font-size: 1.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.2, 0, 0.13, 1.5), background-color 0.15s ease;
+}
+
+.emojiButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.18);
+}
+
+.arrow {
+  fill: var(--modal-bg);
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

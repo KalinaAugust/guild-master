@@ -4,6 +4,8 @@ import React, { useState, useRef, useLayoutEffect } from 'react';
 import { Send } from 'lucide-react';
 import { Button } from '@/shared/ui/Button';
 import { Textarea } from '@/shared/ui/Textarea';
+import { Spinner } from '@/shared/ui/Spinner';
+import { EmojiPicker } from './EmojiPicker';
 import styles from './MessageComposer.module.css';
 
 interface MessageComposerProps {
@@ -61,8 +63,30 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     }
   };
 
+  const handleSelectEmoji = (emoji: string) => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = el.value;
+    const before = text.substring(0, start);
+    const after = text.substring(end, text.length);
+
+    const newValue = before + emoji + after;
+    setValue(newValue);
+
+    // Focus the textarea and set selection range right after the inserted emoji
+    setTimeout(() => {
+      el.focus();
+      const newCursorPos = start + emoji.length;
+      el.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
+  };
+
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
+      <EmojiPicker onSelectEmoji={handleSelectEmoji} disabled={isSubmitting} />
       <Textarea
         ref={textareaRef}
         className={styles.textarea}
@@ -74,7 +98,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         maxLength={maxLength}
       />
       {isSubmitting ? (
-        <span className={styles.spinner} role="status" aria-label={sendLabel} />
+        <Spinner className={styles.composerSpinner} aria-label={sendLabel} />
       ) : (
         <Button
           type="submit"

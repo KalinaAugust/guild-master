@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import { Slot } from '@radix-ui/react-slot';
+import { Spinner } from '@/shared/ui/Spinner';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -41,7 +42,14 @@ export const Button = ({
         children
       ) : (
         <>
-          {isLoading && <span className={styles.spinner} data-testid="button-spinner" />}
+          {isLoading && (
+            <Spinner
+              size="sm"
+              color="currentColor"
+              className={styles.buttonSpinner}
+              data-testid="button-spinner"
+            />
+          )}
           {isLoading ? (
             <span className={styles.contentHidden}>
               {children}

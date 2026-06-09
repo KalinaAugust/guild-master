@@ -18,7 +18,7 @@ All colors are defined as CSS variables in [src/app/globals.css](file:///Users/d
 | CSS Variable | Value | Description |
 | :--- | :--- | :--- |
 | `--bg-gradient` | `linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%)` | Global body gradient (Deep space / Midnight blue) |
-| `--modal-bg` | `#051020` | Solid opaque background for modals and overlay cards |
+| `--modal-bg` | `#0b1528` | Solid opaque background for modals and overlay cards |
 
 ### 2.2 Accents & Glows
 | CSS Variable | Value | Description |
@@ -136,7 +136,18 @@ To support accessibility, responsive scaling, and browser-level zoom configurati
 
 ---
 
-## 10. Guidelines for Developers & Agents
+## 10. Reusable UI Components
+
+To maintain UI consistency and reduce code duplication, always check and reuse existing components in `src/shared/ui/` before building any new custom elements:
+
+*   **`Spinner` (`src/shared/ui/Spinner`):** The standard loading indicator. Supports customizable sizes (`sm` = 16px, `md` = 28px, `lg` = 40px, or a custom number in pixels), color variables (defaults to `var(--accent-primary)`), CSS classes, and a `centered` prop to easily align it in the middle of a container.
+*   **`Button` (`src/shared/ui/Button`):** Standard styled action buttons (Primary, Secondary, Ghost, Danger, etc.) with support for loading states (automatically renders the `Spinner`).
+*   **`Select` (`src/shared/ui/Select`):** Custom dropdown selections matching the night sky theme with smooth arrow transitions.
+*   **`Modal` / `ConfirmModal` (`src/shared/ui/Modal`):** Base overlays for dialogs and user confirmations.
+
+---
+
+## 11. Guidelines for Developers & Agents
 
 When creating or modifying components, adhere to these rules:
 

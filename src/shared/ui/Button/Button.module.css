@@ -141,28 +141,9 @@
   gap: inherit;
 }
 
-.spinner {
+.buttonSpinner {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 1.2em;
-  height: 1.2em;
-  border: 2px solid currentColor;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  box-sizing: border-box;
-  animation: button-spin-centered 0.6s linear infinite;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-@keyframes button-spin-centered {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  100% {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+  left: calc(50% - 8px);
+  top: calc(50% - 8px);
 }
 

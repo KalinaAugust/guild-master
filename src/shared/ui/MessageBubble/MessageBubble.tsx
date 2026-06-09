@@ -9,6 +9,21 @@ import { Textarea } from '@/shared/ui/Textarea';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import styles from './MessageBubble.module.css';
 
+const renderBodyWithLargeEmojis = (text: string) => {
+  // Split the text while preserving matched individual emoji characters (no '+' quantifier)
+  const parts = text.split(/(\p{Extended_Pictographic})/gu);
+  return parts.map((part, idx) => {
+    if (/^\p{Extended_Pictographic}$/gu.test(part)) {
+      return (
+        <span key={idx} className={styles.emoji}>
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+};
+
 export interface MessageBubbleLabels {
   edited: string;
   edit: string;
@@ -100,7 +115,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             </div>
           </>
         ) : (
-          <p className={styles.text}>{body}</p>
+          <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>
         )}
       </div>
 

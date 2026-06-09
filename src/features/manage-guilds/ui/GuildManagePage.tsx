@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
 import { useGetGuildsQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
+import { Spinner } from '@/shared/ui/Spinner';
 import { GuildList } from './GuildList';
 import { EditGuildWizard } from './EditGuildWizard';
 import styles from './GuildManagePage.module.css';
@@ -38,7 +39,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
 
       {isLoading ? (
         <div className={styles.loader}>
-          <span className={styles.spinner} />
+          <Spinner size="lg" />
         </div>
       ) : (
         <>

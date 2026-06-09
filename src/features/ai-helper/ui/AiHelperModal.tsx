@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { Send } from 'lucide-react';
 import { Modal } from '@/shared/ui/Modal';
-import { Textarea } from '@/shared/ui/Textarea';
+import { MessageComposer } from '@/shared/ui/MessageComposer';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
 import { useSendAiMessageMutation } from '../api/aiHelperApi';
@@ -28,7 +27,6 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
   const t = useTranslations('AiHelper');
   const dispatch = useAppDispatch();
   const guildId = useAppSelector((state) => state.guild.currentGuildId) ?? '';
-  const [input, setInput] = useState('');
   const [sendMessage, { isLoading }] = useSendAiMessageMutation();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -36,10 +34,9 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
-  const handleSubmit = async () => {
-    if (!input.trim() || isLoading || !guildId) return;
-    const userMessage = input.trim();
-    setInput('');
+  const handleSubmit = async (body: string) => {
+    if (!body.trim() || isLoading || !guildId) return;
+    const userMessage = body.trim();
     const history = [...messages, { role: 'user' as const, content: userMessage }];
     setMessages(history);
     try {
@@ -53,15 +50,7 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      void handleSubmit();
-    }
-  };
-
   const handleClose = () => {
-    setInput('');
     onClose();
   };
 
@@ -95,25 +84,14 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
           )}
           <div ref={messagesEndRef} />
         </div>
-        <div className={styles.inputRow}>
-          <Textarea
-            className={styles.textarea}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={t('placeholder')}
-            rows={2}
-            disabled={isLoading}
-          />
-          <button
-            className={styles.sendButton}
-            onClick={handleSubmit}
-            disabled={isLoading || !input.trim()}
-            aria-label={t('send')}
-          >
-            <Send size={18} />
-          </button>
-        </div>
+        <MessageComposer
+          canWrite={true}
+          onSubmit={handleSubmit}
+          isSubmitting={isLoading}
+          placeholder={t('placeholder')}
+          sendLabel={t('send')}
+          lockedPrompt=""
+        />
       </div>
     </Modal>
   );
