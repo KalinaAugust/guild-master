@@ -2,12 +2,12 @@ import * as React from 'react';
 import { User } from 'lucide-react';
 import styles from './UserAvatar.module.css';
 
-const iconSizes: Record<string, number> = { sm: 14, md: 18, lg: 22 };
+const iconSizes: Record<string, number> = { sm: 14, md: 18, lg: 22, xl: 40 };
 
 interface UserAvatarProps {
   avatarUrl?: string | null;
   name?: string | null;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export const UserAvatar: React.FC<UserAvatarProps> = ({
