@@ -36,20 +36,14 @@ export const setPollVotes = async (pollId: string, optionIds: string[]): Promise
     }
   }
 
-  // Replace the user's votes: clear existing, then insert the new set.
-  const { error: deleteError } = await supabase
-    .from('poll_votes')
-    .delete()
-    .eq('poll_id', pollId)
-    .eq('user_id', user.id);
-  if (deleteError) throw deleteError;
-
-  if (ids.length > 0) {
-    const { error: insertError } = await supabase
-      .from('poll_votes')
-      .insert(ids.map((option_id) => ({ poll_id: pollId, option_id, user_id: user.id })));
-    if (insertError) throw insertError;
-  }
+  // Replace the user's votes atomically: a single DB function clears the old
+  // votes and inserts the new set in one transaction, so a mid-operation failure
+  // can never leave the user with no votes.
+  const { error: setError } = await supabase.rpc('set_poll_votes', {
+    p_poll_id: pollId,
+    p_option_ids: ids,
+  });
+  if (setError) throw setError;
 
   return getPollById(pollId);
 };

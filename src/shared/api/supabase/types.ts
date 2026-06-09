@@ -632,6 +632,10 @@ export type Database = {
         Args: { p_guild_id: string; p_keep: number }
         Returns: undefined
       }
+      set_poll_votes: {
+        Args: { p_poll_id: string; p_option_ids: string[] }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

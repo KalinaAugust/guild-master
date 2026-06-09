@@ -108,9 +108,10 @@ export const pollApi = baseApi.injectEndpoints({
         method: 'POST',
         body: vote,
       }),
-      // Apply the vote instantly; the server response then reconciles the voter
-      // lists (counts are already covered by the optimistic patch). Custom answers
-      // (no optionId) skip the optimistic step because their option id is server-generated.
+      // Apply the vote instantly, then replace the poll with the authoritative
+      // server state so counts, voter totals and voter lists stay consistent
+      // (e.g. when another user votes concurrently). Custom answers (no optionId)
+      // skip the optimistic step because their option id is server-generated.
       async onQueryStarted({ guildId, pollId, vote }, { dispatch, queryFulfilled }) {
         const patch = vote.optionId
           ? dispatch(
@@ -125,18 +126,7 @@ export const pollApi = baseApi.injectEndpoints({
           dispatch(
             pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
               const index = draft.findIndex((p) => p.id === pollId);
-              if (index === -1) return;
-              if (!vote.optionId) {
-                // Custom answer: the server created the option, so replace wholesale.
-                draft[index] = updated;
-                return;
-              }
-              // Pull the authoritative voter lists in without disturbing the
-              // optimistic counts (avoids flicker when votes overlap).
-              updated.options.forEach((serverOption) => {
-                const option = draft[index].options.find((o) => o.id === serverOption.id);
-                if (option) option.voters = serverOption.voters;
-              });
+              if (index !== -1) draft[index] = updated;
             }),
           );
         } catch {

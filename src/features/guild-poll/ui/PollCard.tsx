@@ -183,7 +183,7 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
         })}
       </ul>
 
-      {poll.allowCustom && !closed && !hasVoted && (
+      {poll.allowCustom && !closed && (!hasVoted || (!deferred && poll.allowMultiple)) && (
         <form className={styles.customForm} onSubmit={handleAddCustom}>
           <Input
             type="text"
