@@ -43,6 +43,9 @@
     },
     "guildChat": "Чат гильдии"
   },
+  "Auth": {
+    "login": "Вход"
+  },
   "Event": {
     "createTitle": "Новое событие",
     "editTitle": "Редактировать событие",

@@ -43,6 +43,9 @@
     },
     "guildChat": "Guild Chat"
   },
+  "Auth": {
+    "login": "Login"
+  },
   "Event": {
     "createTitle": "New Event",
     "editTitle": "Edit Event",
