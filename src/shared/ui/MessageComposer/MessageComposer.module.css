@@ -1,12 +1,12 @@
 .form {
   position: relative;
-  padding-top: 12px;
   margin-top: 12px;
   flex-shrink: 0;
 }
 
 .form .textarea {
   box-sizing: border-box;
+  display: block;
   width: 100%;
   min-height: 0;
   max-height: 160px;
@@ -21,7 +21,7 @@
 .sendButton {
   position: absolute;
   right: 7px;
-  top: calc(50% - 14px);
+  top: calc(50% - 17px);
   color: var(--accent-primary);
 }
 

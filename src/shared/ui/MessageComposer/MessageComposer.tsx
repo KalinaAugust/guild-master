@@ -52,11 +52,12 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     submit();
   };
 
-  // Enter sends; Shift+Enter inserts a newline.
+  // Enter sends; Shift+Enter inserts a newline. Route through the form's
+  // native submit so every send funnels through handleSubmit.
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      submit();
+      e.currentTarget.form?.requestSubmit();
     }
   };
 
