@@ -186,6 +186,12 @@
     "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена",
     "eventComment": "Новые комментарии в «{eventTitle}»"
   },
+  "PublicProfile": {
+    "joined": "Дата регистрации",
+    "statistics": "Статистика",
+    "guilds": "Гильдии",
+    "events": "События"
+  },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",
     "owner": "Владелец",

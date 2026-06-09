@@ -27,11 +27,12 @@ describe('getUser', () => {
 
   it('should return user with mapped profile if authenticated', async () => {
     const mockUser = { id: 'user-123', email: 'test@example.com' };
-    const mockProfile = { 
-      id: 'user-123', 
-      full_name: 'John Doe', 
+    const mockProfile = {
+      id: 'user-123',
+      public_id: 'a1B2c3D4',
+      full_name: 'John Doe',
       avatar_url: 'http://example.com/avatar.png',
-      extra_field: 'should be mapped away' 
+      extra_field: 'should be mapped away'
     };
 
     const mockSupabase = {
@@ -52,6 +53,7 @@ describe('getUser', () => {
       email: mockUser.email,
       profile: {
         id: mockProfile.id,
+        publicId: mockProfile.public_id,
         fullName: mockProfile.full_name,
         avatarUrl: mockProfile.avatar_url,
       },

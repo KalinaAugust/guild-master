@@ -592,6 +592,7 @@ export type Database = {
           full_name: string | null
           id: string
           last_active_guild_id: string | null
+          public_id: string
           updated_at: string | null
         }
         Insert: {
@@ -599,6 +600,7 @@ export type Database = {
           full_name?: string | null
           id: string
           last_active_guild_id?: string | null
+          public_id?: string
           updated_at?: string | null
         }
         Update: {
@@ -606,6 +608,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           last_active_guild_id?: string | null
+          public_id?: string
           updated_at?: string | null
         }
         Relationships: [
@@ -623,6 +626,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_public_id: {
+        Args: { id_length?: number }
+        Returns: string
+      }
+      get_profile_stats: {
+        Args: { profile_id: string }
+        Returns: {
+          joined_at: string
+          guilds_count: number | null
+          events_count: number | null
+        }[]
+      }
       has_guild_role: {
         Args: { target_guild_id: string; target_roles: string[] }
         Returns: boolean
