@@ -1,0 +1,95 @@
+# Public Profile Page — Design
+
+**Date:** 2026-06-09
+**Branch:** `extend-profile`
+
+## Goal
+
+Every user gets a shareable public profile URL: `/users/[id]` (profile UUID). Anyone with the link can open it — logged in or not. Private fields (email) are never shown.
+
+## Visibility Rules
+
+| Field | Anonymous visitor | Logged-in visitor |
+|---|---|---|
+| Avatar | ✅ | ✅ |
+| Full name | ✅ | ✅ |
+| Joined date (registration) | ✅ | ✅ |
+| Stats (guilds count, events count) | ❌ hidden | ✅ |
+| Email | ❌ never | ❌ never |
+
+## Architecture
+
+### 1. Database (migration via Supabase MCP)
+
+New SECURITY DEFINER function `get_profile_stats(profile_id uuid)`:
+
+```sql
+create or replace function public.get_profile_stats(profile_id uuid)
+returns table (joined_at timestamptz, guilds_count bigint, events_count bigint)
+language sql
+security definer
+set search_path = ''
+stable
+as $$
+  select
+    u.created_at as joined_at,
+    case when auth.uid() is null then null
+         else (select count(*) from public.guild_members gm where gm.user_id = profile_id) end,
+    case when auth.uid() is null then null
+         else (select count(*) from public.events e
+               where e.guild_id in (select gm.guild_id from public.guild_members gm where gm.user_id = profile_id)) end
+  from auth.users u
+  where u.id = profile_id
+$$;
+```
+
+- Returns only aggregates — no row data leaks.
+- `joined_at` is returned for everyone; counts are `null` for anonymous callers (`auth.uid() is null`).
+- `grant execute` to `anon, authenticated`.
+- `profiles` SELECT is already public (`qual: true`) — no policy changes needed.
+
+### 2. Page: `src/app/users/[id]/page.tsx` (server component)
+
+- Reads `profiles` (avatar_url, full_name) via session/anon Supabase client — RLS already allows.
+- Calls `supabase.rpc('get_profile_stats', { profile_id })`.
+- Unknown UUID / invalid id → `notFound()` (Next.js 404).
+- Renders: avatar (read-only, reuse `UserAvatar` from `shared/ui`), name, joined date, stats cards (only when counts are non-null).
+- `generateMetadata`: title = user's name, so shared links unfurl nicely.
+- Styling: CSS Module, same card/glassmorphism look as `/profile` (per design-system.md).
+- Texts via next-intl (`PublicProfile.*` keys in `messages/en.json` + `ru.json`).
+
+### 3. Feature: `features/share-profile`
+
+- `ShareProfileButton` (client component): copies `${origin}/users/${userId}` to clipboard, shows transient "Copied" state (icon swap, ~2s).
+- Slice layout: `features/share-profile/ui/ShareProfileButton/` + `index.ts` barrel.
+- Placement: own `/profile` page (header area) and the public `/users/[id]` page.
+- i18n keys: `ShareProfile.copyLink`, `ShareProfile.copied`.
+
+### 4. Routing: `src/proxy.ts`
+
+Add `/users/*` to the unauthenticated-allowed routes (same pattern as guild detail pages):
+
+```ts
+const isPublicProfilePage = request.nextUrl.pathname.match(/^\/users\/[^/]+/) !== null;
+```
+
+### 5. Types
+
+Hand-extend the `Functions` section of `src/shared/api/supabase/types.ts` with the `get_profile_stats` RPC signature, per the established no-CLI migration workflow.
+
+## Error Handling
+
+- Profile not found → `notFound()`.
+- RPC error → render profile without joined date/stats (page still works from `profiles` data alone); log server-side.
+- Clipboard API unavailable → fallback `navigator.clipboard` guard; button hidden if unsupported.
+
+## Testing
+
+- Unit tests (Vitest) for the data helper that fetches public profile + stats (mock Supabase client): found / not found / anonymous (null counts) cases.
+- Component test for `ShareProfileButton`: click → clipboard called → "Copied" state shown.
+
+## Out of Scope
+
+- Username slugs (`/u/[nickname]`) — UUID only for now.
+- Linking to public profiles from guild member lists / comments.
+- Privacy settings (per-user toggle of profile visibility).
