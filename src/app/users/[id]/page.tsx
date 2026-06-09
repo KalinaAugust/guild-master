@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Calendar } from 'lucide-react';
-import { getPublicProfile } from '@/entities/user';
+import { getPublicProfile } from '@/entities/user/api/getPublicProfile';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import styles from './PublicProfilePage.module.css';
 
