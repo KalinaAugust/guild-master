@@ -43,7 +43,7 @@ describe('getPublicProfile', () => {
     mockSupabase({ profileError: { message: 'invalid input syntax for type uuid' } });
 
     expect(await getPublicProfile('not-a-uuid')).toBeNull();
-    expect(console.error).toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith('Error fetching public profile:', { message: 'invalid input syntax for type uuid' });
   });
 
   it('returns mapped profile with stats', async () => {
@@ -78,6 +78,6 @@ describe('getPublicProfile', () => {
       guildsCount: null,
       eventsCount: null,
     });
-    expect(console.error).toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledWith('Error fetching profile stats:', { message: 'boom' });
   });
 });
