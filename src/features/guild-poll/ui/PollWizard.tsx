@@ -30,20 +30,22 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [options, setOptions] = useState<string[]>(['']);
+  const [options, setOptions] = useState<string[]>(['', '']);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [allowCustom, setAllowCustom] = useState(false);
+  const [allowRevote, setAllowRevote] = useState(false);
 
   const isValid = title.trim() !== '' && countFilled(options) >= MIN_POLL_OPTIONS;
 
   const handleClose = () => {
     setTitle('');
     setDescription('');
-    setOptions(['']);
+    setOptions(['', '']);
     setIsAnonymous(false);
     setAllowMultiple(false);
     setAllowCustom(false);
+    setAllowRevote(false);
     onClose();
   };
 
@@ -53,7 +55,7 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }
     try {
       await createPoll({
         guildId,
-        input: { title, description, options, isAnonymous, allowMultiple, allowCustom },
+        input: { title, description, options, isAnonymous, allowMultiple, allowCustom, allowRevote },
       }).unwrap();
       handleClose();
     } catch {
@@ -65,6 +67,7 @@ export const PollWizard: React.FC<PollWizardProps> = ({ open, onClose, guildId }
     { key: 'anonymous', label: t('anonymousLabel'), checked: isAnonymous, onChange: setIsAnonymous },
     { key: 'multiple', label: t('multipleLabel'), checked: allowMultiple, onChange: setAllowMultiple },
     { key: 'custom', label: t('customLabel'), checked: allowCustom, onChange: setAllowCustom },
+    { key: 'revote', label: t('revoteLabel'), checked: allowRevote, onChange: setAllowRevote },
   ];
 
   return (

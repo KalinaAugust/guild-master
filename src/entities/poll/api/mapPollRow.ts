@@ -1,9 +1,9 @@
 import type { Poll } from '../model/types';
 
 export const POLL_SELECT =
-  'id, guild_id, created_by, title, description, is_anonymous, allow_multiple, allow_custom, closed_at, created_at, ' +
+  'id, guild_id, created_by, title, description, is_anonymous, allow_multiple, allow_custom, allow_revote, closed_at, created_at, ' +
   'poll_options(id, body, position, is_custom, created_at), ' +
-  'poll_votes(option_id, user_id, profiles(full_name, avatar_url))';
+  'poll_votes(option_id, user_id, created_at, profiles(full_name, avatar_url))';
 
 interface OptionRow {
   id: string;
@@ -16,6 +16,7 @@ interface OptionRow {
 interface VoteRow {
   option_id: string;
   user_id: string;
+  created_at: string;
   profiles: { full_name: string | null; avatar_url: string | null } | null;
 }
 
@@ -28,6 +29,7 @@ export interface PollRow {
   is_anonymous: boolean;
   allow_multiple: boolean;
   allow_custom: boolean;
+  allow_revote: boolean;
   closed_at: string | null;
   created_at: string;
   poll_options: OptionRow[] | null;
@@ -52,10 +54,14 @@ export const buildPoll = (row: PollRow, currentUserId: string | null, canManage:
         voteCount: optionVotes.length,
         voters: row.is_anonymous
           ? []
-          : optionVotes.map((v) => ({
-              fullName: v.profiles?.full_name ?? null,
-              avatarUrl: v.profiles?.avatar_url ?? null,
-            })),
+          : optionVotes
+              .slice()
+              .sort((a, b) => a.created_at.localeCompare(b.created_at))
+              .map((v) => ({
+                fullName: v.profiles?.full_name ?? null,
+                avatarUrl: v.profiles?.avatar_url ?? null,
+                votedAt: v.created_at,
+              })),
       };
     });
 
@@ -73,6 +79,7 @@ export const buildPoll = (row: PollRow, currentUserId: string | null, canManage:
     isAnonymous: row.is_anonymous,
     allowMultiple: row.allow_multiple,
     allowCustom: row.allow_custom,
+    allowRevote: row.allow_revote,
     closedAt: row.closed_at,
     createdAt: row.created_at,
     options,

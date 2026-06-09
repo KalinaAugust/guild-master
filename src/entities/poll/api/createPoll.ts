@@ -4,6 +4,8 @@ import { getPollById } from './getGuildPolls';
 
 export const MIN_OPTIONS = 2;
 export const MAX_OPTIONS = 10;
+/** A guild keeps at most this many polls; creating more prunes the oldest. */
+export const MAX_POLLS_PER_GUILD = 20;
 export const MAX_TITLE = 200;
 export const MAX_DESCRIPTION = 1000;
 export const MAX_OPTION = 200;
@@ -38,6 +40,7 @@ export const createPoll = async (guildId: string, input: CreatePollInput): Promi
       is_anonymous: input.isAnonymous,
       allow_multiple: input.allowMultiple,
       allow_custom: input.allowCustom,
+      allow_revote: input.allowRevote,
     })
     .select('id')
     .single();
@@ -54,6 +57,15 @@ export const createPoll = async (guildId: string, input: CreatePollInput): Promi
     })),
   );
   if (optionsError) throw optionsError;
+
+  // Keep only the newest MAX_POLLS_PER_GUILD polls; older ones are pruned (with
+  // their options and votes) by a SECURITY DEFINER helper so the cap is enforced
+  // regardless of who authored the polls being removed.
+  const { error: pruneError } = await supabase.rpc('prune_guild_polls', {
+    p_guild_id: guildId,
+    p_keep: MAX_POLLS_PER_GUILD,
+  });
+  if (pruneError) throw pruneError;
 
   return getPollById(poll.id);
 };

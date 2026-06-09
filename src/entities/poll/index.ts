@@ -2,7 +2,9 @@ export type { Poll, PollOption, PollVoter, CreatePollInput, VoteInput } from './
 export {
   useGetGuildPollsQuery,
   useCreatePollMutation,
+  useAddPollOptionMutation,
   useDeletePollMutation,
   useClosePollMutation,
   useVotePollMutation,
+  useSetPollVotesMutation,
 } from './api/pollApi';

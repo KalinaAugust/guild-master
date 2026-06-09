@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { applyOptimisticVote } from './applyVote';
+import { applyOptimisticVote, applyOptimisticVotes } from './applyVote';
 import type { Poll } from './types';
 
 const makePoll = (overrides: Partial<Poll> = {}): Poll => ({
@@ -11,6 +11,7 @@ const makePoll = (overrides: Partial<Poll> = {}): Poll => ({
   isAnonymous: false,
   allowMultiple: false,
   allowCustom: false,
+  allowRevote: false,
   closedAt: null,
   createdAt: '2026-06-01',
   options: [
@@ -67,5 +68,40 @@ describe('applyOptimisticVote', () => {
     expect(count(poll, 'o1')).toBe(1);
     expect(count(poll, 'o2')).toBe(1);
     expect(poll.totalVotes).toBe(1);
+  });
+});
+
+describe('applyOptimisticVotes', () => {
+  it('applies a full selection at once and counts the voter once', () => {
+    const poll = makePoll({ allowMultiple: true });
+    applyOptimisticVotes(poll, ['o1', 'o2']);
+    expect(poll.myVoteOptionIds.sort()).toEqual(['o1', 'o2']);
+    expect(count(poll, 'o1')).toBe(1);
+    expect(count(poll, 'o2')).toBe(1);
+    expect(poll.totalVotes).toBe(1);
+  });
+
+  it('replaces an existing selection, adjusting only changed options', () => {
+    const poll = makePoll({ allowMultiple: true, myVoteOptionIds: ['o1'], totalVotes: 1, options: [
+      { id: 'o1', body: 'A', isCustom: false, voteCount: 1, voters: [] },
+      { id: 'o2', body: 'B', isCustom: false, voteCount: 0, voters: [] },
+    ] });
+    applyOptimisticVotes(poll, ['o2']);
+    expect(poll.myVoteOptionIds).toEqual(['o2']);
+    expect(count(poll, 'o1')).toBe(0);
+    expect(count(poll, 'o2')).toBe(1);
+    expect(poll.totalVotes).toBe(1);
+  });
+
+  it('clears the selection and drops the voter total', () => {
+    const poll = makePoll({ allowMultiple: true, myVoteOptionIds: ['o1', 'o2'], totalVotes: 1, options: [
+      { id: 'o1', body: 'A', isCustom: false, voteCount: 1, voters: [] },
+      { id: 'o2', body: 'B', isCustom: false, voteCount: 1, voters: [] },
+    ] });
+    applyOptimisticVotes(poll, []);
+    expect(poll.myVoteOptionIds).toEqual([]);
+    expect(count(poll, 'o1')).toBe(0);
+    expect(count(poll, 'o2')).toBe(0);
+    expect(poll.totalVotes).toBe(0);
   });
 });

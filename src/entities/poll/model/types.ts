@@ -1,6 +1,8 @@
 export interface PollVoter {
   fullName: string | null;
   avatarUrl: string | null;
+  /** When the vote was cast (ISO timestamp). */
+  votedAt: string;
 }
 
 export interface PollOption {
@@ -21,6 +23,7 @@ export interface Poll {
   isAnonymous: boolean;
   allowMultiple: boolean;
   allowCustom: boolean;
+  allowRevote: boolean;
   closedAt: string | null;
   createdAt: string;
   options: PollOption[];
@@ -39,6 +42,7 @@ export interface CreatePollInput {
   isAnonymous: boolean;
   allowMultiple: boolean;
   allowCustom: boolean;
+  allowRevote: boolean;
 }
 
 export interface VoteInput {

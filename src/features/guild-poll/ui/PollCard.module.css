@@ -14,13 +14,11 @@
   gap: 8px;
 }
 
-.badges {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
 .closedBadge {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -28,9 +26,6 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--text-muted);
-  background: rgba(255, 255, 255, 0.06);
-  padding: 4px 10px;
-  border-radius: 6px;
 }
 
 .question {
@@ -38,6 +33,13 @@
   font-size: 1.05rem;
   line-height: 1.4rem;
   color: var(--text-primary);
+}
+
+.anonNote {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #ff6b6b;
+  white-space: nowrap;
 }
 
 .description {
@@ -69,7 +71,7 @@
   width: 100%;
   padding: 10px 12px;
   border: 1px solid var(--glass-border);
-  border-radius: 10px;
+  border-radius: 12px;
   background: transparent;
   cursor: pointer;
   overflow: hidden;
@@ -95,16 +97,33 @@
   inset: 0 auto 0 0;
   background: var(--accent-glow);
   pointer-events: none;
+  transition: width 0.25s ease-in-out;
 }
 
-.optionCheck {
+.control {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
+  width: 18px;
+  height: 18px;
   flex-shrink: 0;
-  color: var(--accent-secondary);
+  border: 2px solid var(--glass-border);
+  color: #fff;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.radio {
+  border-radius: 50%;
+}
+
+.checkbox {
+  border-radius: 5px;
+}
+
+.controlChecked {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
 }
 
 .optionLabel {
@@ -130,13 +149,33 @@
 .customInput {
   flex: 1;
   min-width: 0;
+  height: 40px;
+  font-size: 0.9rem;
+}
+
+.customInput::placeholder {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.customForm .customSubmit {
+  height: 40px;
+  border-radius: 12px;
+  color: var(--accent-secondary);
 }
 
 .foot {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+.totalsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .totals {
@@ -144,18 +183,67 @@
   color: var(--text-muted);
 }
 
-.actions {
+.eye {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-secondary);
+  transition: color 0.15s ease;
 }
 
-.action {
+.eye:hover {
+  color: var(--text-highlight);
+}
+
+.submitRow {
+  display: flex;
+  justify-content: center;
+}
+
+.submit {
   background: transparent;
   border: none;
   padding: 0;
   cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent-secondary);
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.submit:hover:not(:disabled) {
+  color: var(--text-highlight);
+}
+
+.submit:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.submit.submitDone {
+  cursor: default;
+  opacity: 1;
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
   color: var(--accent-secondary);
   transition: color 0.15s ease;
 }

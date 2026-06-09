@@ -33,3 +33,26 @@ export const applyOptimisticVote = (poll: Poll, optionId: string): void => {
   if (!wasVoter && isVoter) poll.totalVotes += 1;
   else if (wasVoter && !isVoter) poll.totalVotes = Math.max(0, poll.totalVotes - 1);
 };
+
+/**
+ * Replaces the current user's votes with `optionIds` in place, adjusting per-option
+ * counts and the distinct voter total. Mirrors the server's "set votes" operation so
+ * a batched Vote/Revote reflects instantly before the request resolves.
+ */
+export const applyOptimisticVotes = (poll: Poll, optionIds: string[]): void => {
+  const next = new Set(optionIds);
+  const prev = new Set(poll.myVoteOptionIds);
+
+  poll.options.forEach((option) => {
+    const inNext = next.has(option.id);
+    const inPrev = prev.has(option.id);
+    if (inNext && !inPrev) option.voteCount += 1;
+    else if (!inNext && inPrev) option.voteCount = Math.max(0, option.voteCount - 1);
+  });
+
+  const wasVoter = poll.myVoteOptionIds.length > 0;
+  const isVoter = optionIds.length > 0;
+  poll.myVoteOptionIds = [...next];
+  if (!wasVoter && isVoter) poll.totalVotes += 1;
+  else if (wasVoter && !isVoter) poll.totalVotes = Math.max(0, poll.totalVotes - 1);
+};

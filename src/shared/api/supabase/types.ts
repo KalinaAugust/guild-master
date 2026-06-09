@@ -533,6 +533,7 @@ export type Database = {
         Row: {
           allow_custom: boolean
           allow_multiple: boolean
+          allow_revote: boolean
           closed_at: string | null
           created_at: string
           created_by: string | null
@@ -545,6 +546,7 @@ export type Database = {
         Insert: {
           allow_custom?: boolean
           allow_multiple?: boolean
+          allow_revote?: boolean
           closed_at?: string | null
           created_at?: string
           created_by?: string | null
@@ -557,6 +559,7 @@ export type Database = {
         Update: {
           allow_custom?: boolean
           allow_multiple?: boolean
+          allow_revote?: boolean
           closed_at?: string | null
           created_at?: string
           created_by?: string | null
@@ -625,6 +628,10 @@ export type Database = {
         Returns: boolean
       }
       is_member_of: { Args: { target_guild_id: string }; Returns: boolean }
+      prune_guild_polls: {
+        Args: { p_guild_id: string; p_keep: number }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
