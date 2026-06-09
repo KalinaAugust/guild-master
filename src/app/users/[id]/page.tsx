@@ -2,7 +2,9 @@ import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
 import { Calendar } from 'lucide-react';
 import { getPublicProfile } from '@/entities/user/api/getPublicProfile';
+import { createClient } from '@/shared/api/supabase/server';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { OwnProfile } from './OwnProfile';
 import styles from './PublicProfilePage.module.css';
 
 interface PublicProfilePageProps {
@@ -18,6 +20,14 @@ export async function generateMetadata({ params }: PublicProfilePageProps) {
 
 export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
   const { id } = await params;
+
+  const supabase = await createClient();
+  const { data: { user: viewer } } = await supabase.auth.getUser();
+
+  if (viewer && viewer.id === id) {
+    return <OwnProfile user={viewer} />;
+  }
+
   const profile = await getPublicProfile(id);
 
   if (!profile) notFound();

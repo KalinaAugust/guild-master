@@ -39,21 +39,6 @@
   opacity: 0.8;
 }
 
-.publicProfileLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.publicProfileLink:hover {
-  color: var(--accent-secondary);
-}
-
 .infoGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -95,7 +80,6 @@
   font-size: 1rem;
   color: var(--text-primary);
 }
-
 
 .placeholderSection h2 {
   font-size: 1.25rem;
