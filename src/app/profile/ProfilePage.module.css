@@ -24,18 +24,6 @@
   margin-bottom: 2.5rem;
 }
 
-.avatar {
-  width: 80px;
-  height: 80px;
-  background: var(--accent-glow);
-  border: 2px solid var(--accent-primary);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-secondary);
-}
-
 .titleInfo h1 {
   margin: 0;
   font-size: 1.75rem;
@@ -93,12 +81,6 @@
   color: var(--text-primary);
 }
 
-.truncate {
-  max-width: 300px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 .placeholderSection h2 {
   font-size: 1.25rem;

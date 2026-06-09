@@ -135,10 +135,6 @@
   margin: 5px;
 }
 
-.subTrigger[data-state='open'] {
-  background: var(--accent-glow);
-  color: var(--accent-secondary);
-}
 
 .chevronOpen {
   transform: rotate(180deg);

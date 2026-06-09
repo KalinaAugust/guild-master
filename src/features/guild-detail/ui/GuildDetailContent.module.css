@@ -47,13 +47,6 @@
   margin: 0;
 }
 
-.memberCount {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--text-primary);
-  font-size: 1rem;
-}
 
 .statusBadge {
   display: inline-flex;

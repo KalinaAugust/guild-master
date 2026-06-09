@@ -11,29 +11,6 @@
   color: var(--text-secondary);
 }
 
-.input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  border-radius: 10px;
-  height: 44px;
-  padding: 0 16px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  width: 100%;
-}
-
-.textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
-  border-radius: 10px;
-  padding: 12px 16px;
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  width: 100%;
-  min-height: 120px;
-  resize: none;
-  font-family: inherit;
-}
 
 .stubGroup {
   display: flex;
@@ -54,17 +31,6 @@
   font-weight: 500;
 }
 
-.stubField {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed var(--glass-border);
-  border-radius: 10px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: 0.85rem;
-}
 
 .dangerZone {
   display: flex;
@@ -141,12 +107,6 @@
   border-bottom-color: var(--accent-primary);
 }
 
-.tabEmpty {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  text-align: center;
-  margin-top: 48px;
-}
 
 .pendingForm {
   display: flex;

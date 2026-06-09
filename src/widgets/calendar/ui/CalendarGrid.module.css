@@ -45,17 +45,6 @@
   margin: 0 4px;
 }
 
-.guildOption {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.guildAvatar {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-}
 
 .guildSelect {
   max-width: 350px;

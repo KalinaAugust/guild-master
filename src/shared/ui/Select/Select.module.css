@@ -138,26 +138,3 @@
   color: var(--accent-secondary);
 }
 
-/* Fallback for native select if used elsewhere */
-.select {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-  backdrop-filter: var(--glass-blur);
-  padding: 0 16px;
-  height: 45px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.select:focus {
-  border-color: var(--accent-primary);
-  outline: none;
-  box-shadow: 0 0 10px var(--accent-glow);
-}
-
-.select option {
-  background: var(--modal-bg);
-  color: var(--text-primary);
-}
