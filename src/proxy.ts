@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth');
   const isGuildDetailPage = request.nextUrl.pathname.match(/^\/guilds\/[^/]+/) !== null;
-  const isPublicProfilePage = request.nextUrl.pathname.match(/^\/users\/[^/]+/) !== null;
+  const isPublicProfilePage = request.nextUrl.pathname.match(/^\/profile\/[^/]+/) !== null;
 
   if (!user && !isLoginPage && !isAuthCallback && !isGuildDetailPage && !isPublicProfilePage) {
     return NextResponse.redirect(new URL('/login', request.url));

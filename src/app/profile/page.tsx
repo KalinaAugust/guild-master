@@ -15,5 +15,5 @@ export default async function ProfilePage() {
 
   if (!profile) redirect('/');
 
-  redirect(`/users/${profile.public_id}`);
+  redirect(`/profile/${profile.public_id}`);
 }

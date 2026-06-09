@@ -60,7 +60,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ publicId, email, avatarUrl, 
           {email && (
             <>
               <DropdownMenu.Item className={styles.item} asChild>
-                <Link href={publicId ? `/users/${publicId}` : '/profile'} className={styles.link}>
+                <Link href={publicId ? `/profile/${publicId}` : '/profile'} className={styles.link}>
                   <div className={styles.itemContent}>
                     <User size={18} />
                     <span>{t('profile')}</span>
