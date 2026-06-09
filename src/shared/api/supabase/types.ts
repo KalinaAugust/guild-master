@@ -623,6 +623,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_profile_stats: {
+        Args: { profile_id: string }
+        Returns: {
+          joined_at: string
+          guilds_count: number | null
+          events_count: number | null
+        }[]
+      }
       has_guild_role: {
         Args: { target_guild_id: string; target_roles: string[] }
         Returns: boolean
