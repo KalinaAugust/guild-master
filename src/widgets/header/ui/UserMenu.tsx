@@ -14,13 +14,13 @@ import { setUserLocale } from '@/features/language-switcher/api/setLocale';
 import styles from './UserMenu.module.css';
 
 interface UserMenuProps {
-  userId?: string;
+  publicId?: string;
   email?: string;
   avatarUrl?: string | null;
   name?: string | null;
 }
 
-export const UserMenu: React.FC<UserMenuProps> = ({ userId, email, avatarUrl, name }) => {
+export const UserMenu: React.FC<UserMenuProps> = ({ publicId, email, avatarUrl, name }) => {
   const locale = useLocale();
   const t = useTranslations('Common');
   const router = useRouter();
@@ -60,7 +60,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ userId, email, avatarUrl, na
           {email && (
             <>
               <DropdownMenu.Item className={styles.item} asChild>
-                <Link href={userId ? `/users/${userId}` : '/profile'} className={styles.link}>
+                <Link href={publicId ? `/users/${publicId}` : '/profile'} className={styles.link}>
                   <div className={styles.itemContent}>
                     <User size={18} />
                     <span>{t('profile')}</span>

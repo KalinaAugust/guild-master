@@ -39,20 +39,20 @@ describe('getPublicProfile', () => {
     expect(await getPublicProfile('missing-id')).toBeNull();
   });
 
-  it('returns null and logs when the profile query fails (e.g. invalid uuid)', async () => {
-    mockSupabase({ profileError: { message: 'invalid input syntax for type uuid' } });
+  it('returns null and logs when the profile query fails', async () => {
+    mockSupabase({ profileError: { message: 'connection error' } });
 
-    expect(await getPublicProfile('not-a-uuid')).toBeNull();
-    expect(console.error).toHaveBeenCalledWith('Error fetching public profile:', { message: 'invalid input syntax for type uuid' });
+    expect(await getPublicProfile('a1B2c3D4')).toBeNull();
+    expect(console.error).toHaveBeenCalledWith('Error fetching public profile:', { message: 'connection error' });
   });
 
-  it('returns mapped profile with stats', async () => {
+  it('returns mapped profile with stats, looked up by public_id', async () => {
     const supabase = mockSupabase({
       profile: { id: 'user-1', full_name: 'John Doe', avatar_url: 'http://a/b.png' },
       stats: { joined_at: '2025-01-01T00:00:00Z', guilds_count: 3, events_count: 7 },
     });
 
-    expect(await getPublicProfile('user-1')).toEqual({
+    expect(await getPublicProfile('a1B2c3D4')).toEqual({
       id: 'user-1',
       fullName: 'John Doe',
       avatarUrl: 'http://a/b.png',
@@ -61,6 +61,7 @@ describe('getPublicProfile', () => {
       eventsCount: 7,
     });
     expect(supabase.from).toHaveBeenCalledWith('profiles');
+    expect(supabase.eq).toHaveBeenCalledWith('public_id', 'a1B2c3D4');
     expect(supabase.rpc).toHaveBeenCalledWith('get_profile_stats', { profile_id: 'user-1' });
   });
 
@@ -70,7 +71,7 @@ describe('getPublicProfile', () => {
       statsError: { message: 'boom' },
     });
 
-    expect(await getPublicProfile('user-1')).toEqual({
+    expect(await getPublicProfile('a1B2c3D4')).toEqual({
       id: 'user-1',
       fullName: 'John Doe',
       avatarUrl: null,

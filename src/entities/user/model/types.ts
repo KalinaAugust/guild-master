@@ -1,5 +1,6 @@
 export interface UserProfile {
   id: string;
+  publicId: string;
   fullName: string | null;
   avatarUrl: string | null;
   lastActiveGuildId?: string | null;

@@ -8,29 +8,28 @@ import { OwnProfile } from './OwnProfile';
 import styles from './PublicProfilePage.module.css';
 
 interface PublicProfilePageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ publicId: string }>;
 }
 
 export async function generateMetadata({ params }: PublicProfilePageProps) {
-  const { id } = await params;
-  const profile = await getPublicProfile(id);
+  const { publicId } = await params;
+  const profile = await getPublicProfile(publicId);
   const name = profile?.fullName;
   return { title: name ? `${name} — Guild Master` : 'Guild Master' };
 }
 
 export default async function PublicProfilePage({ params }: PublicProfilePageProps) {
-  const { id } = await params;
+  const { publicId } = await params;
+  const profile = await getPublicProfile(publicId);
+
+  if (!profile) notFound();
 
   const supabase = await createClient();
   const { data: { user: viewer } } = await supabase.auth.getUser();
 
-  if (viewer && viewer.id === id) {
+  if (viewer && viewer.id === profile.id) {
     return <OwnProfile user={viewer} />;
   }
-
-  const profile = await getPublicProfile(id);
-
-  if (!profile) notFound();
 
   const t = await getTranslations('PublicProfile');
   const locale = await getLocale();

@@ -72,7 +72,7 @@ export default async function RootLayout({
             <Sidebar
               footer={
                 <UserMenu
-                  userId={user?.id}
+                  publicId={user?.profile?.publicId}
                   email={user?.email}
                   avatarUrl={user?.profile?.avatarUrl}
                   name={user?.profile?.fullName}

@@ -3,13 +3,13 @@ import { createClient } from '@/shared/api/supabase/server';
 import { PublicProfile } from '../model/types';
 
 export const getPublicProfile = cache(
-  async (profileId: string): Promise<PublicProfile | null> => {
+  async (publicId: string): Promise<PublicProfile | null> => {
     const supabase = await createClient();
 
     const { data: profile, error } = await supabase
       .from('profiles')
       .select('id, full_name, avatar_url')
-      .eq('id', profileId)
+      .eq('public_id', publicId)
       .maybeSingle();
 
     if (error) {
@@ -19,7 +19,7 @@ export const getPublicProfile = cache(
     if (!profile) return null;
 
     const { data: stats, error: statsError } = await supabase
-      .rpc('get_profile_stats', { profile_id: profileId })
+      .rpc('get_profile_stats', { profile_id: profile.id })
       .maybeSingle();
 
     if (statsError) {
