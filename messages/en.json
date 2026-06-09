@@ -186,6 +186,12 @@
     "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined",
     "eventComment": "New comments in «{eventTitle}»"
   },
+  "PublicProfile": {
+    "joined": "Joined",
+    "statistics": "Statistics",
+    "guilds": "Guilds",
+    "events": "Events"
+  },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",
     "owner": "Owner",
