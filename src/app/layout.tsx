@@ -62,23 +62,25 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} className={`${manrope.variable} ${unbounded.variable}`}>
-      <body>
+      <body className={user ? undefined : styles.noRail}>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
         <ParticlesBackground />
         <NextIntlClientProvider messages={filteredMessages}>
           <StoreProvider>
             <Toaster position="top-right" richColors closeButton theme="dark" />
-            <Sidebar
-              footer={
-                <UserMenu
-                  publicId={user?.profile?.publicId}
-                  email={user?.email}
-                  avatarUrl={user?.profile?.avatarUrl}
-                  name={user?.profile?.fullName}
-                />
-              }
-            />
+            {user && (
+              <Sidebar
+                footer={
+                  <UserMenu
+                    publicId={user.profile?.publicId}
+                    email={user.email}
+                    avatarUrl={user.profile?.avatarUrl}
+                    name={user.profile?.fullName}
+                  />
+                }
+              />
+            )}
             <div className={styles.appShell}>
               <Header />
               <div className={styles.content}>

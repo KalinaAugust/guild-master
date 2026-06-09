@@ -1,3 +1,10 @@
+/* Applied to <body> for guests: collapses the nav rail offset everywhere
+   (.appShell margin and the fixed detail layouts). 0px, not 0 — the value
+   is consumed inside calc() expressions. */
+.noRail {
+  --rail-width: 0px;
+}
+
 .appShell {
   margin-left: var(--rail-width);
   display: flex;
