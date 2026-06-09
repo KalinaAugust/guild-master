@@ -58,14 +58,7 @@ $$;
 - Styling: CSS Module, same card/glassmorphism look as `/profile` (per design-system.md).
 - Texts via next-intl (`PublicProfile.*` keys in `messages/en.json` + `ru.json`).
 
-### 3. Feature: `features/share-profile`
-
-- `ShareProfileButton` (client component): copies `${origin}/users/${userId}` to clipboard, shows transient "Copied" state (icon swap, ~2s).
-- Slice layout: `features/share-profile/ui/ShareProfileButton/` + `index.ts` barrel.
-- Placement: own `/profile` page (header area) and the public `/users/[id]` page.
-- i18n keys: `ShareProfile.copyLink`, `ShareProfile.copied`.
-
-### 4. Routing: `src/proxy.ts`
+### 3. Routing: `src/proxy.ts`
 
 Add `/users/*` to the unauthenticated-allowed routes (same pattern as guild detail pages):
 
@@ -73,7 +66,7 @@ Add `/users/*` to the unauthenticated-allowed routes (same pattern as guild deta
 const isPublicProfilePage = request.nextUrl.pathname.match(/^\/users\/[^/]+/) !== null;
 ```
 
-### 5. Types
+### 4. Types
 
 Hand-extend the `Functions` section of `src/shared/api/supabase/types.ts` with the `get_profile_stats` RPC signature, per the established no-CLI migration workflow.
 
@@ -81,12 +74,10 @@ Hand-extend the `Functions` section of `src/shared/api/supabase/types.ts` with t
 
 - Profile not found → `notFound()`.
 - RPC error → render profile without joined date/stats (page still works from `profiles` data alone); log server-side.
-- Clipboard API unavailable → fallback `navigator.clipboard` guard; button hidden if unsupported.
 
 ## Testing
 
 - Unit tests (Vitest) for the data helper that fetches public profile + stats (mock Supabase client): found / not found / anonymous (null counts) cases.
-- Component test for `ShareProfileButton`: click → clipboard called → "Copied" state shown.
 
 ## Out of Scope
 
