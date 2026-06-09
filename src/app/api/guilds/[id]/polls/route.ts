@@ -32,6 +32,7 @@ export async function POST(
       isAnonymous: !!body.isAnonymous,
       allowMultiple: !!body.allowMultiple,
       allowCustom: !!body.allowCustom,
+      allowRevote: !!body.allowRevote,
     });
     return NextResponse.json(poll, { status: 201 });
   } catch (e) {

@@ -1,6 +1,6 @@
 import { baseApi } from '@/shared/api/baseApi';
 import type { Poll, CreatePollInput, VoteInput } from '../model/types';
-import { applyOptimisticVote } from '../model/applyVote';
+import { applyOptimisticVote, applyOptimisticVotes } from '../model/applyVote';
 
 const listTag = (guildId: string) => [{ type: 'Poll' as const, id: `LIST-${guildId}` }];
 
@@ -64,15 +64,54 @@ export const pollApi = baseApi.injectEndpoints({
         }
       },
     }),
+    addPollOption: builder.mutation<
+      { poll: Poll; optionId: string },
+      { guildId: string; pollId: string; body: string }
+    >({
+      query: ({ guildId, pollId, body }) => ({
+        url: `guilds/${guildId}/polls/${pollId}/options`,
+        method: 'POST',
+        body: { body },
+      }),
+      invalidatesTags: (_, __, { guildId }) => listTag(guildId),
+    }),
+    setPollVotes: builder.mutation<Poll, { guildId: string; pollId: string; optionIds: string[] }>({
+      query: ({ guildId, pollId, optionIds }) => ({
+        url: `guilds/${guildId}/polls/${pollId}/vote`,
+        method: 'PUT',
+        body: { optionIds },
+      }),
+      // Apply the whole selection at once; reconcile with the server response.
+      async onQueryStarted({ guildId, pollId, optionIds }, { dispatch, queryFulfilled }) {
+        const patch = dispatch(
+          pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
+            const poll = draft.find((p) => p.id === pollId);
+            if (poll) applyOptimisticVotes(poll, optionIds);
+          }),
+        );
+        try {
+          const { data: updated } = await queryFulfilled;
+          dispatch(
+            pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
+              const index = draft.findIndex((p) => p.id === pollId);
+              if (index !== -1) draft[index] = updated;
+            }),
+          );
+        } catch {
+          patch.undo();
+        }
+      },
+    }),
     votePoll: builder.mutation<Poll, { guildId: string; pollId: string; vote: VoteInput }>({
       query: ({ guildId, pollId, vote }) => ({
         url: `guilds/${guildId}/polls/${pollId}/vote`,
         method: 'POST',
         body: vote,
       }),
-      // Apply the vote instantly; the server response then reconciles counts and
-      // voter avatars. Custom answers (no optionId) skip the optimistic step
-      // because their option id is generated server-side.
+      // Apply the vote instantly, then replace the poll with the authoritative
+      // server state so counts, voter totals and voter lists stay consistent
+      // (e.g. when another user votes concurrently). Custom answers (no optionId)
+      // skip the optimistic step because their option id is server-generated.
       async onQueryStarted({ guildId, pollId, vote }, { dispatch, queryFulfilled }) {
         const patch = vote.optionId
           ? dispatch(
@@ -84,16 +123,12 @@ export const pollApi = baseApi.injectEndpoints({
           : undefined;
         try {
           const { data: updated } = await queryFulfilled;
-          // Existing-option votes are fully covered by the optimistic patch, so we
-          // only reconcile custom answers (their option id is server-generated).
-          if (!vote.optionId) {
-            dispatch(
-              pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
-                const index = draft.findIndex((p) => p.id === pollId);
-                if (index !== -1) draft[index] = updated;
-              }),
-            );
-          }
+          dispatch(
+            pollApi.util.updateQueryData('getGuildPolls', guildId, (draft) => {
+              const index = draft.findIndex((p) => p.id === pollId);
+              if (index !== -1) draft[index] = updated;
+            }),
+          );
         } catch {
           patch?.undo();
         }
@@ -105,7 +140,9 @@ export const pollApi = baseApi.injectEndpoints({
 export const {
   useGetGuildPollsQuery,
   useCreatePollMutation,
+  useAddPollOptionMutation,
   useDeletePollMutation,
   useClosePollMutation,
   useVotePollMutation,
+  useSetPollVotesMutation,
 } = pollApi;

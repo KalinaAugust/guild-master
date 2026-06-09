@@ -10,6 +10,7 @@ const baseRow = (overrides: Partial<PollRow> = {}): PollRow => ({
   is_anonymous: false,
   allow_multiple: false,
   allow_custom: false,
+  allow_revote: false,
   closed_at: null,
   created_at: '2026-06-01T00:00:00Z',
   poll_options: [
@@ -17,9 +18,9 @@ const baseRow = (overrides: Partial<PollRow> = {}): PollRow => ({
     { id: 'o1', body: 'A', position: 0, is_custom: false, created_at: '2026-06-01T00:00:00Z' },
   ],
   poll_votes: [
-    { option_id: 'o1', user_id: 'u1', profiles: { full_name: 'One', avatar_url: null } },
-    { option_id: 'o1', user_id: 'u2', profiles: { full_name: 'Two', avatar_url: null } },
-    { option_id: 'o2', user_id: 'u1', profiles: { full_name: 'One', avatar_url: null } },
+    { option_id: 'o1', user_id: 'u1', created_at: '2026-06-01T10:00:00Z', profiles: { full_name: 'One', avatar_url: null } },
+    { option_id: 'o1', user_id: 'u2', created_at: '2026-06-01T10:01:00Z', profiles: { full_name: 'Two', avatar_url: null } },
+    { option_id: 'o2', user_id: 'u1', created_at: '2026-06-01T10:02:00Z', profiles: { full_name: 'One', avatar_url: null } },
   ],
   ...overrides,
 });

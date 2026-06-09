@@ -73,8 +73,10 @@
   overflow-y: auto;
   padding-left: 24px;
   border-left: 1px solid var(--glass-border);
+  /* Bleed into the panel's right padding, then inset the content back by the same
+     amount so the scrollbar sits in that gutter instead of over the cards. */
   margin-right: -16px;
-  padding-right: 0;
+  padding-right: 16px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
@@ -103,8 +105,10 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
+  /* Same gutter trick as .polls: bleed right, then pad the content back so the
+     scrollbar never overlaps the message bubbles. */
   margin-right: -10px;
-  padding-right: 0;
+  padding-right: 10px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
