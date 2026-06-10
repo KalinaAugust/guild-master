@@ -1,4 +1,5 @@
 export interface PollVoter {
+  publicId: string | null;
   fullName: string | null;
   avatarUrl: string | null;
   /** When the vote was cast (ISO timestamp). */

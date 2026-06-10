@@ -17,7 +17,7 @@ const base: EventParticipant = {
   event_id: 'e1',
   user_id: 'u1',
   status: 'pending',
-  profile: { fullName: 'Alice Smith', avatarUrl: null },
+  profile: { publicId: 'pubA', fullName: 'Alice Smith', avatarUrl: null },
 };
 
 describe('ParticipantItem', () => {

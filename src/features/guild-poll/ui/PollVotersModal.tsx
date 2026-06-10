@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Modal } from '@/shared/ui/Modal';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
 import dayjs from '@/shared/lib/dayjs';
 import type { Poll } from '@/entities/poll';
 import styles from './PollVotersModal.module.css';
@@ -41,8 +42,12 @@ export const PollVotersModal: React.FC<PollVotersModalProps> = ({ poll, isOpen, 
                 <ul className={styles.voters}>
                   {o.voters.map((v, i) => (
                     <li key={i} className={styles.voter}>
-                      <UserAvatar avatarUrl={v.avatarUrl} name={v.fullName} size="md" />
-                      <span className={styles.voterName}>{v.fullName ?? t('unknownVoter')}</span>
+                      <ProfileLink publicId={v.publicId} aria-label={v.fullName ?? undefined}>
+                        <UserAvatar avatarUrl={v.avatarUrl} name={v.fullName} size="md" />
+                      </ProfileLink>
+                      <ProfileLink publicId={v.publicId} className={styles.voterName}>
+                        {v.fullName ?? t('unknownVoter')}
+                      </ProfileLink>
                       <span className={styles.voterTime}>{formatVotedAt(v.votedAt)}</span>
                     </li>
                   ))}

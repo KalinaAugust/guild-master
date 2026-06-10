@@ -29,6 +29,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
     <MessageBubble
       authorName={comment.profile.fullName}
       avatarUrl={comment.profile.avatarUrl}
+      profilePublicId={comment.profile.publicId}
       body={comment.body}
       createdAt={comment.createdAt}
       updatedAt={comment.updatedAt}
