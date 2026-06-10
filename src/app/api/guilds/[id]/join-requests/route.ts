@@ -17,19 +17,20 @@ export async function GET(
 
   const { data, error } = await supabase
     .from('guild_join_requests')
-    .select('id, user_id, created_at, profiles!guild_join_requests_user_id_fkey(full_name, avatar_url)')
+    .select('id, user_id, created_at, profiles!guild_join_requests_user_id_fkey(public_id, full_name, avatar_url)')
     .eq('guild_id', guildId)
     .eq('status', 'pending')
     .order('created_at', { ascending: true });
 
   if (error) return NextResponse.json({ error: 'Failed to fetch requests' }, { status: 500 });
 
-  type ProfileShape = { full_name: string | null; avatar_url: string | null } | null;
+  type ProfileShape = { public_id: string | null; full_name: string | null; avatar_url: string | null } | null;
 
   return NextResponse.json(
     (data ?? []).map((r) => ({
       id: r.id,
       userId: r.user_id,
+      publicId: (r.profiles as ProfileShape)?.public_id ?? null,
       userName: (r.profiles as ProfileShape)?.full_name ?? null,
       avatarUrl: (r.profiles as ProfileShape)?.avatar_url ?? null,
       createdAt: r.created_at,

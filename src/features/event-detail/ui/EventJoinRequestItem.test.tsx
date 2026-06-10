@@ -6,13 +6,18 @@ import type { EventJoinRequest } from '../api/detailApi';
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 
 const request: EventJoinRequest = {
-  id: 'r1', userId: 'u1', userName: 'Alice Smith', avatarUrl: null,
+  id: 'r1', userId: 'u1', publicId: 'pubA', userName: 'Alice Smith', avatarUrl: null,
 } as EventJoinRequest;
 
 describe('EventJoinRequestItem', () => {
   it('renders the user name', () => {
     render(<EventJoinRequestItem request={request} onAccept={vi.fn()} onDecline={vi.fn()} />);
     expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+  });
+
+  it('links the user name to their public profile', () => {
+    render(<EventJoinRequestItem request={request} onAccept={vi.fn()} onDecline={vi.fn()} />);
+    expect(screen.getByText('Alice Smith').closest('a')).toHaveAttribute('href', '/profile/pubA');
   });
 
   it('shows a dash when userName is null', () => {

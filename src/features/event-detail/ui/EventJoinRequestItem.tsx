@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/Button';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
 import type { EventJoinRequest } from '../api/detailApi';
 import styles from './EventJoinRequestItem.module.css';
 
@@ -26,8 +27,12 @@ export const EventJoinRequestItem: React.FC<EventJoinRequestItemProps> = ({
 
   return (
     <div className={styles.row}>
-      <UserAvatar avatarUrl={request.avatarUrl} name={request.userName} size="sm" />
-      <span className={styles.name}>{request.userName ?? '—'}</span>
+      <ProfileLink publicId={request.publicId} aria-label={request.userName ?? undefined}>
+        <UserAvatar avatarUrl={request.avatarUrl} name={request.userName} size="sm" />
+      </ProfileLink>
+      <ProfileLink publicId={request.publicId} className={styles.name}>
+        {request.userName ?? '—'}
+      </ProfileLink>
       <div className={styles.actions}>
         <Button
           type="button"

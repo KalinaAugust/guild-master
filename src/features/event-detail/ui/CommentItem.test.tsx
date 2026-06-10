@@ -22,6 +22,11 @@ describe('CommentItem', () => {
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
+  it('links the author name to their public profile', () => {
+    render(<CommentItem comment={base} isOwn={false} />);
+    expect(screen.getByText('Alice').closest('a')).toHaveAttribute('href', '/profile/pubA');
+  });
+
   it('shows edited marker when updatedAt is later than createdAt', () => {
     render(<CommentItem comment={{ ...base, updatedAt: '2026-06-05T12:00:00Z' }} isOwn={false} />);
     expect(screen.getByText('edited')).toBeInTheDocument();

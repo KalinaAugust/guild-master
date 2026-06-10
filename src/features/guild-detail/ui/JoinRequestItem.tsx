@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { JoinRequest } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
 import styles from './JoinRequestItem.module.css';
 
 interface JoinRequestItemProps {
@@ -26,8 +27,12 @@ export const JoinRequestItem: React.FC<JoinRequestItemProps> = ({
 
   return (
     <div className={styles.row}>
-      <UserAvatar avatarUrl={request.avatarUrl} name={request.userName} size="sm" />
-      <span className={styles.name}>{request.userName ?? '—'}</span>
+      <ProfileLink publicId={request.publicId} aria-label={request.userName ?? undefined}>
+        <UserAvatar avatarUrl={request.avatarUrl} name={request.userName} size="sm" />
+      </ProfileLink>
+      <ProfileLink publicId={request.publicId} className={styles.name}>
+        {request.userName ?? '—'}
+      </ProfileLink>
       <div className={styles.actions}>
         <Button
           type="button"

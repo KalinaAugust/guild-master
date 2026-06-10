@@ -29,6 +29,7 @@ export interface GuildMember {
 export interface JoinRequest {
   id: string;
   userId: string;
+  publicId: string | null;
   userName: string | null;
   avatarUrl: string | null;
   createdAt: string;

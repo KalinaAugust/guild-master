@@ -26,6 +26,11 @@ describe('ParticipantItem', () => {
     expect(screen.getByText('Alice Smith')).toBeInTheDocument();
   });
 
+  it('links the participant name to their public profile', () => {
+    render(<ParticipantItem participant={base} isCurrentUser={false} />);
+    expect(screen.getByText('Alice Smith').closest('a')).toHaveAttribute('href', '/profile/pubA');
+  });
+
   it('shows status label', () => {
     render(<ParticipantItem participant={{ ...base, status: 'confirmed' }} isCurrentUser={false} />);
     expect(screen.getByText('status.confirmed')).toBeInTheDocument();
