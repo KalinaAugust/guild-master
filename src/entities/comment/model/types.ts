@@ -6,6 +6,7 @@ export interface EventComment {
   createdAt: string;
   updatedAt: string;
   profile: {
+    publicId: string | null;
     fullName: string | null;
     avatarUrl: string | null;
   };

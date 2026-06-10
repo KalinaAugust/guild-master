@@ -15,6 +15,7 @@ import {
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import styles from './GuildMembersSection.module.css';
 
@@ -90,14 +91,19 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         <ul className={`${styles.list} ${fill ? styles.listFill : ''}`}>
           {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => (
             <li key={member.userId} className={styles.item}>
-              <UserAvatar
-                avatarUrl={member.profile.avatarUrl}
-                name={member.profile.fullName}
-                size="sm"
-              />
-              <span className={styles.name}>
+              <ProfileLink
+                publicId={member.profile.publicId}
+                aria-label={member.profile.fullName ?? undefined}
+              >
+                <UserAvatar
+                  avatarUrl={member.profile.avatarUrl}
+                  name={member.profile.fullName}
+                  size="sm"
+                />
+              </ProfileLink>
+              <ProfileLink publicId={member.profile.publicId} className={styles.name}>
                 {member.profile.fullName ?? member.userId}
-              </span>
+              </ProfileLink>
               <span className={styles.role}>{member.role}</span>
               {member.role === 'OWNER' && (
                 <span className={styles.ownerIcon}>

@@ -11,8 +11,8 @@ beforeEach(() => vi.clearAllMocks());
 describe('getGuildMembers', () => {
   it('maps rows to GuildMember shape', async () => {
     const rows = [
-      { user_id: 'u1', role: 'OWNER', profiles: { full_name: 'Alice', avatar_url: 'http://a.com' } },
-      { user_id: 'u2', role: 'MEMBER', profiles: { full_name: 'Bob', avatar_url: null } },
+      { user_id: 'u1', role: 'OWNER', profiles: { public_id: 'pubA', full_name: 'Alice', avatar_url: 'http://a.com' } },
+      { user_id: 'u2', role: 'MEMBER', profiles: { public_id: 'pubB', full_name: 'Bob', avatar_url: null } },
     ];
     const eq = vi.fn().mockResolvedValue({ data: rows, error: null });
     const select = vi.fn().mockReturnValue({ eq });
@@ -20,8 +20,8 @@ describe('getGuildMembers', () => {
 
     const result = await getGuildMembers('g1');
     expect(result).toEqual([
-      { userId: 'u1', role: 'OWNER', profile: { fullName: 'Alice', avatarUrl: 'http://a.com' } },
-      { userId: 'u2', role: 'MEMBER', profile: { fullName: 'Bob', avatarUrl: null } },
+      { userId: 'u1', role: 'OWNER', profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: 'http://a.com' } },
+      { userId: 'u2', role: 'MEMBER', profile: { publicId: 'pubB', fullName: 'Bob', avatarUrl: null } },
     ]);
     expect(eq).toHaveBeenCalledWith('guild_id', 'g1');
   });
@@ -33,7 +33,7 @@ describe('getGuildMembers', () => {
     vi.mocked(createClient).mockResolvedValue({ from: vi.fn().mockReturnValue({ select }) } as never);
 
     const result = await getGuildMembers('g1');
-    expect(result[0].profile).toEqual({ fullName: null, avatarUrl: null });
+    expect(result[0].profile).toEqual({ publicId: null, fullName: null, avatarUrl: null });
   });
 
   it('returns empty array when no members', async () => {

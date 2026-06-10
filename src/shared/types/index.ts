@@ -26,6 +26,7 @@ export interface EventParticipant {
   user_id: string;
   status: ParticipantStatus;
   profile: {
+    publicId: string | null;
     fullName: string | null;
     avatarUrl: string | null;
   };

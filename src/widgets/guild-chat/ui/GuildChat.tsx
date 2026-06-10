@@ -151,6 +151,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
                 key={m.id}
                 authorName={m.profile.fullName}
                 avatarUrl={m.profile.avatarUrl}
+                profilePublicId={m.profile.publicId}
                 body={m.body}
                 createdAt={m.createdAt}
                 updatedAt={m.updatedAt}

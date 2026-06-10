@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { LogOut } from 'lucide-react';
 import { EventParticipant } from '@/shared/types';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import styles from './ParticipantItem.module.css';
@@ -47,13 +48,20 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
         .filter(Boolean)
         .join(' ')}
     >
-      <UserAvatar
-        avatarUrl={participant.profile.avatarUrl}
-        name={participant.profile.fullName}
-        size="md"
-      />
+      <ProfileLink
+        publicId={participant.profile.publicId}
+        aria-label={participant.profile.fullName ?? undefined}
+      >
+        <UserAvatar
+          avatarUrl={participant.profile.avatarUrl}
+          name={participant.profile.fullName}
+          size="md"
+        />
+      </ProfileLink>
       <div className={styles.info}>
-        <span className={styles.name}>{participant.profile.fullName || '—'}</span>
+        <ProfileLink publicId={participant.profile.publicId} className={styles.name}>
+          {participant.profile.fullName || '—'}
+        </ProfileLink>
         <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
           {t(`status.${participant.status}` as Parameters<typeof t>[0])}
         </span>

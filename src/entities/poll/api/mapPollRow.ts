@@ -3,7 +3,7 @@ import type { Poll } from '../model/types';
 export const POLL_SELECT =
   'id, guild_id, created_by, title, description, is_anonymous, allow_multiple, allow_custom, allow_revote, closed_at, created_at, ' +
   'poll_options(id, body, position, is_custom, created_at), ' +
-  'poll_votes(option_id, user_id, created_at, profiles(full_name, avatar_url))';
+  'poll_votes(option_id, user_id, created_at, profiles(public_id, full_name, avatar_url))';
 
 interface OptionRow {
   id: string;
@@ -17,7 +17,7 @@ interface VoteRow {
   option_id: string;
   user_id: string;
   created_at: string;
-  profiles: { full_name: string | null; avatar_url: string | null } | null;
+  profiles: { public_id: string | null; full_name: string | null; avatar_url: string | null } | null;
 }
 
 export interface PollRow {
@@ -58,6 +58,7 @@ export const buildPoll = (row: PollRow, currentUserId: string | null, canManage:
               .slice()
               .sort((a, b) => a.created_at.localeCompare(b.created_at))
               .map((v) => ({
+                publicId: v.profiles?.public_id ?? null,
                 fullName: v.profiles?.full_name ?? null,
                 avatarUrl: v.profiles?.avatar_url ?? null,
                 votedAt: v.created_at,

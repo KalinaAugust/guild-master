@@ -102,13 +102,13 @@ describe('POST /api/guilds/[id]/members', () => {
       .mockReturnValueOnce(query({ data: null }))
       .mockReturnValueOnce(query({ error: null }))
       .mockReturnValueOnce(query({
-        data: { user_id: 'target', role: 'MEMBER', profiles: { full_name: 'Bob', avatar_url: null } },
+        data: { user_id: 'target', role: 'MEMBER', profiles: { public_id: 'pubT', full_name: 'Bob', avatar_url: null } },
       }));
     authed(from);
     adminFindsUser({ id: 'target', email: 'a@b.c' });
     const res = await POST(postReq({ email: 'a@b.c' }), params('g1'));
     expect(res.status).toBe(200);
     const json = await res.json();
-    expect(json).toEqual({ userId: 'target', role: 'MEMBER', profile: { fullName: 'Bob', avatarUrl: null } });
+    expect(json).toEqual({ userId: 'target', role: 'MEMBER', profile: { publicId: 'pubT', fullName: 'Bob', avatarUrl: null } });
   });
 });

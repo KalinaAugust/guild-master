@@ -12,7 +12,7 @@ vi.mock('next-intl', () => ({
 const base: EventComment = {
   id: 'c1', eventId: 'e1', userId: 'u1', body: 'Hello there',
   createdAt: '2026-06-05T10:00:00Z', updatedAt: '2026-06-05T10:00:00Z',
-  profile: { fullName: 'Alice', avatarUrl: null },
+  profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: null },
 };
 
 describe('CommentItem', () => {
@@ -20,6 +20,11 @@ describe('CommentItem', () => {
     render(<CommentItem comment={base} isOwn={false} />);
     expect(screen.getByText('Hello there')).toBeInTheDocument();
     expect(screen.getByText('Alice')).toBeInTheDocument();
+  });
+
+  it('links the author name to their public profile', () => {
+    render(<CommentItem comment={base} isOwn={false} />);
+    expect(screen.getByText('Alice').closest('a')).toHaveAttribute('href', '/profile/pubA');
   });
 
   it('shows edited marker when updatedAt is later than createdAt', () => {

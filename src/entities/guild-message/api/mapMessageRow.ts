@@ -1,7 +1,7 @@
 import type { GuildMessage } from '../model/types';
 
 export const MESSAGE_SELECT =
-  'id, guild_id, user_id, body, created_at, updated_at, profiles(full_name, avatar_url)';
+  'id, guild_id, user_id, body, created_at, updated_at, profiles(public_id, full_name, avatar_url)';
 
 interface MessageRow {
   id: string;
@@ -10,7 +10,7 @@ interface MessageRow {
   body: string;
   created_at: string;
   updated_at: string;
-  profiles: { full_name: string | null; avatar_url: string | null } | null;
+  profiles: { public_id: string | null; full_name: string | null; avatar_url: string | null } | null;
 }
 
 export const mapMessageRow = (row: MessageRow): GuildMessage => ({
@@ -21,6 +21,7 @@ export const mapMessageRow = (row: MessageRow): GuildMessage => ({
   createdAt: row.created_at,
   updatedAt: row.updated_at,
   profile: {
+    publicId: row.profiles?.public_id ?? null,
     fullName: row.profiles?.full_name ?? null,
     avatarUrl: row.profiles?.avatar_url ?? null,
   },

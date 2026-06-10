@@ -1,0 +1,13 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Hover underline is opt-in via `.textLink` (name links only). Avatar wrappers use
+   bare `.link` so the underline never reaches initials text rendered inside the avatar. */
+.textLink:hover {
+  text-decoration: underline;
+}

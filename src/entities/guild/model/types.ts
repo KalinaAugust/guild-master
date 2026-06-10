@@ -20,6 +20,7 @@ export interface GuildMember {
   userId: string;
   role: 'OWNER' | 'ADMIN' | 'MEMBER';
   profile: {
+    publicId: string | null;
     fullName: string | null;
     avatarUrl: string | null;
   };
@@ -28,6 +29,7 @@ export interface GuildMember {
 export interface JoinRequest {
   id: string;
   userId: string;
+  publicId: string | null;
   userName: string | null;
   avatarUrl: string | null;
   createdAt: string;

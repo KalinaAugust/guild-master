@@ -86,17 +86,18 @@ export async function POST(
 
   const { data: newRow } = await supabase
     .from('guild_members')
-    .select('user_id, role, profiles(full_name, avatar_url)')
+    .select('user_id, role, profiles(public_id, full_name, avatar_url)')
     .eq('guild_id', guildId)
     .eq('user_id', targetUser.id)
     .single();
 
-  type ProfileShape = { full_name: string | null; avatar_url: string | null } | null;
+  type ProfileShape = { public_id: string | null; full_name: string | null; avatar_url: string | null } | null;
 
   return NextResponse.json({
     userId: newRow!.user_id,
     role: newRow!.role,
     profile: {
+      publicId: (newRow!.profiles as ProfileShape)?.public_id ?? null,
       fullName: (newRow!.profiles as ProfileShape)?.full_name ?? null,
       avatarUrl: (newRow!.profiles as ProfileShape)?.avatar_url ?? null,
     },

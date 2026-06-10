@@ -15,7 +15,7 @@ export const getEventParticipants = async (
 
   const { data, error } = await supabase
     .from('event_participants')
-    .select('id, event_id, user_id, status, profiles(full_name, avatar_url)')
+    .select('id, event_id, user_id, status, profiles(public_id, full_name, avatar_url)')
     .eq('event_id', eventId);
 
   if (error) throw error;
@@ -26,6 +26,7 @@ export const getEventParticipants = async (
     user_id: row.user_id,
     status: row.status as ParticipantStatus,
     profile: {
+      publicId: row.profiles?.public_id ?? null,
       fullName: row.profiles?.full_name ?? null,
       avatarUrl: row.profiles?.avatar_url ?? null,
     },

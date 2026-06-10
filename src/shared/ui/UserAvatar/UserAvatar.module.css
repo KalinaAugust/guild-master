@@ -3,7 +3,6 @@
  * avatar text sizes are tightly coupled to the fixed width/height container sizes.
  */
 .base {
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,24 +15,28 @@
   width: 24px;
   height: 24px;
   font-size: 9px;
+  border-radius: 6px;
 }
 
 .size_md {
   width: 32px;
   height: 32px;
   font-size: 12px;
+  border-radius: 8px;
 }
 
 .size_lg {
   width: 40px;
   height: 40px;
   font-size: 14px;
+  border-radius: 10px;
 }
 
 .size_xl {
   width: 96px;
   height: 96px;
   font-size: 32px;
+  border-radius: 16px;
 }
 
 .image {

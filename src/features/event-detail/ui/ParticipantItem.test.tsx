@@ -17,13 +17,18 @@ const base: EventParticipant = {
   event_id: 'e1',
   user_id: 'u1',
   status: 'pending',
-  profile: { fullName: 'Alice Smith', avatarUrl: null },
+  profile: { publicId: 'pubA', fullName: 'Alice Smith', avatarUrl: null },
 };
 
 describe('ParticipantItem', () => {
   it('renders participant name', () => {
     render(<ParticipantItem participant={base} isCurrentUser={false} />);
     expect(screen.getByText('Alice Smith')).toBeInTheDocument();
+  });
+
+  it('links the participant name to their public profile', () => {
+    render(<ParticipantItem participant={base} isCurrentUser={false} />);
+    expect(screen.getByText('Alice Smith').closest('a')).toHaveAttribute('href', '/profile/pubA');
   });
 
   it('shows status label', () => {

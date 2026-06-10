@@ -18,7 +18,7 @@ interface Props {
   initialGuildId?: string;
 }
 
-// Stable references for the hydration guard so useSyncExternalStore never
+// Stable references for the hydration guard, so useSyncExternalStore never
 // re-subscribes between renders.
 const emptySubscribe = () => () => {};
 const getClientSnapshot = () => true;

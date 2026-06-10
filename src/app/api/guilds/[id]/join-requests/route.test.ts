@@ -50,11 +50,11 @@ describe('GET /api/guilds/[id]/join-requests', () => {
 
   it('returns the pending requests for the owner', async () => {
     authed(vi.fn().mockReturnValue(query({
-      data: [{ id: 'r1', user_id: 'u2', created_at: 't', profiles: { full_name: 'Bob', avatar_url: null } }],
+      data: [{ id: 'r1', user_id: 'u2', created_at: 't', profiles: { public_id: 'pub2', full_name: 'Bob', avatar_url: null } }],
     })));
     const res = await GET(req, params('g1'));
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual([{ id: 'r1', userId: 'u2', userName: 'Bob', avatarUrl: null, createdAt: 't' }]);
+    expect(await res.json()).toEqual([{ id: 'r1', userId: 'u2', publicId: 'pub2', userName: 'Bob', avatarUrl: null, createdAt: 't' }]);
   });
 
   it('returns 500 on fetch error', async () => {
