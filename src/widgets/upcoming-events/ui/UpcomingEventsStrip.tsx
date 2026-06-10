@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useSyncExternalStore } from 'react';
 import { useGetEventsQuery, useGetMyEventIdsQuery } from '@/entities/event';
 import { useAppSelector } from '@/shared/lib/hooks';
 import type { Guild } from '@/entities/guild';
@@ -18,12 +18,19 @@ interface Props {
   initialGuildId?: string;
 }
 
-export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
-  const [isMounted, setIsMounted] = useState(false);
+// Stable references for the hydration guard so useSyncExternalStore never
+// re-subscribes between renders.
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
+  // Hydration guard: false on the server and during hydration, true on the client.
+  const isMounted = useSyncExternalStore(
+    emptySubscribe,
+    getClientSnapshot,
+    getServerSnapshot
+  );
 
   const currentGuildId = useAppSelector(state => state.guild.currentGuildId);
   const activeGuildId = useMemo(

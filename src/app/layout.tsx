@@ -55,8 +55,8 @@ export default async function RootLayout({
   ];
   const filteredMessages = Object.keys(messages)
     .filter((key) => requiredNamespaces.includes(key))
-    .reduce<Record<string, any>>((obj, key) => {
-      obj[key] = (messages as Record<string, any>)[key];
+    .reduce<typeof messages>((obj, key) => {
+      obj[key] = messages[key];
       return obj;
     }, {});
 
