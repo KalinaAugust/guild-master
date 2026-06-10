@@ -11,7 +11,7 @@ interface ProfileLinkProps {
 }
 
 /**
- * Wraps a user's avatar or name in a link to their public profile, opened in a new tab.
+ * Wraps a user's avatar or name in a link to their public profile.
  * Falls back to a plain span (preserving `className`) when `publicId` is unknown.
  */
 export const ProfileLink: React.FC<ProfileLinkProps> = ({
@@ -31,13 +31,7 @@ export const ProfileLink: React.FC<ProfileLinkProps> = ({
     : styles.link;
 
   return (
-    <Link
-      href={`/profile/${publicId}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={linkClass}
-      {...rest}
-    >
+    <Link href={`/profile/${publicId}`} className={linkClass} {...rest}>
       {children}
     </Link>
   );

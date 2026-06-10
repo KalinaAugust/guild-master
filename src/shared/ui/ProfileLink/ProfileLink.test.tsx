@@ -3,13 +3,12 @@ import { describe, it, expect } from 'vitest';
 import { ProfileLink } from './ProfileLink';
 
 describe('ProfileLink', () => {
-  it('renders a new-tab link to the public profile when publicId is present', () => {
+  it('renders a link to the public profile when publicId is present', () => {
     render(<ProfileLink publicId="a1B2c3D4">Alice</ProfileLink>);
 
     const link = screen.getByRole('link', { name: 'Alice' });
     expect(link).toHaveAttribute('href', '/profile/a1B2c3D4');
-    expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveAttribute('rel', expect.stringContaining('noopener'));
+    expect(link).not.toHaveAttribute('target');
   });
 
   it('renders plain text without a link when publicId is missing', () => {
