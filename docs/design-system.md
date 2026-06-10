@@ -105,7 +105,8 @@ To maintain a soft, modern gaming interface, corner rounding should follow these
 *   **`12px` (Medium):** Sub-panels, filter dropdowns, event wizard stages, comments input area.
 *   **`10px` / `8px` (Small):** Interactive elements: buttons, form inputs, selector elements, dropdown items.
 *   **`6px` / `4px` (Micro):** Inner components: badges, checkmarks, tooltip bubble cards, small icons.
-*   **`50%` / `999px` (Circle/Pill):** Avatars, pill badges, tag indicators, fully-rounded buttons.
+*   **Avatars (squircle):** Avatars (user and guild) use a **square shape with a size-proportional radius**, not a circle, keeping ~25–30% radius-to-size ratio so the corner softness reads the same at every size: `24px → 6px`, `32px → 8px`, `40px → 10px`, `96px → 16px` (the `20px` guild avatar in `Select` uses `6px`). Upload previews must match the rendered avatar radius.
+*   **`50%` / `999px` (Circle/Pill):** Pill badges, tag indicators, fully-rounded buttons, status dots, radio controls.
 
 ---
 

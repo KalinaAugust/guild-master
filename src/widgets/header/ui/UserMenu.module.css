@@ -11,7 +11,16 @@
   color: var(--text-primary);
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+}
+
+/* The base left padding centers the avatar in the collapsed rail (transparent, no
+   pill visible). Once the pill background shows — i.e. the sidebar is expanded — give
+   the square avatar room so its flat left edge doesn't hug the rounded pill corner. */
+.trigger:hover,
+.trigger:focus-visible,
+.trigger[data-state='open'] {
+  padding-left: 10px;
 }
 
 .trigger:hover {
