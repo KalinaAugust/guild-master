@@ -144,6 +144,7 @@ To maintain UI consistency and reduce code duplication, always check and reuse e
 *   **`Button` (`src/shared/ui/Button`):** Standard styled action buttons (Primary, Secondary, Ghost, Danger, etc.) with support for loading states (automatically renders the `Spinner`).
 *   **`Select` (`src/shared/ui/Select`):** Custom dropdown selections matching the night sky theme with smooth arrow transitions.
 *   **`Modal` / `ConfirmModal` (`src/shared/ui/Modal`):** Base overlays for dialogs and user confirmations.
+*   **Toasts (`sonner`):** Mounted once in `layout.tsx` with `richColors` + `theme="dark"`. Success toasts are recolored from the default green to the brand blue (`--success-bg: #0e3460`, `--success-border: var(--accent-primary)`, `--success-text: var(--text-highlight)`, icon `var(--accent-secondary)`) via overrides in `globals.css`. Error/warning toasts keep sonner's defaults.
 
 ---
 

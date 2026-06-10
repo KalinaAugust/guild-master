@@ -101,3 +101,14 @@ h1, h2, h3, h4, h5, h6 {
   left: 30%;
   top: 20%;
 }
+
+/* Recolor sonner's richColors success toast from green to brand blue */
+[data-sonner-toast][data-type='success'] {
+  --success-bg: #0e3460;
+  --success-border: var(--accent-primary);
+  --success-text: var(--text-highlight);
+}
+
+[data-sonner-toast][data-type='success'] [data-icon] {
+  color: var(--accent-secondary);
+}
