@@ -16,6 +16,7 @@ This project does **NOT** use the standard `middleware.ts`.
 1. All request interception, route protection, and locale handling lives in **`src/proxy.ts`**.
 2. To protect new routes or change redirect logic — edit `src/proxy.ts`.
 3. Do not create `middleware.ts` in the project root.
+4. **Content-Security-Policy** is also set in `src/proxy.ts` — a per-request, nonce-based policy (`script-src 'nonce-…' 'strict-dynamic'`). Next.js auto-applies the nonce to its own scripts; app code can read it via `headers().get('x-nonce')`. Any new inline `<script>` must carry that nonce or it will be blocked. External script/img/connect origins must be added to the matching directive in `buildCsp()`. Static, route-agnostic headers (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`) live in `next.config.mjs` → `headers()`.
 
 ## Route Handler Authorization Model
 

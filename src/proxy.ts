@@ -1,20 +1,60 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+const supabaseUrl = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!);
+const supabaseOrigin = supabaseUrl.origin;
+const supabaseWsOrigin = `wss://${supabaseUrl.host}`;
+const isDev = process.env.NODE_ENV === 'development';
+
+/**
+ * Per-request nonce-based CSP. 'strict-dynamic' lets Next.js's nonced bootstrap
+ * script vouch for the chunks it loads, so no host allowlist is needed for
+ * scripts; 'self'+nonce is the fallback for CSP2 browsers that ignore
+ * 'strict-dynamic'. 'unsafe-eval' is dev-only (HMR / React Refresh). Styles
+ * keep 'unsafe-inline' since Next.js inlines critical CSS (low XSS risk).
+ */
+function buildCsp(nonce: string): string {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ''}`,
+    "style-src 'self' 'unsafe-inline'",
+    `img-src 'self' data: blob: ${supabaseOrigin}`,
+    "font-src 'self'",
+    `connect-src 'self' ${supabaseOrigin} ${supabaseWsOrigin}`,
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+  ].join('; ');
+}
+
 export async function proxy(request: NextRequest) {
+  const nonce = crypto.randomUUID();
+  const csp = buildCsp(nonce);
+
+  // Next.js reads the nonce from the request's CSP header and applies it to its
+  // own scripts; x-nonce exposes it to app code via headers().
+  const buildRequestHeaders = () => {
+    const headers = new Headers(request.headers);
+    headers.set('x-nonce', nonce);
+    headers.set('Content-Security-Policy', csp);
+    return headers;
+  };
+
   let response = NextResponse.next({
     request: {
-      headers: request.headers,
+      headers: buildRequestHeaders(),
     },
   });
 
-  // Handle locale initialization
-  const localeCookie = request.cookies.get('NEXT_LOCALE')?.value;
-  if (!localeCookie) {
-    const acceptLanguage = request.headers.get('accept-language');
-    const preferredLocale = acceptLanguage?.startsWith('ru') ? 'ru' : 'en';
-    response.cookies.set('NEXT_LOCALE', preferredLocale);
-  }
+  // Resolve the locale cookie up front, but apply it at finalize() time. Setting
+  // it here would be lost when Supabase's setAll re-creates `response` below.
+  const acceptLanguage = request.headers.get('accept-language');
+  const localeToSet = request.cookies.get('NEXT_LOCALE')?.value
+    ? null
+    : acceptLanguage?.startsWith('ru')
+      ? 'ru'
+      : 'en';
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -29,7 +69,9 @@ export async function proxy(request: NextRequest) {
             request.cookies.set({ name, value, ...options })
           );
           response = NextResponse.next({
-            request,
+            request: {
+              headers: buildRequestHeaders(),
+            },
           });
           cookiesToSet.forEach(({ name, value, options }) =>
             response.cookies.set(name, value, options)
@@ -41,6 +83,16 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Apply the CSP header and pending locale cookie to whatever response we
+  // ultimately return, so neither is lost across response re-creation.
+  const finalize = (res: NextResponse) => {
+    res.headers.set('Content-Security-Policy', csp);
+    if (localeToSet) {
+      res.cookies.set('NEXT_LOCALE', localeToSet);
+    }
+    return res;
+  };
+
   // Protect all routes except /login and /auth/callback
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth');
@@ -48,14 +100,14 @@ export async function proxy(request: NextRequest) {
   const isPublicProfilePage = request.nextUrl.pathname.match(/^\/profile\/[^/]+/) !== null;
 
   if (!user && !isLoginPage && !isAuthCallback && !isGuildDetailPage && !isPublicProfilePage) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return finalize(NextResponse.redirect(new URL('/login', request.url)));
   }
 
   if (user && isLoginPage) {
-    return NextResponse.redirect(new URL('/', request.url));
+    return finalize(NextResponse.redirect(new URL('/', request.url)));
   }
 
-  return response;
+  return finalize(response);
 }
 
 export const config = {
