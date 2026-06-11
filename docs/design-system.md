@@ -47,9 +47,9 @@ Cards, panels, calendars, and other container surfaces use a **Glassmorphism** s
 | CSS Variable | Value | Description |
 | :--- | :--- | :--- |
 | `--glass-bg` | `rgba(255, 255, 255, 0.05)` | Semi-transparent white surface |
-| `--glass-border` | `rgba(255, 255, 255, 0.1)` | Subtle white border simulating glass edges |
-| `--glass-blur` | `blur(2px)` | Backdrop blur effect |
-| `--shadow-glass` | `0 25px 50px -12px rgba(0, 0, 0, 0.5)` | Large soft shadow under the card |
+| `--glass-border` | `rgba(255, 255, 255, 0.08)` | Subtle white border simulating glass edges |
+| `--glass-blur` | `blur(12px) saturate(180%)` | Backdrop blur with color saturation effect |
+| `--shadow-glass` | `0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.2)` | Multi-layered shadow (outer shadow, top glare highlight, bottom dark edge) |
 
 ### 3.2 Standard Glass Container Class Example
 ```css

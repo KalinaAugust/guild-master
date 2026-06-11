@@ -6,8 +6,8 @@
   /* Backgrounds */
   --bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);
   --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-blur: blur(2px);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(12px) saturate(180%);
 
   /* Accents */
   --accent-primary: #2d9ed0;
@@ -23,7 +23,9 @@
   --text-highlight: #bae6fd;
 
   /* Shadows */
-  --shadow-glass: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-glass: 0 20px 40px -15px rgba(0, 0, 0, 0.5),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 
   /* Modal */
   --modal-bg: #0b1528;
