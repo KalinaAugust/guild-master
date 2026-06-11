@@ -149,7 +149,40 @@ To maintain UI consistency and reduce code duplication, always check and reuse e
 
 ---
 
-## 11. Guidelines for Developers & Agents
+## 11. Nested Glassmorphism Guidelines
+
+When rendering a glass component inside another glass component, their backdrop blurs and semi-transparent backgrounds stack. This reduces depth, creates visual mud, and degrades text legibility. To solve this, we define three nested glassmorphism strategies.
+
+### 11.1 Strategy 1: Elevation / "Higher is Lighter & Sharper" (Recommended for overlays)
+Simulates depth by raising the nested card closer to the light source along the Z-axis.
+*   **Rules:**
+    *   Set `backdrop-filter: none;` (or keep it under `2px`) on the nested card to avoid stacked blur.
+    *   Make the background slightly lighter and brand-tinted: `rgba(255, 255, 255, 0.08)` or `rgba(125, 211, 252, 0.06)`.
+    *   Increase border visibility: `1px solid rgba(255, 255, 255, 0.15)`.
+    *   Add a soft, dark drop shadow to establish elevation: `box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)`.
+*   **When to use:** Floating panels, dropdown menus, context popups, or hover-triggered cards that need to look layered above the main interface.
+
+### 11.2 Strategy 2: Cutout / "Darker Semi-Transparent Plaquette" (Recommended for data containers)
+Grounded nested components by placing them in a "cutout" or "carved-out" space within the main glass panel.
+*   **Rules:**
+    *   Disable backdrop-filter on the child card: `backdrop-filter: none;`.
+    *   Use a dark, semi-transparent background derived from the site's dark palette: `rgba(3, 13, 26, 0.5)` or `rgba(11, 21, 40, 0.6)`.
+    *   Apply a very subtle outer or inner border: `1px solid rgba(255, 255, 255, 0.05)`.
+    *   Optionally use an inner shadow to simulate depth: `box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4)`.
+*   **When to use:** Interactive inline widgets (e.g., [PollCard](file:///Users/deniskalinin/frontend/guild-master/src/features/guild-poll/ui/PollCard.tsx) inside chat aside, chat messages, event details list item) where high contrast is required for nested buttons, input fields, checkboxes, or colorful progress bars.
+
+### 11.3 Strategy 3: Outline / "Border Only"
+Keeps the layout light and minimal by eliminating the nested background entirely.
+*   **Rules:**
+    *   Set `background: transparent;`.
+    *   Use a thin, subtle border: `1px solid rgba(255, 255, 255, 0.08)`.
+    *   Disable drop shadows.
+    *   Increase padding and vertical/horizontal margins (white space) to separate elements.
+*   **When to use:** Static read-only cards, text lists, or secondary settings items where no overlapping progress bars or dense inputs are present.
+
+---
+
+## 12. Guidelines for Developers & Agents
 
 When creating or modifying components, adhere to these rules:
 
@@ -160,5 +193,6 @@ When creating or modifying components, adhere to these rules:
 5.  **Follow Border Radii & Spacing Scales:** Always map paddings and border-radius styles to the scales in sections 7 and 8 to keep the UI visually cohesive.
 6.  **Respect Unit Separation (`rem` vs `px`):** Adhere to the guidelines in section 9. Do not mix them randomly; use `rem` for text and layout spacing, and `px` for borders and rounded corners.
 7.  **Synchronization:** If you update any global variables in `globals.css` (or standard spacing constants), immediately update this document to keep the design system synchronized.
+
 
 
