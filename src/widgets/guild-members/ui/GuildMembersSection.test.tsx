@@ -22,8 +22,8 @@ import {
 } from '@/entities/guild';
 
 const mockMembers = [
-  { userId: 'u1', role: 'OWNER' as const, profile: { fullName: 'Alice', avatarUrl: null } },
-  { userId: 'u2', role: 'MEMBER' as const, profile: { fullName: 'Bob', avatarUrl: null } },
+  { userId: 'u1', role: 'OWNER' as const, profile: { publicId: null, fullName: 'Alice', avatarUrl: null, alias: null, displayAsAlias: false } },
+  { userId: 'u2', role: 'MEMBER' as const, profile: { publicId: null, fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false } },
 ];
 
 describe('GuildMembersSection', () => {

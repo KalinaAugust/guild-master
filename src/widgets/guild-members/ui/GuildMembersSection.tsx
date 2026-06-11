@@ -12,6 +12,7 @@ import {
   useRemoveGuildMemberMutation,
   useGuildPermissions,
 } from '@/entities/guild';
+import { resolveDisplayName } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
@@ -89,20 +90,26 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         <p className={styles.empty}>{t('empty')}</p>
       ) : (
         <ul className={`${styles.list} ${fill ? styles.listFill : ''}`}>
-          {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => (
+          {[...members].sort((a, b) => (a.role === 'OWNER' ? -1 : b.role === 'OWNER' ? 1 : 0)).map((member) => {
+            const memberName = resolveDisplayName({
+              fullName: member.profile.fullName,
+              alias: member.profile.alias,
+              displayAsAlias: member.profile.displayAsAlias,
+            });
+            return (
             <li key={member.userId} className={styles.item}>
               <ProfileLink
                 publicId={member.profile.publicId}
-                aria-label={member.profile.fullName ?? undefined}
+                aria-label={memberName ?? undefined}
               >
                 <UserAvatar
                   avatarUrl={member.profile.avatarUrl}
-                  name={member.profile.fullName}
+                  name={memberName}
                   size="sm"
                 />
               </ProfileLink>
               <ProfileLink publicId={member.profile.publicId} className={styles.name}>
-                {member.profile.fullName ?? member.userId}
+                {memberName ?? member.userId}
               </ProfileLink>
               <span className={styles.role}>{member.role}</span>
               {member.role === 'OWNER' && (
@@ -118,7 +125,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                   className={styles.removeBtn}
                   onClick={() => setPendingRemove({
                     userId: member.userId,
-                    name: member.profile.fullName ?? member.userId,
+                    name: memberName ?? member.userId,
                   })}
                   aria-label={t('removeMember')}
                 >
@@ -126,7 +133,8 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 </Button>
               )}
             </li>
-          ))}
+            );
+          })}
         </ul>
       )}
 

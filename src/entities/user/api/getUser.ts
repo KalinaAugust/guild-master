@@ -27,6 +27,8 @@ export const getUser = cache(async (): Promise<User | null> => {
           publicId: profile.public_id,
           fullName: profile.full_name,
           avatarUrl: profile.avatar_url,
+          alias: profile.alias,
+          displayAsAlias: profile.display_as_alias,
           lastActiveGuildId: profile.last_active_guild_id,
         }
       : null,
