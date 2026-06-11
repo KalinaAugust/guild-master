@@ -2,6 +2,8 @@ export interface PollVoter {
   publicId: string | null;
   fullName: string | null;
   avatarUrl: string | null;
+  alias: string | null;
+  displayAsAlias: boolean;
   /** When the vote was cast (ISO timestamp). */
   votedAt: string;
 }
