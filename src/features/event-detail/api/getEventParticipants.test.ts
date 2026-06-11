@@ -18,7 +18,7 @@ describe('getEventParticipants', () => {
   it('maps participants and resolves viewer flags', async () => {
     const from = vi.fn()
       .mockReturnValueOnce(query({ data: [
-        { id: 'p1', event_id: 'e1', user_id: 'u2', status: 'confirmed', profiles: { public_id: 'pub2', full_name: 'Bob', avatar_url: 'a.png' } },
+        { id: 'p1', event_id: 'e1', user_id: 'u2', status: 'confirmed', profiles: { public_id: 'pub2', full_name: 'Bob', avatar_url: 'a.png', alias: null, display_as_alias: false } },
       ] }))
       .mockReturnValueOnce(query({ data: { guild_id: 'g1' } }))  // event row
       .mockReturnValueOnce(query({ data: { id: 'm1' } }))        // membership -> member
@@ -30,7 +30,7 @@ describe('getEventParticipants', () => {
     expect(result.viewerIsGuildMember).toBe(true);
     expect(result.viewerHasPendingRequest).toBe(false);
     expect(result.participants).toEqual([
-      { id: 'p1', event_id: 'e1', user_id: 'u2', status: 'confirmed', profile: { publicId: 'pub2', fullName: 'Bob', avatarUrl: 'a.png' } },
+      { id: 'p1', event_id: 'e1', user_id: 'u2', status: 'confirmed', profile: { publicId: 'pub2', fullName: 'Bob', avatarUrl: 'a.png', alias: null, displayAsAlias: false } },
     ]);
   });
 

@@ -12,6 +12,7 @@ import {
   useSyncParticipantsMutation,
 } from '@/entities/event';
 import { useGetGuildMembersQuery } from '@/entities/guild';
+import { resolveDisplayName } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
@@ -89,7 +90,13 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
 
   const filteredMembers = useMemo(() => {
     const q = deferredQuery.trim().toLowerCase();
-    return q ? sortedMembers.filter((m) => (m.profile.fullName ?? '').toLowerCase().includes(q)) : sortedMembers;
+    return q
+      ? sortedMembers.filter((m) =>
+          (resolveDisplayName({ fullName: m.profile.fullName, alias: m.profile.alias, displayAsAlias: m.profile.displayAsAlias }) ?? '')
+            .toLowerCase()
+            .includes(q),
+        )
+      : sortedMembers;
   }, [deferredQuery, sortedMembers]);
 
   const handleClose = () => {
@@ -211,6 +218,11 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                     <div className={styles.memberList}>
                     {filteredMembers.map((member) => {
                       const selected = selectedParticipants.includes(member.userId);
+                      const memberName = resolveDisplayName({
+                        fullName: member.profile.fullName,
+                        alias: member.profile.alias,
+                        displayAsAlias: member.profile.displayAsAlias,
+                      });
                       return (
                         <div
                           key={member.userId}
@@ -219,10 +231,10 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                         >
                           <UserAvatar
                             avatarUrl={member.profile.avatarUrl}
-                            name={member.profile.fullName}
+                            name={memberName}
                             size="sm"
                           />
-                          <span className={styles.memberName}>{member.profile.fullName || member.userId}</span>
+                          <span className={styles.memberName}>{memberName || member.userId}</span>
                           {selected && (
                             <span className={styles.memberCheck}>
                               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -3,6 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import type { EventParticipant } from '@/shared/types';
+import { resolveDisplayName } from '@/entities/user';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import styles from './UpcomingEventsStrip.module.css';
 
@@ -19,12 +20,15 @@ export const ParticipantsTooltip: React.FC<Props> = ({ participants }) => {
   return (
     <div className={styles.participantsList}>
       <div className={styles.tooltipLabel}>{t('confirmedLabel')}</div>
-      {confirmed.map(p => (
-        <div key={p.id} className={styles.participantRow}>
-          <UserAvatar avatarUrl={p.profile.avatarUrl} name={p.profile.fullName} size="sm" />
-          <span className={styles.participantName}>{p.profile.fullName ?? 'Unknown'}</span>
-        </div>
-      ))}
+      {confirmed.map(p => {
+        const name = resolveDisplayName({ fullName: p.profile.fullName, alias: p.profile.alias, displayAsAlias: p.profile.displayAsAlias });
+        return (
+          <div key={p.id} className={styles.participantRow}>
+            <UserAvatar avatarUrl={p.profile.avatarUrl} name={name} size="sm" />
+            <span className={styles.participantName}>{name ?? 'Unknown'}</span>
+          </div>
+        );
+      })}
     </div>
   );
 };

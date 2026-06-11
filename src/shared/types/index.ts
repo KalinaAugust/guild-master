@@ -35,5 +35,7 @@ export interface EventParticipant {
     publicId: string | null;
     fullName: string | null;
     avatarUrl: string | null;
+    alias: string | null;
+    displayAsAlias: boolean;
   };
 }

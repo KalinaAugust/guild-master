@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { LogOut } from 'lucide-react';
 import { EventParticipant } from '@/shared/types';
+import { resolveDisplayName } from '@/entities/user';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { Button } from '@/shared/ui/Button';
@@ -33,6 +34,12 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
 }) => {
   const t = useTranslations('EventDetail');
 
+  const participantName = resolveDisplayName({
+    fullName: participant.profile.fullName,
+    alias: participant.profile.alias,
+    displayAsAlias: participant.profile.displayAsAlias,
+  });
+
   const showActions = isCurrentUser && participant.status === 'pending';
   const showLeave =
     isCurrentUser &&
@@ -50,17 +57,17 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
     >
       <ProfileLink
         publicId={participant.profile.publicId}
-        aria-label={participant.profile.fullName ?? undefined}
+        aria-label={participantName ?? undefined}
       >
         <UserAvatar
           avatarUrl={participant.profile.avatarUrl}
-          name={participant.profile.fullName}
+          name={participantName}
           size="md"
         />
       </ProfileLink>
       <div className={styles.info}>
         <ProfileLink publicId={participant.profile.publicId} className={styles.name}>
-          {participant.profile.fullName || '—'}
+          {participantName || '—'}
         </ProfileLink>
         <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
           {t(`status.${participant.status}` as Parameters<typeof t>[0])}
