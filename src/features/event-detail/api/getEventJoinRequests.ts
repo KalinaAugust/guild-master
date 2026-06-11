@@ -7,6 +7,7 @@ export interface EventJoinRequestRow {
   publicId: string | null;
   userName: string | null;
   avatarUrl: string | null;
+  icon: string | null;
   createdAt: string;
 }
 
@@ -15,7 +16,7 @@ export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRe
 
   const { data, error } = await supabase
     .from('event_join_requests')
-    .select('id, user_id, created_at, profiles(public_id, full_name, avatar_url, alias, display_as_alias)')
+    .select('id, user_id, created_at, profiles(public_id, full_name, avatar_url, alias, display_as_alias, icon)')
     .eq('event_id', eventId)
     .eq('status', 'pending')
     .order('created_at', { ascending: true });
@@ -32,6 +33,7 @@ export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRe
       displayAsAlias: r.profiles?.display_as_alias ?? false,
     }),
     avatarUrl: r.profiles?.avatar_url ?? null,
+    icon: r.profiles?.icon ?? null,
     createdAt: r.created_at,
   }));
 };

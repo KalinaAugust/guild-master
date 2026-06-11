@@ -9,6 +9,7 @@ import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './ParticipantItem.module.css';
 
 interface ParticipantItemProps {
@@ -67,7 +68,7 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
       </ProfileLink>
       <div className={styles.info}>
         <ProfileLink publicId={participant.profile.publicId} className={styles.name}>
-          {participantName || '—'}
+          <NameWithIcon name={participantName} icon={participant.profile.icon} fallback="—" iconSize={14} />
         </ProfileLink>
         <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
           {t(`status.${participant.status}` as Parameters<typeof t>[0])}

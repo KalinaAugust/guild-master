@@ -1,19 +1,12 @@
-import * as React from 'react';
-import * as Icons from 'lucide-react';
 import Link from 'next/link';
 import type { CommonGuild, PublicProfile, SocialLink } from '@/entities/user';
 import { SOCIAL_META } from '@/entities/user';
+import { NameWithIcon as SharedNameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './ProfileBlocks.module.css';
 
-export const NameWithIcon = ({ name, icon }: { name: string | null; icon: string | null }) => {
-  const Icon = icon ? (Icons[icon as keyof typeof Icons] as React.ComponentType<{ size?: number }>) : null;
-  return (
-    <span className={styles.nameRow}>
-      {name || 'Guild Master user'}
-      {Icon && <Icon size={18} />}
-    </span>
-  );
-};
+export const NameWithIcon = ({ name, icon }: { name: string | null; icon: string | null }) => (
+  <SharedNameWithIcon name={name} icon={icon} iconSize={18} className={styles.nameRow} />
+);
 
 export const AboutBlock = ({ about }: { about: string }) => (
   <section className={styles.block}>

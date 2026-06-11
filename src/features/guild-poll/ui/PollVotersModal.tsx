@@ -8,6 +8,7 @@ import { ProfileLink } from '@/shared/ui/ProfileLink';
 import dayjs from '@/shared/lib/dayjs';
 import type { Poll } from '@/entities/poll';
 import { resolveDisplayName } from '@/entities/user';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './PollVotersModal.module.css';
 
 interface PollVotersModalProps {
@@ -53,7 +54,7 @@ export const PollVotersModal: React.FC<PollVotersModalProps> = ({ poll, isOpen, 
                           <UserAvatar avatarUrl={v.avatarUrl} name={voterName} size="md" />
                         </ProfileLink>
                         <ProfileLink publicId={v.publicId} className={styles.voterName}>
-                          {voterName ?? t('unknownVoter')}
+                          <NameWithIcon name={voterName ?? t('unknownVoter')} icon={v.icon} fallback={t('unknownVoter')} iconSize={14} />
                         </ProfileLink>
                         <span className={styles.voterTime}>{formatVotedAt(v.votedAt)}</span>
                       </li>

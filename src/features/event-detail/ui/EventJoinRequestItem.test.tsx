@@ -6,7 +6,7 @@ import type { EventJoinRequest } from '../api/detailApi';
 vi.mock('next-intl', () => ({ useTranslations: () => (key: string) => key }));
 
 const request: EventJoinRequest = {
-  id: 'r1', userId: 'u1', publicId: 'pubA', userName: 'Alice Smith', avatarUrl: null,
+  id: 'r1', userId: 'u1', publicId: 'pubA', userName: 'Alice Smith', avatarUrl: null, icon: null,
 } as EventJoinRequest;
 
 describe('EventJoinRequestItem', () => {

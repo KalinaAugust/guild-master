@@ -7,6 +7,7 @@ export interface EventJoinRequest {
   publicId: string | null;
   userName: string | null;
   avatarUrl: string | null;
+  icon: string | null;
   createdAt: string;
 }
 

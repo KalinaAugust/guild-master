@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/shared/ui/Button';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import type { EventJoinRequest } from '../api/detailApi';
 import styles from './EventJoinRequestItem.module.css';
 
@@ -31,7 +32,7 @@ export const EventJoinRequestItem: React.FC<EventJoinRequestItemProps> = ({
         <UserAvatar avatarUrl={request.avatarUrl} name={request.userName} size="sm" />
       </ProfileLink>
       <ProfileLink publicId={request.publicId} className={styles.name}>
-        {request.userName ?? '—'}
+        <NameWithIcon name={request.userName} icon={request.icon} fallback="—" iconSize={14} />
       </ProfileLink>
       <div className={styles.actions}>
         <Button

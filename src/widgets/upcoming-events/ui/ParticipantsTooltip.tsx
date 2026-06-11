@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { EventParticipant } from '@/shared/types';
 import { resolveDisplayName } from '@/entities/user';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './UpcomingEventsStrip.module.css';
 
 interface Props {
@@ -25,7 +26,9 @@ export const ParticipantsTooltip: React.FC<Props> = ({ participants }) => {
         return (
           <div key={p.id} className={styles.participantRow}>
             <UserAvatar avatarUrl={p.profile.avatarUrl} name={name} size="sm" />
-            <span className={styles.participantName}>{name ?? 'Unknown'}</span>
+            <span className={styles.participantName}>
+              <NameWithIcon name={name ?? 'Unknown'} icon={p.profile.icon} fallback="Unknown" iconSize={12} />
+            </span>
           </div>
         );
       })}
