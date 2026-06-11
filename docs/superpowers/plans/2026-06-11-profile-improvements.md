@@ -634,6 +634,22 @@ git commit -m "feat(profile): add getCommonGuilds query"
 
 ## Task 7: getPublicProfile — fetch new fields + apply visibility (TDD)
 
+> **REVISED (FSD correction):** `entities/user` must NOT import `entities/guild`
+> (same-layer cross-import → `fsd/forbidden-imports`). Cross-entity composition
+> moves to the **app layer** (Task 15). `CommonGuild` now lives in `shared/types`
+> and a `RawProfile` type was added to `entities/user/model/types.ts`.
+>
+> This task is split:
+> - **Task 7** — `getPublicProfile(publicId)` returns `RawProfile | null` (profile
+>   row + stats + resolved `displayName`). No viewer/guild logic, no privacy filtering.
+> - **Task 7B** — pure `buildVisibleProfile(raw, relationship, commonGuilds)` →
+>   `PublicProfile` in `entities/user/lib/` (applies `resolvePrivacy` + `canSee`).
+> - **Task 15** — the page calls `getPublicProfile` → `getCommonGuilds` (guild) →
+>   derives relationship → `buildVisibleProfile`.
+>
+> The original code blocks below are superseded; follow the controller's dispatch
+> prompts for Tasks 7, 7B, 15.
+
 **Files:**
 - Modify: `src/entities/user/api/getPublicProfile.ts`
 - Modify: `src/entities/user/api/getPublicProfile.test.ts`
