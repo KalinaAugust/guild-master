@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Edit2, Trash2 } from 'lucide-react';
+import { Edit2, Trash2, Check, X } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
@@ -119,13 +119,35 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
         {isEditing ? (
           <>
-            <Textarea value={draft} onChange={(e) => setDraft(e.target.value)} rows={2} maxLength={maxLength} />
+            <Textarea
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              rows={2}
+              maxLength={maxLength}
+              className={styles.editTextarea}
+            />
             <div className={styles.editActions}>
-              <Button type="button" size="xs" variant="primary" onClick={handleSave} isLoading={isSaving}>
-                {labels.save}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon_sm"
+                onClick={handleSave}
+                isLoading={isSaving}
+                aria-label={labels.save}
+                className={styles.saveBtn}
+              >
+                <Check size={16} />
               </Button>
-              <Button type="button" size="xs" variant="secondary" onClick={handleCancel} disabled={isSaving}>
-                {labels.cancel}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon_sm"
+                onClick={handleCancel}
+                disabled={isSaving}
+                aria-label={labels.cancel}
+                className={styles.cancelBtn}
+              >
+                <X size={16} />
               </Button>
             </div>
           </>

@@ -39,7 +39,7 @@ describe('MessageBubble', () => {
     const field = screen.getByRole('textbox');
     await user.clear(field);
     await user.type(field, 'Updated');
-    await user.click(screen.getByText('save'));
+    await user.click(screen.getByRole('button', { name: 'save' }));
     expect(onSave).toHaveBeenCalledWith('Updated');
   });
 });
