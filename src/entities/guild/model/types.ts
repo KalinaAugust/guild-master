@@ -25,6 +25,7 @@ export interface GuildMember {
     avatarUrl: string | null;
     alias: string | null;
     displayAsAlias: boolean;
+    icon: string | null;
   };
 }
 

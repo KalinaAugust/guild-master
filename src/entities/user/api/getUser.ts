@@ -30,6 +30,7 @@ export const getUser = cache(async (): Promise<User | null> => {
           alias: profile.alias,
           displayAsAlias: profile.display_as_alias,
           lastActiveGuildId: profile.last_active_guild_id,
+          icon: profile.icon,
         }
       : null,
   };

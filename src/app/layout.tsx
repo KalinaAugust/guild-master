@@ -82,6 +82,7 @@ export default async function RootLayout({
                       alias: user.profile?.alias ?? null,
                       displayAsAlias: user.profile?.displayAsAlias ?? false,
                     })}
+                    icon={user.profile?.icon ?? null}
                   />
                 }
               />

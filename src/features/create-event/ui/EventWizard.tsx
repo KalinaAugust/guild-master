@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import dayjs from '@/shared/lib/dayjs';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { EventForm } from './EventForm';
@@ -234,7 +235,9 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                             name={memberName}
                             size="sm"
                           />
-                          <span className={styles.memberName}>{memberName || member.userId}</span>
+                          <span className={styles.memberName}>
+                            <NameWithIcon name={memberName || member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
+                          </span>
                           {selected && (
                             <span className={styles.memberCheck}>
                               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">

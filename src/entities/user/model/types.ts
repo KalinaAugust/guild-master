@@ -32,6 +32,7 @@ export interface UserProfile {
   lastActiveGuildId?: string | null;
   alias?: string | null;
   displayAsAlias?: boolean;
+  icon?: string | null;
 }
 
 export interface User {

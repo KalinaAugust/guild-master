@@ -11,8 +11,8 @@ beforeEach(() => vi.clearAllMocks());
 describe('getGuildMembers', () => {
   it('maps rows to GuildMember shape', async () => {
     const rows = [
-      { user_id: 'u1', role: 'OWNER', profiles: { public_id: 'pubA', full_name: 'Alice', avatar_url: 'http://a.com', alias: 'Ali', display_as_alias: true } },
-      { user_id: 'u2', role: 'MEMBER', profiles: { public_id: 'pubB', full_name: 'Bob', avatar_url: null, alias: null, display_as_alias: false } },
+      { user_id: 'u1', role: 'OWNER', profiles: { public_id: 'pubA', full_name: 'Alice', avatar_url: 'http://a.com', alias: 'Ali', display_as_alias: true, icon: 'Sword' } },
+      { user_id: 'u2', role: 'MEMBER', profiles: { public_id: 'pubB', full_name: 'Bob', avatar_url: null, alias: null, display_as_alias: false, icon: null } },
     ];
     const eq = vi.fn().mockResolvedValue({ data: rows, error: null });
     const select = vi.fn().mockReturnValue({ eq });
@@ -20,8 +20,8 @@ describe('getGuildMembers', () => {
 
     const result = await getGuildMembers('g1');
     expect(result).toEqual([
-      { userId: 'u1', role: 'OWNER', profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: 'http://a.com', alias: 'Ali', displayAsAlias: true } },
-      { userId: 'u2', role: 'MEMBER', profile: { publicId: 'pubB', fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false } },
+      { userId: 'u1', role: 'OWNER', profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: 'http://a.com', alias: 'Ali', displayAsAlias: true, icon: 'Sword' } },
+      { userId: 'u2', role: 'MEMBER', profile: { publicId: 'pubB', fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false, icon: null } },
     ]);
     expect(eq).toHaveBeenCalledWith('guild_id', 'g1');
   });
@@ -33,7 +33,7 @@ describe('getGuildMembers', () => {
     vi.mocked(createClient).mockResolvedValue({ from: vi.fn().mockReturnValue({ select }) } as never);
 
     const result = await getGuildMembers('g1');
-    expect(result[0].profile).toEqual({ publicId: null, fullName: null, avatarUrl: null, alias: null, displayAsAlias: false });
+    expect(result[0].profile).toEqual({ publicId: null, fullName: null, avatarUrl: null, alias: null, displayAsAlias: false, icon: null });
   });
 
   it('returns empty array when no members', async () => {

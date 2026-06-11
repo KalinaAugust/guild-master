@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import styles from './GuildMembersSection.module.css';
 
@@ -109,7 +110,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 />
               </ProfileLink>
               <ProfileLink publicId={member.profile.publicId} className={styles.name}>
-                {memberName ?? member.userId}
+                <NameWithIcon name={memberName ?? member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
               </ProfileLink>
               <span className={styles.role}>{member.role}</span>
               {member.role === 'OWNER' && (
