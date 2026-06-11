@@ -35,7 +35,7 @@
   line-height: 1.4;
 }
 
-.editActions { display: flex; gap: 8px; margin-top: 6px; }
+.editActions { display: flex; gap: 8px; margin-top: 2px; }
 
 .actions {
   position: absolute;
@@ -69,20 +69,27 @@
   margin-top: 8px;
 }
 
+.saveBtn, .cancelBtn {
+  width: 28px !important;
+  height: 28px !important;
+}
+
 .saveBtn {
-  color: #34d399;
+  color: var(--accent-secondary);
 }
 
 .saveBtn:hover:not(:disabled) {
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-primary);
+  background: rgba(56, 189, 248, 0.1);
+  transform: none !important;
 }
 
 .cancelBtn {
-  color: #f87171;
+  color: var(--text-muted);
 }
 
 .cancelBtn:hover:not(:disabled) {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  transform: none !important;
 }
