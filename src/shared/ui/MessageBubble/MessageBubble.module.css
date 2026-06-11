@@ -53,6 +53,12 @@
 .item:hover .actions,
 .item:focus-within .actions { opacity: 1; }
 
+.actionBtn:hover:not(:disabled),
+.deleteBtn:hover:not(:disabled) {
+  transform: none !important;
+  background: transparent !important;
+}
+
 .actionBtn:hover { color: var(--accent-primary); }
 
 .deleteBtn:hover { color: #ff4d4d; }
