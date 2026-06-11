@@ -1,9 +1,40 @@
+import type { SocialPlatform } from '../config/socials';
+
+export type PrivacyLevel = 'private' | 'guildmates' | 'public';
+
+export type PrivacyField =
+  | 'name'
+  | 'alias'
+  | 'about'
+  | 'interests'
+  | 'socials'
+  | 'joined'
+  | 'stats'
+  | 'common_guilds';
+
+export type ProfilePrivacy = Partial<Record<PrivacyField, PrivacyLevel>>;
+
+export type ViewerRelationship = 'self' | 'guildmate' | 'public';
+
+export interface SocialLink {
+  platform: SocialPlatform;
+  value: string;
+}
+
+export interface CommonGuild {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+}
+
 export interface UserProfile {
   id: string;
   publicId: string;
   fullName: string | null;
   avatarUrl: string | null;
   lastActiveGuildId?: string | null;
+  alias?: string | null;
+  displayAsAlias?: boolean;
 }
 
 export interface User {
@@ -14,9 +45,21 @@ export interface User {
 
 export interface PublicProfile {
   id: string;
-  fullName: string | null;
+  publicId: string;
+  relationship: ViewerRelationship;
+  /** Resolved display name (alias when toggle on, else full_name). Always present. */
+  displayName: string | null;
+  /** lucide icon name shown after the name. No privacy. */
+  icon: string | null;
   avatarUrl: string | null;
-  joinedAt: string | null;
-  guildsCount: number | null;
-  eventsCount: number | null;
+  // Fields below are present only when visible to the viewer:
+  realName?: string | null;
+  alias?: string | null;
+  about?: string | null;
+  interests?: string[];
+  socials?: SocialLink[];
+  joinedAt?: string | null;
+  guildsCount?: number | null;
+  eventsCount?: number | null;
+  commonGuilds?: CommonGuild[];
 }
