@@ -238,14 +238,14 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                           <span className={styles.memberName}>
                             <NameWithIcon name={memberName || member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
                           </span>
-                          {selected && (
-                            <span className={styles.memberCheck}>
-                              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="11" cy="11" r="10" fill="#38bdf8" fillOpacity="0.2" stroke="#38bdf8" strokeWidth="1.5"/>
-                                <path d="M6.5 11L9.5 14L15.5 8" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              </svg>
-                            </span>
-                          )}
+                           {selected && (
+                             <span className={styles.memberCheck}>
+                               <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                 <circle cx="11" cy="11" r="10" fill="rgba(56, 189, 248, 0.16)" stroke="var(--accent-secondary)" strokeWidth="1.5"/>
+                                 <path d="M6.5 11L9.5 14L15.5 8" stroke="var(--accent-secondary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                               </svg>
+                             </span>
+                           )}
                         </div>
                       );
                     })}

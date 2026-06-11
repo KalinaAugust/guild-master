@@ -115,9 +115,15 @@
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  border: 2px solid var(--glass-border);
+  border: 1.5px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
   color: #fff;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: all 0.2s ease;
+}
+
+.option:hover:not(:disabled) .control {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: rgba(56, 189, 248, 0.03);
 }
 
 .radio {
@@ -129,8 +135,15 @@
 }
 
 .controlChecked {
-  background: var(--accent-secondary);
-  border-color: var(--accent-secondary);
+  background: rgba(56, 189, 248, 0.16) !important;
+  border-color: var(--accent-secondary) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+}
+
+.option:hover:not(:disabled) .controlChecked {
+  background: rgba(56, 189, 248, 0.24) !important;
+  border-color: #93e3ff !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4);
 }
 
 .optionLabel {
