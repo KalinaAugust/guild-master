@@ -12,6 +12,7 @@ import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { PollCard, PollWizard } from '@/features/guild-poll';
 import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
+import { resolveDisplayName } from '@/entities/user';
 import {
   useGetGuildMessagesQuery,
   useGetGuildChatReadStateQuery,
@@ -149,7 +150,11 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
             {messages.map((m) => (
               <MessageBubble
                 key={m.id}
-                authorName={m.profile.fullName}
+                authorName={resolveDisplayName({
+                  fullName: m.profile.fullName,
+                  alias: m.profile.alias,
+                  displayAsAlias: m.profile.displayAsAlias,
+                })}
                 avatarUrl={m.profile.avatarUrl}
                 profilePublicId={m.profile.publicId}
                 body={m.body}

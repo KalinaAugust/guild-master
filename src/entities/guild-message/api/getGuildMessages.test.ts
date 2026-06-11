@@ -12,13 +12,13 @@ const useClient = (from: ReturnType<typeof vi.fn>) =>
 describe('getGuildMessages', () => {
   it('maps rows to GuildMessage shape', async () => {
     const from = vi.fn().mockReturnValueOnce(query({ data: [
-      { id: 'm1', guild_id: 'g1', user_id: 'u2', body: 'hi', created_at: '2026-06-05T10:00:00Z', updated_at: '2026-06-05T10:00:00Z', profiles: { public_id: 'pub2', full_name: 'Bob', avatar_url: 'a.png' } },
+      { id: 'm1', guild_id: 'g1', user_id: 'u2', body: 'hi', created_at: '2026-06-05T10:00:00Z', updated_at: '2026-06-05T10:00:00Z', profiles: { public_id: 'pub2', full_name: 'Bob', avatar_url: 'a.png', alias: null, display_as_alias: false } },
     ] }));
     useClient(from);
 
     const result = await getGuildMessages('g1');
     expect(result).toEqual([
-      { id: 'm1', guildId: 'g1', userId: 'u2', body: 'hi', createdAt: '2026-06-05T10:00:00Z', updatedAt: '2026-06-05T10:00:00Z', profile: { publicId: 'pub2', fullName: 'Bob', avatarUrl: 'a.png' } },
+      { id: 'm1', guildId: 'g1', userId: 'u2', body: 'hi', createdAt: '2026-06-05T10:00:00Z', updatedAt: '2026-06-05T10:00:00Z', profile: { publicId: 'pub2', fullName: 'Bob', avatarUrl: 'a.png', alias: null, displayAsAlias: false } },
     ]);
   });
 
