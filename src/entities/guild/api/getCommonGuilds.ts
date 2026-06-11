@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/shared/api/supabase/server';
-import type { CommonGuild } from '@/entities/user/model/types';
+import type { CommonGuild } from '@/shared/types';
 
 export const getCommonGuilds = async (
   viewerId: string | undefined,

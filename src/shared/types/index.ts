@@ -18,6 +18,12 @@ export interface UIState {
   excludedEventTypes: ActivityType[];
 }
 
+export interface CommonGuild {
+  id: string;
+  name: string;
+  avatarUrl: string | null;
+}
+
 export type ParticipantStatus = 'pending' | 'confirmed' | 'declined';
 
 export interface EventParticipant {

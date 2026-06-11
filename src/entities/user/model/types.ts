@@ -1,4 +1,7 @@
 import type { SocialPlatform } from '../config/socials';
+import type { CommonGuild } from '@/shared/types';
+
+export type { CommonGuild };
 
 export type PrivacyLevel = 'private' | 'guildmates' | 'public';
 
@@ -19,12 +22,6 @@ export type ViewerRelationship = 'self' | 'guildmate' | 'public';
 export interface SocialLink {
   platform: SocialPlatform;
   value: string;
-}
-
-export interface CommonGuild {
-  id: string;
-  name: string;
-  avatarUrl: string | null;
 }
 
 export interface UserProfile {
@@ -62,4 +59,26 @@ export interface PublicProfile {
   guildsCount?: number | null;
   eventsCount?: number | null;
   commonGuilds?: CommonGuild[];
+}
+
+/**
+ * Unfiltered profile data fetched from the DB plus stats and the resolved
+ * display name. Visibility is applied later by `buildVisibleProfile` in the
+ * composition layer; this type carries every field regardless of privacy.
+ */
+export interface RawProfile {
+  id: string;
+  publicId: string;
+  displayName: string | null;
+  icon: string | null;
+  avatarUrl: string | null;
+  fullName: string | null;
+  alias: string | null;
+  about: string | null;
+  interests: string[];
+  socials: SocialLink[];
+  privacy: ProfilePrivacy;
+  joinedAt: string | null;
+  guildsCount: number | null;
+  eventsCount: number | null;
 }
