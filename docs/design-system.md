@@ -62,6 +62,41 @@ Cards, panels, calendars, and other container surfaces use a **Glassmorphism** s
 }
 ```
 
+### 3.3 Core Rules & Formulas for Glassmorphism
+To ensure a high-end sci-fi aesthetic and maintain readability, developers must follow these standard properties and ratios:
+
+1.  **Surface Opacities:**
+    *   **Standard Panels:** `rgba(255, 255, 255, 0.05)` (Provides a premium, subtle glass shell).
+    *   **Light Containers / Inner Elements:** `rgba(255, 255, 255, 0.02)` to `0.03` (Keeps UI light and readable).
+    *   **Elevated Overlays / Focus Elements:** `rgba(255, 255, 255, 0.08)` or a subtle brand tint `rgba(56, 189, 248, 0.04)` to `0.08` (Pulls attention).
+2.  **Backdrop Blur Strength:**
+    *   Standard blur is `blur(8px) saturate(120%)`.
+    *   Do not stack multiple backdrop blurs directly.
+    *   For overlays, menus, and popups, use Strategy 1 (disable/minimize inner blur) to prevent visual artifacts and performance drops.
+3.  **Light Refraction (Borders):**
+    *   Glass borders must act as light highlights, not solid framing lines. Use `1px solid rgba(255, 255, 255, 0.08)` as the base.
+    *   On hover or selection, borders highlight to `rgba(255, 255, 255, 0.15)` or `rgba(56, 189, 248, 0.35)`.
+4.  **Dual-Shadow Depth:**
+    *   Combine soft outer drop shadows (`rgba(0, 0, 0, 0.4)` to `0.5`) with a crisp inner glare highlight on the top edge (`inset 0 1px 0 rgba(255, 255, 255, 0.15)`) to simulate the reflection of light off a three-dimensional glass panel.
+
+### 3.4 Nested Stacking & Layering Rules
+When rendering a glass component inside another glass component, backdrop blurs and semi-transparent backgrounds stack. This reduces depth, creates visual mud, and degrades text legibility. To solve this, we define three nested glassmorphism strategies:
+
+*   **Strategy 1: Elevation / "Higher is Lighter & Sharper" (Recommended for overlays)**
+    *   *Concept:* Simulates depth by raising the nested card closer to the light source along the Z-axis.
+    *   *Rules:* Set `backdrop-filter: none` (or keep under `2px`) on the nested card to avoid stacked blur. Make background slightly lighter/brand-tinted (`rgba(255, 255, 255, 0.08)` or `rgba(125, 211, 252, 0.06)`). Increase border visibility to `1px solid rgba(255, 255, 255, 0.15)` and add a deep drop shadow `box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)`.
+    *   *When to use:* Floating panels, dropdown menus, context popups, or hover-triggered cards that need to look layered above the main interface.
+
+*   **Strategy 2: Cutout / "Darker Semi-Transparent Plaquette" (Recommended for data containers)**
+    *   *Concept:* Ground nested components by placing them in a "carved-out" space within the main glass panel.
+    *   *Rules:* Disable backdrop-filter on the child card (`backdrop-filter: none`). Use a dark, semi-transparent background derived from the site's dark palette (`rgba(3, 13, 26, 0.5)` or `rgba(11, 21, 40, 0.6)`). Apply a very subtle border (`1px solid rgba(255, 255, 255, 0.05)`) and optionally an inner shadow (`box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4)`).
+    *   *When to use:* Interactive inline widgets (e.g., PollCard inside chat aside, chat messages, event details list item) where high contrast is required for nested buttons, input fields, checkboxes, or colorful progress bars.
+
+*   **Strategy 3: Outline / "Border Only"**
+    *   *Concept:* Keep the layout light and minimal by eliminating the nested background entirely.
+    *   *Rules:* Set `background: transparent`, use a thin, subtle border (`1px solid rgba(255, 255, 255, 0.08)`), disable drop shadows, and increase padding/white space to separate elements.
+    *   *When to use:* Static read-only cards, text lists, or secondary settings items where no overlapping progress bars or dense inputs are present.
+
 ---
 
 ## 4. Typography
@@ -91,8 +126,8 @@ Guild Master color-codes calendar events by their type. Each event type has a ba
 ---
 
 ## 6. Layout & Sizing Constants
-*   `--header-height`: `48px`
-*   `--rail-width`: `60px`
+*   `--header-height`: `3rem` (equivalent to 48px at base 16px)
+*   `--rail-width`: `3.75rem` (equivalent to 60px at base 16px)
 
 ---
 
@@ -141,48 +176,77 @@ To support accessibility, responsive scaling, and browser-level zoom configurati
 
 To maintain UI consistency and reduce code duplication, always check and reuse existing components in `src/shared/ui/` before building any new custom elements:
 
-*   **`Spinner` (`src/shared/ui/Spinner`):** The standard loading indicator. Supports customizable sizes (`sm` = 16px, `md` = 28px, `lg` = 40px, or a custom number in pixels), color variables (defaults to `var(--accent-primary)`), CSS classes, and a `centered` prop to easily align it in the middle of a container.
-*   **`Button` (`src/shared/ui/Button`):** Standard styled action buttons (Primary, Secondary, Ghost, Danger, etc.) with support for loading states (automatically renders the `Spinner`).
+*   **`Spinner` (`src/shared/ui/Spinner`):** An SVG-based gooey-balls-2 animation loader. Supports customizable sizes (`sm` = 16px, `md` = 28px, `lg` = 40px, or custom numbers in pixels), color variables (passed down as color prop to fill elements via `currentColor`), CSS classes, and a `centered` layout modifier. Generates unique SVG filter IDs dynamically using React's `useId` to prevent collisions.
+*   **`Button` (`src/shared/ui/Button`):** Standard styled action buttons (Primary, Secondary, Secondary Glass, Ghost, Danger, etc.) with support for loading states (automatically renders the `Spinner`) and unified hover physics.
 *   **`Select` (`src/shared/ui/Select`):** Custom dropdown selections matching the night sky theme with smooth arrow transitions.
 *   **`Modal` / `ConfirmModal` (`src/shared/ui/Modal`):** Base overlays for dialogs and user confirmations.
 *   **Toasts (`sonner`):** Mounted once in `layout.tsx` with `richColors` + `theme="dark"`. Success toasts are recolored from the default green to the brand blue (`--success-bg: #0e3460`, `--success-border: var(--accent-primary)`, `--success-text: var(--text-highlight)`, icon `var(--accent-secondary)`) via overrides in `globals.css`. Error/warning toasts keep sonner's defaults.
 
 ---
 
-## 11. Nested Glassmorphism Guidelines
+## 11. Form Inputs & Custom Controls
 
-When rendering a glass component inside another glass component, their backdrop blurs and semi-transparent backgrounds stack. This reduces depth, creates visual mud, and degrades text legibility. To solve this, we define three nested glassmorphism strategies.
+To maintain the Sci-Fi Night Sky theme, all inputs (text inputs, textareas) and selection controls (checkboxes, radio buttons) use glassmorphism styles rather than flat solid colors:
 
-### 11.1 Strategy 1: Elevation / "Higher is Lighter & Sharper" (Recommended for overlays)
-Simulates depth by raising the nested card closer to the light source along the Z-axis.
-*   **Rules:**
-    *   Set `backdrop-filter: none;` (or keep it under `2px`) on the nested card to avoid stacked blur.
-    *   Make the background slightly lighter and brand-tinted: `rgba(255, 255, 255, 0.08)` or `rgba(125, 211, 252, 0.06)`.
-    *   Increase border visibility: `1px solid rgba(255, 255, 255, 0.15)`.
-    *   Add a soft, dark drop shadow to establish elevation: `box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)`.
-*   **When to use:** Floating panels, dropdown menus, context popups, or hover-triggered cards that need to look layered above the main interface.
+### 11.1 Text Inputs & Textareas
+*   **Default State:** Background `rgba(255, 255, 255, 0.02)`, border `1px solid rgba(255, 255, 255, 0.08)`, border-radius `12px`.
+*   **Hover State:** Background shifts to `rgba(56, 189, 248, 0.03)` and border-color to `rgba(56, 189, 248, 0.35)` (subtle brand blue highlight).
+*   **Focus State:** Background `rgba(255, 255, 255, 0.04)`, border-color `var(--accent-primary)`, and a glowing shadow `box-shadow: 0 0 10px var(--accent-glow)`.
+*   **Error States:** Border-color `#ff6b6b`. On hover, border-color `#ff8787` and background `rgba(255, 107, 107, 0.03)`. On focus, border-color `#ff6b6b`, background `rgba(255, 107, 107, 0.05)`, and a red glow `box-shadow: 0 0 10px rgba(255, 107, 107, 0.3)`.
 
-### 11.2 Strategy 2: Cutout / "Darker Semi-Transparent Plaquette" (Recommended for data containers)
-Grounded nested components by placing them in a "cutout" or "carved-out" space within the main glass panel.
-*   **Rules:**
-    *   Disable backdrop-filter on the child card: `backdrop-filter: none;`.
-    *   Use a dark, semi-transparent background derived from the site's dark palette: `rgba(3, 13, 26, 0.5)` or `rgba(11, 21, 40, 0.6)`.
-    *   Apply a very subtle outer or inner border: `1px solid rgba(255, 255, 255, 0.05)`.
-    *   Optionally use an inner shadow to simulate depth: `box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4)`.
-*   **When to use:** Interactive inline widgets (e.g., [PollCard](file:///Users/deniskalinin/frontend/guild-master/src/features/guild-poll/ui/PollCard.tsx) inside chat aside, chat messages, event details list item) where high contrast is required for nested buttons, input fields, checkboxes, or colorful progress bars.
-
-### 11.3 Strategy 3: Outline / "Border Only"
-Keeps the layout light and minimal by eliminating the nested background entirely.
-*   **Rules:**
-    *   Set `background: transparent;`.
-    *   Use a thin, subtle border: `1px solid rgba(255, 255, 255, 0.08)`.
-    *   Disable drop shadows.
-    *   Increase padding and vertical/horizontal margins (white space) to separate elements.
-*   **When to use:** Static read-only cards, text lists, or secondary settings items where no overlapping progress bars or dense inputs are present.
+### 11.2 Custom Checkboxes & Radio Buttons
+*   **Default Unchecked State:** Background `rgba(255, 255, 255, 0.02)`, border `1.5px solid var(--glass-border)`, color `#fff`.
+*   **Hover Unchecked State:** Background `rgba(56, 189, 248, 0.03)`, border-color `rgba(56, 189, 248, 0.4)`.
+*   **Checked State:** Background is a translucent brand blue `rgba(56, 189, 248, 0.16)`, border-color `var(--accent-secondary)`, and a glowing shadow `box-shadow: 0 0 10px rgba(56, 189, 248, 0.25)`.
+*   **Hover Checked State:** Background `rgba(56, 189, 248, 0.24)`, border-color `#93e3ff`, and a stronger glow `box-shadow: 0 0 14px rgba(56, 189, 248, 0.4)`.
+*   **Shapes:** Checkboxes use a rounded squircle shape (`border-radius: 5px`), while radio buttons use a circle (`border-radius: 50%`).
 
 ---
 
-## 12. Guidelines for Developers & Agents
+## 12. Buttons & Hover Physics
+
+To keep the interface cohesive and responsive, buttons adhere to strict styles and physics rules:
+
+### 12.1 Base Button Sizing & Borders
+All buttons have `border: 1px solid transparent` and `box-sizing: border-box` to avoid layout shifts when changing button variants.
+
+### 12.2 Hover Physics (Lift-Up effect)
+To simulate elevation and mechanical response, **all standard buttons** (Primary, Secondary, Secondary Glass, Ghost, Icon, Danger) must animate when hovered:
+*   **Hover State:** `transform: translateY(-2px);` combined with a smooth transition `transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1)`.
+*   **Active State:** `transform: translateY(0);` (depressed when clicked).
+*   *Exception:* Inline message actions (like edit/delete icons in message bubbles) do not lift on hover to maintain chat text block stability.
+
+### 12.3 Primary Button Redesign
+The Primary action button is styled as a glowing glassmorphic energy panel:
+*   **Default State:** Background `linear-gradient(135deg, rgba(45, 158, 208, 0.28) 0%, rgba(14, 82, 114, 0.45) 100%)`, border `1px solid rgba(56, 189, 248, 0.65)`, glow `box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 10px rgba(56, 189, 248, 0.25)`.
+*   **Hover State:** Background `linear-gradient(135deg, rgba(45, 158, 208, 0.38) 0%, rgba(14, 82, 114, 0.6) 100%)`, border-color `rgba(56, 189, 248, 0.95)`, glow `box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 0 18px rgba(56, 189, 248, 0.45)`.
+*   **Hover Shine Effect:** A glint of light glides from left to right across the button body.
+
+---
+
+## 13. Chat UI & Message Bubble Guidelines
+
+For chat components and messages, we apply specific formatting and structural guidelines to ensure optimal layout stability, contrast, and visual rhythm:
+
+### 13.1 Message Bubbles
+*   **Other User's Message:** Background `rgba(3, 13, 26, 0.35)`, border `1px solid rgba(255, 255, 255, 0.06)`, and border-radius `16px 16px 16px 4px` (tail pointing to the avatar).
+*   **Own Message:** Background `rgba(45, 158, 208, 0.12)`, border `1px solid rgba(125, 211, 252, 0.15)`, border-radius `16px 16px 4px 16px` (tail pointing to the opposite side), and a subtle glow `box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.05)`.
+
+### 13.2 Message Editing UI
+*   When editing a message, the input field uses the standard glassmorphic `Textarea` styled component, but has an explicit margin-top offset (`margin-top: 8px`) to prevent it from overlapping or cramming against the author/time headers.
+*   **Control Icons:** Action text buttons are replaced by enlarged vector/icon checkmarks and cancel crosses:
+    *   **Checkmark / Save Button:** Uses the Lucide `Check` icon (`size={20}`), colored in sky blue `var(--accent-secondary)`. On hover, the color changes to brand blue `var(--accent-primary)` and gets a light background fill `rgba(56, 189, 248, 0.1)`.
+    *   **Cross / Cancel Button:** Uses the Lucide `X` icon (`size={20}`), colored in muted text color `var(--text-muted)`. On hover, the color changes to primary text `var(--text-primary)` and gets a light gray background fill `rgba(255, 255, 255, 0.08)`.
+*   Both icons have a fixed layout footprint (`width: 28px !important`, `height: 28px !important`) and are positioned at the bottom-left with a slight top spacing (`margin-top: 2px`) to sit close to the field without overlapping boundaries.
+
+### 13.3 Inline Action Icons Hover Exceptions
+*   To prevent text reflow, distracting cursor shifts, or layout jumps within active text zones, all inline action buttons (such as edit and delete icon buttons inside the bubble, or save and cancel buttons during draft edits):
+    *   **Must disable vertical translation/lift** on hover: `transform: none !important`.
+    *   **Must not use rounded outline borders/backgrounds** on hover unless explicitly defined (e.g. they hover with a clean color change and a subtle box/circle background, never lifting along the Y-axis).
+
+---
+
+## 14. Guidelines for Developers & Agents
 
 When creating or modifying components, adhere to these rules:
 
@@ -193,6 +257,3 @@ When creating or modifying components, adhere to these rules:
 5.  **Follow Border Radii & Spacing Scales:** Always map paddings and border-radius styles to the scales in sections 7 and 8 to keep the UI visually cohesive.
 6.  **Respect Unit Separation (`rem` vs `px`):** Adhere to the guidelines in section 9. Do not mix them randomly; use `rem` for text and layout spacing, and `px` for borders and rounded corners.
 7.  **Synchronization:** If you update any global variables in `globals.css` (or standard spacing constants), immediately update this document to keep the design system synchronized.
-
-
-

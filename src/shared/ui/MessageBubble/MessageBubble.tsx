@@ -136,7 +136,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                 aria-label={labels.save}
                 className={styles.saveBtn}
               >
-                <Check size={16} />
+                <Check size={20} />
               </Button>
               <Button
                 type="button"
@@ -147,7 +147,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                 aria-label={labels.cancel}
                 className={styles.cancelBtn}
               >
-                <X size={16} />
+                <X size={20} />
               </Button>
             </div>
           </>
