@@ -83,6 +83,19 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
+.variant_secondary_glass {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #ffffff);
+  transition: all 0.2s ease;
+}
+
+.variant_secondary_glass:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.05);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.12);
+}
+
 .variant_ghost {
   background: transparent;
   color: var(--text-primary, #ffffff);
