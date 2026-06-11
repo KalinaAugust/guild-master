@@ -1,11 +1,11 @@
-import type {
-  PrivacyField,
-  PrivacyLevel,
-  ProfilePrivacy,
-  SocialLink,
+import {
+  type PrivacyField,
+  type PrivacyLevel,
+  type ProfilePrivacy,
+  type SocialLink,
+  isSocialPlatform,
+  isProfileIcon,
 } from '@/entities/user';
-import { isSocialPlatform } from '@/entities/user/config/socials';
-import { isProfileIcon } from '@/entities/user/config/icons';
 
 export const ABOUT_MAX = 500;
 export const INTERESTS_MAX = 10;
