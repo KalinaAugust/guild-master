@@ -33,6 +33,7 @@ export const CommentItem: React.FC<CommentItemProps> = ({
         alias: comment.profile.alias,
         displayAsAlias: comment.profile.displayAsAlias,
       })}
+      authorIcon={comment.profile.icon}
       avatarUrl={comment.profile.avatarUrl}
       profilePublicId={comment.profile.publicId}
       body={comment.body}
