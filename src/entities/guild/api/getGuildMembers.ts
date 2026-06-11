@@ -6,7 +6,7 @@ export const getGuildMembers = async (guildId: string): Promise<GuildMember[]> =
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('user_id, role, profiles(public_id, full_name, avatar_url)')
+    .select('user_id, role, profiles(public_id, full_name, avatar_url, alias, display_as_alias, icon)')
     .eq('guild_id', guildId);
 
   if (error) throw error;
@@ -18,6 +18,9 @@ export const getGuildMembers = async (guildId: string): Promise<GuildMember[]> =
       publicId: (row.profiles as { public_id: string | null } | null)?.public_id ?? null,
       fullName: (row.profiles as { full_name: string | null } | null)?.full_name ?? null,
       avatarUrl: (row.profiles as { avatar_url: string | null } | null)?.avatar_url ?? null,
+      alias: (row.profiles as { alias: string | null } | null)?.alias ?? null,
+      displayAsAlias: (row.profiles as { display_as_alias: boolean | null } | null)?.display_as_alias ?? false,
+      icon: (row.profiles as { icon: string | null } | null)?.icon ?? null,
     },
   }));
 };

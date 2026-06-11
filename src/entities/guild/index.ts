@@ -1,6 +1,7 @@
 export * from './model/types';
 export * from './model/slice';
 export * from './api/getGuilds';
+export { getCommonGuilds } from './api/getCommonGuilds';
 export { uploadGuildAvatar } from './api/uploadGuildAvatar';
 export { useGuildPermissions } from './lib/useGuildPermissions';
 export {

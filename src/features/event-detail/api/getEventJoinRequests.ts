@@ -1,4 +1,5 @@
 import { createClient } from '@/shared/api/supabase/server';
+import { resolveDisplayName } from '@/entities/user';
 
 export interface EventJoinRequestRow {
   id: string;
@@ -6,6 +7,7 @@ export interface EventJoinRequestRow {
   publicId: string | null;
   userName: string | null;
   avatarUrl: string | null;
+  icon: string | null;
   createdAt: string;
 }
 
@@ -14,7 +16,7 @@ export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRe
 
   const { data, error } = await supabase
     .from('event_join_requests')
-    .select('id, user_id, created_at, profiles(public_id, full_name, avatar_url)')
+    .select('id, user_id, created_at, profiles(public_id, full_name, avatar_url, alias, display_as_alias, icon)')
     .eq('event_id', eventId)
     .eq('status', 'pending')
     .order('created_at', { ascending: true });
@@ -25,8 +27,13 @@ export const getEventJoinRequests = async (eventId: string): Promise<EventJoinRe
     id: r.id,
     userId: r.user_id,
     publicId: r.profiles?.public_id ?? null,
-    userName: r.profiles?.full_name ?? null,
+    userName: resolveDisplayName({
+      fullName: r.profiles?.full_name ?? null,
+      alias: r.profiles?.alias ?? null,
+      displayAsAlias: r.profiles?.display_as_alias ?? false,
+    }),
     avatarUrl: r.profiles?.avatar_url ?? null,
+    icon: r.profiles?.icon ?? null,
     createdAt: r.created_at,
   }));
 };

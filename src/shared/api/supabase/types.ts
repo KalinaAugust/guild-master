@@ -588,27 +588,48 @@ export type Database = {
       }
       profiles: {
         Row: {
+          about: string | null
+          alias: string | null
           avatar_url: string | null
+          display_as_alias: boolean
           full_name: string | null
+          icon: string | null
           id: string
+          interests: string[]
           last_active_guild_id: string | null
+          privacy: Json
           public_id: string
+          socials: Json
           updated_at: string | null
         }
         Insert: {
+          about?: string | null
+          alias?: string | null
           avatar_url?: string | null
+          display_as_alias?: boolean
           full_name?: string | null
+          icon?: string | null
           id: string
+          interests?: string[]
           last_active_guild_id?: string | null
+          privacy?: Json
           public_id?: string
+          socials?: Json
           updated_at?: string | null
         }
         Update: {
+          about?: string | null
+          alias?: string | null
           avatar_url?: string | null
+          display_as_alias?: boolean
           full_name?: string | null
+          icon?: string | null
           id?: string
+          interests?: string[]
           last_active_guild_id?: string | null
+          privacy?: Json
           public_id?: string
+          socials?: Json
           updated_at?: string | null
         }
         Relationships: [

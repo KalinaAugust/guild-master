@@ -1,0 +1,76 @@
+.nameRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent-yellow);
+}
+.block {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 12px;
+}
+.blockTitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-secondary);
+  margin: 0 0 8px;
+}
+.about {
+  color: var(--text-secondary);
+  margin: 0;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  background: rgba(45, 158, 208, 0.25);
+  border: 1px solid var(--accent-primary);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--text-primary);
+}
+.socials,
+.guilds {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-secondary);
+}
+.socialLabel {
+  color: var(--text-muted);
+}
+.muted {
+  color: var(--text-muted);
+  margin: 0;
+}
+.statsRow {
+  display: flex;
+  gap: 12px;
+}
+.statCard {
+  flex: 1;
+  text-align: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 12px;
+}
+.statValue {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.statLabel {
+  font-size: 12px;
+  color: var(--text-muted);
+}

@@ -5,6 +5,7 @@ import { Edit2, Trash2 } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { Button } from '@/shared/ui/Button';
 import { Textarea } from '@/shared/ui/Textarea';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
@@ -36,6 +37,7 @@ export interface MessageBubbleLabels {
 
 interface MessageBubbleProps {
   authorName: string | null;
+  authorIcon?: string | null;
   avatarUrl: string | null;
   /** When set, the author's avatar and name link to their public profile. */
   profilePublicId?: string | null;
@@ -54,6 +56,7 @@ interface MessageBubbleProps {
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
   authorName,
+  authorIcon,
   avatarUrl,
   profilePublicId,
   body,
@@ -102,7 +105,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         <div className={styles.head}>
           {!isOwn && (
             <ProfileLink publicId={profilePublicId} className={styles.name}>
-              {authorName || '—'}
+              <NameWithIcon name={authorName} icon={authorIcon} fallback="—" iconSize={14} />
             </ProfileLink>
           )}
           <span className={styles.meta}>{time}</span>

@@ -5,6 +5,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { User, LogOut, ChevronDown, Languages, MoreHorizontal } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { createClient } from '@/shared/api/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/shared/lib/hooks';
@@ -18,9 +19,10 @@ interface UserMenuProps {
   email?: string;
   avatarUrl?: string | null;
   name?: string | null;
+  icon?: string | null;
 }
 
-export const UserMenu: React.FC<UserMenuProps> = ({ publicId, email, avatarUrl, name }) => {
+export const UserMenu: React.FC<UserMenuProps> = ({ publicId, email, avatarUrl, name, icon }) => {
   const locale = useLocale();
   const t = useTranslations('Common');
   const router = useRouter();
@@ -50,7 +52,9 @@ export const UserMenu: React.FC<UserMenuProps> = ({ publicId, email, avatarUrl, 
       <DropdownMenu.Trigger asChild>
         <button className={styles.trigger} aria-label="User menu">
           <UserAvatar avatarUrl={avatarUrl} name={name} size="md" />
-          <span className={styles.triggerName}>{name || email}</span>
+          <span className={styles.triggerName}>
+            <NameWithIcon name={name ?? email ?? null} icon={icon} fallback={email ?? ''} iconSize={14} />
+          </span>
           <MoreHorizontal size={18} className={styles.triggerDots} />
         </button>
       </DropdownMenu.Trigger>

@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { MessageBubble } from '@/shared/ui/MessageBubble';
 import type { EventComment } from '@/entities/comment';
+import { resolveDisplayName } from '@/entities/user';
 
 interface CommentItemProps {
   comment: EventComment;
@@ -27,7 +28,12 @@ export const CommentItem: React.FC<CommentItemProps> = ({
 
   return (
     <MessageBubble
-      authorName={comment.profile.fullName}
+      authorName={resolveDisplayName({
+        fullName: comment.profile.fullName,
+        alias: comment.profile.alias,
+        displayAsAlias: comment.profile.displayAsAlias,
+      })}
+      authorIcon={comment.profile.icon}
       avatarUrl={comment.profile.avatarUrl}
       profilePublicId={comment.profile.publicId}
       body={comment.body}

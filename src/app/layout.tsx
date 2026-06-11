@@ -21,6 +21,7 @@ import { Header, UserMenu } from "@/widgets/header";
 import { Sidebar } from "@/widgets/sidebar";
 import { CopyrightFooter } from "./CopyrightFooter";
 import { getUser } from "@/entities/user/api/getUser";
+import { resolveDisplayName } from '@/entities/user';
 import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
 import styles from './Layout.module.css';
 
@@ -76,7 +77,12 @@ export default async function RootLayout({
                     publicId={user.profile?.publicId}
                     email={user.email}
                     avatarUrl={user.profile?.avatarUrl}
-                    name={user.profile?.fullName}
+                    name={resolveDisplayName({
+                      fullName: user.profile?.fullName ?? null,
+                      alias: user.profile?.alias ?? null,
+                      displayAsAlias: user.profile?.displayAsAlias ?? false,
+                    })}
+                    icon={user.profile?.icon ?? null}
                   />
                 }
               />

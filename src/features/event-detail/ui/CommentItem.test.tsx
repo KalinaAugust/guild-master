@@ -12,7 +12,7 @@ vi.mock('next-intl', () => ({
 const base: EventComment = {
   id: 'c1', eventId: 'e1', userId: 'u1', body: 'Hello there',
   createdAt: '2026-06-05T10:00:00Z', updatedAt: '2026-06-05T10:00:00Z',
-  profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: null },
+  profile: { publicId: 'pubA', fullName: 'Alice', avatarUrl: null, alias: null, displayAsAlias: false, icon: null },
 };
 
 describe('CommentItem', () => {

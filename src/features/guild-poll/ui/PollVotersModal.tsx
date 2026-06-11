@@ -7,6 +7,8 @@ import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import dayjs from '@/shared/lib/dayjs';
 import type { Poll } from '@/entities/poll';
+import { resolveDisplayName } from '@/entities/user';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './PollVotersModal.module.css';
 
 interface PollVotersModalProps {
@@ -40,17 +42,24 @@ export const PollVotersModal: React.FC<PollVotersModalProps> = ({ poll, isOpen, 
               </header>
               {o.voters.length > 0 && (
                 <ul className={styles.voters}>
-                  {o.voters.map((v, i) => (
-                    <li key={i} className={styles.voter}>
-                      <ProfileLink publicId={v.publicId} aria-label={v.fullName ?? undefined}>
-                        <UserAvatar avatarUrl={v.avatarUrl} name={v.fullName} size="md" />
-                      </ProfileLink>
-                      <ProfileLink publicId={v.publicId} className={styles.voterName}>
-                        {v.fullName ?? t('unknownVoter')}
-                      </ProfileLink>
-                      <span className={styles.voterTime}>{formatVotedAt(v.votedAt)}</span>
-                    </li>
-                  ))}
+                  {o.voters.map((v, i) => {
+                    const voterName = resolveDisplayName({
+                      fullName: v.fullName,
+                      alias: v.alias,
+                      displayAsAlias: v.displayAsAlias,
+                    });
+                    return (
+                      <li key={i} className={styles.voter}>
+                        <ProfileLink publicId={v.publicId} aria-label={voterName ?? undefined}>
+                          <UserAvatar avatarUrl={v.avatarUrl} name={voterName} size="md" />
+                        </ProfileLink>
+                        <ProfileLink publicId={v.publicId} className={styles.voterName}>
+                          <NameWithIcon name={voterName ?? t('unknownVoter')} icon={v.icon} fallback={t('unknownVoter')} iconSize={14} />
+                        </ProfileLink>
+                        <span className={styles.voterTime}>{formatVotedAt(v.votedAt)}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </section>
