@@ -1,13 +1,12 @@
 .trigger {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: var(--text-primary);
-  backdrop-filter: var(--glass-blur);
   padding: 0 16px;
   height: 45px;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -16,6 +15,11 @@
   gap: 12px;
   text-align: left;
   overflow: hidden;
+}
+
+.trigger:hover {
+  background: rgba(56, 189, 248, 0.03);
+  border-color: rgba(56, 189, 248, 0.35);
 }
 
 /* Select.Value renders a span */

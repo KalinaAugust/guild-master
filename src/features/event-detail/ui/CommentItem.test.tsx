@@ -43,7 +43,7 @@ describe('CommentItem', () => {
     render(<CommentItem comment={base} isOwn onSave={vi.fn()} onDelete={vi.fn()} />);
     expect(screen.getByRole('button', { name: 'edit' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'edit' }));
-    expect(screen.getByText('save')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'save' })).toBeInTheDocument();
   });
 
   it('calls onSave with edited text', async () => {
@@ -54,7 +54,7 @@ describe('CommentItem', () => {
     const field = screen.getByRole('textbox');
     await user.clear(field);
     await user.type(field, 'Updated');
-    await user.click(screen.getByText('save'));
+    await user.click(screen.getByRole('button', { name: 'save' }));
     expect(onSave).toHaveBeenCalledWith('Updated');
   });
 });

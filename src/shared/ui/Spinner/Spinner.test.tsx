@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Spinner } from './Spinner';
+import styles from './Spinner.module.css';
 
 describe('Spinner Component', () => {
   it('renders successfully with default props', () => {
@@ -15,7 +16,7 @@ describe('Spinner Component', () => {
     const spinner = screen.getByTestId('spinner');
     expect(spinner).toHaveClass('custom-class');
     // Check if the spinner has the centered layout class
-    expect(spinner.className).toContain('centered');
+    expect(spinner).toHaveClass(styles.centered);
   });
 
   it('applies inline styles for size and color', () => {
@@ -25,16 +26,14 @@ describe('Spinner Component', () => {
     // Default size 'lg' is mapped to 40px in Spinner.tsx
     expect(spinner.style.width).toBe('40px');
     expect(spinner.style.height).toBe('40px');
-    expect(spinner.style.borderTopColor).toBe('rgb(255, 0, 0)');
+    expect(spinner.style.color).toBe('rgb(255, 0, 0)');
   });
 
-  it('supports custom numeric size and calculates proportional border width', () => {
+  it('supports custom numeric size', () => {
     render(<Spinner data-testid="spinner" size={60} />);
     const spinner = screen.getByTestId('spinner');
     
     expect(spinner.style.width).toBe('60px');
     expect(spinner.style.height).toBe('60px');
-    // borderWidth is calculated as Math.max(2, Math.round(60 / 12)) = 5px
-    expect(spinner.style.borderWidth).toBe('5px');
   });
 });

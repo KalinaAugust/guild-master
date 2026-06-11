@@ -5,14 +5,18 @@
   padding: 12px 14px;
   max-width: 90%;
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(3, 13, 26, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px 16px 16px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .own {
   align-self: flex-end;
-  background: rgba(96, 165, 250, 0.18);
+  background: rgba(45, 158, 208, 0.12);
+  border: 1px solid rgba(125, 211, 252, 0.15);
   border-radius: 16px 16px 4px 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.05);
 }
 
 .body { flex: 1; min-width: 0; }
@@ -31,7 +35,7 @@
   line-height: 1.4;
 }
 
-.editActions { display: flex; gap: 8px; margin-top: 6px; }
+.editActions { display: flex; gap: 8px; margin-top: 2px; }
 
 .actions {
   position: absolute;
@@ -49,6 +53,12 @@
 .item:hover .actions,
 .item:focus-within .actions { opacity: 1; }
 
+.actionBtn:hover:not(:disabled),
+.deleteBtn:hover:not(:disabled) {
+  transform: none !important;
+  background: transparent !important;
+}
+
 .actionBtn:hover { color: var(--accent-primary); }
 
 .deleteBtn:hover { color: #ff4d4d; }
@@ -59,4 +69,33 @@
   vertical-align: -0.1em;
   display: inline-block;
   padding: 0 1px;
+}
+
+.editTextarea {
+  margin-top: 8px;
+}
+
+.saveBtn, .cancelBtn {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.saveBtn {
+  color: var(--accent-secondary);
+}
+
+.saveBtn:hover:not(:disabled) {
+  color: var(--accent-primary);
+  background: rgba(56, 189, 248, 0.1);
+  transform: none !important;
+}
+
+.cancelBtn {
+  color: var(--text-muted);
+}
+
+.cancelBtn:hover:not(:disabled) {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  transform: none !important;
 }

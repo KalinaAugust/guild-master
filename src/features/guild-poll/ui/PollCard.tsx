@@ -192,7 +192,7 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
             placeholder={t('addCustomPlaceholder')}
             className={styles.customInput}
           />
-          <Button type="submit" variant="secondary" size="sm" className={styles.customSubmit} isLoading={isVoting || isAddingOption} disabled={!customBody.trim()}>
+          <Button type="submit" variant="secondary_glass" size="sm" className={styles.customSubmit} isLoading={isVoting || isAddingOption} disabled={!customBody.trim()}>
             <Plus size={16} strokeWidth={2.75} />
           </Button>
         </form>

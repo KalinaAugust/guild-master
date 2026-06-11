@@ -6,9 +6,10 @@
   font-weight: 600;
   line-height: 1.2;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid transparent;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 .button:disabled {
@@ -59,70 +60,162 @@
 
 /* Variants */
 .variant_primary {
-  background: var(--accent-primary, #38bdf8);
-  color: white;
+  background: linear-gradient(135deg, rgba(45, 158, 208, 0.28) 0%, rgba(14, 82, 114, 0.45) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  color: var(--text-primary, #ffffff);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.2), 
+              0 0 10px rgba(56, 189, 248, 0.25);
+  position: relative;
+  overflow: hidden;
+}
+
+.variant_primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: transform 0.75s ease;
+  pointer-events: none;
+}
+
+.variant_primary:hover:not(:disabled)::before {
+  transform: translate(50%) skewX(-25deg);
 }
 
 .variant_primary:hover:not(:disabled) {
-  background: var(--accent-hover, #0ea5e9);
-  box-shadow: 0 4px 12px var(--accent-glow, rgba(56, 189, 248, 0.4));
+  background: linear-gradient(135deg, rgba(45, 158, 208, 0.38) 0%, rgba(14, 82, 114, 0.6) 100%);
+  border-color: rgba(56, 189, 248, 0.95);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.3), 
+              0 0 18px rgba(56, 189, 248, 0.45);
+  transform: translateY(-2px);
 }
 
 .variant_primary:active:not(:disabled) {
-  transform: scale(0.98);
+  transform: translateY(0);
+  background: linear-gradient(135deg, rgba(45, 158, 208, 0.3) 0%, rgba(14, 82, 114, 0.5) 100%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.15), 
+              0 0 6px rgba(56, 189, 248, 0.2);
 }
 
 .variant_secondary {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-  color: var(--text-primary, #ffffff);
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .variant_secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.variant_secondary:active:not(:disabled) {
+  transform: translateY(0);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.variant_secondary_glass {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.variant_secondary_glass:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.04);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25), 0 0 10px rgba(56, 189, 248, 0.15);
+}
+
+.variant_secondary_glass:active:not(:disabled) {
+  transform: translateY(0);
+  background: rgba(56, 189, 248, 0.02);
 }
 
 .variant_ghost {
   background: transparent;
-  color: var(--text-primary, #ffffff);
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .variant_ghost:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-2px);
+}
+
+.variant_ghost:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .variant_icon {
-  background: var(--glass-bg, rgba(0, 0, 0, 0.2));
-  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.1));
-  color: var(--text-primary, #ffffff);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .variant_icon:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-primary, #38bdf8);
+  background: rgba(56, 189, 248, 0.05);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: var(--text-primary, #ffffff);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.variant_icon:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .variant_icon_floating {
   background: rgba(0, 0, 0, 0.5);
   border: none;
   color: var(--text-primary, #ffffff);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .variant_icon_floating:hover:not(:disabled) {
   background: var(--accent-primary, #38bdf8);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+}
+
+.variant_icon_floating:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .variant_danger {
-  background: rgba(235, 64, 52, 0.2);
-  border: 1px solid rgba(235, 64, 52, 0.4);
+  background: rgba(235, 64, 52, 0.12);
+  border: 1px solid rgba(235, 64, 52, 0.35);
   color: #ff6b6b;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .variant_danger:hover:not(:disabled) {
-  background: rgba(235, 64, 52, 0.3);
-  border-color: #eb4034;
-  box-shadow: 0 4px 12px rgba(235, 64, 52, 0.2);
+  background: rgba(235, 64, 52, 0.2);
+  border-color: rgba(235, 64, 52, 0.6);
+  color: #ff8787;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(235, 64, 52, 0.2);
 }
 
 /* Loading state */

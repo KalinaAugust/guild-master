@@ -74,13 +74,14 @@
 }
 
 .day {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(3, 13, 26, 0.25);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   min-height: 110px;
   height: 100%;
   padding: 8px 10px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -89,14 +90,15 @@
 }
 
 .day:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(56, 189, 248, 0.05);
   transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35), 0 0 12px rgba(56, 189, 248, 0.12);
 }
 
 .weekend {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(3, 13, 26, 0.4);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .addEventBtn {
@@ -113,8 +115,9 @@
 }
 
 .today {
-  background: rgba(56, 189, 248, 0.1);
+  background: rgba(56, 189, 248, 0.06);
   border-color: var(--accent-primary);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.12);
 }
 
 .otherMonth {

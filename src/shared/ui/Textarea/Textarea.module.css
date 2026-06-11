@@ -1,26 +1,32 @@
 .textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   padding: 12px 16px;
   color: var(--text-primary);
   font-size: 1rem;
   outline: none;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   width: 100%;
   min-height: 100px;
   resize: none;
   font-family: inherit;
 }
 
+.textarea:hover {
+  background: rgba(56, 189, 248, 0.03);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
 .textarea:focus {
+  background: rgba(255, 255, 255, 0.04);
   border-color: var(--accent-primary);
   box-shadow: 0 0 10px var(--accent-glow);
-  background: rgba(255, 255, 255, 0.08);
+  outline: none;
 }
 
 .textarea::placeholder {
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .textarea:disabled {
@@ -30,4 +36,17 @@
 .textarea[data-invalid],
 .textareaError {
   border-color: #ff6b6b;
+}
+
+.textarea[data-invalid]:hover,
+.textareaError:hover {
+  border-color: #ff8787;
+  background: rgba(255, 107, 107, 0.03);
+}
+
+.textarea[data-invalid]:focus,
+.textareaError:focus {
+  border-color: #ff6b6b;
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+  background: rgba(255, 107, 107, 0.05);
 }
