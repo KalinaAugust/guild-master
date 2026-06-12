@@ -34,6 +34,15 @@
   color: var(--text-primary);
 }
 
+.backLink:focus {
+  outline: none;
+}
+
+.backLink:focus-visible {
+  outline: none;
+  color: var(--text-primary);
+}
+
 .title {
   position: absolute;
   left: 50%;

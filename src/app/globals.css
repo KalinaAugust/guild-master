@@ -7,7 +7,7 @@
   --bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur: blur(8px) saturate(120%);
+  --glass-blur: blur(5px) saturate(120%);
 
   /* Accents */
   --accent-primary: #2d9ed0;
