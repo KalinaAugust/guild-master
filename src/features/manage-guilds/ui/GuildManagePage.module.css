@@ -22,11 +22,10 @@
   gap: 8px;
 }
 
-.loader {
+.skeletonList {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 80px 20px;
+  flex-direction: column;
+  gap: 8px;
 }
 
 

@@ -16,6 +16,7 @@ import { resolveDisplayName } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
@@ -86,7 +87,11 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
       )}
 
       {isLoading ? (
-        <p className={styles.loading}>{t('loading')}</p>
+        <div className={styles.skeletonList}>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <ListRowSkeleton key={i} circle lines={1} />
+          ))}
+        </div>
       ) : members.length === 0 ? (
         <p className={styles.empty}>{t('empty')}</p>
       ) : (

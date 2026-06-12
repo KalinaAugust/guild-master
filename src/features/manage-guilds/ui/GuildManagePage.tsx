@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
 import { useGetGuildsQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
-import { Spinner } from '@/shared/ui/Spinner';
+import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { GuildList } from './GuildList';
 import { EditGuildWizard } from './EditGuildWizard';
@@ -39,8 +39,10 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
       </div>
 
       {isLoading ? (
-        <div className={styles.loader}>
-          <Spinner size="lg" />
+        <div className={styles.skeletonList}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <ListRowSkeleton key={i} />
+          ))}
         </div>
       ) : (
         <>

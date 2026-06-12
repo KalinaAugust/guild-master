@@ -15,6 +15,8 @@ import {
   useDeleteEventMutation,
 } from '@/entities/event';
 import { Button } from '@/shared/ui/Button';
+import { Skeleton } from '@/shared/ui/Skeleton';
+import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { DetailLayout } from '@/shared/ui/DetailLayout';
 import {
@@ -184,7 +186,12 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   if (isEventLoading) {
     return (
       <div className={styles.stateContainer}>
-        <div className={styles.skeleton} />
+        <div className={styles.detailSkeleton}>
+          <Skeleton className={styles.skTitle} />
+          <Skeleton className={styles.skHero} />
+          <Skeleton className={styles.skLine} />
+          <Skeleton className={styles.skLineShort} />
+        </div>
       </div>
     );
   }
@@ -218,7 +225,13 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         </Button>
       )}
 
-      {isParticipantsLoading && <div className={styles.skeleton} />}
+      {isParticipantsLoading && (
+        <div className={styles.participantSkeleton}>
+          {Array.from({ length: 4 }).map((_, i) => (
+            <ListRowSkeleton key={i} circle lines={1} />
+          ))}
+        </div>
+      )}
 
       {!isParticipantsLoading && participants.length === 0 && (
         <p className={styles.empty}>{t('noParticipants')}</p>

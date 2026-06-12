@@ -116,17 +116,41 @@
   background: rgba(255, 255, 255, 0.28);
 }
 
-.skeleton {
-  height: 44px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  margin-bottom: 8px;
-  animation: pulse 1.5s ease-in-out infinite;
+.detailSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 640px;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50%       { opacity: 0.8; }
+.skTitle {
+  height: 28px;
+  width: 55%;
+}
+
+.skHero {
+  height: 80px;
+  width: 220px;
+  border-radius: 12px;
+}
+
+.skLine {
+  height: 14px;
+  width: 80%;
+}
+
+.skLineShort {
+  height: 14px;
+  width: 50%;
+}
+
+.participantSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
 }
 
 .requestsGroup {

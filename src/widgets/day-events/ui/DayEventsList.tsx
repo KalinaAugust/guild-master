@@ -11,7 +11,7 @@ import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventCard, useDeleteEventMutation, useGetEventsQuery, useGetParticipantsQuery } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
-import { Spinner } from '@/shared/ui/Spinner';
+import { EventCardSkeleton } from '@/shared/ui/EventCardSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './DayEventsList.module.css';
@@ -121,8 +121,10 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
       </div>
 
       {isLoading || !activeGuildId ? (
-        <div className={styles.loader}>
-          <Spinner size="lg" />
+        <div className={styles.list}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <EventCardSkeleton key={i} />
+          ))}
         </div>
       ) : dayEvents.length > 0 ? (
         <div className={styles.list}>

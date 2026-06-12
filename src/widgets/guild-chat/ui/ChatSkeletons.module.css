@@ -1,0 +1,78 @@
+/* Messages */
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.msgRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 75%;
+}
+
+.msgRow.own {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  min-width: 180px;
+}
+
+.line {
+  height: 12px;
+  width: 100%;
+}
+
+.lineShort {
+  height: 12px;
+  width: 60%;
+}
+
+/* Polls */
+.polls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pollCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1.25rem;
+  background: rgba(3, 13, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.pollTitle {
+  height: 18px;
+  width: 70%;
+}
+
+.pollOption {
+  height: 38px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+.pollFooter {
+  height: 14px;
+  width: 40%;
+}

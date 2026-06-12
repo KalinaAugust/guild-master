@@ -21,6 +21,7 @@ import {
   useDeleteGuildMessageMutation,
   useMarkGuildChatReadMutation,
 } from '@/entities/guild-message';
+import { MessagesSkeleton, PollsSkeleton } from './ChatSkeletons';
 import styles from './GuildChat.module.css';
 
 interface GuildChatProps {
@@ -42,7 +43,9 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     skipPollingIfUnfocused: true,
   });
   const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
-  const { data: polls = [] } = useGetGuildPollsQuery(activeGuildId ?? '', { skip: !activeGuildId });
+  const { data: polls = [], isLoading: isPollsLoading } = useGetGuildPollsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId,
+  });
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
@@ -146,8 +149,9 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
       <div className={styles.body}>
         <div className={styles.chat}>
           <div className={styles.list} ref={listRef} onScroll={handleScroll}>
+            {isLoading && <MessagesSkeleton />}
             {!isLoading && messages.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
-            {messages.map((m) => (
+            {!isLoading && messages.map((m) => (
               <MessageBubble
                 key={m.id}
                 authorName={resolveDisplayName({
@@ -184,8 +188,12 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
         </div>
 
         <aside className={styles.polls}>
-          {activeGuildId && polls.length === 0 && <p className={styles.empty}>{pollT('emptyPolls')}</p>}
+          {activeGuildId && isPollsLoading && <PollsSkeleton />}
+          {activeGuildId && !isPollsLoading && polls.length === 0 && (
+            <p className={styles.empty}>{pollT('emptyPolls')}</p>
+          )}
           {activeGuildId &&
+            !isPollsLoading &&
             polls.map((poll) => <PollCard key={poll.id} poll={poll} guildId={activeGuildId} />)}
         </aside>
       </div>

@@ -1,0 +1,46 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+}
+
+.icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  height: 16px;
+  width: 45%;
+}
+
+.desc {
+  height: 12px;
+  width: 70%;
+}
+
+.meta {
+  flex-shrink: 0;
+}
+
+.metaLine {
+  height: 14px;
+  width: 90px;
+}

@@ -11,6 +11,7 @@ import {
   useDeleteCommentMutation,
   useMarkCommentsReadMutation,
 } from '@/entities/comment';
+import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { CommentItem } from './CommentItem';
 import { CommentInput } from './CommentInput';
 import styles from './CommentsTab.module.css';
@@ -100,6 +101,8 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   return (
     <div className={styles.container}>
       <div className={styles.list} ref={listRef} onScroll={handleScroll}>
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, i) => <ListRowSkeleton key={i} circle lines={2} />)}
         {!isLoading && comments.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
         {comments.map((c) => (
           <CommentItem
