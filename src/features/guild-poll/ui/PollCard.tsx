@@ -233,7 +233,7 @@ export const PollCard: React.FC<PollCardProps> = ({ poll, guildId }) => {
                 onClick={() => setVotersOpen(true)}
                 aria-label={t('viewVoters')}
               >
-                <Eye size={16} />
+                <Eye size={24} />
               </button>
             </Tooltip>
           )}

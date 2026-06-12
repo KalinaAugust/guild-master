@@ -4,6 +4,7 @@ import { FileText, Sparkles, Cake, Users } from 'lucide-react';
 import type { CommonGuild, SocialLink } from '@/entities/user';
 import { SOCIAL_META, SocialIcon } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
 import dayjs from '@/shared/lib/dayjs';
 import { NameWithIcon as SharedNameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './ProfileBlocks.module.css';
@@ -125,7 +126,10 @@ export const CommonGuildsBlock = ({ guilds }: { guilds: CommonGuild[] }) => (
       <ul className={styles.guilds}>
         {guilds.map((g) => (
           <li key={g.id}>
-            <Link href={`/guilds/${g.id}`}>{g.name}</Link>
+            <Link href={`/guilds/${g.id}`} className={styles.guildItem}>
+              <UserAvatar avatarUrl={g.avatarUrl} name={g.name} size="sm" />
+              <span className={styles.guildName}>{g.name}</span>
+            </Link>
           </li>
         ))}
       </ul>
