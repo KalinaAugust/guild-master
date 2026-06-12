@@ -15,7 +15,7 @@ export const SOCIAL_VALUE_MAX = 200;
 
 const LEVELS: readonly PrivacyLevel[] = ['private', 'guildmates', 'public'];
 const PRIVACY_FIELDS: readonly PrivacyField[] = [
-  'name', 'alias', 'about', 'interests', 'socials', 'joined', 'stats', 'common_guilds',
+  'name', 'alias', 'about', 'interests', 'socials', 'birth_date', 'joined', 'common_guilds',
 ];
 
 export interface ProfileSettingsInput {
@@ -25,8 +25,12 @@ export interface ProfileSettingsInput {
   about?: string | null;
   interests?: string[];
   socials?: SocialLink[];
+  birthDate?: string | null;
   privacy?: ProfilePrivacy;
 }
+
+/** Matches an ISO calendar date (YYYY-MM-DD), as emitted by `<input type="date">`. */
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export function sanitizeSettings(input: ProfileSettingsInput): ProfileSettingsInput {
   const out: ProfileSettingsInput = {};
@@ -37,6 +41,10 @@ export function sanitizeSettings(input: ProfileSettingsInput): ProfileSettingsIn
   }
   if ('displayAsAlias' in input) out.displayAsAlias = Boolean(input.displayAsAlias);
   if ('icon' in input) out.icon = isProfileIcon(input.icon) ? input.icon : null;
+  if ('birthDate' in input) {
+    const d = (input.birthDate ?? '').trim();
+    out.birthDate = ISO_DATE_RE.test(d) && !Number.isNaN(Date.parse(d)) ? d : null;
+  }
   if ('about' in input) {
     const t = (input.about ?? '').trim().slice(0, ABOUT_MAX);
     out.about = t || null;

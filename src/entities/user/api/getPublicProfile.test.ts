@@ -15,6 +15,7 @@ const PROFILE_ROW = {
   about: 'Hello',
   interests: ['raids'],
   socials: [{ platform: 'discord', value: 'john#1' }],
+  birth_date: '1990-05-20',
   privacy: { about: 'public' },
 };
 
@@ -56,7 +57,7 @@ describe('getPublicProfile', () => {
   it('maps the raw profile + stats, looked up by public_id', async () => {
     const supabase = mockSupabase({
       profile: PROFILE_ROW,
-      stats: { joined_at: '2025-01-01', guilds_count: 3, events_count: 7 },
+      stats: { joined_at: '2025-01-01' },
     });
     expect(await getPublicProfile('a1B2c3D4')).toEqual({
       id: 'user-1',
@@ -69,10 +70,9 @@ describe('getPublicProfile', () => {
       about: 'Hello',
       interests: ['raids'],
       socials: [{ platform: 'discord', value: 'john#1' }],
+      birthDate: '1990-05-20',
       privacy: { about: 'public' },
       joinedAt: '2025-01-01',
-      guildsCount: 3,
-      eventsCount: 7,
     });
     expect(supabase.from).toHaveBeenCalledWith('profiles');
     expect(supabase.eq).toHaveBeenCalledWith('public_id', 'a1B2c3D4');
@@ -96,8 +96,6 @@ describe('getPublicProfile', () => {
       socials: [],
       privacy: {},
       joinedAt: null,
-      guildsCount: null,
-      eventsCount: null,
     });
     expect(console.error).toHaveBeenCalledWith('Error fetching profile stats:', { message: 'boom' });
   });

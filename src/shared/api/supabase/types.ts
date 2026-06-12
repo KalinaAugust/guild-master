@@ -591,6 +591,7 @@ export type Database = {
           about: string | null
           alias: string | null
           avatar_url: string | null
+          birth_date: string | null
           display_as_alias: boolean
           full_name: string | null
           icon: string | null
@@ -606,6 +607,7 @@ export type Database = {
           about?: string | null
           alias?: string | null
           avatar_url?: string | null
+          birth_date?: string | null
           display_as_alias?: boolean
           full_name?: string | null
           icon?: string | null
@@ -621,6 +623,7 @@ export type Database = {
           about?: string | null
           alias?: string | null
           avatar_url?: string | null
+          birth_date?: string | null
           display_as_alias?: boolean
           full_name?: string | null
           icon?: string | null

@@ -6,15 +6,19 @@ import { buildVisibleProfile } from '@/entities/user/lib/buildVisibleProfile';
 import type { ViewerRelationship } from '@/entities/user';
 import { getCommonGuilds } from '@/entities/guild/api/getCommonGuilds';
 import { createClient } from '@/shared/api/supabase/server';
+import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { OwnProfile } from './OwnProfile';
 import {
   NameWithIcon,
+  ValueBlock,
   AboutBlock,
   InterestsBlock,
   SocialsBlock,
+  SendMessageButton,
+  BirthDateBlock,
   CommonGuildsBlock,
-  StatsBlock,
 } from './ProfileBlocks';
 import styles from './PublicProfilePage.module.css';
 
@@ -51,37 +55,44 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
 
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <UserAvatar avatarUrl={profile.avatarUrl} name={profile.displayName} size="xl" />
-          <h1 className={styles.name}>
+      <div className={styles.layout}>
+        <aside className={styles.sidebar}>
+          <div className={styles.avatarWrap}>
+            <UserAvatar avatarUrl={profile.avatarUrl} name={profile.displayName} size="xl" />
+          </div>
+          <GradientTitle className={styles.name} fontSize="1.6rem">
             <NameWithIcon name={profile.displayName} icon={profile.icon} />
-          </h1>
+          </GradientTitle>
+          {profile.alias && profile.alias !== profile.displayName && (
+            <p className={styles.alias}>{profile.alias}</p>
+          )}
           {profile.realName && profile.realName !== profile.displayName && (
             <p className={styles.realName}>{profile.realName}</p>
           )}
-        </div>
 
-        {profile.about && <AboutBlock about={profile.about} />}
-        {profile.interests && profile.interests.length > 0 && (
-          <InterestsBlock interests={profile.interests} />
-        )}
-        {profile.socials && profile.socials.length > 0 && (
-          <SocialsBlock socials={profile.socials} />
-        )}
-        {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
+          {viewer && <SendMessageButton />}
 
-        {profile.joinedAt && (
-          <div className={styles.infoItem}>
-            <Calendar className={styles.icon} size={20} />
-            <div>
-              <span className={styles.infoLabel}>{t('joined')}</span>
-              <p>{new Date(profile.joinedAt).toLocaleDateString(locale)}</p>
-            </div>
-          </div>
-        )}
+          {profile.socials && profile.socials.length > 0 && (
+            <SocialsBlock socials={profile.socials} />
+          )}
+        </aside>
 
-        {profile.guildsCount !== undefined && <StatsBlock profile={profile} />}
+        <section className={styles.main}>
+          {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
+          {profile.about && <AboutBlock about={profile.about} />}
+          {profile.interests && profile.interests.length > 0 && (
+            <InterestsBlock interests={profile.interests} />
+          )}
+          {profile.birthDate && <BirthDateBlock birthDate={profile.birthDate} locale={locale} />}
+
+          {profile.joinedAt && (
+            <ValueBlock
+              icon={Calendar}
+              title={t('joined')}
+              value={dayjs(profile.joinedAt).locale(locale).format('D MMMM YYYY')}
+            />
+          )}
+        </section>
       </div>
     </div>
   );

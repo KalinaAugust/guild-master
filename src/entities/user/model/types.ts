@@ -11,8 +11,8 @@ export type PrivacyField =
   | 'about'
   | 'interests'
   | 'socials'
+  | 'birth_date'
   | 'joined'
-  | 'stats'
   | 'common_guilds';
 
 export type ProfilePrivacy = Partial<Record<PrivacyField, PrivacyLevel>>;
@@ -56,9 +56,8 @@ export interface PublicProfile {
   about?: string | null;
   interests?: string[];
   socials?: SocialLink[];
+  birthDate?: string | null;
   joinedAt?: string | null;
-  guildsCount?: number | null;
-  eventsCount?: number | null;
   commonGuilds?: CommonGuild[];
 }
 
@@ -78,8 +77,7 @@ export interface RawProfile {
   about: string | null;
   interests: string[];
   socials: SocialLink[];
+  birthDate: string | null;
   privacy: ProfilePrivacy;
   joinedAt: string | null;
-  guildsCount: number | null;
-  eventsCount: number | null;
 }

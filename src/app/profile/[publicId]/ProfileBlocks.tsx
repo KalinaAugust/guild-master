@@ -1,44 +1,98 @@
+import type { ComponentType, ReactNode } from 'react';
 import Link from 'next/link';
-import type { CommonGuild, PublicProfile, SocialLink } from '@/entities/user';
-import { SOCIAL_META } from '@/entities/user';
+import { FileText, Sparkles, Cake, Users } from 'lucide-react';
+import type { CommonGuild, SocialLink } from '@/entities/user';
+import { SOCIAL_META, SocialIcon } from '@/entities/user';
+import { Button } from '@/shared/ui/Button';
+import dayjs from '@/shared/lib/dayjs';
 import { NameWithIcon as SharedNameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './ProfileBlocks.module.css';
+
+type BlockIcon = ComponentType<{ size?: number; className?: string }>;
+
+/**
+ * Unified profile block shell: a glass panel with an icon + title header and a
+ * body. Every block on the profile page (Name, Email, About, Interests, …)
+ * shares this chrome so headers and spacing stay consistent.
+ */
+export const ProfileBlock = ({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: BlockIcon;
+  title: string;
+  children: ReactNode;
+}) => (
+  <section className={styles.block}>
+    <div className={styles.blockHeader}>
+      <span className={styles.blockIconTile}>
+        <Icon size={16} className={styles.blockIcon} />
+      </span>
+      <h2 className={styles.blockTitle}>{title}</h2>
+    </div>
+    {children}
+  </section>
+);
+
+/** Convenience block for a single primary value (Email, Joined, Birth date, …). */
+export const ValueBlock = ({
+  icon,
+  title,
+  value,
+}: {
+  icon: BlockIcon;
+  title: string;
+  value: ReactNode;
+}) => (
+  <ProfileBlock icon={icon} title={title}>
+    <p className={styles.value}>{value}</p>
+  </ProfileBlock>
+);
 
 export const NameWithIcon = ({ name, icon }: { name: string | null; icon: string | null }) => (
   <SharedNameWithIcon name={name} icon={icon} iconSize={18} className={styles.nameRow} />
 );
 
 export const AboutBlock = ({ about }: { about: string }) => (
-  <section className={styles.block}>
-    <h2 className={styles.blockTitle}>About</h2>
+  <ProfileBlock icon={FileText} title="About">
     <p className={styles.about}>{about}</p>
-  </section>
+  </ProfileBlock>
 );
 
 export const InterestsBlock = ({ interests }: { interests: string[] }) => (
-  <section className={styles.block}>
-    <h2 className={styles.blockTitle}>Interests</h2>
+  <ProfileBlock icon={Sparkles} title="Interests">
     <div className={styles.chips}>
       {interests.map((tag) => (
         <span key={tag} className={styles.chip}>{tag}</span>
       ))}
     </div>
-  </section>
+  </ProfileBlock>
 );
 
 export const SocialsBlock = ({ socials }: { socials: SocialLink[] }) => (
-  <section className={styles.block}>
-    <h2 className={styles.blockTitle}>Socials</h2>
+  <section>
     <ul className={styles.socials}>
       {socials.map((s) => {
         const isUrl = /^https?:\/\//i.test(s.value);
+        const label = SOCIAL_META[s.platform].label;
         return (
           <li key={s.platform}>
-            <span className={styles.socialLabel}>{SOCIAL_META[s.platform].label}:</span>{' '}
             {isUrl ? (
-              <a href={s.value} target="_blank" rel="noopener noreferrer">{s.value}</a>
+              <a
+                href={s.value}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialItem}
+                title={label}
+                aria-label={label}
+              >
+                <SocialIcon platform={s.platform} className={styles.socialIcon} size={22} />
+              </a>
             ) : (
-              <span>{s.value}</span>
+              <span className={styles.socialItem} title={`${label}: ${s.value}`} aria-label={label}>
+                <SocialIcon platform={s.platform} className={styles.socialIcon} size={22} />
+              </span>
             )}
           </li>
         );
@@ -47,9 +101,24 @@ export const SocialsBlock = ({ socials }: { socials: SocialLink[] }) => (
   </section>
 );
 
+/**
+ * Direct messaging is not implemented yet, so this is an intentionally disabled
+ * placeholder matching the public-profile design.
+ */
+export const SendMessageButton = () => (
+  <Button variant="primary" fullWidth>
+    Send message
+  </Button>
+);
+
+export const BirthDateBlock = ({ birthDate, locale }: { birthDate: string; locale: string }) => (
+  <ProfileBlock icon={Cake} title="Birth date">
+    <p className={styles.value}>{dayjs(birthDate).locale(locale).format('D MMMM YYYY')}</p>
+  </ProfileBlock>
+);
+
 export const CommonGuildsBlock = ({ guilds }: { guilds: CommonGuild[] }) => (
-  <section className={styles.block}>
-    <h2 className={styles.blockTitle}>Common guilds</h2>
+  <ProfileBlock icon={Users} title="Common guilds">
     {guilds.length === 0 ? (
       <p className={styles.muted}>No common guilds</p>
     ) : (
@@ -61,21 +130,5 @@ export const CommonGuildsBlock = ({ guilds }: { guilds: CommonGuild[] }) => (
         ))}
       </ul>
     )}
-  </section>
-);
-
-export const StatsBlock = ({ profile }: { profile: Pick<PublicProfile, 'guildsCount' | 'eventsCount'> }) => (
-  <section className={styles.block}>
-    <h2 className={styles.blockTitle}>Statistics</h2>
-    <div className={styles.statsRow}>
-      <div className={styles.statCard}>
-        <span className={styles.statValue}>{profile.guildsCount ?? 0}</span>
-        <span className={styles.statLabel}>Guilds</span>
-      </div>
-      <div className={styles.statCard}>
-        <span className={styles.statValue}>{profile.eventsCount ?? 0}</span>
-        <span className={styles.statLabel}>Events</span>
-      </div>
-    </div>
-  </section>
+  </ProfileBlock>
 );

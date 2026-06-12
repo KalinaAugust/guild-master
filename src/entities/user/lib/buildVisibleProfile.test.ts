@@ -13,10 +13,9 @@ const RAW: RawProfile = {
   about: 'Hello',
   interests: ['raids'],
   socials: [{ platform: 'discord', value: 'john#1' }],
+  birthDate: '1990-05-20',
   privacy: {}, // all defaults
   joinedAt: '2025-01-01',
-  guildsCount: 3,
-  eventsCount: 7,
 };
 
 const COMMON = [{ id: 'g1', name: 'Night Owls', avatarUrl: null }];
@@ -32,13 +31,11 @@ describe('buildVisibleProfile', () => {
 
   it('anonymous/public viewer sees only public-default fields', () => {
     const r = buildVisibleProfile(RAW, 'public', COMMON);
-    // public defaults: alias, about, interests, joined, stats
+    // public defaults: alias, about, interests, joined
     expect(r.about).toBe('Hello');
     expect(r.interests).toEqual(['raids']);
     expect(r.alias).toBe('Johnny');
     expect(r.joinedAt).toBe('2025-01-01');
-    expect(r.guildsCount).toBe(3);
-    expect(r.eventsCount).toBe(7);
     // guildmates-only defaults hidden:
     expect(r).not.toHaveProperty('realName');
     expect(r).not.toHaveProperty('socials');

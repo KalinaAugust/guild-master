@@ -33,6 +33,7 @@ export interface ProfileSettingsInitial {
   alias: string | null;
   displayAsAlias: boolean;
   icon: string | null;
+  birthDate: string | null;
   about: string | null;
   interests: string[];
   socials: SocialLink[];
@@ -45,8 +46,8 @@ const PRIVACY_ROWS: { field: PrivacyField; label: string }[] = [
   { field: 'about', label: 'About' },
   { field: 'interests', label: 'Interests' },
   { field: 'socials', label: 'Socials' },
+  { field: 'birth_date', label: 'Birth date' },
   { field: 'joined', label: 'Join date' },
-  { field: 'stats', label: 'Statistics' },
   { field: 'common_guilds', label: 'Common guilds' },
 ];
 
@@ -63,6 +64,7 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
   const [alias, setAlias] = useState(initial.alias ?? '');
   const [displayAsAlias, setDisplayAsAlias] = useState(initial.displayAsAlias);
   const [icon, setIcon] = useState<string | null>(initial.icon);
+  const [birthDate, setBirthDate] = useState(initial.birthDate ?? '');
   const [about, setAbout] = useState(initial.about ?? '');
   const [interests, setInterests] = useState<string[]>(initial.interests);
   const [interestDraft, setInterestDraft] = useState('');
@@ -90,6 +92,7 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
       alias,
       displayAsAlias,
       icon,
+      birthDate,
       about,
       interests,
       socials,
@@ -123,6 +126,16 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
       <div className={styles.section}>
         <span className={styles.label}>Icon after name</span>
         <IconPicker value={icon} onChange={(v: ProfileIcon | null) => setIcon(v)} />
+      </div>
+
+      <div className={styles.section}>
+        <span className={styles.label}>Birth date</span>
+        <Input
+          type="date"
+          value={birthDate}
+          onChange={(e) => setBirthDate(e.target.value)}
+          max={new Date().toISOString().slice(0, 10)}
+        />
       </div>
 
       <div className={styles.section}>

@@ -5,21 +5,52 @@
   color: var(--accent-yellow);
 }
 .block {
+  position: relative;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 16px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+  border-radius: 24px;
+  padding: 1rem 1.25rem;
   margin-top: 12px;
 }
-.blockTitle {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.blockHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.blockIconTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.05) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 10px rgba(56, 189, 248, 0.12);
+}
+.blockIcon {
   color: var(--accent-secondary);
-  margin: 0 0 8px;
+}
+.blockTitle {
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--text-primary);
+  margin: 0;
 }
 .about {
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  margin: 0;
+}
+.value {
+  color: var(--text-primary);
+  font-size: 1rem;
   margin: 0;
 }
 .chips {
@@ -35,42 +66,38 @@
   font-size: 12px;
   color: var(--text-primary);
 }
-.socials,
 .guilds {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   color: var(--text-secondary);
 }
-.socialLabel {
-  color: var(--text-muted);
+.socials {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.socialItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+a.socialItem:hover {
+  color: var(--accent-secondary);
+}
+.socialIcon {
+  flex-shrink: 0;
 }
 .muted {
   color: var(--text-muted);
   margin: 0;
-}
-.statsRow {
-  display: flex;
-  gap: 12px;
-}
-.statCard {
-  flex: 1;
-  text-align: center;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  padding: 12px;
-}
-.statValue {
-  display: block;
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.statLabel {
-  font-size: 12px;
-  color: var(--text-muted);
 }

@@ -20,6 +20,7 @@ export async function PATCH(request: NextRequest) {
   if ('alias' in clean) update.alias = clean.alias;
   if ('displayAsAlias' in clean) update.display_as_alias = clean.displayAsAlias;
   if ('icon' in clean) update.icon = clean.icon;
+  if ('birthDate' in clean) update.birth_date = clean.birthDate;
   if ('about' in clean) update.about = clean.about;
   if ('interests' in clean) update.interests = clean.interests;
   if ('socials' in clean) update.socials = clean.socials as unknown as Json;
