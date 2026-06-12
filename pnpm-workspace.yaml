@@ -6,3 +6,5 @@ allowBuilds:
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - dompurify@3.4.7
+patchedDependencies:
+  '@tsparticles/engine@4.1.3': patches/@tsparticles__engine@4.1.3.patch
