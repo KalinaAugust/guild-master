@@ -6,6 +6,7 @@ import { Plus } from 'lucide-react';
 import { useGetGuildsQuery } from '@/entities/guild';
 import { Button } from '@/shared/ui/Button';
 import { Spinner } from '@/shared/ui/Spinner';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { GuildList } from './GuildList';
 import { EditGuildWizard } from './EditGuildWizard';
 import styles from './GuildManagePage.module.css';
@@ -30,7 +31,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.pageTitle}>{t('manageTitle')}</h1>
+        <GradientTitle className={styles.pageTitle}>{t('manageTitle')}</GradientTitle>
         <Button variant="primary" onClick={openCreate} className={styles.createBtn}>
           <Plus size={18} strokeWidth={3} />
           {t('createButton')}

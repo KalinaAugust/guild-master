@@ -1,0 +1,11 @@
+.title {
+  margin: 0;
+  width: fit-content;
+  font-size: var(--gradient-title-font-size, 1.75rem);
+  font-family: var(--gradient-title-font-family, var(--font-display));
+  font-weight: var(--gradient-title-font-weight, 700);
+  background: linear-gradient(to right, #fff, var(--accent-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -25,13 +25,6 @@
   margin-bottom: 2.5rem;
 }
 
-.titleInfo h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  background: linear-gradient(to right, #fff, var(--accent-secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 .status {
   margin: 0.25rem 0 0;

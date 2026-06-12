@@ -4,6 +4,7 @@ import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
 import { EditableName } from '@/features/update-profile-name';
 import { resolvePrivacy, resolveDisplayName, type SocialLink } from '@/entities/user';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { OwnProfileSettings } from './OwnProfileClient';
 import { NameWithIcon, AboutBlock, InterestsBlock, SocialsBlock } from './ProfileBlocks';
 import styles from './OwnProfile.module.css';
@@ -64,12 +65,12 @@ export async function OwnProfile({ user }: OwnProfileProps) {
         <div className={styles.header}>
           <AvatarUpload initialAvatarUrl={profile?.avatar_url || null} userId={user.id} />
           <div className={styles.titleInfo}>
-            <h1>
+            <GradientTitle>
               <NameWithIcon
                 name={displayName ?? user.email?.split('@')[0] ?? 'User Profile'}
                 icon={profile?.icon ?? null}
               />
-            </h1>
+            </GradientTitle>
             <p className={styles.status}>Active Member</p>
           </div>
         </div>
