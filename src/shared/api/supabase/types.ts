@@ -177,6 +177,8 @@ export type Database = {
           id: string
           title: string
           type: string
+          week_days: number[] | null
+          exceptions: string[] | null
         }
         Insert: {
           created_at?: string
@@ -187,6 +189,8 @@ export type Database = {
           id?: string
           title: string
           type: string
+          week_days?: number[] | null
+          exceptions?: string[] | null
         }
         Update: {
           created_at?: string
@@ -197,6 +201,8 @@ export type Database = {
           id?: string
           title?: string
           type?: string
+          week_days?: number[] | null
+          exceptions?: string[] | null
         }
         Relationships: [
           {

@@ -5,6 +5,7 @@ import {
   ResolveForbiddenError,
   ResolveNotFoundError,
 } from '@/features/event-detail/api/resolveEventJoinRequest';
+import { parseEventId } from '@/shared/lib/parseEventId';
 
 export async function PATCH(
   request: NextRequest,
@@ -14,6 +15,7 @@ export async function PATCH(
   if (!auth.ok) return auth.response;
 
   const { id, requestId } = await params;
+  const { realId } = parseEventId(id);
   const body = await request.json();
   const action: unknown = body?.action;
   if (action !== 'approve' && action !== 'decline') {
@@ -21,7 +23,7 @@ export async function PATCH(
   }
 
   try {
-    await resolveEventJoinRequest(id, requestId, action);
+    await resolveEventJoinRequest(realId, requestId, action);
     return NextResponse.json({ success: true });
   } catch (e) {
     if (e instanceof ResolveForbiddenError) {

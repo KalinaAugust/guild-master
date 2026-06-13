@@ -15,6 +15,7 @@ export const createEvent = async (event: Omit<ActivityEvent, 'id'> & { guild_id:
         event_date: `${event.date}T${event.time}:00`,
         guild_id: event.guild_id,
         created_by: user?.id,
+        week_days: event.weekDays || [],
       }
     ])
     .select()

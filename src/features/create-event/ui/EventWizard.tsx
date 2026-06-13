@@ -44,6 +44,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
   const dayLabels = useWeekdayLabels();
 
   const [selectedParticipants, setSelectedParticipants] = useState<string[]>([]);
+  const [weekDays, setWeekDays] = useState<number[]>([]);
   const [filterQuery, setFilterQuery] = useState('');
   const [deferredQuery, setDeferredQuery] = useState('');
   const [, startTransition] = useTransition();
@@ -70,6 +71,17 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (editingEvent) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setWeekDays(editingEvent.weekDays || []);
+      } else {
+        setWeekDays([]);
+      }
+    }
+  }, [isOpen, editingEvent]);
 
   useEffect(() => {
     if (participantsData) {
@@ -130,12 +142,15 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
       return;
     }
     try {
+      const eventPayload = { ...data, weekDays };
       if (editingEvent) {
-        await updateEvent({ id: editingEvent.id, event: data }).unwrap();
-        await syncParticipants({ eventId: editingEvent.id, userIds: selectedParticipants }).unwrap();
+        // We update the event using its real ID
+        const realEventId = editingEvent.id.split('_')[0];
+        await updateEvent({ id: realEventId, event: eventPayload }).unwrap();
+        await syncParticipants({ eventId: realEventId, userIds: selectedParticipants }).unwrap();
         toast.success(t('successUpdated'));
       } else {
-        const newEvent = await createEvent({ ...data, guild_id: activeGuildId }).unwrap();
+        const newEvent = await createEvent({ ...eventPayload, guild_id: activeGuildId }).unwrap();
         await syncParticipants({ eventId: newEvent.id, userIds: selectedParticipants }).unwrap();
         toast.success(t('successCreated'));
       }
@@ -187,9 +202,25 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
               <div className={styles.stubGroup}>
                 <span className={styles.stubLabel}>{t('wizard.repeatLabel')}</span>
                 <div className={styles.dayToggles}>
-                  {dayLabels.map((d) => (
-                    <div key={d} className={styles.dayToggle}>{d}</div>
-                  ))}
+                  {dayLabels.map((d, idx) => {
+                    const dayNum = idx === 6 ? 0 : idx + 1; // 0 = Sunday, 1 = Monday...
+                    const isActive = weekDays.includes(dayNum);
+                    return (
+                      <div
+                        key={d}
+                        className={`${styles.dayToggle} ${isActive ? styles.dayToggleActive : ''}`}
+                        onClick={() => {
+                          setWeekDays((prev) =>
+                            prev.includes(dayNum)
+                              ? prev.filter((val) => val !== dayNum)
+                              : [...prev, dayNum]
+                          );
+                        }}
+                      >
+                        {d}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

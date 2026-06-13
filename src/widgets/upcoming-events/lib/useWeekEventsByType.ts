@@ -14,7 +14,7 @@ export const useWeekEventsByType = (
     return events
       .filter(e => {
         const eventTime = dayjs(`${e.date}T${e.time}`);
-        return myIdSet.has(e.id) && eventTime.isAfter(now) && !eventTime.isAfter(endOfWeek);
+        return myIdSet.has(e.id.split('_')[0]) && eventTime.isAfter(now) && !eventTime.isAfter(endOfWeek);
       })
       .reduce<Partial<Record<ActivityType, ActivityEvent[]>>>((acc, e) => {
         if (!acc[e.type]) acc[e.type] = [];

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getComments } from '@/entities/comment/api/getComments';
 import { createComment, InvalidCommentError } from '@/entities/comment/api/createComment';
 import { requireUser } from '@/shared/api/guildAuth';
+import { parseEventId } from '@/shared/lib/parseEventId';
 
 export async function GET(
   _: NextRequest,
@@ -9,7 +10,8 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const comments = await getComments(id);
+    const { realId } = parseEventId(id);
+    const comments = await getComments(realId);
     return NextResponse.json(comments);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
@@ -24,11 +26,12 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
+    const { realId } = parseEventId(id);
     const { body } = await request.json();
     if (typeof body !== 'string') {
       return NextResponse.json({ error: 'Invalid comment body' }, { status: 400 });
     }
-    const comment = await createComment(id, body);
+    const comment = await createComment(realId, body);
     return NextResponse.json(comment, { status: 201 });
   } catch (e) {
     if (e instanceof InvalidCommentError) {

@@ -36,6 +36,27 @@
   justify-content: center;
   font-size: 0.75rem;
   color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.dayToggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--text-primary);
+}
+
+.dayToggleActive {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.dayToggleActive:hover {
+  background: rgba(56, 189, 248, 0.24);
 }
 
 .memberList {

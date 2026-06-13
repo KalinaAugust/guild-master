@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getEventById } from '@/entities/event/api/getEventById';
 import { updateEvent } from '@/entities/event/api/updateEvent';
 import { deleteEvent } from '@/entities/event/api/deleteEvent';
+import { parseEventId } from '@/shared/lib/parseEventId';
 
 export async function GET(
   _: NextRequest,
@@ -23,8 +24,9 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
+    const { realId } = parseEventId(id);
     const body = await request.json();
-    const data = await updateEvent(id, body);
+    const data = await updateEvent(realId, body);
     return NextResponse.json(data);
   } catch {
     return NextResponse.json({ error: 'Failed to update event' }, { status: 500 });
@@ -37,7 +39,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    await deleteEvent(id);
+    const { realId } = parseEventId(id);
+    await deleteEvent(realId);
     return NextResponse.json({ deleted: id });
   } catch {
     return NextResponse.json({ error: 'Failed to delete event' }, { status: 500 });

@@ -62,6 +62,10 @@
     "successCreated": "Событие успешно создано",
     "successUpdated": "Событие обновлено",
     "successDeleted": "Событие удалено",
+    "deleteOccurrenceTitle": "Удаление события",
+    "deleteOccurrenceDesc": "Это повторяющееся событие. Вы хотите удалить только это конкретное вхождение или всю серию?",
+    "deleteOnlyThis": "Только это вхождение",
+    "deleteAll": "Всю серию",
     "error": "Произошла ошибка",
     "validation": {
       "titleRequired": "Укажите название",
@@ -85,6 +89,8 @@
     }
   },
   "EventDetail": {
+    "recurrence": "Повторение",
+    "recurrenceDays": "Повторяется по:",
     "type": "Тип",
     "dateTime": "Дата и время",
     "participants": "Участники",

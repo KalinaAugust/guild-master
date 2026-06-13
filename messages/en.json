@@ -62,6 +62,10 @@
     "successCreated": "Event created successfully",
     "successUpdated": "Event updated",
     "successDeleted": "Event deleted",
+    "deleteOccurrenceTitle": "Delete Event",
+    "deleteOccurrenceDesc": "This is a recurring event. Do you want to delete only this occurrence or the entire series?",
+    "deleteOnlyThis": "Only this occurrence",
+    "deleteAll": "Entire series",
     "error": "An error occurred",
     "validation": {
       "titleRequired": "Title is required",
@@ -85,6 +89,8 @@
     }
   },
   "EventDetail": {
+    "recurrence": "Recurrence",
+    "recurrenceDays": "Repeats on:",
     "type": "Type",
     "dateTime": "Date & Time",
     "participants": "Participants",
