@@ -52,9 +52,10 @@
 .sidebar :global(section) {
   width: 100%;
   margin-top: 1rem;
-  padding: 0;
+  padding: 2rem 0 0;
   background: none;
   border: none;
+  border-top: 1px solid var(--glass-border);
   box-shadow: none;
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
