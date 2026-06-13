@@ -8,6 +8,8 @@ export interface ActivityEvent {
   type: ActivityType;
   description?: string;
   createdBy?: string;
+  weekDays?: number[];
+  exceptions?: string[];
 }
 
 export interface UIState {

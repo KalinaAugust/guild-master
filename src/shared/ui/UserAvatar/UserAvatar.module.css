@@ -33,10 +33,19 @@
 }
 
 .size_xl {
-  width: 96px;
-  height: 96px;
-  font-size: 32px;
+  width: 150px;
+  height: 150px;
+  font-size: 48px;
   border-radius: 16px;
+}
+
+.fill {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  font-size: 64px;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
 }
 
 .image {

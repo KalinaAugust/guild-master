@@ -55,7 +55,7 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 
 | Table | Key columns |
 |---|---|
-| `profiles` | `id` (uuid, FK → auth.users), `public_id` (unique 8-char base62, used in `/profile/[publicId]` URLs), `full_name`, `avatar_url`, `updated_at`, `alias`, `display_as_alias` (bool — show alias instead of name app-wide), `icon` (lucide name, no privacy), `about`, `interests` (text[]), `socials` (jsonb `[{platform,value}]`), `birth_date` (date), `privacy` (jsonb map `field→'private'\|'guildmates'\|'public'`; visibility computed server-side, not via RLS; keys include `birth_date`) |
+| `profiles` | `id` (uuid, FK → auth.users), `public_id` (unique 8-char base62, used in `/profile/[publicId]` URLs), `full_name`, `avatar_url`, `updated_at`, `alias`, `display_as_alias` (bool — show alias instead of name app-wide), `icon` (lucide name, no privacy), `about`, `interests` (text[]), `socials` (jsonb `[{platform,value}]`), `birth_date` (date), `email` (text — denormalized copy of `auth.users.email`, synced via the `handle_new_user` / `handle_user_email_update` triggers), `last_seen_at` (timestamptz — presence; refreshed by a throttled heartbeat in `src/proxy.ts`, ≤ once per 5 min via the `ls_hb` cookie; not privacy-gated), `privacy` (jsonb map `field→'private'\|'guildmates'\|'public'`; visibility computed server-side, not via RLS; keys include `birth_date`, `email`) |
 | `guilds` | `id`, `name`, `description`, `avatar_url`, `owner_id` (FK → profiles) |
 | `guild_members` | `id`, `guild_id`, `user_id`, `role` (OWNER\|ADMIN\|MEMBER) |
 | `events` | `id`, `guild_id`, `title`, `description`, `event_date`, `type`, `created_by` |

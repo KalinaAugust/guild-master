@@ -16,4 +16,8 @@ export { buildVisibleProfile } from './lib/buildVisibleProfile';
 
 export { updateAvatar } from './api/updateAvatar';
 export { updateFullName } from './api/updateFullName';
+export { updateAbout } from './api/updateAbout';
+export { updateBirthDate } from './api/updateBirthDate';
+export { updateAlias } from './api/updateAlias';
+export { updateInterests } from './api/updateInterests';
 export { updateLastActiveGuild } from "./api/updateLastActiveGuild";

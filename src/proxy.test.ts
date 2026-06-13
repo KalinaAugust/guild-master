@@ -10,6 +10,7 @@ const h = vi.hoisted(() => {
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'anon-key';
   return {
     getUser: vi.fn(),
+    updateProfile: vi.fn().mockResolvedValue({ error: null }),
     cookies: null as null | {
       setAll: (c: { name: string; value: string; options?: object }[]) => void;
     },
@@ -23,7 +24,14 @@ vi.mock('@supabase/ssr', () => ({
     options: { cookies: NonNullable<typeof h.cookies> }
   ) => {
     h.cookies = options.cookies;
-    return { auth: { getUser: h.getUser } };
+    return {
+      auth: { getUser: h.getUser },
+      from: () => ({
+        update: (values: Record<string, unknown>) => ({
+          eq: (col: string, val: string) => h.updateProfile(values, col, val),
+        }),
+      }),
+    };
   },
 }));
 
@@ -122,6 +130,32 @@ describe('proxy route protection', () => {
 
     expect(guild.headers.get('location')).toBeNull();
     expect(profile.headers.get('location')).toBeNull();
+  });
+});
+
+describe('proxy presence heartbeat', () => {
+  it('refreshes last_seen_at for an authenticated user without the throttle cookie', async () => {
+    authed();
+    await proxy(makeRequest('/'));
+
+    expect(h.updateProfile).toHaveBeenCalledTimes(1);
+    const [values, col, val] = h.updateProfile.mock.calls[0];
+    expect(values).toHaveProperty('last_seen_at');
+    expect([col, val]).toEqual(['id', 'u1']);
+  });
+
+  it('skips the heartbeat when the throttle cookie is present', async () => {
+    authed();
+    await proxy(makeRequest('/', { cookie: 'ls_hb=1' }));
+
+    expect(h.updateProfile).not.toHaveBeenCalled();
+  });
+
+  it('does not heartbeat for anonymous requests', async () => {
+    anon();
+    await proxy(makeRequest('/profile/abcd1234'));
+
+    expect(h.updateProfile).not.toHaveBeenCalled();
   });
 });
 

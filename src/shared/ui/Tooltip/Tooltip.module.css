@@ -6,7 +6,9 @@
   font-size: 0.8rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
   max-width: 260px;
-  z-index: 100;
+  /* Must sit above dialogs (WizardDialog 1100, Modal 1500/1501) since the
+     tooltip is portaled to body. */
+  z-index: 1600;
   animation-duration: 150ms;
   animation-timing-function: ease-out;
 }

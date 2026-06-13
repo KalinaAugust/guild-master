@@ -177,6 +177,8 @@ export type Database = {
           id: string
           title: string
           type: string
+          week_days: number[] | null
+          exceptions: string[] | null
         }
         Insert: {
           created_at?: string
@@ -187,6 +189,8 @@ export type Database = {
           id?: string
           title: string
           type: string
+          week_days?: number[] | null
+          exceptions?: string[] | null
         }
         Update: {
           created_at?: string
@@ -197,6 +201,8 @@ export type Database = {
           id?: string
           title?: string
           type?: string
+          week_days?: number[] | null
+          exceptions?: string[] | null
         }
         Relationships: [
           {
@@ -593,11 +599,13 @@ export type Database = {
           avatar_url: string | null
           birth_date: string | null
           display_as_alias: boolean
+          email: string | null
           full_name: string | null
           icon: string | null
           id: string
           interests: string[]
           last_active_guild_id: string | null
+          last_seen_at: string | null
           privacy: Json
           public_id: string
           socials: Json
@@ -609,11 +617,13 @@ export type Database = {
           avatar_url?: string | null
           birth_date?: string | null
           display_as_alias?: boolean
+          email?: string | null
           full_name?: string | null
           icon?: string | null
           id: string
           interests?: string[]
           last_active_guild_id?: string | null
+          last_seen_at?: string | null
           privacy?: Json
           public_id?: string
           socials?: Json
@@ -625,11 +635,13 @@ export type Database = {
           avatar_url?: string | null
           birth_date?: string | null
           display_as_alias?: boolean
+          email?: string | null
           full_name?: string | null
           icon?: string | null
           id?: string
           interests?: string[]
           last_active_guild_id?: string | null
+          last_seen_at?: string | null
           privacy?: Json
           public_id?: string
           socials?: Json

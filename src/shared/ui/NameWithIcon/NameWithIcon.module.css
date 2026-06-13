@@ -1,5 +1,15 @@
 .root {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+  /* Inline flow so the flair icon trails the name and lands at the end of the
+     last line even when the name wraps to multiple lines. */
+  display: inline;
+}
+.icon {
+  margin-left: 6px;
+  vertical-align: middle;
+  /* Consistent accent color for the name flair icon across the whole app. */
+  color: var(--accent-yellow);
+}
+/* The last word + icon stay on the same line and wrap together. */
+.lastChunk {
+  white-space: nowrap;
 }

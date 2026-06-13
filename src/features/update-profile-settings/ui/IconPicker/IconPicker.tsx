@@ -19,7 +19,7 @@ export const IconPicker = ({ value, onChange }: IconPickerProps) => (
       className={!value ? styles.activeCell : styles.cell}
       onClick={() => onChange(null)}
     >
-      <Icons.Ban size={18} />
+      <Icons.Ban size={16} />
     </button>
     {PROFILE_ICONS.map((name) => {
       const Icon = Icons[name] as React.ComponentType<{ size?: number }>;
@@ -32,7 +32,7 @@ export const IconPicker = ({ value, onChange }: IconPickerProps) => (
           className={value === name ? styles.activeCell : styles.cell}
           onClick={() => onChange(name)}
         >
-          <Icon size={18} />
+          <Icon size={16} />
         </button>
       );
     })}

@@ -1,15 +1,15 @@
 .grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 5px;
 }
 .cell,
 .activeCell {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 36px;
-  border-radius: 8px;
+  height: 30px;
+  border-radius: 7px;
   border: 1px solid var(--glass-border);
   background: var(--glass-bg);
   color: var(--text-secondary);

@@ -1,0 +1,125 @@
+.view {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  background:
+    linear-gradient(
+      135deg,
+      rgba(125, 211, 252, 0.18) 0%,
+      rgba(45, 158, 208, 0.1) 100%
+    );
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 8px rgba(3, 13, 26, 0.25);
+}
+
+.placeholder {
+  margin: 0;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.view .editButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  opacity: var(--edit-opacity, 0);
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.view .editButton:hover:not(:disabled) {
+  background: transparent;
+  transform: none;
+  opacity: 1;
+  color: var(--text-primary, #ffffff);
+}
+
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.editableChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(125, 211, 252, 0.18) 0%,
+      rgba(45, 158, 208, 0.1) 100%
+    );
+  border: 1px solid rgba(125, 211, 252, 0.35);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  color: var(--text-primary);
+  cursor: pointer;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 8px rgba(3, 13, 26, 0.25);
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.removeIcon {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.editableChip:hover {
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 0 0 1px rgba(125, 211, 252, 0.25),
+    0 4px 14px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+.addRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.addRow > :first-child {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.actionButton {
+  color: var(--text-primary, #ffffff);
+  background: transparent;
+}
+
+.actionButton:hover:not(:disabled) {
+  color: var(--accent-secondary);
+  background: transparent;
+  transform: none;
+}

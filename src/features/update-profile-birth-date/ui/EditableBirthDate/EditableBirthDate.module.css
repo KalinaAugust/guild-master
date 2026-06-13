@@ -1,0 +1,60 @@
+.view {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.value {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.placeholder {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+.view .editButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.7));
+  opacity: var(--edit-opacity, 0);
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.view .editButton:hover:not(:disabled) {
+  background: transparent;
+  transform: none;
+  opacity: 1;
+  color: var(--text-primary, #ffffff);
+}
+
+.edit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.edit > :first-child {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.actionButton {
+  color: var(--text-primary, #ffffff);
+  background: transparent;
+}
+
+.actionButton:hover:not(:disabled) {
+  color: var(--accent-secondary);
+  background: transparent;
+  transform: none;
+}

@@ -32,6 +32,7 @@ vi.mock('@/entities/event', () => ({
     isLoading: false,
   }),
   useDeleteEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
+  useUpdateEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
 }));
 vi.mock('../api/detailApi', () => ({
   useUpdateParticipantStatusMutation: vi.fn().mockReturnValue([vi.fn()]),

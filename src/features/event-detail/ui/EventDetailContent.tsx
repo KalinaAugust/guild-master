@@ -13,7 +13,10 @@ import {
   useGetEventByIdQuery,
   useGetParticipantsQuery,
   useDeleteEventMutation,
+  useUpdateEventMutation,
 } from '@/entities/event';
+import { Modal } from '@/shared/ui/Modal';
+import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { Button } from '@/shared/ui/Button';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
@@ -96,10 +99,18 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [leaveEvent, { isLoading: isLeaving }] = useLeaveEventMutation();
   const [statusAction, setStatusAction] = useState<'confirmed' | 'declined' | null>(null);
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
+  const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecurringOpen, setDeleteRecurringOpen] = useState(false);
   const [leaveModalOpen, setLeaveModalOpen] = useState(false);
 
   const locale = useLocale();
+  const dayLabels = useWeekdayLabels();
+
+  const getDayLabel = (dayNum: number) => {
+    const labelIdx = dayNum === 0 ? 6 : dayNum - 1;
+    return dayLabels[labelIdx];
+  };
   const eventDate = event ? dayjs(`${event.date} ${event.time}`).locale(locale) : null;
 
   const handleEdit = () => {
@@ -175,11 +186,45 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const handleDelete = async () => {
     if (!event) return;
     try {
-      await deleteEvent(event.id).unwrap();
+      const realId = event.id.split('_')[0];
+      await deleteEvent(realId).unwrap();
       toast.success(eventT('successDeleted'));
       router.push(`/day/${event.date}?guildId=${data.guildId}`);
     } catch {
       toast.error(eventT('error'));
+    }
+  };
+
+  const handleDeleteOnlyOccurrence = async () => {
+    if (!event) return;
+    const [realId, dateStr] = event.id.split('_');
+    try {
+      const currentExceptions = event.exceptions || [];
+      const newExceptions = [...currentExceptions, dateStr];
+      await updateEvent({
+        id: realId,
+        event: { exceptions: newExceptions }
+      }).unwrap();
+      toast.success(eventT('successDeleted'));
+      router.push(`/day/${event.date}?guildId=${data.guildId}`);
+    } catch {
+      toast.error(eventT('error'));
+    } finally {
+      setDeleteRecurringOpen(false);
+    }
+  };
+
+  const handleDeleteAllOccurrences = async () => {
+    if (!event) return;
+    const realId = event.id.split('_')[0];
+    try {
+      await deleteEvent(realId).unwrap();
+      toast.success(eventT('successDeleted'));
+      router.push(`/day/${event.date}?guildId=${data.guildId}`);
+    } catch {
+      toast.error(eventT('error'));
+    } finally {
+      setDeleteRecurringOpen(false);
     }
   };
 
@@ -282,6 +327,20 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               </span>
             </div>
 
+            {event.weekDays && event.weekDays.length > 0 && (
+              <div className={styles.infoGroup}>
+                <span className={styles.label}>{t('recurrence')}</span>
+                <span className={styles.dateTime} style={{ color: 'var(--accent-secondary)' }}>
+                  {t('recurrenceDays')}{' '}
+                  <strong>
+                    {event.weekDays
+                      .map((d) => getDayLabel(d))
+                      .join(', ')}
+                  </strong>
+                </span>
+              </div>
+            )}
+
             {event.description && (
               <div className={styles.infoGroup}>
                 <span className={styles.label}>{commonT('description')}</span>
@@ -350,7 +409,17 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         footer={
           isCreator ? (
             <>
-              <Button type="button" variant="secondary" onClick={() => setDeleteModalOpen(true)}>
+              <Button 
+                type="button" 
+                variant="secondary" 
+                onClick={() => {
+                  if (event.id.includes('_')) {
+                    setDeleteRecurringOpen(true);
+                  } else {
+                    setDeleteModalOpen(true);
+                  }
+                }}
+              >
                 {commonT('delete')}
               </Button>
               <Button type="button" variant="primary" onClick={handleEdit}>
@@ -380,6 +449,41 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         confirmLabel={t('leave')}
         isLoading={isLeaving}
       />
+
+      <Modal
+        isOpen={deleteRecurringOpen}
+        onClose={() => setDeleteRecurringOpen(false)}
+        title={eventT('deleteOccurrenceTitle')}
+      >
+        <p style={{ marginBottom: '20px', fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+          {eventT('deleteOccurrenceDesc')}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <Button
+            variant="secondary"
+            onClick={() => setDeleteRecurringOpen(false)}
+            disabled={isDeleting || isUpdating}
+          >
+            {commonT('cancel')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteOnlyOccurrence}
+            isLoading={isUpdating}
+            disabled={isDeleting}
+          >
+            {eventT('deleteOnlyThis')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteAllOccurrences}
+            isLoading={isDeleting}
+            disabled={isUpdating}
+          >
+            {eventT('deleteAll')}
+          </Button>
+        </div>
+      </Modal>
     </>
   );
 };

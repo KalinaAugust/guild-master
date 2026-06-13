@@ -5,6 +5,7 @@ import {
   submitEventJoinRequest,
   JoinRequestConflictError,
 } from '@/features/event-detail/api/submitEventJoinRequest';
+import { parseEventId } from '@/shared/lib/parseEventId';
 
 export async function GET(
   _: NextRequest,
@@ -14,7 +15,8 @@ export async function GET(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const requests = await getEventJoinRequests(id);
+    const { realId } = parseEventId(id);
+    const requests = await getEventJoinRequests(realId);
     return NextResponse.json(requests);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch requests' }, { status: 500 });
@@ -29,7 +31,8 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const request = await submitEventJoinRequest(id);
+    const { realId } = parseEventId(id);
+    const request = await submitEventJoinRequest(realId);
     return NextResponse.json({ id: request.id }, { status: 201 });
   } catch (e) {
     if (e instanceof JoinRequestConflictError) {

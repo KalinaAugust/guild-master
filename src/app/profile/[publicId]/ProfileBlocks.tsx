@@ -55,6 +55,33 @@ export const NameWithIcon = ({ name, icon }: { name: string | null; icon: string
   <SharedNameWithIcon name={name} icon={icon} iconSize={18} className={styles.nameRow} />
 );
 
+const PRESENCE_THRESHOLD_MIN = 5;
+
+/** Whether a `last_seen_at` timestamp counts as currently online. Computed by
+ * the (Server Component) caller so ProfileStatus stays purely presentational. */
+export const isOnline = (lastSeenAt: string | null | undefined): boolean =>
+  !!lastSeenAt && dayjs().diff(dayjs(lastSeenAt), 'minute') < PRESENCE_THRESHOLD_MIN;
+
+/** Presence line shown under the profile name. */
+export const ProfileStatus = ({
+  online,
+  lastSeenAt,
+  locale,
+}: {
+  online: boolean;
+  lastSeenAt?: string | null;
+  locale: string;
+}) => {
+  if (!online && !lastSeenAt) return null;
+
+  return (
+    <p className={online ? styles.statusOnline : styles.status}>
+      <span className={online ? styles.statusDotOnline : styles.statusDot} />
+      {online ? 'Online' : `Last seen ${dayjs(lastSeenAt).locale(locale).fromNow()}`}
+    </p>
+  );
+};
+
 export const AboutBlock = ({ about }: { about: string }) => (
   <ProfileBlock icon={FileText} title="About">
     <p className={styles.about}>{about}</p>
@@ -88,11 +115,11 @@ export const SocialsBlock = ({ socials }: { socials: SocialLink[] }) => (
                 title={label}
                 aria-label={label}
               >
-                <SocialIcon platform={s.platform} className={styles.socialIcon} size={22} />
+                <SocialIcon platform={s.platform} className={styles.socialIcon} size={19} />
               </a>
             ) : (
               <span className={styles.socialItem} title={`${label}: ${s.value}`} aria-label={label}>
-                <SocialIcon platform={s.platform} className={styles.socialIcon} size={22} />
+                <SocialIcon platform={s.platform} className={styles.socialIcon} size={19} />
               </span>
             )}
           </li>

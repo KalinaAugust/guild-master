@@ -28,6 +28,8 @@ export function buildVisibleProfile(
   if (canSee(privacy.interests, relationship)) result.interests = raw.interests;
   if (canSee(privacy.socials, relationship)) result.socials = raw.socials;
   if (canSee(privacy.birth_date, relationship)) result.birthDate = raw.birthDate;
+  if (canSee(privacy.email, relationship)) result.email = raw.email;
+  result.lastSeenAt = raw.lastSeenAt;
   if (canSee(privacy.joined, relationship)) result.joinedAt = raw.joinedAt;
   if (relationship !== 'self' && canSee(privacy.common_guilds, relationship)) {
     result.commonGuilds = commonGuilds;

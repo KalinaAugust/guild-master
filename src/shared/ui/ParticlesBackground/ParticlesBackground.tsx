@@ -26,7 +26,7 @@ const particlesOptions = {
     },
     opacity: { value: 0.5 },
     shape: { type: 'circle' },
-    size: { value: { min: 2, max: 4 } },
+    size: { value: { min: 2, max: 3 } },
   },
   interactivity: {
     events: {
@@ -44,11 +44,13 @@ export function ParticlesBackground() {
 
   return (
     <ParticlesProvider init={init}>
-      <Particles
-        id="tsparticles"
-        className={styles.root}
-        options={particlesOptions}
-      />
+      <div className={styles.container}>
+        <Particles
+          id="tsparticles"
+          className={styles.root}
+          options={particlesOptions}
+        />
+      </div>
     </ParticlesProvider>
   );
 }

@@ -8,11 +8,18 @@ import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { useGuildPermissions } from '@/entities/guild';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
-import { EventCard, useDeleteEventMutation, useGetEventsQuery, useGetParticipantsQuery } from '@/entities/event';
+import { 
+  EventCard, 
+  useDeleteEventMutation, 
+  useUpdateEventMutation, 
+  useGetEventsQuery, 
+  useGetParticipantsQuery 
+} from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import { EventCardSkeleton } from '@/shared/ui/EventCardSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { Modal } from '@/shared/ui/Modal';
 import dayjs from '@/shared/lib/dayjs';
 import styles from './DayEventsList.module.css';
 
@@ -60,9 +67,12 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
     skip: !activeGuildId,
   });
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
+  const [updateEvent, { isLoading: isUpdating }] = useUpdateEventMutation();
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecurringOpen, setDeleteRecurringOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
+  const [eventObjectToDelete, setEventObjectToDelete] = useState<ActivityEvent | null>(null);
 
   const dayEvents = events
     .filter(event => event.date === date)
@@ -86,8 +96,15 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   };
 
   const handleDeleteClick = (id: string) => {
+    const targetEvent = events.find(e => e.id === id);
+    if (!targetEvent) return;
+    setEventObjectToDelete(targetEvent);
     setEventToDelete(id);
-    setDeleteModalOpen(true);
+    if (id.includes('_')) {
+      setDeleteRecurringOpen(true);
+    } else {
+      setDeleteModalOpen(true);
+    }
   };
 
   const handleConfirmDelete = async () => {
@@ -99,6 +116,44 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         toast.error(t('error'));
       }
       setEventToDelete(null);
+      setEventObjectToDelete(null);
+    }
+  };
+
+  const handleDeleteOnlyOccurrence = async () => {
+    if (eventObjectToDelete) {
+      const [realId, dateStr] = eventObjectToDelete.id.split('_');
+      try {
+        const currentExceptions = eventObjectToDelete.exceptions || [];
+        const newExceptions = [...currentExceptions, dateStr];
+        await updateEvent({
+          id: realId,
+          event: { exceptions: newExceptions }
+        }).unwrap();
+        toast.success(t('successDeleted'));
+      } catch {
+        toast.error(t('error'));
+      } finally {
+        setDeleteRecurringOpen(false);
+        setEventObjectToDelete(null);
+        setEventToDelete(null);
+      }
+    }
+  };
+
+  const handleDeleteAllOccurrences = async () => {
+    if (eventObjectToDelete) {
+      const realId = eventObjectToDelete.id.split('_')[0];
+      try {
+        await deleteEvent(realId).unwrap();
+        toast.success(t('successDeleted'));
+      } catch {
+        toast.error(t('error'));
+      } finally {
+        setDeleteRecurringOpen(false);
+        setEventObjectToDelete(null);
+        setEventToDelete(null);
+      }
     }
   };
 
@@ -158,6 +213,49 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
         confirmLabel={commonT('delete')}
         isLoading={isDeleting}
       />
+
+      <Modal
+        isOpen={deleteRecurringOpen}
+        onClose={() => {
+          setDeleteRecurringOpen(false);
+          setEventObjectToDelete(null);
+          setEventToDelete(null);
+        }}
+        title={t('deleteOccurrenceTitle')}
+      >
+        <p style={{ marginBottom: '20px', fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+          {t('deleteOccurrenceDesc')}
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setDeleteRecurringOpen(false);
+              setEventObjectToDelete(null);
+              setEventToDelete(null);
+            }}
+            disabled={isDeleting || isUpdating}
+          >
+            {commonT('cancel')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteOnlyOccurrence}
+            isLoading={isUpdating}
+            disabled={isDeleting}
+          >
+            {t('deleteOnlyThis')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDeleteAllOccurrences}
+            isLoading={isDeleting}
+            disabled={isUpdating}
+          >
+            {t('deleteAll')}
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 };

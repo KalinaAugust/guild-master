@@ -14,6 +14,8 @@ const RAW: RawProfile = {
   interests: ['raids'],
   socials: [{ platform: 'discord', value: 'john#1' }],
   birthDate: '1990-05-20',
+  email: 'john@doe.com',
+  lastSeenAt: '2025-06-01T10:00:00Z',
   privacy: {}, // all defaults
   joinedAt: '2025-01-01',
 };
@@ -40,6 +42,10 @@ describe('buildVisibleProfile', () => {
     expect(r).not.toHaveProperty('realName');
     expect(r).not.toHaveProperty('socials');
     expect(r).not.toHaveProperty('commonGuilds');
+    // email is private by default:
+    expect(r).not.toHaveProperty('email');
+    // last seen is never privacy-gated:
+    expect(r.lastSeenAt).toBe('2025-06-01T10:00:00Z');
   });
 
   it('guildmate sees guildmates-level fields and common guilds', () => {
@@ -53,7 +59,13 @@ describe('buildVisibleProfile', () => {
     const r = buildVisibleProfile(RAW, 'self', []);
     expect(r.realName).toBe('John Doe');
     expect(r.socials).toEqual([{ platform: 'discord', value: 'john#1' }]);
+    expect(r.email).toBe('john@doe.com');
     expect(r).not.toHaveProperty('commonGuilds');
+  });
+
+  it('shows email to guildmates / public only when privacy allows', () => {
+    const raw = { ...RAW, privacy: { email: 'public' as const } };
+    expect(buildVisibleProfile(raw, 'public', []).email).toBe('john@doe.com');
   });
 
   it('respects explicit privacy overrides', () => {

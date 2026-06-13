@@ -12,6 +12,7 @@ export type PrivacyField =
   | 'interests'
   | 'socials'
   | 'birth_date'
+  | 'email'
   | 'joined'
   | 'common_guilds';
 
@@ -57,6 +58,9 @@ export interface PublicProfile {
   interests?: string[];
   socials?: SocialLink[];
   birthDate?: string | null;
+  email?: string | null;
+  /** Presence timestamp; not privacy-gated (shown to everyone). */
+  lastSeenAt?: string | null;
   joinedAt?: string | null;
   commonGuilds?: CommonGuild[];
 }
@@ -78,6 +82,8 @@ export interface RawProfile {
   interests: string[];
   socials: SocialLink[];
   birthDate: string | null;
+  email: string | null;
+  lastSeenAt: string | null;
   privacy: ProfilePrivacy;
   joinedAt: string | null;
 }
