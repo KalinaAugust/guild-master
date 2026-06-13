@@ -1,4 +1,4 @@
-.root {
+.container {
   position: absolute;
   top: 0;
   left: 0;
@@ -6,4 +6,56 @@
   height: 100%;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
+  background-image: 
+    radial-gradient(2px at 25px 50px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(3px at 150px 300px, rgba(255, 255, 255, 0.95), transparent),
+    radial-gradient(2.5px at 400px 100px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(2px at 250px 600px, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(3px at 600px 200px, rgba(255, 255, 255, 0.95), transparent),
+    radial-gradient(3.5px at 800px 500px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(2px at 50px 800px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(2.5px at 300px 450px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(2px at 500px 750px, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(3.5px at 700px 150px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(2.5px at 850px 850px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(2px at 120px 650px, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(3px at 480px 280px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(2px at 780px 320px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(2.5px at 350px 850px, rgba(255, 255, 255, 0.75), transparent),
+    /* Дополнительные 20% средних/крупных звезд */
+    radial-gradient(2.2px at 180px 780px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(3.2px at 640px 640px, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(2.7px at 850px 380px, rgba(255, 255, 255, 0.9), transparent),
+    /* Мелкие, глубокие звезды */
+    radial-gradient(1px at 80px 180px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px at 200px 80px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.5px at 320px 220px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px at 450px 520px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.5px at 580px 400px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px at 620px 880px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.5px at 720px 680px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px at 880px 280px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.2px at 150px 520px, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px at 520px 80px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1.5px at 850px 50px, rgba(255, 255, 255, 0.55), transparent),
+    /* Дополнительные 20% мелких звезд */
+    radial-gradient(1.2px at 280px 140px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px at 390px 700px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1.5px at 520px 480px, rgba(255, 255, 255, 0.5), transparent),
+    /* Еще 5 маленьких звезд */
+    radial-gradient(1.1px at 300px 300px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px at 700px 750px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1.2px at 420px 880px, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px at 80px 450px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px at 680px 480px, rgba(255, 255, 255, 0.5), transparent);
+  background-size: 900px 900px;
 }
+
+.root {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+}
+
+

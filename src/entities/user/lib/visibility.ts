@@ -12,6 +12,7 @@ export const DEFAULT_PRIVACY: Required<ProfilePrivacy> = {
   interests: 'public',
   socials: 'guildmates',
   birth_date: 'guildmates',
+  email: 'private',
   joined: 'public',
   common_guilds: 'guildmates',
 };

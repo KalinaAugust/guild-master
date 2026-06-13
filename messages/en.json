@@ -188,7 +188,8 @@
     "eventComment": "New comments in «{eventTitle}»"
   },
   "PublicProfile": {
-    "joined": "Joined"
+    "joined": "Joined",
+    "email": "Email"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",

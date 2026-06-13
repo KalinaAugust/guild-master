@@ -1,21 +1,22 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { Mail, Calendar, User } from 'lucide-react';
+import { Mail, User, FileText, Cake, VenetianMask, Sparkles } from 'lucide-react';
 import { getLocale } from 'next-intl/server';
 import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
 import { EditableName } from '@/features/update-profile-name';
+import { EditableAbout } from '@/features/update-profile-about';
+import { EditableBirthDate } from '@/features/update-profile-birth-date';
+import { EditableAlias } from '@/features/update-profile-alias';
+import { EditableInterests } from '@/features/update-profile-interests';
 import { resolvePrivacy, resolveDisplayName, type SocialLink } from '@/entities/user';
-import dayjs from '@/shared/lib/dayjs';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { OwnProfileSettings } from './OwnProfileClient';
 import {
   NameWithIcon,
   ProfileBlock,
+  ProfileStatus,
   ValueBlock,
-  AboutBlock,
-  InterestsBlock,
   SocialsBlock,
-  BirthDateBlock,
 } from './ProfileBlocks';
 import styles from './OwnProfile.module.css';
 
@@ -68,7 +69,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
               icon={profile?.icon ?? null}
             />
           </GradientTitle>
-          <p className={styles.status}>Active Member</p>
+          <ProfileStatus self locale={locale} />
 
           {Array.isArray(profile?.socials) && (profile.socials as unknown as SocialLink[]).length > 0 && (
             <SocialsBlock socials={profile.socials as unknown as SocialLink[]} />
@@ -79,18 +80,27 @@ export async function OwnProfile({ user }: OwnProfileProps) {
           <ProfileBlock icon={User} title="Name">
             <EditableName initialFullName={profile?.full_name ?? null} userId={user.id} />
           </ProfileBlock>
+          <ProfileBlock icon={VenetianMask} title="Alias">
+            <EditableAlias initialAlias={profile?.alias ?? null} userId={user.id} />
+          </ProfileBlock>
+          <ProfileBlock icon={FileText} title="About">
+            <EditableAbout initialAbout={profile?.about ?? null} userId={user.id} />
+          </ProfileBlock>
+          <ProfileBlock icon={Sparkles} title="Interests">
+            <EditableInterests
+              initialInterests={(profile?.interests as string[]) ?? []}
+              userId={user.id}
+            />
+          </ProfileBlock>
           <ValueBlock icon={Mail} title="Email" value={user.email} />
-          <ValueBlock
-            icon={Calendar}
-            title="Joined"
-            value={dayjs(user.created_at).locale(locale).format('D MMMM YYYY')}
-          />
 
-          {profile?.about && <AboutBlock about={profile.about} />}
-          {Array.isArray(profile?.interests) && profile.interests.length > 0 && (
-            <InterestsBlock interests={profile.interests as string[]} />
-          )}
-          {profile?.birth_date && <BirthDateBlock birthDate={profile.birth_date} locale={locale} />}
+          <ProfileBlock icon={Cake} title="Birth date">
+            <EditableBirthDate
+              initialBirthDate={profile?.birth_date ?? null}
+              userId={user.id}
+              locale={locale}
+            />
+          </ProfileBlock>
         </section>
       </div>
     </div>

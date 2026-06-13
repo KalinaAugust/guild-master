@@ -60,13 +60,6 @@
   backdrop-filter: none;
 }
 
-.status {
-  margin: 0.25rem 0 0;
-  color: var(--accent-secondary);
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
 @media (max-width: 720px) {
   .layout {
     grid-template-columns: 1fr;

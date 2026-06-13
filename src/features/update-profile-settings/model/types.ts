@@ -15,7 +15,7 @@ export const SOCIAL_VALUE_MAX = 200;
 
 const LEVELS: readonly PrivacyLevel[] = ['private', 'guildmates', 'public'];
 const PRIVACY_FIELDS: readonly PrivacyField[] = [
-  'name', 'alias', 'about', 'interests', 'socials', 'birth_date', 'joined', 'common_guilds',
+  'name', 'alias', 'about', 'interests', 'socials', 'birth_date', 'email', 'joined', 'common_guilds',
 ];
 
 export interface ProfileSettingsInput {

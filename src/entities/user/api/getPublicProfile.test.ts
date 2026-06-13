@@ -16,6 +16,8 @@ const PROFILE_ROW = {
   interests: ['raids'],
   socials: [{ platform: 'discord', value: 'john#1' }],
   birth_date: '1990-05-20',
+  email: 'john@doe.com',
+  last_seen_at: '2025-06-01T10:00:00Z',
   privacy: { about: 'public' },
 };
 
@@ -71,6 +73,8 @@ describe('getPublicProfile', () => {
       interests: ['raids'],
       socials: [{ platform: 'discord', value: 'john#1' }],
       birthDate: '1990-05-20',
+      email: 'john@doe.com',
+      lastSeenAt: '2025-06-01T10:00:00Z',
       privacy: { about: 'public' },
       joinedAt: '2025-01-01',
     });

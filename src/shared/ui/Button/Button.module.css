@@ -218,6 +218,15 @@
   box-shadow: 0 4px 15px rgba(235, 64, 52, 0.2);
 }
 
+/* Icon-only buttons never lift on hover — feedback is opacity/color only.
+   See docs/design-system.md. */
+.size_icon:hover:not(:disabled),
+.size_icon_sm:hover:not(:disabled),
+.size_icon:active:not(:disabled),
+.size_icon_sm:active:not(:disabled) {
+  transform: none;
+}
+
 /* Loading state */
 .button.loading {
   position: relative;

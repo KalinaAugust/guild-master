@@ -599,11 +599,13 @@ export type Database = {
           avatar_url: string | null
           birth_date: string | null
           display_as_alias: boolean
+          email: string | null
           full_name: string | null
           icon: string | null
           id: string
           interests: string[]
           last_active_guild_id: string | null
+          last_seen_at: string | null
           privacy: Json
           public_id: string
           socials: Json
@@ -615,11 +617,13 @@ export type Database = {
           avatar_url?: string | null
           birth_date?: string | null
           display_as_alias?: boolean
+          email?: string | null
           full_name?: string | null
           icon?: string | null
           id: string
           interests?: string[]
           last_active_guild_id?: string | null
+          last_seen_at?: string | null
           privacy?: Json
           public_id?: string
           socials?: Json
@@ -631,11 +635,13 @@ export type Database = {
           avatar_url?: string | null
           birth_date?: string | null
           display_as_alias?: boolean
+          email?: string | null
           full_name?: string | null
           icon?: string | null
           id?: string
           interests?: string[]
           last_active_guild_id?: string | null
+          last_seen_at?: string | null
           privacy?: Json
           public_id?: string
           socials?: Json

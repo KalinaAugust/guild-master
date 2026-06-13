@@ -83,12 +83,25 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Apply the CSP header and pending locale cookie to whatever response we
-  // ultimately return, so neither is lost across response re-creation.
+  // Presence heartbeat: refresh last_seen_at at most once per 5 minutes. The
+  // `ls_hb` cookie throttles writes so most requests skip the DB entirely.
+  const needsHeartbeat = !!user && !request.cookies.get('ls_hb');
+  if (needsHeartbeat && user) {
+    await supabase
+      .from('profiles')
+      .update({ last_seen_at: new Date().toISOString() })
+      .eq('id', user.id);
+  }
+
+  // Apply the CSP header and pending cookies to whatever response we ultimately
+  // return, so none are lost across response re-creation.
   const finalize = (res: NextResponse) => {
     res.headers.set('Content-Security-Policy', csp);
     if (localeToSet) {
       res.cookies.set('NEXT_LOCALE', localeToSet);
+    }
+    if (needsHeartbeat) {
+      res.cookies.set('ls_hb', '1', { maxAge: 300, httpOnly: true, sameSite: 'lax' });
     }
     return res;
   };

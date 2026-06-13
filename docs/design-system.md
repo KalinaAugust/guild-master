@@ -216,6 +216,7 @@ To simulate elevation and mechanical response, **all standard buttons** (Primary
 *   **Hover State:** `transform: translateY(-2px);` combined with a smooth transition `transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1)`.
 *   **Active State:** `transform: translateY(0);` (depressed when clicked).
 *   *Exception:* Inline message actions (like edit/delete icons in message bubbles) do not lift on hover to maintain chat text block stability.
+*   *Exception — icon-only buttons:* Buttons sized `icon` / `icon_sm` (e.g. the profile settings gear, inline edit icons) **never lift on hover**. Their feedback is opacity/color only — no `translateY`. This is enforced in `Button.module.css` via a `transform: none` override on the icon sizes.
 
 ### 12.3 Primary Button Redesign
 The Primary action button is styled as a glowing glassmorphic energy panel:

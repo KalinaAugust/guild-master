@@ -1,4 +1,5 @@
 export const PROFILE_ICONS = [
+  // Original set
   'Sword',
   'Shield',
   'Crown',
@@ -11,6 +12,31 @@ export const PROFILE_ICONS = [
   'Sparkles',
   'Ghost',
   'Rocket',
+  // Sport
+  'Trophy',
+  'Medal',
+  'Dumbbell',
+  'Bike',
+  'Target',
+  'Mountain',
+  'Volleyball',
+  // Hobbies & interests
+  'Music',
+  'Headphones',
+  'Guitar',
+  'Camera',
+  'Palette',
+  'Gem',
+  'Compass',
+  'Anchor',
+  'Leaf',
+  'Moon',
+  'Coffee',
+  'Dices',
+  'Brain',
+  'Cat',
+  'Dog',
+  'Bird',
 ] as const;
 
 export type ProfileIcon = (typeof PROFILE_ICONS)[number];

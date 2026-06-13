@@ -188,7 +188,8 @@
     "eventComment": "Новые комментарии в «{eventTitle}»"
   },
   "PublicProfile": {
-    "joined": "Дата регистрации"
+    "joined": "Дата регистрации",
+    "email": "Почта"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",

@@ -26,13 +26,31 @@ export const NameWithIcon: React.FC<NameWithIconProps> = ({
   className,
 }) => {
   const Icon = icon
-    ? (Icons[icon as keyof typeof Icons] as React.ComponentType<{ size?: number }> | undefined)
+    ? (Icons[icon as keyof typeof Icons] as
+        | React.ComponentType<{ size?: number; className?: string }>
+        | undefined)
     : null;
 
+  const rootClass = [styles.root, className].filter(Boolean).join(' ');
+  const text = name || fallback;
+
+  if (!Icon) {
+    return <span className={rootClass}>{text}</span>;
+  }
+
+  // Keep the icon glued to the last word so they wrap to a new line together
+  // instead of the icon breaking onto a line by itself.
+  const words = text.split(' ');
+  const lastWord = words.pop() ?? '';
+  const head = words.join(' ');
+
   return (
-    <span className={[styles.root, className].filter(Boolean).join(' ')}>
-      {name || fallback}
-      {Icon && <Icon size={iconSize} />}
+    <span className={rootClass}>
+      {head && `${head} `}
+      <span className={styles.lastChunk}>
+        {lastWord}
+        <Icon size={iconSize} className={styles.icon} />
+      </span>
     </span>
   );
 };

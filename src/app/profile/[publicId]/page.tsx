@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { getTranslations, getLocale } from 'next-intl/server';
-import { Calendar } from 'lucide-react';
+import { Calendar, Mail } from 'lucide-react';
 import { getPublicProfile } from '@/entities/user/api/getPublicProfile';
 import { buildVisibleProfile, type ViewerRelationship } from '@/entities/user';
 import { getCommonGuilds } from '@/entities/guild';
@@ -11,6 +11,7 @@ import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { OwnProfile } from './OwnProfile';
 import {
   NameWithIcon,
+  ProfileStatus,
   ValueBlock,
   AboutBlock,
   InterestsBlock,
@@ -57,9 +58,9 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
       <div className={styles.layout}>
         <aside className={styles.sidebar}>
           <div className={styles.avatarWrap}>
-            <UserAvatar avatarUrl={profile.avatarUrl} name={profile.displayName} size="xl" />
+            <UserAvatar avatarUrl={profile.avatarUrl} name={profile.displayName} fill />
           </div>
-          <GradientTitle className={styles.name} fontSize="1.6rem">
+          <GradientTitle className={styles.name} fontSize="1.3rem">
             <NameWithIcon name={profile.displayName} icon={profile.icon} />
           </GradientTitle>
           {profile.alias && profile.alias !== profile.displayName && (
@@ -68,6 +69,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           {profile.realName && profile.realName !== profile.displayName && (
             <p className={styles.realName}>{profile.realName}</p>
           )}
+          <ProfileStatus lastSeenAt={profile.lastSeenAt} locale={locale} />
 
           {viewer && <SendMessageButton />}
 
@@ -83,6 +85,8 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
             <InterestsBlock interests={profile.interests} />
           )}
           {profile.birthDate && <BirthDateBlock birthDate={profile.birthDate} locale={locale} />}
+
+          {profile.email && <ValueBlock icon={Mail} title={t('email')} value={profile.email} />}
 
           {profile.joinedAt && (
             <ValueBlock
