@@ -55,21 +55,23 @@ export const NameWithIcon = ({ name, icon }: { name: string | null; icon: string
   <SharedNameWithIcon name={name} icon={icon} iconSize={18} className={styles.nameRow} />
 );
 
-const PRESENCE_THRESHOLD_MS = 5 * 60 * 1000;
+const PRESENCE_THRESHOLD_MIN = 5;
+
+/** Whether a `last_seen_at` timestamp counts as currently online. Computed by
+ * the (Server Component) caller so ProfileStatus stays purely presentational. */
+export const isOnline = (lastSeenAt: string | null | undefined): boolean =>
+  !!lastSeenAt && dayjs().diff(dayjs(lastSeenAt), 'minute') < PRESENCE_THRESHOLD_MIN;
 
 /** Presence line shown under the profile name. */
 export const ProfileStatus = ({
+  online,
   lastSeenAt,
   locale,
-  self = false,
 }: {
+  online: boolean;
   lastSeenAt?: string | null;
   locale: string;
-  self?: boolean;
 }) => {
-  const online =
-    self || (!!lastSeenAt && Date.now() - new Date(lastSeenAt).getTime() < PRESENCE_THRESHOLD_MS);
-
   if (!online && !lastSeenAt) return null;
 
   return (

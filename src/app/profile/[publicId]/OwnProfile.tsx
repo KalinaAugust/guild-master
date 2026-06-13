@@ -69,7 +69,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
               icon={profile?.icon ?? null}
             />
           </GradientTitle>
-          <ProfileStatus self locale={locale} />
+          <ProfileStatus online locale={locale} />
 
           {Array.isArray(profile?.socials) && (profile.socials as unknown as SocialLink[]).length > 0 && (
             <SocialsBlock socials={profile.socials as unknown as SocialLink[]} />

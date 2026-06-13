@@ -12,6 +12,7 @@ import { OwnProfile } from './OwnProfile';
 import {
   NameWithIcon,
   ProfileStatus,
+  isOnline,
   ValueBlock,
   AboutBlock,
   InterestsBlock,
@@ -69,7 +70,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           {profile.realName && profile.realName !== profile.displayName && (
             <p className={styles.realName}>{profile.realName}</p>
           )}
-          <ProfileStatus lastSeenAt={profile.lastSeenAt} locale={locale} />
+          <ProfileStatus online={isOnline(profile.lastSeenAt)} lastSeenAt={profile.lastSeenAt} locale={locale} />
 
           {viewer && <SendMessageButton />}
 
