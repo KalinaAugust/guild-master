@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { EventWizard } from './EventWizard';
 import { calendarReducer } from '@/entities/calendar';
-import { guildReducer } from '@/entities/guild/model/slice';
+import { guildReducer } from '@/entities/guild';
 import { baseApi } from '@/shared/api/baseApi';
 
 vi.mock('next-intl', () => ({

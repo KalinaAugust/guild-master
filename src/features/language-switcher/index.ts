@@ -1,1 +1,1 @@
-export { LanguageSwitcher } from './ui/LanguageSwitcher';
+export { setUserLocale } from './api/setLocale';

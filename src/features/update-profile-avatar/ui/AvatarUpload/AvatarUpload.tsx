@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { User, Camera } from 'lucide-react';
 import { Spinner } from '@/shared/ui/Spinner';
 import { toast } from 'sonner';
-import { updateAvatar } from '@/entities/user/api/updateAvatar';
+import { updateAvatar } from '@/entities/user';
 import { CropperModal } from '@/shared/ui/CropperModal';
 import { ACCEPTED_IMAGE_ACCEPT, validateImageFile } from '@/shared/lib/imageValidation';
 import styles from './AvatarUpload.module.css';

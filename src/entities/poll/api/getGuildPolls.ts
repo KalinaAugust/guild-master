@@ -5,7 +5,7 @@ import { POLL_SELECT, buildPoll, type PollRow } from './mapPollRow';
 const MANAGER_ROLES = ['ADMIN', 'OWNER'];
 
 /** Returns the caller's id and guild role (or null when unauthenticated / not a member). */
-export const resolveCaller = async (
+const resolveCaller = async (
   supabase: Awaited<ReturnType<typeof createClient>>,
   guildId: string,
 ): Promise<{ userId: string | null; role: string | null }> => {
@@ -20,7 +20,7 @@ export const resolveCaller = async (
   return { userId: user.id, role: membership?.role ?? null };
 };
 
-export const canManagePoll = (
+const canManagePoll = (
   createdBy: string | null,
   userId: string | null,
   role: string | null,

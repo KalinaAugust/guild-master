@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { baseApi } from '@/shared/api/baseApi';
 import Link from 'next/link';
-import { setUserLocale } from '@/features/language-switcher/api/setLocale';
+import { setUserLocale } from '@/features/language-switcher';
 import styles from './UserMenu.module.css';
 
 interface UserMenuProps {

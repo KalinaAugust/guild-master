@@ -6,7 +6,7 @@ import { Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
-import { updateFullName } from '@/entities/user/api/updateFullName';
+import { updateFullName } from '@/entities/user';
 import styles from './EditableName.module.css';
 
 interface EditableNameProps {

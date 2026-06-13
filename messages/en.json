@@ -69,12 +69,8 @@
       "timeRequired": "Time is required"
     },
     "wizard": {
-      "mainColumn": "Main",
-      "additionalColumn": "Additional",
       "repeatLabel": "Repeat on days",
       "invitedLabel": "Invited users",
-      "invitedPlaceholder": "Add members…",
-      "memberSearch": "Search members…",
       "noMembers": "No guild members found",
       "filterPlaceholder": "Search members...",
       "selectAll": "Select all",
@@ -85,7 +81,6 @@
       "none": "None",
       "enableAll": "Enable all",
       "disableAll": "Disable all",
-      "triggerLabel": "Filter events by type",
       "ariaLabel": "Event type filter"
     }
   },
@@ -187,10 +182,7 @@
     "eventComment": "New comments in «{eventTitle}»"
   },
   "PublicProfile": {
-    "joined": "Joined",
-    "statistics": "Statistics",
-    "guilds": "Guilds",
-    "events": "Events"
+    "joined": "Joined"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",
@@ -216,7 +208,6 @@
   },
   "GuildMembers": {
     "add": "Add",
-    "loading": "Loading…",
     "empty": "No members yet.",
     "removeMember": "Remove member",
     "remove": "Remove",

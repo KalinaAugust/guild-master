@@ -1,9 +1,15 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EditableName } from './EditableName';
-import { updateFullName } from '@/entities/user/api/updateFullName';
+import { updateFullName } from '@/entities/user';
 
-vi.mock('@/entities/user/api/updateFullName');
+vi.mock('@/entities/user', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@/entities/user')>();
+  return {
+    ...original,
+    updateFullName: vi.fn(),
+  };
+});
 const refresh = vi.fn();
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh }) }));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));

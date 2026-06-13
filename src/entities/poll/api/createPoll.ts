@@ -2,12 +2,12 @@ import { createClient } from '@/shared/api/supabase/server';
 import type { CreatePollInput, Poll } from '../model/types';
 import { getPollById } from './getGuildPolls';
 
-export const MIN_OPTIONS = 2;
-export const MAX_OPTIONS = 10;
+const MIN_OPTIONS = 2;
+const MAX_OPTIONS = 10;
 /** A guild keeps at most this many polls; creating more prunes the oldest. */
-export const MAX_POLLS_PER_GUILD = 20;
-export const MAX_TITLE = 200;
-export const MAX_DESCRIPTION = 1000;
+const MAX_POLLS_PER_GUILD = 20;
+const MAX_TITLE = 200;
+const MAX_DESCRIPTION = 1000;
 export const MAX_OPTION = 200;
 
 /** Thrown when poll input is invalid (empty title, too few/long options, …). */

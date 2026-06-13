@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { calendarReducer } from '@/entities/calendar';
-import { guildReducer } from '@/entities/guild/model/slice';
+import { guildReducer } from '@/entities/guild';
 import { baseApi } from '@/shared/api/baseApi';
 
 export const store = configureStore({

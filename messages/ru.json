@@ -69,12 +69,8 @@
       "timeRequired": "Укажите время"
     },
     "wizard": {
-      "mainColumn": "Основное",
-      "additionalColumn": "Дополнительно",
       "repeatLabel": "Повтор по дням",
       "invitedLabel": "Приглашённые участники",
-      "invitedPlaceholder": "Добавить участников…",
-      "memberSearch": "Поиск участников…",
       "noMembers": "Участников гильдии не найдено",
       "filterPlaceholder": "Поиск участников...",
       "selectAll": "Выбрать всех",
@@ -85,7 +81,6 @@
       "none": "Ничего",
       "enableAll": "Включить все",
       "disableAll": "Выключить все",
-      "triggerLabel": "Фильтровать события по типу",
       "ariaLabel": "Фильтр типов событий"
     }
   },
@@ -187,10 +182,7 @@
     "eventComment": "Новые комментарии в «{eventTitle}»"
   },
   "PublicProfile": {
-    "joined": "Дата регистрации",
-    "statistics": "Статистика",
-    "guilds": "Гильдии",
-    "events": "События"
+    "joined": "Дата регистрации"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",
@@ -216,7 +208,6 @@
   },
   "GuildMembers": {
     "add": "Добавить",
-    "loading": "Загрузка…",
     "empty": "Пока нет участников.",
     "removeMember": "Удалить участника",
     "remove": "Удалить",

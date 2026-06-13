@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import { guildReducer } from '@/entities/guild/model/slice';
+import { guildReducer } from '@/entities/guild';
 import { useGuildSelection } from './useGuildSelection';
 import type { Guild } from '@/entities/guild';
 import React from 'react';
