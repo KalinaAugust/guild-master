@@ -139,7 +139,7 @@
   box-shadow: var(--shadow-glass);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  z-index: 1000;
+  z-index: var(--z-popover);
 }
 
 .menuItem {

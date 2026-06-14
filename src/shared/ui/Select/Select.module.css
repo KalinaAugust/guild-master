@@ -86,7 +86,7 @@
   border: 1px solid var(--glass-border);
   border-radius: 8px;
   box-shadow: var(--shadow-glass);
-  z-index: 2000;
+  z-index: var(--z-popover);
   min-width: var(--radix-select-trigger-width);
   max-height: 300px;
   backdrop-filter: var(--glass-blur);

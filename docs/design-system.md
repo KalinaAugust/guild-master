@@ -129,6 +129,24 @@ Guild Master color-codes calendar events by their type. Each event type has a ba
 *   `--header-height`: `3rem` (equivalent to 48px at base 16px)
 *   `--rail-width`: `3.75rem` (equivalent to 60px at base 16px)
 
+### Z-index scale (stacking order)
+
+**Never hard-code a numeric `z-index` in a `*.module.css` file.** Every stacking layer uses a token from the single scale defined in `globals.css` (`:root`). This prevents the recurring bug where a dropdown opened from inside a dialog disappears behind it.
+
+| Token | Value | Use for |
+|---|---|---|
+| `--z-behind` | `-1` | decorative backgrounds (e.g. `ParticlesBackground`, bg blobs) |
+| `--z-base` | `0` | normal in-flow content |
+| `--z-sticky` | `10` | sticky table headers (e.g. `CalendarGrid`) |
+| `--z-nav` | `200` | sidebar, side panels (notifications) |
+| `--z-wizard` | `1100` | fullscreen wizard overlay (`WizardDialog`) |
+| `--z-modal` | `1500` | modal backdrop (`Modal`) |
+| `--z-modal-content` | `1501` | modal content box |
+| `--z-tooltip` | `1600` | tooltips |
+| `--z-popover` | `2000` | **dropdowns / selects / poppers** — sits above every dialog so it stays visible when triggered from inside one |
+
+**Rule:** any Radix floating layer portaled to `document.body` (DropdownMenu, Select, Popover content) must use `--z-popover`. A purely local stack within one component (e.g. raising a link above a sibling) may use a small literal like `z-index: 1` — the scale governs cross-component layers, not intra-component ones.
+
 ---
 
 ## 7. Border Radii (Corner Rounding)

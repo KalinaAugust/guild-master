@@ -31,7 +31,7 @@
   border-radius: 12px;
   box-shadow: var(--shadow-glass);
   padding: 10px;
-  z-index: 2000;
+  z-index: var(--z-popover);
   width: 290px;
   backdrop-filter: var(--glass-blur);
   animation: slideUpAndFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
