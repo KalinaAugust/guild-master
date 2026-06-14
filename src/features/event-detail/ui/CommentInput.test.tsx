@@ -27,7 +27,7 @@ describe('CommentInput', () => {
     const field = screen.getByRole('textbox');
     await user.type(field, '  hello  ');
     fireEvent.submit(field.closest('form')!);
-    expect(onSubmit).toHaveBeenCalledWith('hello');
+    expect(onSubmit).toHaveBeenCalledWith('hello', null);
     expect(field).toHaveValue('');
   });
 

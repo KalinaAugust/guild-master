@@ -61,7 +61,80 @@
   scrollbar-width: none;
 }
 
+/* Reserve room for the second (attachment) button on the left. */
+.form .textareaWithAttach {
+  padding-left: 78px;
+}
+
 .form .textarea::-webkit-scrollbar { display: none; }
+
+.attachButton {
+  position: absolute;
+  left: 42px;
+  top: calc(50% - 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.2s ease;
+}
+
+.attachButton:hover:not(:disabled) {
+  color: var(--accent-primary);
+}
+
+.attachButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.previewBar {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+
+.previewThumb {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+}
+
+.previewRemove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  background: var(--modal-bg);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.previewRemove:hover {
+  color: #ff4d4d;
+}
 
 .sendButton {
   position: absolute;

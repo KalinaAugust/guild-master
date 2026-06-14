@@ -331,6 +331,7 @@ export type Database = {
       }
       guild_messages: {
         Row: {
+          attachment_url: string | null
           body: string
           created_at: string
           guild_id: string
@@ -339,6 +340,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          attachment_url?: string | null
           body: string
           created_at?: string
           guild_id: string
@@ -347,6 +349,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          attachment_url?: string | null
           body?: string
           created_at?: string
           guild_id?: string

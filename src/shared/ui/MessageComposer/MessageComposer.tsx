@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
-import { Send, Check, X, Pencil } from 'lucide-react';
+import React, { useState, useRef, useLayoutEffect, useEffect, useMemo } from 'react';
+import Image from 'next/image';
+import { Send, Check, X, Pencil, Paperclip } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/shared/ui/Button';
 import { Textarea } from '@/shared/ui/Textarea';
 import { Spinner } from '@/shared/ui/Spinner';
+import { ACCEPTED_IMAGE_ACCEPT, validateImageFile } from '@/shared/lib/imageValidation';
 import { EmojiPicker } from './EmojiPicker';
 import styles from './MessageComposer.module.css';
 
 interface MessageComposerProps {
   canWrite: boolean;
-  onSubmit: (body: string) => void;
+  onSubmit: (body: string, file?: File | null) => void;
   isSubmitting?: boolean;
   placeholder: string;
   sendLabel: string;
@@ -25,6 +28,10 @@ interface MessageComposerProps {
   onCancelEdit?: () => void;
   editLabel?: string;
   cancelEditLabel?: string;
+  /** Enables the image-attachment button (guild chat only). */
+  allowAttachment?: boolean;
+  attachLabel?: string;
+  removeAttachmentLabel?: string;
 }
 
 export const MessageComposer: React.FC<MessageComposerProps> = ({
@@ -41,9 +48,20 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   onCancelEdit,
   editLabel,
   cancelEditLabel,
+  allowAttachment = false,
+  attachLabel,
+  removeAttachmentLabel,
 }) => {
   const [value, setValue] = useState('');
+  const [file, setFile] = useState<File | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Attachments are offered only outside edit mode (edits are text-only).
+  const showAttach = allowAttachment && !editing;
+
+  const previewUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file]);
+  useEffect(() => () => { if (previewUrl) URL.revokeObjectURL(previewUrl); }, [previewUrl]);
 
   // Auto-grow the textarea: reset height, then match it to the content.
   useLayoutEffect(() => {
@@ -61,6 +79,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   if (editSession !== prevSession) {
     setPrevSession(editSession);
     setValue(editing ? initialValue ?? '' : '');
+    if (editing) setFile(null);
   }
 
   // Focus + place the cursor at the end whenever a new edit session begins.
@@ -77,13 +96,33 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     return <p className={styles.locked}>{lockedPrompt}</p>;
   }
 
+  const clearFile = () => {
+    setFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const picked = e.target.files?.[0];
+    if (!picked) return;
+    const error = validateImageFile(picked);
+    if (error) {
+      toast.error(error);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    setFile(picked);
+  };
+
   const submit = () => {
     const trimmed = value.trim();
-    if (!trimmed) return;
-    onSubmit(trimmed);
+    if (!trimmed && !file) return;
+    onSubmit(trimmed, file);
     // In edit mode the parent clears `editing`, which resets the value via the
-    // effect above; only the send flow clears it here.
-    if (!editing) setValue('');
+    // render-phase block above; only the send flow clears it here.
+    if (!editing) {
+      setValue('');
+      clearFile();
+    }
   };
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -123,6 +162,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     }, 0);
   };
 
+  const canSend = !!value.trim() || !!file;
+
   return (
     <div className={styles.wrapper}>
       {editing && (
@@ -139,11 +180,51 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           </button>
         </div>
       )}
+      {previewUrl && (
+        <div className={styles.previewBar}>
+          <Image
+            src={previewUrl}
+            alt=""
+            width={56}
+            height={56}
+            unoptimized
+            className={styles.previewThumb}
+          />
+          <button
+            type="button"
+            className={styles.previewRemove}
+            onClick={clearFile}
+            aria-label={removeAttachmentLabel}
+          >
+            <X size={16} />
+          </button>
+        </div>
+      )}
       <form className={styles.form} onSubmit={handleSubmit}>
         <EmojiPicker onSelectEmoji={handleSelectEmoji} disabled={isSubmitting} />
+        {showAttach && (
+          <>
+            <button
+              type="button"
+              className={styles.attachButton}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isSubmitting}
+              aria-label={attachLabel}
+            >
+              <Paperclip size={22} />
+            </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept={ACCEPTED_IMAGE_ACCEPT}
+              className={styles.hiddenInput}
+            />
+          </>
+        )}
         <Textarea
           ref={textareaRef}
-          className={styles.textarea}
+          className={`${styles.textarea} ${showAttach ? styles.textareaWithAttach : ''}`}
           value={value}
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -159,7 +240,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             size="icon"
             variant="ghost"
             className={styles.sendButton}
-            disabled={!value.trim()}
+            disabled={!canSend}
             aria-label={sendLabel}
           >
             {editing ? <Check size={26} /> : <Send size={26} />}

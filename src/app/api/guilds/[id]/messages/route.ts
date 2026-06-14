@@ -24,11 +24,14 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const { body } = await request.json();
+    const { body, attachmentUrl } = await request.json();
     if (typeof body !== 'string') {
       return NextResponse.json({ error: 'Invalid message body' }, { status: 400 });
     }
-    const message = await createGuildMessage(id, body);
+    if (attachmentUrl != null && typeof attachmentUrl !== 'string') {
+      return NextResponse.json({ error: 'Invalid attachment' }, { status: 400 });
+    }
+    const message = await createGuildMessage(id, body, attachmentUrl ?? null);
     return NextResponse.json(message, { status: 201 });
   } catch (e) {
     if (e instanceof InvalidGuildMessageError) {

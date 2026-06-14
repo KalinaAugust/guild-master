@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { Edit2, Trash2 } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
@@ -39,6 +40,8 @@ interface MessageBubbleProps {
   /** When set, the author's avatar and name link to their public profile. */
   profilePublicId?: string | null;
   body: string;
+  /** Optional image attachment URL rendered above the text. */
+  attachmentUrl?: string | null;
   createdAt: string;
   updatedAt: string;
   isOwn: boolean;
@@ -57,6 +60,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   avatarUrl,
   profilePublicId,
   body,
+  attachmentUrl,
   createdAt,
   updatedAt,
   isOwn,
@@ -102,7 +106,24 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           )}
         </div>
 
-        <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>
+        {attachmentUrl && (
+          <a
+            href={attachmentUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.attachment}
+          >
+            <Image
+              src={attachmentUrl}
+              alt=""
+              width={320}
+              height={320}
+              unoptimized
+              className={styles.attachmentImg}
+            />
+          </a>
+        )}
+        {body && <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>}
       </div>
 
       {isOwn && (

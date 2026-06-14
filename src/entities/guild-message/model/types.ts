@@ -3,6 +3,7 @@ export interface GuildMessage {
   guildId: string;
   userId: string;
   body: string;
+  attachmentUrl: string | null;
   createdAt: string;
   updatedAt: string;
   profile: {

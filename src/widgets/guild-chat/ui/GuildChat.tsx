@@ -13,7 +13,7 @@ import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { PollCard, PollWizard } from '@/features/guild-poll';
 import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
-import type { GuildMessage } from '@/entities/guild-message';
+import { uploadChatAttachment, type GuildMessage } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
 import {
   useGetGuildMessagesQuery,
@@ -70,6 +70,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
   const [markRead] = useMarkGuildChatReadMutation();
   const [isPollWizardOpen, setIsPollWizardOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; body: string } | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
   const hasUnread =
@@ -122,7 +123,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
 
   // Single composer entry point: save the message being edited, otherwise send a
   // new one. On a failed edit we keep edit mode so the draft is preserved.
-  const handleComposerSubmit = async (body: string) => {
+  const handleComposerSubmit = async (body: string, file?: File | null) => {
     if (!activeGuildId) return;
     if (editing) {
       try {
@@ -133,11 +134,25 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
       }
       return;
     }
+    // Upload the attachment first (if any) so the message carries a public URL.
+    let attachmentUrl: string | null = null;
+    if (file && userId) {
+      setIsUploading(true);
+      try {
+        attachmentUrl = await uploadChatAttachment(userId, file);
+      } catch {
+        toast.error(t('attachmentError'));
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+    }
     pendingScrollRef.current = true;
     try {
       await addMessage({
         guildId: activeGuildId,
         body,
+        attachmentUrl,
         author: userId && viewerProfile ? { userId, profile: viewerProfile } : undefined,
       }).unwrap();
     } catch {
@@ -207,6 +222,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
                     avatarUrl={m.profile.avatarUrl}
                     profilePublicId={m.profile.publicId}
                     body={m.body}
+                    attachmentUrl={m.attachmentUrl}
                     createdAt={m.createdAt}
                     updatedAt={m.updatedAt}
                     isOwn={m.userId === userId}
@@ -224,7 +240,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
           <MessageComposer
             canWrite={!!userId}
             onSubmit={handleComposerSubmit}
-            isSubmitting={isAdding || updateState.isLoading}
+            isSubmitting={isAdding || updateState.isLoading || isUploading}
             placeholder={t('placeholder')}
             sendLabel={editing ? t('save') : t('send')}
             lockedPrompt={t('lockedPrompt')}
@@ -235,6 +251,9 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
             onCancelEdit={() => setEditing(null)}
             editLabel={t('editing')}
             cancelEditLabel={t('cancel')}
+            allowAttachment
+            attachLabel={t('attach')}
+            removeAttachmentLabel={t('removeAttachment')}
           />
         </div>
 

@@ -251,6 +251,9 @@
     "confirmDelete": "Delete this message?",
     "lockedPrompt": "Join this guild to write messages",
     "sendError": "Failed to send message",
+    "attach": "Attach image",
+    "removeAttachment": "Remove image",
+    "attachmentError": "Failed to upload image",
     "updateError": "Failed to update message",
     "deleteError": "Failed to delete message"
   },

@@ -12,15 +12,20 @@ export const guildMessageApi = baseApi.injectEndpoints({
     addGuildMessage: builder.mutation<
       GuildMessage,
       // `author` lets the message appear instantly (optimistic); the server
-      // ignores it and only consumes `body`.
-      { guildId: string; body: string; author?: { userId: string; profile: GuildMessage['profile'] } }
+      // ignores it and only consumes `body` + `attachmentUrl`.
+      {
+        guildId: string;
+        body: string;
+        attachmentUrl?: string | null;
+        author?: { userId: string; profile: GuildMessage['profile'] };
+      }
     >({
-      query: ({ guildId, body }) => ({
+      query: ({ guildId, body, attachmentUrl }) => ({
         url: `guilds/${guildId}/messages`,
         method: 'POST',
-        body: { body },
+        body: { body, attachmentUrl: attachmentUrl ?? null },
       }),
-      async onQueryStarted({ guildId, body, author }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ guildId, body, attachmentUrl, author }, { dispatch, queryFulfilled }) {
         // Insert a temporary bubble immediately so sending feels instant.
         let tempId: string | null = null;
         if (author) {
@@ -31,6 +36,7 @@ export const guildMessageApi = baseApi.injectEndpoints({
             guildId,
             userId: author.userId,
             body,
+            attachmentUrl: attachmentUrl ?? null,
             createdAt: now,
             updatedAt: now,
             profile: author.profile,

@@ -36,6 +36,21 @@
 
 .meta { font-size: 0.75rem; opacity: 0.6; }
 
+.attachment {
+  display: block;
+  margin-top: 6px;
+  max-width: 280px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.attachmentImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .text {
   margin: 4px 0 0;
   white-space: pre-wrap;
