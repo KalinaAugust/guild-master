@@ -88,24 +88,27 @@
   flex-shrink: 0;
 }
 
-.ownerIcon {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-primary);
-  flex-shrink: 0;
-}
-
+.ownerIcon,
 .adminIcon {
   width: 24px;
   height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-secondary);
   flex-shrink: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+.ownerIcon {
+  color: var(--accent-primary);
+}
+
+.adminIcon {
+  color: var(--accent-secondary);
 }
 
 .skeletonList {

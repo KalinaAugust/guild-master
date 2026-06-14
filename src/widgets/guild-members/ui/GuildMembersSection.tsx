@@ -159,12 +159,12 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               <span className={styles.role}>{member.role}</span>
               {member.role === 'OWNER' && (
                 <span className={styles.ownerIcon}>
-                  <Shield size={14} />
+                  <ShieldCheck size={14} />
                 </span>
               )}
               {member.role === 'ADMIN' && (
                 <span className={styles.adminIcon}>
-                  <ShieldCheck size={14} />
+                  <Shield size={14} />
                 </span>
               )}
               {showMenu && (
