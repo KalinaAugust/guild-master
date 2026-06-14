@@ -10,6 +10,7 @@ export function useGuildPermissions(
     skip: !guildId || !userId,
   });
   const myRole = members.find((m) => m.userId === userId)?.role;
-  const elevated = myRole === 'OWNER' || myRole === 'ADMIN';
-  return { canManageEvents: elevated, canManageMembers: elevated };
+  const isOwner = myRole === 'OWNER';
+  const elevated = isOwner || myRole === 'ADMIN';
+  return { canManageEvents: elevated, canManageMembers: elevated, isOwner };
 }
