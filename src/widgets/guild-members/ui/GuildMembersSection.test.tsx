@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { GuildMembersSection } from './GuildMembersSection';
 
@@ -6,7 +7,12 @@ vi.mock('@/entities/guild', () => ({
   useGetGuildMembersQuery: vi.fn(),
   useAddGuildMemberMutation: vi.fn(),
   useRemoveGuildMemberMutation: vi.fn(),
-  useGuildPermissions: vi.fn(() => ({ canManageMembers: false })),
+  useUpdateGuildMemberRoleMutation: vi.fn(),
+  useGuildPermissions: vi.fn(() => ({ canManageMembers: false, isOwner: false })),
+}));
+
+vi.mock('@/entities/user', () => ({
+  resolveDisplayName: ({ fullName }: { fullName: string | null }) => fullName,
 }));
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
@@ -19,6 +25,8 @@ import {
   useGetGuildMembersQuery,
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
+  useUpdateGuildMemberRoleMutation,
+  useGuildPermissions,
 } from '@/entities/guild';
 
 const mockMembers = [
@@ -26,13 +34,22 @@ const mockMembers = [
   { userId: 'u2', role: 'MEMBER' as const, profile: { publicId: null, fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false, icon: null } },
 ];
 
+const ownerMember = mockMembers[0]; // u1 OWNER
+const regularMember = mockMembers[1]; // u2 MEMBER
+const adminMember = {
+  userId: 'u3', role: 'ADMIN' as const,
+  profile: { publicId: null, fullName: 'Carol', avatarUrl: null, alias: null, displayAsAlias: false, icon: null },
+};
+
 describe('GuildMembersSection', () => {
   const addMemberMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
   const removeMemberMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+  const updateRoleMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
 
   beforeEach(() => {
     addMemberMock.mockClear();
     removeMemberMock.mockClear();
+    updateRoleMock.mockClear();
     vi.mocked(useGetGuildMembersQuery).mockReturnValue(
       { data: mockMembers, isLoading: false } as never
     );
@@ -41,6 +58,9 @@ describe('GuildMembersSection', () => {
     );
     vi.mocked(useRemoveGuildMemberMutation).mockReturnValue(
       [removeMemberMock, { isLoading: false }] as never
+    );
+    vi.mocked(useUpdateGuildMemberRoleMutation).mockReturnValue(
+      [updateRoleMock, { isLoading: false }] as never
     );
   });
 
@@ -83,23 +103,85 @@ describe('GuildMembersSection', () => {
     expect(toast.error).toHaveBeenCalledWith('invalidEmail');
   });
 
-  it('does not show remove button for OWNER', () => {
-    render(<GuildMembersSection guildId="g1" />);
-    const removeButtons = screen.getAllByRole('button', { name: 'removeMember' });
-    expect(removeButtons).toHaveLength(1);
+  it('shows an actions menu only for non-owner members when manager', () => {
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    expect(screen.getAllByRole('button', { name: 'memberActions' })).toHaveLength(1);
   });
 
-  it('asks for confirmation before removing and does not remove on open', () => {
-    render(<GuildMembersSection guildId="g1" />);
-    fireEvent.click(screen.getByRole('button', { name: 'removeMember' }));
-    expect(removeMemberMock).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'remove' })).toBeInTheDocument();
+  it('owner sees Make admin + Remove for a member', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    expect(await screen.findByText('makeAdmin')).toBeInTheDocument();
+    expect(screen.getByText('removeMember')).toBeInTheDocument();
   });
 
-  it('calls removeGuildMember with correct ids after confirming', () => {
-    render(<GuildMembersSection guildId="g1" />);
-    fireEvent.click(screen.getByRole('button', { name: 'removeMember' }));
-    fireEvent.click(screen.getByRole('button', { name: 'remove' }));
+  it('owner sees Revoke admin for an admin', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, adminMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    expect(await screen.findByText('revokeAdmin')).toBeInTheDocument();
+  });
+
+  it('admin sees Remove for a member but no role action and no menu on an admin', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: false } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember, adminMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u9" />);
+    const triggers = screen.getAllByRole('button', { name: 'memberActions' });
+    expect(triggers).toHaveLength(1);
+    await user.click(triggers[0]);
+    expect(await screen.findByText('removeMember')).toBeInTheDocument();
+    expect(screen.queryByText('makeAdmin')).not.toBeInTheDocument();
+  });
+
+  it('promotes a member to admin after confirming', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    await user.click(await screen.findByText('makeAdmin'));
+    await user.click(await screen.findByRole('button', { name: 'confirm' }));
+    expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2', role: 'ADMIN' });
+  });
+
+  it('revokes admin from a member after confirming', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, adminMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    await user.click(await screen.findByText('revokeAdmin'));
+    await user.click(await screen.findByRole('button', { name: 'confirm' }));
+    expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u3', role: 'MEMBER' });
+  });
+
+  it('removes a member after confirming', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    await user.click(await screen.findByText('removeMember'));
+    await user.click(await screen.findByRole('button', { name: 'remove' }));
     expect(removeMemberMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2' });
   });
 

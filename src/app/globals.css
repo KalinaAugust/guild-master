@@ -53,6 +53,21 @@
   --event-dnd-border: #f59e0b;
   --event-boardgame: #232450;
   --event-boardgame-border: #818cf8;
+
+  /* Z-index scale — single source of truth for stacking order.
+     Higher tiers always render above lower tiers. Floating layers
+     (dropdowns, selects, poppers) use --z-popover, which sits above
+     every dialog so they remain visible when opened from inside one.
+     See docs/design-system.md → "Z-index scale". */
+  --z-behind: -1;        /* decorative backgrounds */
+  --z-base: 0;
+  --z-sticky: 10;        /* sticky table headers */
+  --z-nav: 200;          /* sidebar, side panels */
+  --z-wizard: 1100;      /* fullscreen wizard overlay */
+  --z-modal: 1500;       /* modal backdrop */
+  --z-modal-content: 1501;
+  --z-tooltip: 1600;
+  --z-popover: 2000;     /* dropdowns / selects / poppers — above all dialogs */
 }
 
 * {
@@ -90,7 +105,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--accent-primary);
   filter: blur(100px);
   border-radius: 50%;
-  z-index: -1;
+  z-index: var(--z-behind);
   opacity: 0.15;
   pointer-events: none;
   animation: move-blob 25s infinite alternate ease-in-out;

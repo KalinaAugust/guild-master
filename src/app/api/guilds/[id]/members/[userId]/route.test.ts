@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextResponse } from 'next/server';
-import { DELETE } from './route';
-import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
+import { DELETE, PATCH } from './route';
+import { requireUser, requireGuildRole, requireGuildOwner } from '@/shared/api/guildAuth';
 
 vi.mock('@/shared/api/guildAuth');
 
@@ -19,6 +19,7 @@ function query(result: { data?: unknown; error?: unknown }) {
 
 const params = (id: string, userId: string) => ({ params: Promise.resolve({ id, userId }) });
 const req = {} as never;
+const patchReq = (body: unknown) => ({ json: () => Promise.resolve(body) }) as never;
 
 function authed(from: ReturnType<typeof vi.fn>) {
   vi.mocked(requireUser).mockResolvedValue({
@@ -31,6 +32,7 @@ function authed(from: ReturnType<typeof vi.fn>) {
 beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(requireGuildRole).mockResolvedValue(null); // allowed by default
+  vi.mocked(requireGuildOwner).mockResolvedValue(null); // owner by default
 });
 
 describe('DELETE /api/guilds/[id]/members/[userId]', () => {
@@ -82,5 +84,84 @@ describe('DELETE /api/guilds/[id]/members/[userId]', () => {
     authed(from);
     const res = await DELETE(req, params('g1', 'u2'));
     expect(res.status).toBe(500);
+  });
+});
+
+describe('PATCH /api/guilds/[id]/members/[userId] (role change)', () => {
+  it('returns 401 when not authenticated', async () => {
+    vi.mocked(requireUser).mockResolvedValue({
+      ok: false,
+      response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }),
+    });
+    const res = await PATCH(patchReq({ role: 'ADMIN' }), params('g1', 'u2'));
+    expect(res.status).toBe(401);
+  });
+
+  it('returns 403 when the caller is not the owner', async () => {
+    authed(vi.fn());
+    vi.mocked(requireGuildOwner).mockResolvedValue(
+      NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    );
+    const res = await PATCH(patchReq({ role: 'ADMIN' }), params('g1', 'u2'));
+    expect(res.status).toBe(403);
+    expect(requireGuildOwner).toHaveBeenCalledWith(expect.anything(), 'g1', 'admin1');
+  });
+
+  it('returns 400 for an invalid role value', async () => {
+    authed(vi.fn());
+    const res = await PATCH(patchReq({ role: 'OWNER' }), params('g1', 'u2'));
+    expect(res.status).toBe(400);
+  });
+
+  it('returns 404 when the target is not a member', async () => {
+    authed(vi.fn().mockReturnValue(query({ data: null })));
+    const res = await PATCH(patchReq({ role: 'ADMIN' }), params('g1', 'u2'));
+    expect(res.status).toBe(404);
+  });
+
+  it('returns 403 when targeting the guild owner', async () => {
+    authed(vi.fn().mockReturnValue(query({ data: { role: 'OWNER' } })));
+    const res = await PATCH(patchReq({ role: 'MEMBER' }), params('g1', 'owner1'));
+    expect(res.status).toBe(403);
+  });
+
+  it('returns 200 and promotes a member to admin', async () => {
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: { role: 'MEMBER' } }))
+      .mockReturnValueOnce(query({ error: null }));
+    authed(from);
+    const res = await PATCH(patchReq({ role: 'ADMIN' }), params('g1', 'u2'));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ success: true });
+  });
+
+  it('returns 500 when the update fails', async () => {
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: { role: 'MEMBER' } }))
+      .mockReturnValueOnce(query({ error: { message: 'boom' } }));
+    authed(from);
+    const res = await PATCH(patchReq({ role: 'ADMIN' }), params('g1', 'u2'));
+    expect(res.status).toBe(500);
+  });
+});
+
+describe('DELETE — admin cannot remove an admin', () => {
+  it('returns 403 when caller is admin and target is admin', async () => {
+    authed(vi.fn().mockReturnValue(query({ data: { role: 'ADMIN' } })));
+    vi.mocked(requireGuildOwner).mockResolvedValue(
+      NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    );
+    const res = await DELETE(req, params('g1', 'admin2'));
+    expect(res.status).toBe(403);
+  });
+
+  it('returns 200 when owner removes an admin', async () => {
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: { role: 'ADMIN' } }))
+      .mockReturnValueOnce(query({ error: null }));
+    authed(from);
+    vi.mocked(requireGuildOwner).mockResolvedValue(null); // owner
+    const res = await DELETE(req, params('g1', 'admin2'));
+    expect(res.status).toBe(200);
   });
 });

@@ -3,7 +3,7 @@
   backdrop-filter: blur(4px);
   position: fixed;
   inset: 0;
-  z-index: 1500;
+  z-index: var(--z-modal);
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -21,7 +21,7 @@
   max-width: 500px;
   max-height: 85vh;
   padding: 24px;
-  z-index: 1501;
+  z-index: var(--z-modal-content);
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
 }
