@@ -398,6 +398,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                     eventId={eventId}
                     canWrite={canWriteComments}
                     currentUserId={currentUserId}
+                    viewerProfile={participants.find((p) => p.user_id === currentUserId)?.profile}
                   />
                 }
               />

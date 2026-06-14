@@ -130,6 +130,25 @@
   background: rgba(255, 255, 255, 0.28);
 }
 
+.dayDivider {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.dayDividerLabel {
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(3, 13, 26, 0.45);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
 .empty {
   font-size: 0.85rem;
   opacity: 0.6;

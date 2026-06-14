@@ -16,12 +16,13 @@ describe('deleteGuildMessage', () => {
   });
 
   it('throws on query error', async () => {
-    useClient({ id: 'u1' }, vi.fn().mockReturnValueOnce(query({ error: new Error('boom') })));
+    // Both the attachment lookup and the delete go through `from`; the delete error surfaces.
+    useClient({ id: 'u1' }, vi.fn().mockReturnValue(query({ error: new Error('boom') })));
     await expect(deleteGuildMessage('m1')).rejects.toThrow('boom');
   });
 
   it('resolves when delete succeeds', async () => {
-    useClient({ id: 'u1' }, vi.fn().mockReturnValueOnce(query({ error: null })));
+    useClient({ id: 'u1' }, vi.fn().mockReturnValue(query({ data: { attachment_url: null }, error: null })));
     await expect(deleteGuildMessage('m1')).resolves.toBeUndefined();
   });
 });

@@ -9,7 +9,12 @@ export const commentApi = baseApi.injectEndpoints({
         { type: 'Comment' as const, id: `LIST-${eventId}` },
       ],
     }),
-    addComment: builder.mutation<EventComment, { eventId: string; body: string }>({
+    addComment: builder.mutation<
+      EventComment,
+      // `author` lets the comment appear instantly (optimistic); the server
+      // ignores it and only consumes `body`.
+      { eventId: string; body: string; author?: { userId: string; profile: EventComment['profile'] } }
+    >({
       query: ({ eventId, body }) => ({
         url: `events/${eventId}/comments`,
         method: 'POST',
@@ -17,18 +22,46 @@ export const commentApi = baseApi.injectEndpoints({
       }),
       // Append the created comment to the cached list instead of invalidating
       // (which would refetch the whole thread and remount every avatar image).
-      async onQueryStarted({ eventId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ eventId, body, author }, { dispatch, queryFulfilled }) {
+        // Insert a temporary comment immediately so sending feels instant.
+        let tempId: string | null = null;
+        if (author) {
+          tempId = `temp-${crypto.randomUUID()}`;
+          const now = new Date().toISOString();
+          const optimistic: EventComment = {
+            id: tempId,
+            eventId,
+            userId: author.userId,
+            body,
+            createdAt: now,
+            updatedAt: now,
+            profile: author.profile,
+          };
+          dispatch(
+            commentApi.util.updateQueryData('getComments', eventId, (draft) => {
+              draft.push(optimistic);
+            })
+          );
+        }
         try {
           const { data: created } = await queryFulfilled;
           dispatch(
             commentApi.util.updateQueryData('getComments', eventId, (draft) => {
-              if (!draft.some((c) => c.id === created.id)) {
-                draft.push(created);
-              }
+              const idx = tempId ? draft.findIndex((c) => c.id === tempId) : -1;
+              if (idx !== -1) draft[idx] = created;
+              else if (!draft.some((c) => c.id === created.id)) draft.push(created);
             })
           );
         } catch {
-          // Mutation failed; CommentsTab surfaces the error toast.
+          // Roll back the optimistic comment; CommentsTab surfaces the error toast.
+          if (tempId) {
+            dispatch(
+              commentApi.util.updateQueryData('getComments', eventId, (draft) => {
+                const idx = draft.findIndex((c) => c.id === tempId);
+                if (idx !== -1) draft.splice(idx, 1);
+              })
+            );
+          }
         }
       },
     }),

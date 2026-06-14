@@ -63,8 +63,21 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `polls` | `id`, `guild_id`, `created_by`, `title`, `description`, `is_anonymous`, `allow_multiple`, `allow_custom`, `allow_revote`, `closed_at`, `created_at` |
 | `poll_options` | `id`, `poll_id`, `body`, `position`, `is_custom`, `created_by` |
 | `poll_votes` | `id`, `poll_id`, `option_id`, `user_id` — `unique(option_id, user_id)` |
+| `guild_messages` | `id`, `guild_id`, `user_id`, `body`, `attachment_url` (text, nullable — public URL of an optional image attachment in the `chat-attachments` bucket), `created_at`, `updated_at`. RLS: select/insert for guild members, update/delete own. |
 
 All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
+
+## Storage Buckets
+
+| Bucket | Public | Notes |
+|---|---|---|
+| `avatars` | yes | User avatars (`{userId}/...`); write restricted to own folder. |
+| `guild-avatars` | yes | Guild avatars; write restricted to guild owners. |
+| `chat-attachments` | yes | Guild-chat image attachments (`{userId}/...`); write/update/delete restricted to own folder, **no broad SELECT policy** (public bucket serves objects by URL without one — avoids the listing lint). Uploaded client-side via `uploadChatAttachment` (`entities/guild-message`). The file is removed in `deleteGuildMessage` when its message is deleted. |
+
+## Scheduled Jobs (pg_cron)
+
+- **`cleanup-chat-attachments-daily`** (03:17 UTC) — `net.http_post` (pg_net) invokes the `cleanup-chat-attachments` Edge Function with the public anon key (satisfies `verify_jwt`; the function uses the service role internally). It deletes `chat-attachments` files whose `guild_messages` row is older than 30 days and nulls their `attachment_url`. Retention policy: chat images do **not** persist beyond ~30 days.
 
 ## Styling and UI
 

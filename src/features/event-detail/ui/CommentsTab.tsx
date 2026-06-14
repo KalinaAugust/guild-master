@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import {
@@ -12,6 +12,7 @@ import {
   useMarkCommentsReadMutation,
 } from '@/entities/comment';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
+import type { EventComment } from '@/entities/comment';
 import { CommentItem } from './CommentItem';
 import { CommentInput } from './CommentInput';
 import styles from './CommentsTab.module.css';
@@ -20,9 +21,16 @@ interface CommentsTabProps {
   eventId: string;
   canWrite: boolean;
   currentUserId: string;
+  /** Viewer's profile, used to render optimistically-sent comments instantly. */
+  viewerProfile?: EventComment['profile'];
 }
 
-export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, currentUserId }) => {
+export const CommentsTab: React.FC<CommentsTabProps> = ({
+  eventId,
+  canWrite,
+  currentUserId,
+  viewerProfile,
+}) => {
   const t = useTranslations('EventComments');
   const { data: comments = [], isLoading } = useGetCommentsQuery(eventId, {
     pollingInterval: 60_000,
@@ -34,6 +42,7 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
   const [deleteComment, deleteState] = useDeleteCommentMutation();
   const [markCommentsRead] = useMarkCommentsReadMutation();
   const { data: readState } = useGetCommentReadStateQuery(eventId);
+  const [editing, setEditing] = useState<{ id: string; body: string } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   // Whether the thread holds comments from others the viewer hasn't seen yet.
@@ -72,27 +81,34 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
     }
   }, [comments.length]);
 
-  const handleAdd = async (body: string) => {
+  // Single composer entry point: save the comment being edited, otherwise add a
+  // new one. On a failed edit we keep edit mode so the draft is preserved.
+  const handleComposerSubmit = async (body: string) => {
+    if (editing) {
+      try {
+        await updateComment({ eventId, commentId: editing.id, body }).unwrap();
+        setEditing(null);
+      } catch {
+        toast.error(t('updateError'));
+      }
+      return;
+    }
+    pendingScrollRef.current = true;
     try {
-      await addComment({ eventId, body }).unwrap();
-      pendingScrollRef.current = true;
+      await addComment({
+        eventId,
+        body,
+        author: currentUserId && viewerProfile ? { userId: currentUserId, profile: viewerProfile } : undefined,
+      }).unwrap();
     } catch {
       toast.error(t('sendError'));
-    }
-  };
-
-  const handleUpdate = async (commentId: string, body: string) => {
-    try {
-      await updateComment({ eventId, commentId, body }).unwrap();
-    } catch (e) {
-      toast.error(t('updateError'));
-      throw e;
     }
   };
 
   const handleDelete = async (commentId: string) => {
     try {
       await deleteComment({ eventId, commentId }).unwrap();
+      if (editing?.id === commentId) setEditing(null);
     } catch {
       toast.error(t('deleteError'));
     }
@@ -109,14 +125,22 @@ export const CommentsTab: React.FC<CommentsTabProps> = ({ eventId, canWrite, cur
             key={c.id}
             comment={c}
             isOwn={c.userId === currentUserId}
-            onSave={(body) => handleUpdate(c.id, body)}
+            isEditing={editing?.id === c.id}
+            onEdit={() => setEditing({ id: c.id, body: c.body })}
             onDelete={() => handleDelete(c.id)}
-            isSaving={updateState.isLoading && updateState.originalArgs?.commentId === c.id}
             isDeleting={deleteState.isLoading && deleteState.originalArgs?.commentId === c.id}
           />
         ))}
       </div>
-      <CommentInput canWrite={canWrite} onSubmit={handleAdd} isSubmitting={isAdding} />
+      <CommentInput
+        canWrite={canWrite}
+        onSubmit={handleComposerSubmit}
+        isSubmitting={isAdding || updateState.isLoading}
+        editing={!!editing}
+        editingKey={editing?.id}
+        initialValue={editing?.body}
+        onCancelEdit={() => setEditing(null)}
+      />
     </div>
   );
 };

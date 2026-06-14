@@ -10,18 +10,20 @@ export class InvalidGuildMessageError extends Error {}
 export const createGuildMessage = async (
   guildId: string,
   body: string,
+  attachmentUrl?: string | null,
 ): Promise<GuildMessage> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Not authenticated');
 
   const trimmed = body.trim();
-  if (!trimmed) throw new InvalidGuildMessageError('Message is empty');
+  // A message must carry text or an attachment (or both).
+  if (!trimmed && !attachmentUrl) throw new InvalidGuildMessageError('Message is empty');
   if (trimmed.length > MAX_MESSAGE_LENGTH) throw new InvalidGuildMessageError('Message is too long');
 
   const { data, error } = await supabase
     .from('guild_messages')
-    .insert({ guild_id: guildId, user_id: user.id, body: trimmed })
+    .insert({ guild_id: guildId, user_id: user.id, body: trimmed, attachment_url: attachmentUrl ?? null })
     .select(MESSAGE_SELECT)
     .single();
 

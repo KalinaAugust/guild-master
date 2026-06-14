@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
@@ -12,6 +13,7 @@ import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { PollCard, PollWizard } from '@/features/guild-poll';
 import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
+import { uploadChatAttachment, type GuildMessage } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
 import {
   useGetGuildMessagesQuery,
@@ -24,13 +26,29 @@ import {
 import { MessagesSkeleton, PollsSkeleton } from './ChatSkeletons';
 import styles from './GuildChat.module.css';
 
+const formatDayLabel = (
+  iso: string,
+  locale: string,
+  labels: { today: string; yesterday: string },
+) => {
+  const day = dayjs(iso).locale(locale);
+  const now = dayjs();
+  if (day.isSame(now, 'day')) return labels.today;
+  if (day.isSame(now.subtract(1, 'day'), 'day')) return labels.yesterday;
+  const sameYear = day.isSame(now, 'year');
+  if (!sameYear) return day.format('LL');
+  return day.format(locale === 'ru' ? 'D MMMM' : 'MMMM D');
+};
+
 interface GuildChatProps {
   guilds: Guild[];
   userId?: string;
+  /** Viewer's profile, used to render optimistically-sent messages instantly. */
+  viewerProfile?: GuildMessage['profile'];
   initialGuildId?: string;
 }
 
-export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGuildId }) => {
+export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProfile, initialGuildId }) => {
   const t = useTranslations('GuildChat');
   const pollT = useTranslations('GuildPoll');
   const locale = useLocale();
@@ -51,6 +69,8 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
   const [markRead] = useMarkGuildChatReadMutation();
   const [isPollWizardOpen, setIsPollWizardOpen] = useState(false);
+  const [editing, setEditing] = useState<{ id: string; body: string } | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
   const hasUnread =
@@ -72,6 +92,13 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     pendingScrollRef.current = true;
   }, [activeGuildId]);
 
+  // Switching guilds discards any in-progress edit (the message belongs to the
+  // previous guild's thread).
+  const handleGuildSwitch = (id: string) => {
+    setEditing(null);
+    handleGuildChange(id);
+  };
+
   const handleScroll = () => {
     const el = listRef.current;
     if (!el) return;
@@ -91,28 +118,45 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     edited: t('edited'),
     edit: t('edit'),
     delete: t('delete'),
-    save: t('save'),
-    cancel: t('cancel'),
     confirmDelete: t('confirmDelete'),
   };
 
-  const handleAdd = async (body: string) => {
+  // Single composer entry point: save the message being edited, otherwise send a
+  // new one. On a failed edit we keep edit mode so the draft is preserved.
+  const handleComposerSubmit = async (body: string, file?: File | null) => {
     if (!activeGuildId) return;
+    if (editing) {
+      try {
+        await updateMessage({ guildId: activeGuildId, messageId: editing.id, body }).unwrap();
+        setEditing(null);
+      } catch {
+        toast.error(t('updateError'));
+      }
+      return;
+    }
+    // Upload the attachment first (if any) so the message carries a public URL.
+    let attachmentUrl: string | null = null;
+    if (file && userId) {
+      setIsUploading(true);
+      try {
+        attachmentUrl = await uploadChatAttachment(userId, file);
+      } catch {
+        toast.error(t('attachmentError'));
+        return;
+      } finally {
+        setIsUploading(false);
+      }
+    }
+    pendingScrollRef.current = true;
     try {
-      await addMessage({ guildId: activeGuildId, body }).unwrap();
-      pendingScrollRef.current = true;
+      await addMessage({
+        guildId: activeGuildId,
+        body,
+        attachmentUrl,
+        author: userId && viewerProfile ? { userId, profile: viewerProfile } : undefined,
+      }).unwrap();
     } catch {
       toast.error(t('sendError'));
-    }
-  };
-
-  const handleUpdate = async (messageId: string, body: string) => {
-    if (!activeGuildId) return;
-    try {
-      await updateMessage({ guildId: activeGuildId, messageId, body }).unwrap();
-    } catch (e) {
-      toast.error(t('updateError'));
-      throw e;
     }
   };
 
@@ -120,6 +164,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
     if (!activeGuildId) return;
     try {
       await deleteMessage({ guildId: activeGuildId, messageId }).unwrap();
+      if (editing?.id === messageId) setEditing(null);
     } catch {
       toast.error(t('deleteError'));
     }
@@ -130,7 +175,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
       <div className={styles.header}>
         <div className={styles.headerChat}>
           <div className={styles.guildSelect}>
-            <GuildSelect value={activeGuildId} onValueChange={handleGuildChange} options={guildOptions} />
+            <GuildSelect value={activeGuildId} onValueChange={handleGuildSwitch} options={guildOptions} />
           </div>
         </div>
         <div className={styles.headerPolls}>
@@ -151,39 +196,64 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, initialGui
           <div className={styles.list} ref={listRef} onScroll={handleScroll}>
             {isLoading && <MessagesSkeleton />}
             {!isLoading && messages.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
-            {!isLoading && messages.map((m) => (
-              <MessageBubble
-                key={m.id}
-                authorName={resolveDisplayName({
-                  fullName: m.profile.fullName,
-                  alias: m.profile.alias,
-                  displayAsAlias: m.profile.displayAsAlias,
-                })}
-                authorIcon={m.profile.icon}
-                avatarUrl={m.profile.avatarUrl}
-                profilePublicId={m.profile.publicId}
-                body={m.body}
-                createdAt={m.createdAt}
-                updatedAt={m.updatedAt}
-                isOwn={m.userId === userId}
-                locale={locale}
-                labels={labels}
-                maxLength={2000}
-                onSave={(body) => handleUpdate(m.id, body)}
-                onDelete={() => handleDelete(m.id)}
-                isSaving={updateState.isLoading && updateState.originalArgs?.messageId === m.id}
-                isDeleting={deleteState.isLoading && deleteState.originalArgs?.messageId === m.id}
-              />
-            ))}
+            {!isLoading && messages.map((m, i) => {
+              const prev = messages[i - 1];
+              const showDayDivider =
+                !prev || !dayjs(prev.createdAt).isSame(dayjs(m.createdAt), 'day');
+              return (
+                <React.Fragment key={m.id}>
+                  {showDayDivider && (
+                    <div className={styles.dayDivider}>
+                      <span className={styles.dayDividerLabel}>
+                        {formatDayLabel(m.createdAt, locale, {
+                          today: t('today'),
+                          yesterday: t('yesterday'),
+                        })}
+                      </span>
+                    </div>
+                  )}
+                  <MessageBubble
+                    authorName={resolveDisplayName({
+                      fullName: m.profile.fullName,
+                      alias: m.profile.alias,
+                      displayAsAlias: m.profile.displayAsAlias,
+                    })}
+                    authorIcon={m.profile.icon}
+                    avatarUrl={m.profile.avatarUrl}
+                    profilePublicId={m.profile.publicId}
+                    body={m.body}
+                    attachmentUrl={m.attachmentUrl}
+                    createdAt={m.createdAt}
+                    updatedAt={m.updatedAt}
+                    isOwn={m.userId === userId}
+                    isEditing={editing?.id === m.id}
+                    locale={locale}
+                    labels={labels}
+                    onEdit={() => setEditing({ id: m.id, body: m.body })}
+                    onDelete={() => handleDelete(m.id)}
+                    isDeleting={deleteState.isLoading && deleteState.originalArgs?.messageId === m.id}
+                  />
+                </React.Fragment>
+              );
+            })}
           </div>
           <MessageComposer
             canWrite={!!userId}
-            onSubmit={handleAdd}
-            isSubmitting={isAdding}
+            onSubmit={handleComposerSubmit}
+            isSubmitting={isAdding || updateState.isLoading || isUploading}
             placeholder={t('placeholder')}
-            sendLabel={t('send')}
+            sendLabel={editing ? t('save') : t('send')}
             lockedPrompt={t('lockedPrompt')}
             maxLength={2000}
+            editing={!!editing}
+            editingKey={editing?.id}
+            initialValue={editing?.body}
+            onCancelEdit={() => setEditing(null)}
+            editLabel={t('editing')}
+            cancelEditLabel={t('cancel')}
+            allowAttachment
+            attachLabel={t('attach')}
+            removeAttachmentLabel={t('removeAttachment')}
           />
         </div>
 

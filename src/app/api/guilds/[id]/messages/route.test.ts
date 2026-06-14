@@ -42,7 +42,7 @@ describe('POST /api/guilds/[id]/messages', () => {
     const req = { json: async () => ({ body: 'hi' }) } as unknown as NextRequest;
     const res = await POST(req, params('g1'));
     expect(res.status).toBe(201);
-    expect(createGuildMessage).toHaveBeenCalledWith('g1', 'hi');
+    expect(createGuildMessage).toHaveBeenCalledWith('g1', 'hi', null);
   });
 
   it('400 on invalid body type', async () => {

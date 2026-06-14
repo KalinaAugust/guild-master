@@ -23,7 +23,23 @@ export default async function GuildChatPage() {
   return (
     <main className={styles.main}>
       <UpcomingEventsStrip guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
-      <GuildChat guilds={guilds} userId={user?.id} initialGuildId={defaultGuildId} />
+      <GuildChat
+        guilds={guilds}
+        userId={user?.id}
+        viewerProfile={
+          user?.profile
+            ? {
+                publicId: user.profile.publicId,
+                fullName: user.profile.fullName,
+                avatarUrl: user.profile.avatarUrl,
+                alias: user.profile.alias ?? null,
+                displayAsAlias: user.profile.displayAsAlias ?? false,
+                icon: user.profile.icon ?? null,
+              }
+            : undefined
+        }
+        initialGuildId={defaultGuildId}
+      />
     </main>
   );
 }
