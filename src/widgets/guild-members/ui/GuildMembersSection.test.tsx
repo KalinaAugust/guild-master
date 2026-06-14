@@ -159,6 +159,19 @@ describe('GuildMembersSection', () => {
     expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2', role: 'ADMIN' });
   });
 
+  it('revokes admin from a member after confirming', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, adminMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    await user.click(await screen.findByText('revokeAdmin'));
+    await user.click(await screen.findByRole('button', { name: 'confirm' }));
+    expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u3', role: 'MEMBER' });
+  });
+
   it('removes a member after confirming', async () => {
     const user = userEvent.setup();
     vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
