@@ -128,3 +128,60 @@
   text-align: center;
   padding: 16px 0;
 }
+
+.menuTrigger {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.menuTrigger:hover,
+.menuTrigger[data-state='open'] {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.menuContent {
+  min-width: 180px;
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  z-index: 1000;
+}
+
+.menuItem {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
+  user-select: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menuItem:hover,
+.menuItem[data-highlighted] {
+  background: var(--accent-glow);
+  color: var(--accent-secondary);
+}
+
+.menuItemDanger:hover,
+.menuItemDanger[data-highlighted] {
+  background: rgba(235, 64, 52, 0.1);
+  color: var(--event-raid-border);
+}
