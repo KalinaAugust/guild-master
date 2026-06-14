@@ -2,6 +2,9 @@
   position: relative;
   display: flex;
   gap: 12px;
+  /* Pin the avatar to the bottom so it doesn't drift to the middle of tall
+     (image) messages. */
+  align-items: flex-end;
   padding: 12px 14px;
   max-width: 90%;
   align-self: flex-start;
