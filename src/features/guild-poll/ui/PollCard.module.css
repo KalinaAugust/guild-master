@@ -166,10 +166,10 @@
   gap: 8px;
 }
 
-.customInput {
+.customForm .customInput {
   flex: 1;
   min-width: 0;
-  height: 40px;
+  height: 45px;
   font-size: 0.9rem;
 }
 
@@ -179,7 +179,7 @@
 }
 
 .customForm .customSubmit {
-  height: 40px;
+  height: 45px;
   border-radius: 12px;
   color: var(--accent-secondary);
 }
