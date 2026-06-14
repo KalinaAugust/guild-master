@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Edit2, Trash2, Check, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Edit2, Trash2 } from 'lucide-react';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { Button } from '@/shared/ui/Button';
-import { Textarea } from '@/shared/ui/Textarea';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import styles from './MessageBubble.module.css';
 
@@ -30,8 +29,6 @@ export interface MessageBubbleLabels {
   edited: string;
   edit: string;
   delete: string;
-  save: string;
-  cancel: string;
   confirmDelete: string;
 }
 
@@ -45,12 +42,12 @@ interface MessageBubbleProps {
   createdAt: string;
   updatedAt: string;
   isOwn: boolean;
+  /** Highlights the bubble while it is being edited in the composer. */
+  isEditing?: boolean;
   locale: string;
   labels: MessageBubbleLabels;
-  maxLength?: number;
-  onSave?: (body: string) => void | Promise<void>;
+  onEdit?: () => void;
   onDelete?: () => void;
-  isSaving?: boolean;
   isDeleting?: boolean;
 }
 
@@ -63,39 +60,27 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   createdAt,
   updatedAt,
   isOwn,
+  isEditing = false,
   locale,
   labels,
-  maxLength = 2000,
-  onSave,
+  onEdit,
   onDelete,
-  isSaving = false,
   isDeleting = false,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [draft, setDraft] = useState(body);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const isEdited = dayjs(updatedAt).diff(dayjs(createdAt), 'second') > 2;
   const time = dayjs(createdAt).locale(locale).fromNow();
 
-  const handleSave = async () => {
-    const trimmed = draft.trim();
-    if (!trimmed) return;
-    try {
-      await onSave?.(trimmed);
-      setIsEditing(false);
-    } catch {
-      // Keep edit mode open so the draft is preserved; the consumer shows the error toast.
-    }
-  };
-
-  const handleCancel = () => {
-    setDraft(body);
-    setIsEditing(false);
-  };
+  // Bring the message into view when it starts being edited, so the user sees
+  // what they're editing while typing in the fixed bottom composer.
+  useEffect(() => {
+    if (isEditing) rootRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, [isEditing]);
 
   return (
-    <div className={`${styles.item} ${isOwn ? styles.own : ''}`}>
+    <div ref={rootRef} className={`${styles.item} ${isOwn ? styles.own : ''} ${isEditing ? styles.editing : ''}`}>
       {!isOwn && (
         <ProfileLink publicId={profilePublicId} aria-label={authorName ?? undefined}>
           <UserAvatar avatarUrl={avatarUrl} name={authorName} size="md" />
@@ -117,46 +102,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           )}
         </div>
 
-        {isEditing ? (
-          <>
-            <Textarea
-              value={draft}
-              onChange={(e) => setDraft(e.target.value)}
-              rows={2}
-              maxLength={maxLength}
-              className={styles.editTextarea}
-            />
-            <div className={styles.editActions}>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon_sm"
-                onClick={handleSave}
-                isLoading={isSaving}
-                aria-label={labels.save}
-                className={styles.saveBtn}
-              >
-                <Check size={20} />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon_sm"
-                onClick={handleCancel}
-                disabled={isSaving}
-                aria-label={labels.cancel}
-                className={styles.cancelBtn}
-              >
-                <X size={20} />
-              </Button>
-            </div>
-          </>
-        ) : (
-          <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>
-        )}
+        <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>
       </div>
 
-      {isOwn && !isEditing && (
+      {isOwn && (
         <div className={styles.actions}>
           <Button
             type="button"
@@ -164,7 +113,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             size="icon_sm"
             aria-label={labels.edit}
             className={styles.actionBtn}
-            onClick={() => setIsEditing(true)}
+            onClick={onEdit}
           >
             <Edit2 size={16} />
           </Button>

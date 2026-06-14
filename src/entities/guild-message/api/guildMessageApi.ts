@@ -9,22 +9,57 @@ export const guildMessageApi = baseApi.injectEndpoints({
         { type: 'GuildMessage' as const, id: `LIST-${guildId}` },
       ],
     }),
-    addGuildMessage: builder.mutation<GuildMessage, { guildId: string; body: string }>({
+    addGuildMessage: builder.mutation<
+      GuildMessage,
+      // `author` lets the message appear instantly (optimistic); the server
+      // ignores it and only consumes `body`.
+      { guildId: string; body: string; author?: { userId: string; profile: GuildMessage['profile'] } }
+    >({
       query: ({ guildId, body }) => ({
         url: `guilds/${guildId}/messages`,
         method: 'POST',
         body: { body },
       }),
-      async onQueryStarted({ guildId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ guildId, body, author }, { dispatch, queryFulfilled }) {
+        // Insert a temporary bubble immediately so sending feels instant.
+        let tempId: string | null = null;
+        if (author) {
+          tempId = `temp-${crypto.randomUUID()}`;
+          const now = new Date().toISOString();
+          const optimistic: GuildMessage = {
+            id: tempId,
+            guildId,
+            userId: author.userId,
+            body,
+            createdAt: now,
+            updatedAt: now,
+            profile: author.profile,
+          };
+          dispatch(
+            guildMessageApi.util.updateQueryData('getGuildMessages', guildId, (draft) => {
+              draft.push(optimistic);
+            }),
+          );
+        }
         try {
           const { data: created } = await queryFulfilled;
           dispatch(
             guildMessageApi.util.updateQueryData('getGuildMessages', guildId, (draft) => {
-              if (!draft.some((m) => m.id === created.id)) draft.push(created);
+              const idx = tempId ? draft.findIndex((m) => m.id === tempId) : -1;
+              if (idx !== -1) draft[idx] = created;
+              else if (!draft.some((m) => m.id === created.id)) draft.push(created);
             }),
           );
         } catch {
-          // GuildChat surfaces the error toast.
+          // Roll back the optimistic bubble; GuildChat surfaces the error toast.
+          if (tempId) {
+            dispatch(
+              guildMessageApi.util.updateQueryData('getGuildMessages', guildId, (draft) => {
+                const idx = draft.findIndex((m) => m.id === tempId);
+                if (idx !== -1) draft.splice(idx, 1);
+              }),
+            );
+          }
         }
       },
     }),

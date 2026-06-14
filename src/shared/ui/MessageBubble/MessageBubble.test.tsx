@@ -7,11 +7,11 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
 
-const labels = { edited: 'edited', edit: 'edit', delete: 'delete', save: 'save', cancel: 'cancel', confirmDelete: 'confirm-delete' };
+const labels = { edited: 'edited', edit: 'edit', delete: 'delete', confirmDelete: 'confirm-delete' };
 const base = {
   authorName: 'Alice', avatarUrl: null, body: 'Hello there',
   createdAt: '2026-06-05T10:00:00Z', updatedAt: '2026-06-05T10:00:00Z',
-  locale: 'en', labels, maxLength: 2000,
+  locale: 'en', labels,
 };
 
 describe('MessageBubble', () => {
@@ -31,15 +31,11 @@ describe('MessageBubble', () => {
     expect(screen.queryByRole('button', { name: 'edit' })).not.toBeInTheDocument();
   });
 
-  it('enters edit mode and saves edited text', async () => {
+  it('requests edit when the edit button is clicked', async () => {
     const user = userEvent.setup();
-    const onSave = vi.fn();
-    render(<MessageBubble {...base} isOwn onSave={onSave} onDelete={vi.fn()} />);
+    const onEdit = vi.fn();
+    render(<MessageBubble {...base} isOwn onEdit={onEdit} onDelete={vi.fn()} />);
     await user.click(screen.getByRole('button', { name: 'edit' }));
-    const field = screen.getByRole('textbox');
-    await user.clear(field);
-    await user.type(field, 'Updated');
-    await user.click(screen.getByRole('button', { name: 'save' }));
-    expect(onSave).toHaveBeenCalledWith('Updated');
+    expect(onEdit).toHaveBeenCalled();
   });
 });

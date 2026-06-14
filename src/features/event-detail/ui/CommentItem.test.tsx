@@ -38,23 +38,17 @@ describe('CommentItem', () => {
     expect(screen.queryByRole('button', { name: 'delete' })).not.toBeInTheDocument();
   });
 
-  it('shows edit/delete for owner and enters edit mode', async () => {
-    const user = userEvent.setup();
-    render(<CommentItem comment={base} isOwn onSave={vi.fn()} onDelete={vi.fn()} />);
+  it('shows edit/delete for owner', () => {
+    render(<CommentItem comment={base} isOwn onEdit={vi.fn()} onDelete={vi.fn()} />);
     expect(screen.getByRole('button', { name: 'edit' })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'edit' }));
-    expect(screen.getByRole('button', { name: 'save' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'delete' })).toBeInTheDocument();
   });
 
-  it('calls onSave with edited text', async () => {
+  it('requests edit when the edit button is clicked', async () => {
     const user = userEvent.setup();
-    const onSave = vi.fn();
-    render(<CommentItem comment={base} isOwn onSave={onSave} onDelete={vi.fn()} />);
+    const onEdit = vi.fn();
+    render(<CommentItem comment={base} isOwn onEdit={onEdit} onDelete={vi.fn()} />);
     await user.click(screen.getByRole('button', { name: 'edit' }));
-    const field = screen.getByRole('textbox');
-    await user.clear(field);
-    await user.type(field, 'Updated');
-    await user.click(screen.getByRole('button', { name: 'save' }));
-    expect(onSave).toHaveBeenCalledWith('Updated');
+    expect(onEdit).toHaveBeenCalled();
   });
 });

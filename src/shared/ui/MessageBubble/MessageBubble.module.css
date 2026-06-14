@@ -13,10 +13,19 @@
 
 .own {
   align-self: flex-end;
+  /* Reserve room so the absolutely-positioned actions block never overlaps the
+     timestamp in the header row. */
+  min-width: 200px;
   background: rgba(45, 158, 208, 0.12);
   border: 1px solid rgba(125, 211, 252, 0.15);
   border-radius: 16px 16px 4px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.05);
+}
+
+/* Highlights the message currently being edited in the composer. */
+.editing {
+  border-color: rgba(125, 211, 252, 0.5);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(125, 211, 252, 0.3);
 }
 
 .body { flex: 1; min-width: 0; }
@@ -35,17 +44,19 @@
   line-height: 1.4;
 }
 
-.editActions { display: flex; gap: 8px; margin-top: 2px; }
-
 .actions {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 4px;
+  right: 4px;
   display: flex;
   gap: 4px;
   padding: 2px 8px;
-  border-radius: 999px;
-  background: rgba(20, 28, 46, 0.85);
+  border-radius: 12px;
+  background: rgba(20, 28, 46, 0.45);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -69,33 +80,4 @@
   vertical-align: -0.1em;
   display: inline-block;
   padding: 0 1px;
-}
-
-.editTextarea {
-  margin-top: 8px;
-}
-
-.saveBtn, .cancelBtn {
-  width: 28px !important;
-  height: 28px !important;
-}
-
-.saveBtn {
-  color: var(--accent-secondary);
-}
-
-.saveBtn:hover:not(:disabled) {
-  color: var(--accent-primary);
-  background: rgba(56, 189, 248, 0.1);
-  transform: none !important;
-}
-
-.cancelBtn {
-  color: var(--text-muted);
-}
-
-.cancelBtn:hover:not(:disabled) {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.08);
-  transform: none !important;
 }

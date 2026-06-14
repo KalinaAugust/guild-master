@@ -9,18 +9,18 @@ import { resolveDisplayName } from '@/entities/user';
 interface CommentItemProps {
   comment: EventComment;
   isOwn: boolean;
-  onSave?: (body: string) => void | Promise<void>;
+  isEditing?: boolean;
+  onEdit?: () => void;
   onDelete?: () => void;
-  isSaving?: boolean;
   isDeleting?: boolean;
 }
 
 export const CommentItem: React.FC<CommentItemProps> = ({
   comment,
   isOwn,
-  onSave,
+  isEditing = false,
+  onEdit,
   onDelete,
-  isSaving = false,
   isDeleting = false,
 }) => {
   const t = useTranslations('EventComments');
@@ -40,19 +40,16 @@ export const CommentItem: React.FC<CommentItemProps> = ({
       createdAt={comment.createdAt}
       updatedAt={comment.updatedAt}
       isOwn={isOwn}
+      isEditing={isEditing}
       locale={locale}
       labels={{
         edited: t('edited'),
         edit: t('edit'),
         delete: t('delete'),
-        save: t('save'),
-        cancel: t('cancel'),
         confirmDelete: t('confirmDelete'),
       }}
-      maxLength={2000}
-      onSave={onSave}
+      onEdit={onEdit}
       onDelete={onDelete}
-      isSaving={isSaving}
       isDeleting={isDeleting}
     />
   );

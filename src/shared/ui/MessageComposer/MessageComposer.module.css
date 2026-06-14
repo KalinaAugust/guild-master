@@ -1,7 +1,51 @@
-.form {
-  position: relative;
+.wrapper {
   margin-top: 12px;
   flex-shrink: 0;
+}
+
+.form {
+  position: relative;
+}
+
+.editBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  border-left: 2px solid var(--accent-primary);
+  background: rgba(45, 158, 208, 0.08);
+}
+
+.editBarIcon {
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.editBarLabel {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+}
+
+.editBarCancel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: color 0.2s ease;
+}
+
+.editBarCancel:hover {
+  color: var(--text-primary);
 }
 
 .form .textarea {
