@@ -98,6 +98,16 @@
   flex-shrink: 0;
 }
 
+.adminIcon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-secondary);
+  flex-shrink: 0;
+}
+
 .skeletonList {
   display: flex;
   flex-direction: column;

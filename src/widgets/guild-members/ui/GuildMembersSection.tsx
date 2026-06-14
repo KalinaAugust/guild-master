@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-import { UserMinus, Shield, ShieldOff, MoreVertical } from 'lucide-react';
+import { UserMinus, Shield, ShieldCheck, ShieldOff, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
@@ -160,6 +160,11 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               {member.role === 'OWNER' && (
                 <span className={styles.ownerIcon}>
                   <Shield size={14} />
+                </span>
+              )}
+              {member.role === 'ADMIN' && (
+                <span className={styles.adminIcon}>
+                  <ShieldCheck size={14} />
                 </span>
               )}
               {showMenu && (
