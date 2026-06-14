@@ -224,7 +224,14 @@
     "userNotFound": "User with this email not found",
     "alreadyMember": "User is already a member",
     "addError": "Failed to add member",
-    "removeError": "Failed to remove member"
+    "removeError": "Failed to remove member",
+    "memberActions": "Member actions",
+    "makeAdmin": "Make admin",
+    "revokeAdmin": "Revoke admin",
+    "promoteConfirm": "Make {name} an admin?",
+    "revokeConfirm": "Revoke admin rights from {name}?",
+    "confirm": "Confirm",
+    "roleError": "Failed to update role"
   },
   "UpcomingEvents": {
     "nextEvent": "Next Event",

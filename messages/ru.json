@@ -224,7 +224,14 @@
     "userNotFound": "Пользователь с таким email не найден",
     "alreadyMember": "Пользователь уже состоит в гильдии",
     "addError": "Не удалось добавить участника",
-    "removeError": "Не удалось удалить участника"
+    "removeError": "Не удалось удалить участника",
+    "memberActions": "Действия с участником",
+    "makeAdmin": "Назначить админом",
+    "revokeAdmin": "Снять админа",
+    "promoteConfirm": "Назначить {name} админом?",
+    "revokeConfirm": "Снять права админа с {name}?",
+    "confirm": "Подтвердить",
+    "roleError": "Не удалось изменить роль"
   },
   "UpcomingEvents": {
     "nextEvent": "Следующее событие",
