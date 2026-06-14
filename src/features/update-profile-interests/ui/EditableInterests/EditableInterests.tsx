@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pencil, Check, X } from 'lucide-react';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
@@ -8,18 +8,24 @@ import { updateInterests } from '@/entities/user';
 import { useEditableField } from '@/shared/lib/useEditableField';
 import styles from './EditableInterests.module.css';
 
-const INTERESTS_MAX = 10;
+export const INTERESTS_MAX = 15;
 const INTEREST_MAX_LEN = 30;
 
 interface EditableInterestsProps {
   initialInterests: string[];
   userId: string;
+  /** Notifies the parent block of edit state so it can render a header counter. */
+  onEditStateChange?: (state: { isEditing: boolean; count: number }) => void;
 }
 
 const sameList = (a: string[], b: string[]) =>
   a.length === b.length && a.every((v, i) => v === b[i]);
 
-export const EditableInterests = ({ initialInterests, userId }: EditableInterestsProps) => {
+export const EditableInterests = ({
+  initialInterests,
+  userId,
+  onEditStateChange,
+}: EditableInterestsProps) => {
   const {
     isEditing,
     value: interests,
@@ -38,6 +44,10 @@ export const EditableInterests = ({ initialInterests, userId }: EditableInterest
     isEqual: sameList,
   });
   const [draft, setDraft] = useState('');
+
+  useEffect(() => {
+    onEditStateChange?.({ isEditing, count: interests.length });
+  }, [isEditing, interests.length, onEditStateChange]);
 
   const addInterest = () => {
     const v = draft.trim().slice(0, INTEREST_MAX_LEN);

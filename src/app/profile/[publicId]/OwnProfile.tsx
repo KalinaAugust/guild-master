@@ -1,5 +1,5 @@
 import type { User as SupabaseUser } from '@supabase/supabase-js';
-import { Mail, User, FileText, Cake, VenetianMask, Sparkles } from 'lucide-react';
+import { Mail, User, FileText, Cake, VenetianMask } from 'lucide-react';
 import { getLocale } from 'next-intl/server';
 import { createClient } from '@/shared/api/supabase/server';
 import { AvatarUpload } from '@/features/update-profile-avatar';
@@ -7,10 +7,9 @@ import { EditableName } from '@/features/update-profile-name';
 import { EditableAbout } from '@/features/update-profile-about';
 import { EditableBirthDate } from '@/features/update-profile-birth-date';
 import { EditableAlias } from '@/features/update-profile-alias';
-import { EditableInterests } from '@/features/update-profile-interests';
 import { resolvePrivacy, resolveDisplayName, type SocialLink } from '@/entities/user';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
-import { OwnProfileSettings } from './OwnProfileClient';
+import { OwnProfileSettings, EditableInterestsBlock } from './OwnProfileClient';
 import {
   NameWithIcon,
   ProfileBlock,
@@ -86,12 +85,10 @@ export async function OwnProfile({ user }: OwnProfileProps) {
           <ProfileBlock icon={FileText} title="About">
             <EditableAbout initialAbout={profile?.about ?? null} userId={user.id} />
           </ProfileBlock>
-          <ProfileBlock icon={Sparkles} title="Interests">
-            <EditableInterests
-              initialInterests={(profile?.interests as string[]) ?? []}
-              userId={user.id}
-            />
-          </ProfileBlock>
+          <EditableInterestsBlock
+            initialInterests={(profile?.interests as string[]) ?? []}
+            userId={user.id}
+          />
           <ValueBlock icon={Mail} title="Email" value={user.email} />
 
           <ProfileBlock icon={Cake} title="Birth date">

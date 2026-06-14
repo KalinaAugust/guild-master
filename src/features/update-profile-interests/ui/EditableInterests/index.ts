@@ -1,1 +1,1 @@
-export { EditableInterests } from './EditableInterests';
+export { EditableInterests, INTERESTS_MAX } from './EditableInterests';
