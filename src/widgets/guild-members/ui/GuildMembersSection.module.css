@@ -66,9 +66,11 @@
   gap: 8px;
   min-height: 42px;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 8px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 .name {
@@ -96,11 +98,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 6px;
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
 }
 
 .ownerIcon {
