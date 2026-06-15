@@ -64,6 +64,9 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `poll_options` | `id`, `poll_id`, `body`, `position`, `is_custom`, `created_by` |
 | `poll_votes` | `id`, `poll_id`, `option_id`, `user_id` — `unique(option_id, user_id)` |
 | `guild_messages` | `id`, `guild_id`, `user_id`, `body`, `attachment_url` (text, nullable — public URL of an optional image attachment in the `chat-attachments` bucket), `created_at`, `updated_at`. RLS: select/insert for guild members, update/delete own. |
+| `announcements` | `id`, `guild_id`, `created_by`, `title`, `content` (markdown source), `is_pinned`, `created_at`, `updated_at`. RLS: select for guild members; insert/update/delete only `ADMIN`/`OWNER` (`has_guild_role`). Feed served on `/announcements`. |
+| `announcement_comments` | `id`, `announcement_id` (cascade), `user_id`, `body`, `created_at`, `updated_at`. RLS: select for members, insert own, delete by author or `ADMIN`/`OWNER`. Not editable. |
+| `announcement_reactions` | `id`, `announcement_id` (cascade), `user_id`, `type` (`like\|dislike\|heart\|doubt\|poop`) — `unique(announcement_id, user_id, type)`. RLS: select for members, insert/delete own. |
 
 All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
 

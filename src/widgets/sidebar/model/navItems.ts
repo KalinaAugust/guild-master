@@ -1,4 +1,4 @@
-import { Users, Calendar, MessagesSquare, type LucideIcon } from 'lucide-react';
+import { Users, Calendar, MessagesSquare, Megaphone, type LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   href: string;
@@ -10,5 +10,6 @@ export interface NavItem {
 export const navItems: NavItem[] = [
   { href: '/', icon: Calendar, labelKey: 'Common.calendar' },
   { href: '/guild-chat', icon: MessagesSquare, labelKey: 'Common.guildChat' },
+  { href: '/announcements', icon: Megaphone, labelKey: 'Common.announcements' },
   { href: '/guilds', icon: Users, labelKey: 'Guild.title' },
 ];

@@ -1,0 +1,23 @@
+.wrap { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem; }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.muted { color: var(--text-muted); }
+.row { display: flex; gap: 0.5rem; }
+.bubble {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 0.45rem 0.65rem;
+}
+.meta { display: flex; align-items: center; gap: 0.5rem; }
+.author { font-weight: 600; font-size: 0.85rem; }
+.time { font-size: 0.75rem; color: var(--text-muted); }
+.delete {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+}
+.delete:hover { color: #ff6b6b; }
+.body { margin: 0.2rem 0 0; font-size: 0.9rem; white-space: pre-wrap; overflow-wrap: anywhere; }

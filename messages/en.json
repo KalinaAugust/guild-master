@@ -41,7 +41,8 @@
       "boardgame": "Board Games",
       "other": "Other"
     },
-    "guildChat": "Guild Chat"
+    "guildChat": "Guild Chat",
+    "announcements": "Announcements"
   },
   "Auth": {
     "login": "Login"
@@ -300,5 +301,46 @@
     "closeError": "Failed to close poll",
     "confirmDelete": "Delete this poll?",
     "addOptionButton": "Add an option"
+  },
+  "Announcements": {
+    "newAnnouncement": "New announcement",
+    "createTitle": "New announcement",
+    "editTitle": "Edit announcement",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Announcement title",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write your announcement… Markdown supported.",
+    "write": "Write",
+    "preview": "Preview",
+    "previewEmpty": "Nothing to preview yet.",
+    "pinLabel": "Pin to top",
+    "publishButton": "Publish",
+    "saveButton": "Save",
+    "pinnedBadge": "Pinned",
+    "pin": "Pin",
+    "unpin": "Unpin",
+    "editLabel": "Edit",
+    "deleteLabel": "Delete",
+    "confirmDelete": "Delete this announcement?",
+    "edited": "edited",
+    "empty": "No announcements yet.",
+    "commentsCount": "{count, plural, =0 {No comments} one {# comment} other {# comments}}",
+    "commentPlaceholder": "Write a comment…",
+    "sendComment": "Send",
+    "lockedPrompt": "Sign in to comment.",
+    "deleteComment": "Delete comment",
+    "reactions": {
+      "like": "Like",
+      "dislike": "Dislike",
+      "heart": "Love",
+      "doubt": "Doubt",
+      "poop": "Poop"
+    },
+    "createError": "Failed to publish announcement",
+    "updateError": "Failed to save announcement",
+    "deleteError": "Failed to delete announcement",
+    "reactError": "Failed to update reaction",
+    "commentError": "Failed to send comment",
+    "commentDeleteError": "Failed to delete comment"
   }
 }

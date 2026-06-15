@@ -1,0 +1,55 @@
+.panel { display: flex; flex-direction: column; gap: 1rem; flex: 1; min-height: 0; }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 24px;
+}
+.guildSelect { min-width: 220px; }
+.newButton { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  /* Bleed into the panel's padding on both sides, then inset the content back by
+     the same amount: the scrollbar sits in the right gutter and card hover/edge
+     rendering has room on the left instead of being clipped by the scrollport. */
+  margin-left: -16px;
+  padding-left: 16px;
+  margin-right: -16px;
+  padding-right: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.feed::-webkit-scrollbar {
+  width: 6px;
+}
+.feed::-webkit-scrollbar-track {
+  background: transparent;
+}
+.feed::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+.feed::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+.empty { color: var(--text-muted); text-align: center; padding: 2rem 0; }
+
+.skeletonList { display: flex; flex-direction: column; gap: 1rem; }
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+}
+.skTitle { width: 40%; height: 18px; }
+.skBody { width: 100%; height: 48px; }
+.skMeta { width: 30%; height: 16px; }
