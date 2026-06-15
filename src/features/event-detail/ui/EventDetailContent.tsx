@@ -463,7 +463,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               {isCreator && (
                 <Button 
                   type="button" 
-                  variant="secondary" 
+                  variant="danger" 
                   onClick={() => {
                     if (event.id.includes('_')) {
                       setDeleteRecurringOpen(true);
