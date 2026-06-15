@@ -106,6 +106,8 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
         )}
       </header>
 
+      <div className={styles.divider} />
+
       <div className={styles.titleRow}>
         <GradientTitle as="h3" fontSize="1.15rem" className={styles.title}>
           {a.title}

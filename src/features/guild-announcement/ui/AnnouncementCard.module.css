@@ -60,3 +60,10 @@
   cursor: pointer;
 }
 .commentsToggle:hover { color: var(--text-primary); }
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0%, rgba(255, 255, 255, 0.08) 15%, rgba(255, 255, 255, 0.08) 85%, rgba(255, 255, 255, 0.01) 100%);
+  border: none;
+  margin: 0;
+}
