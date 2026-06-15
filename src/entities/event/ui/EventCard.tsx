@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sword, Gamepad2, Users, Calendar, Clock, Trash2, Edit2, Skull, PartyPopper, Dumbbell, Dices, Puzzle } from 'lucide-react';
+import { Sword, Gamepad2, Users, Calendar, Clock, Trash2, Edit2, Skull, PartyPopper, Dumbbell, Dices, Puzzle, Copy } from 'lucide-react';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import styles from './EventCard.module.css';
@@ -17,6 +17,7 @@ interface EventCardProps {
   onClick?: (event: ActivityEvent) => void;
   onEdit?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
+  onRepeat?: (event: ActivityEvent) => void;
 }
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -31,7 +32,7 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   boardgame: <Puzzle size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onEdit, onDelete }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onEdit, onDelete, onRepeat }) => {
   return (
     <div
       className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
@@ -66,6 +67,17 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
       </div>
 
       <div className={styles.actions}>
+        {onRepeat && (
+          <Button
+            variant="ghost"
+            size="icon_sm"
+            onClick={(e) => { e.stopPropagation(); onRepeat(event); }}
+            className={styles.actionBtn}
+            title="Repeat event"
+          >
+            <Copy size={16} />
+          </Button>
+        )}
         {onEdit && (
           <Button
             variant="ghost"
