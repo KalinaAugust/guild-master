@@ -211,7 +211,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               disabled={isSubmitting}
               aria-label={attachLabel}
             >
-              <ImageIcon size={22} />
+              <ImageIcon size={24} />
             </button>
             <input
               type="file"

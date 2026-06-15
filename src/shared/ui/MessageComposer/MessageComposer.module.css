@@ -71,27 +71,28 @@
 .attachButton {
   position: absolute;
   left: 42px;
-  top: calc(50% - 16px);
+  top: calc(50% - 17px);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border: none;
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
-  border-radius: 8px;
-  transition: color 0.2s ease;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 .attachButton:hover:not(:disabled) {
-  color: var(--accent-primary);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .attachButton:disabled {
   opacity: 0.5;
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .hiddenInput {
