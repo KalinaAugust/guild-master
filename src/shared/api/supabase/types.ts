@@ -14,6 +14,168 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcement_comments: {
+        Row: {
+          announcement_id: string
+          body: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          body: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_comments_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcement_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      announcement_reactions: {
+        Row: {
+          announcement_id: string
+          created_at: string
+          id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          announcement_id: string
+          created_at?: string
+          id?: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          announcement_id?: string
+          created_at?: string
+          id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_reactions_announcement_id_fkey"
+            columns: ["announcement_id"]
+            isOneToOne: false
+            referencedRelation: "announcements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcement_reactions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      announcements: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          guild_id: string
+          id: string
+          is_pinned: boolean
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by: string
+          guild_id: string
+          id?: string
+          is_pinned?: boolean
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          guild_id?: string
+          id?: string
+          is_pinned?: boolean
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcements_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcements_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_comment_reads: {
+        Row: {
+          event_id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          event_id: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          event_id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_comment_reads_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_comment_reads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_comments: {
         Row: {
           body: string
@@ -49,39 +211,6 @@ export type Database = {
           },
           {
             foreignKeyName: "event_comments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      event_comment_reads: {
-        Row: {
-          event_id: string
-          last_read_at: string
-          user_id: string
-        }
-        Insert: {
-          event_id: string
-          last_read_at?: string
-          user_id: string
-        }
-        Update: {
-          event_id?: string
-          last_read_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "event_comment_reads_event_id_fkey"
-            columns: ["event_id"]
-            isOneToOne: false
-            referencedRelation: "events"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "event_comment_reads_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -173,36 +302,36 @@ export type Database = {
           created_by: string | null
           description: string | null
           event_date: string
+          exceptions: string[] | null
           guild_id: string
           id: string
           title: string
           type: string
           week_days: number[] | null
-          exceptions: string[] | null
         }
         Insert: {
           created_at?: string
           created_by?: string | null
           description?: string | null
           event_date: string
+          exceptions?: string[] | null
           guild_id: string
           id?: string
           title: string
           type: string
           week_days?: number[] | null
-          exceptions?: string[] | null
         }
         Update: {
           created_at?: string
           created_by?: string | null
           description?: string | null
           event_date?: string
+          exceptions?: string[] | null
           guild_id?: string
           id?: string
           title?: string
           type?: string
           week_days?: number[] | null
-          exceptions?: string[] | null
         }
         Relationships: [
           {
@@ -657,7 +786,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "guilds"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -665,16 +794,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      generate_public_id: {
-        Args: { id_length?: number }
-        Returns: string
-      }
+      generate_public_id: { Args: { id_length?: number }; Returns: string }
       get_profile_stats: {
         Args: { profile_id: string }
         Returns: {
+          events_count: number
+          guilds_count: number
           joined_at: string
-          guilds_count: number | null
-          events_count: number | null
         }[]
       }
       has_guild_role: {
@@ -687,7 +813,7 @@ export type Database = {
         Returns: undefined
       }
       set_poll_votes: {
-        Args: { p_poll_id: string; p_option_ids: string[] }
+        Args: { p_option_ids: string[]; p_poll_id: string }
         Returns: undefined
       }
     }
