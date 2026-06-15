@@ -1,95 +1,170 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AnnouncementModal } from './AnnouncementModal';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
+
 vi.mock('sonner', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
 }));
 
-// Mock the Tiptap-based editor with a plain textarea so the modal's form logic
-// (validation, submit, edit vs create) can be tested in isolation.
 vi.mock('@/shared/ui/RichTextEditor', () => ({
-  RichTextEditor: ({
-    value,
-    onChange,
-    placeholder,
-  }: {
-    value: string;
-    onChange: (md: string) => void;
-    placeholder?: string;
-  }) => (
+  RichTextEditor: ({ value, onChange, placeholder }: any) => (
     <textarea
-      aria-label="content"
-      value={value}
       placeholder={placeholder}
+      value={value}
       onChange={(e) => onChange(e.target.value)}
+      data-testid="rich-editor"
     />
   ),
 }));
 
-const createAnnouncement = vi.fn(() => ({ unwrap: () => Promise.resolve({}) }));
-const updateAnnouncement = vi.fn(() => ({ unwrap: () => Promise.resolve({}) }));
+vi.mock('@/shared/ui/Tooltip', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
+const mockCreateAnnouncement = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+const mockUpdateAnnouncement = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+
 vi.mock('@/entities/announcement', () => ({
-  useCreateAnnouncementMutation: () => [createAnnouncement, { isLoading: false }],
-  useUpdateAnnouncementMutation: () => [updateAnnouncement, { isLoading: false }],
+  useCreateAnnouncementMutation: () => [mockCreateAnnouncement, { isLoading: false }],
+  useUpdateAnnouncementMutation: () => [mockUpdateAnnouncement, { isLoading: false }],
 }));
 
 describe('AnnouncementModal', () => {
-  beforeEach(() => vi.clearAllMocks());
+  const mockOnClose = vi.fn();
 
-  const baseProps = { open: true, onClose: vi.fn(), guildId: 'g1' };
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-  it('shows the create title and a disabled publish button when empty', () => {
-    render(<AnnouncementModal {...baseProps} />);
+  it('renders create title and empty form by default', () => {
+    render(
+      <AnnouncementModal
+        open={true}
+        onClose={mockOnClose}
+        guildId="g1"
+      />
+    );
     expect(screen.getByText('createTitle')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'publishButton' })).toBeDisabled();
+    expect(screen.getByPlaceholderText('titlePlaceholder')).toHaveValue('');
+    expect(screen.getByTestId('rich-editor')).toHaveValue('');
+    expect(screen.getByLabelText('pinLabel')).toBeInTheDocument();
   });
 
-  it('enables publish once title and content are filled and submits the input', async () => {
-    const user = userEvent.setup();
-    const onClose = vi.fn();
-    render(<AnnouncementModal {...baseProps} onClose={onClose} />);
-
-    await user.type(screen.getByPlaceholderText('titlePlaceholder'), 'News');
-    await user.type(screen.getByLabelText('content'), 'Body text');
-
-    const publish = screen.getByRole('button', { name: 'publishButton' });
-    expect(publish).toBeEnabled();
-
-    fireEvent.submit(publish.closest('form')!);
-
-    expect(createAnnouncement).toHaveBeenCalledWith({
-      guildId: 'g1',
-      input: { title: 'News', content: 'Body text', isPinned: false },
-    });
-    await vi.waitFor(() => expect(onClose).toHaveBeenCalled());
-  });
-
-  it('edits an existing announcement: edit title, save button, no pin toggle', () => {
-    // The modal loads the edited values on the closed -> open transition, so mount
-    // closed first and then open it (its render-phase "adjust on prop change").
+  it('renders edit title and prefilled values in edit mode', () => {
     const { rerender } = render(
-      <AnnouncementModal {...baseProps} open={false} editing={{ id: 'a1', title: 'Old', content: 'Old body' }} />,
+      <AnnouncementModal
+        open={false}
+        onClose={mockOnClose}
+        guildId="g1"
+        editing={null}
+      />
     );
     rerender(
-      <AnnouncementModal {...baseProps} open editing={{ id: 'a1', title: 'Old', content: 'Old body' }} />,
+      <AnnouncementModal
+        open={true}
+        onClose={mockOnClose}
+        guildId="g1"
+        editing={{
+          id: 'a1',
+          title: 'Old Title',
+          content: 'Old Content',
+        }}
+      />
     );
-
     expect(screen.getByText('editTitle')).toBeInTheDocument();
-    // Pin toggle is creation-only.
-    expect(screen.queryByText('pinLabel')).not.toBeInTheDocument();
+    expect(screen.getByPlaceholderText('titlePlaceholder')).toHaveValue('Old Title');
+    expect(screen.getByTestId('rich-editor')).toHaveValue('Old Content');
+    expect(screen.queryByLabelText('pinLabel')).not.toBeInTheDocument();
+  });
 
-    const save = screen.getByRole('button', { name: 'saveButton' });
-    fireEvent.submit(save.closest('form')!);
+  it('disables submit button when title or content is empty', () => {
+    render(
+      <AnnouncementModal
+        open={true}
+        onClose={mockOnClose}
+        guildId="g1"
+      />
+    );
+    const publishBtn = screen.getByRole('button', { name: 'publishButton' });
+    expect(publishBtn).toBeDisabled();
 
-    expect(updateAnnouncement).toHaveBeenCalledWith({
+    // Fill only title
+    fireEvent.change(screen.getByPlaceholderText('titlePlaceholder'), { target: { value: 'Hi' } });
+    expect(publishBtn).toBeDisabled();
+
+    // Fill content
+    fireEvent.change(screen.getByTestId('rich-editor'), { target: { value: 'Hello world' } });
+    expect(publishBtn).not.toBeDisabled();
+  });
+
+  it('calls createAnnouncement mutation with inputs on form submit', async () => {
+    render(
+      <AnnouncementModal
+        open={true}
+        onClose={mockOnClose}
+        guildId="g1"
+      />
+    );
+    fireEvent.change(screen.getByPlaceholderText('titlePlaceholder'), { target: { value: 'New Announcement' } });
+    fireEvent.change(screen.getByTestId('rich-editor'), { target: { value: 'My body content' } });
+    
+    // Toggle pin switch
+    const pinSwitch = screen.getByLabelText('pinLabel');
+    fireEvent.click(pinSwitch);
+
+    const publishBtn = screen.getByRole('button', { name: 'publishButton' });
+    fireEvent.click(publishBtn);
+
+    expect(mockCreateAnnouncement).toHaveBeenCalledWith({
+      guildId: 'g1',
+      input: {
+        title: 'New Announcement',
+        content: 'My body content',
+        isPinned: true,
+      },
+    });
+    await waitFor(() => expect(mockOnClose).toHaveBeenCalled());
+  });
+
+  it('calls updateAnnouncement mutation with inputs in edit mode on form submit', async () => {
+    const { rerender } = render(
+      <AnnouncementModal
+        open={false}
+        onClose={mockOnClose}
+        guildId="g1"
+        editing={null}
+      />
+    );
+    rerender(
+      <AnnouncementModal
+        open={true}
+        onClose={mockOnClose}
+        guildId="g1"
+        editing={{
+          id: 'a1',
+          title: 'Old Title',
+          content: 'Old Content',
+        }}
+      />
+    );
+    fireEvent.change(screen.getByPlaceholderText('titlePlaceholder'), { target: { value: 'Updated Title' } });
+    fireEvent.change(screen.getByTestId('rich-editor'), { target: { value: 'Updated Content' } });
+
+    const saveBtn = screen.getByRole('button', { name: 'saveButton' });
+    fireEvent.click(saveBtn);
+
+    expect(mockUpdateAnnouncement).toHaveBeenCalledWith({
       guildId: 'g1',
       announcementId: 'a1',
-      input: { title: 'Old', content: 'Old body' },
+      input: {
+        title: 'Updated Title',
+        content: 'Updated Content',
+      },
     });
+    await waitFor(() => expect(mockOnClose).toHaveBeenCalled());
   });
 });

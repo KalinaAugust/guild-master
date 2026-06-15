@@ -36,16 +36,16 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   const announcements = data?.announcements ?? [];
   const canCreate = data?.canCreate ?? false;
 
-  const [wizardOpen, setWizardOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; title: string; content: string } | null>(null);
 
   const openCreate = () => {
     setEditing(null);
-    setWizardOpen(true);
+    setModalOpen(true);
   };
   const openEdit = (a: Announcement) => {
     setEditing({ id: a.id, title: a.title, content: a.content });
-    setWizardOpen(true);
+    setModalOpen(true);
   };
 
   return (
@@ -80,8 +80,8 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
 
       {activeGuildId && (
         <AnnouncementModal
-          open={wizardOpen}
-          onClose={() => setWizardOpen(false)}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
           guildId={activeGuildId}
           editing={editing}
         />

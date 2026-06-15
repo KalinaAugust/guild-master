@@ -44,4 +44,10 @@ describe('executeEditEvent', () => {
     expect(result).toEqual({ success: false, error: 'Both date and time must be provided together' });
     expect(updateEvent).not.toHaveBeenCalled();
   });
+
+  it('passes weekDays when provided', async () => {
+    vi.mocked(updateEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeEditEvent({ id: 'e1', weekDays: [2, 4] });
+    expect(updateEvent).toHaveBeenCalledWith('e1', { weekDays: [2, 4] });
+  });
 });

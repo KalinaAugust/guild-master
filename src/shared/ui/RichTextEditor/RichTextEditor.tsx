@@ -5,6 +5,7 @@ import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
 import { Placeholder } from '@tiptap/extensions';
+import Link from '@tiptap/extension-link';
 import { Bold, Italic, Heading2, Heading3, List, ListOrdered, Link2, Check } from 'lucide-react';
 import styles from './RichTextEditor.module.css';
 
