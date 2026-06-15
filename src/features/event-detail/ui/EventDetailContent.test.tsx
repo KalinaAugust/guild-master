@@ -33,6 +33,10 @@ vi.mock('@/entities/event', () => ({
   }),
   useDeleteEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
   useUpdateEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
+  useCreateEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
+}));
+vi.mock('@/entities/guild', () => ({
+  useGuildPermissions: vi.fn().mockReturnValue({ canManageEvents: true }),
 }));
 vi.mock('../api/detailApi', () => ({
   useUpdateParticipantStatusMutation: vi.fn().mockReturnValue([vi.fn()]),
@@ -51,6 +55,7 @@ function makeStore() {
         isEventModalOpen: false,
         selectedDate: null,
         viewDate: '2026-05-01T00:00:00.000Z',
+        excludedEventTypes: [],
       },
     },
   });

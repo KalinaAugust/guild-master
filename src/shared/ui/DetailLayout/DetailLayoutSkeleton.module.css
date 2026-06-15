@@ -1,0 +1,48 @@
+.skeletonColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.infoGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  height: 12px;
+  width: 80px;
+}
+
+.title {
+  height: 24px;
+  width: 180px;
+}
+
+.description {
+  height: 72px;
+  width: 100%;
+}
+
+.value {
+  height: 18px;
+  width: 150px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button {
+  height: 38px;
+  width: 120px;
+}
+
+.backText {
+  height: 14px;
+  width: 100px;
+}
+

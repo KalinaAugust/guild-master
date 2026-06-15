@@ -3,6 +3,7 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -29,7 +30,11 @@ export const Modal: React.FC<ModalProps> = ({
           aria-describedby={undefined}
         >
           <div className={styles.header}>
-            {title && <DialogPrimitive.Title className={styles.title}>{title}</DialogPrimitive.Title>}
+            {title && (
+              <DialogPrimitive.Title asChild>
+                <GradientTitle as="h2" fontSize="1.5rem">{title}</GradientTitle>
+              </DialogPrimitive.Title>
+            )}
             <DialogPrimitive.Close className={styles.closeButton}>
               <X size={20} />
             </DialogPrimitive.Close>

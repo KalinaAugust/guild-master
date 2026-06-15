@@ -47,6 +47,7 @@ export default defineConfig([
     files: [
       './src/entities/notification/**',
       './src/features/ai-helper/**',
+      './src/features/guild-announcement/**',
       './src/features/language-switcher/**',
       './src/features/notification-panel/**',
     ],

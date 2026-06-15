@@ -14,14 +14,18 @@ import {
   useGetParticipantsQuery,
   useDeleteEventMutation,
   useUpdateEventMutation,
+  useCreateEventMutation,
 } from '@/entities/event';
+import { useGuildPermissions } from '@/entities/guild';
 import { Modal } from '@/shared/ui/Modal';
+import { FormField } from '@/shared/ui/FormField';
+import { Input } from '@/shared/ui/Input';
+import * as Form from '@radix-ui/react-form';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { Button } from '@/shared/ui/Button';
-import { Skeleton } from '@/shared/ui/Skeleton';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
-import { DetailLayout } from '@/shared/ui/DetailLayout';
+import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
 import {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
@@ -65,6 +69,8 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const { data: participantsData, isLoading: isParticipantsLoading } =
     useGetParticipantsQuery(eventId, { skip: !event });
   const currentUserId = participantsData?.currentUserId ?? '';
+
+  const { canManageEvents } = useGuildPermissions(data?.guildId ?? '', currentUserId);
   // Order: the viewer first, then confirmed participants, then everyone else.
   const participantRank = (p: { user_id: string; status: string }) =>
     p.user_id === currentUserId ? 0 : p.status === 'confirmed' ? 1 : 2;
@@ -103,6 +109,12 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecurringOpen, setDeleteRecurringOpen] = useState(false);
   const [leaveModalOpen, setLeaveModalOpen] = useState(false);
+
+  const [repeatModalOpen, setRepeatModalOpen] = useState(false);
+  const [repeatDate, setRepeatDate] = useState('');
+  const [repeatTime, setRepeatTime] = useState('');
+  const [repeatErrors, setRepeatErrors] = useState<{ date?: string; time?: string }>({});
+  const [createEvent, { isLoading: isCreatingEvent }] = useCreateEventMutation();
 
   const locale = useLocale();
   const dayLabels = useWeekdayLabels();
@@ -228,17 +240,45 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
     }
   };
 
+  const handleRepeatClick = () => {
+    if (!event) return;
+    setRepeatDate(event.date);
+    setRepeatTime(event.time);
+    setRepeatErrors({});
+    setRepeatModalOpen(true);
+  };
+
+  const handleRepeatSubmit = async (e: React.SubmitEvent) => {
+    e.preventDefault();
+    if (!event || !data?.guildId) return;
+
+    const errors: { date?: string; time?: string } = {};
+    if (!repeatDate) errors.date = eventT('validation.dateRequired');
+    if (!repeatTime) errors.time = eventT('validation.timeRequired');
+
+    if (Object.keys(errors).length > 0) {
+      setRepeatErrors(errors);
+      return;
+    }
+
+    try {
+      await createEvent({
+        guild_id: data.guildId,
+        title: event.title,
+        description: event.description || '',
+        type: event.type,
+        date: repeatDate,
+        time: repeatTime,
+      }).unwrap();
+      toast.success(eventT('successCreated'));
+      setRepeatModalOpen(false);
+    } catch {
+      toast.error(eventT('error'));
+    }
+  };
+
   if (isEventLoading) {
-    return (
-      <div className={styles.stateContainer}>
-        <div className={styles.detailSkeleton}>
-          <Skeleton className={styles.skTitle} />
-          <Skeleton className={styles.skHero} />
-          <Skeleton className={styles.skLine} />
-          <Skeleton className={styles.skLineShort} />
-        </div>
-      </div>
-    );
+    return <DetailLayoutSkeleton backLabel={commonT('backToDay')} />;
   }
 
   if (!event) {
@@ -408,24 +448,37 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           </>
         }
         footer={
-          isCreator ? (
+          canManageEvents || isCreator ? (
             <>
-              <Button 
-                type="button" 
-                variant="secondary" 
-                onClick={() => {
-                  if (event.id.includes('_')) {
-                    setDeleteRecurringOpen(true);
-                  } else {
-                    setDeleteModalOpen(true);
-                  }
-                }}
-              >
-                {commonT('delete')}
-              </Button>
-              <Button type="button" variant="primary" onClick={handleEdit}>
-                {commonT('edit')}
-              </Button>
+              {isCreator && (
+                <Button 
+                  type="button" 
+                  variant="danger" 
+                  onClick={() => {
+                    if (event.id.includes('_')) {
+                      setDeleteRecurringOpen(true);
+                    } else {
+                      setDeleteModalOpen(true);
+                    }
+                  }}
+                >
+                  {commonT('delete')}
+                </Button>
+              )}
+              {canManageEvents && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleRepeatClick}
+                >
+                  {eventT('repeatEvent')}
+                </Button>
+              )}
+              {isCreator && (
+                <Button type="button" variant="primary" onClick={handleEdit}>
+                  {commonT('edit')}
+                </Button>
+              )}
             </>
           ) : undefined
         }
@@ -484,6 +537,53 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             {eventT('deleteAll')}
           </Button>
         </div>
+      </Modal>
+
+      <Modal
+        isOpen={repeatModalOpen}
+        onClose={() => setRepeatModalOpen(false)}
+        title={eventT('repeatEventTitle')}
+      >
+        {event && (
+          <Form.Root onSubmit={handleRepeatSubmit} className={styles.repeatForm}>
+            <p className={styles.modalDesc}>
+              {event.title}
+            </p>
+            <div className={styles.formRow}>
+              <FormField name="date" label={eventT('dateLabel')} error={repeatErrors.date}>
+                <Input
+                  type="date"
+                  value={repeatDate}
+                  onChange={(e) => setRepeatDate(e.target.value)}
+                />
+              </FormField>
+              <FormField name="time" label={eventT('timeLabel')} error={repeatErrors.time}>
+                <Input
+                  type="time"
+                  value={repeatTime}
+                  onChange={(e) => setRepeatTime(e.target.value)}
+                />
+              </FormField>
+            </div>
+            <div className={styles.formActions}>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={() => setRepeatModalOpen(false)}
+                disabled={isCreatingEvent}
+              >
+                {commonT('cancel')}
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                isLoading={isCreatingEvent}
+              >
+                {eventT('repeatEvent')}
+              </Button>
+            </div>
+          </Form.Root>
+        )}
       </Modal>
     </>
   );

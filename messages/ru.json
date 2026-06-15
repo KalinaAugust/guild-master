@@ -67,6 +67,8 @@
     "deleteOccurrenceDesc": "Это повторяющееся событие. Вы хотите удалить только это конкретное вхождение или всю серию?",
     "deleteOnlyThis": "Только это вхождение",
     "deleteAll": "Всю серию",
+    "repeatEvent": "Повторить событие",
+    "repeatEventTitle": "Повторить событие",
     "error": "Произошла ошибка",
     "validation": {
       "titleRequired": "Укажите название",
@@ -310,9 +312,6 @@
     "titlePlaceholder": "Заголовок анонса",
     "contentLabel": "Содержание",
     "contentPlaceholder": "Напишите анонс… Поддерживается Markdown.",
-    "write": "Текст",
-    "preview": "Превью",
-    "previewEmpty": "Пока нечего показать.",
     "pinLabel": "Закрепить сверху",
     "publishButton": "Опубликовать",
     "saveButton": "Сохранить",
@@ -333,14 +332,15 @@
       "like": "Нравится",
       "dislike": "Не нравится",
       "heart": "Любовь",
-      "doubt": "Сомнение",
-      "poop": "Какашка"
+      "celebrate": "Праздную",
+      "insightful": "Полезно"
     },
     "createError": "Не удалось опубликовать анонс",
     "updateError": "Не удалось сохранить анонс",
     "deleteError": "Не удалось удалить анонс",
     "reactError": "Не удалось изменить реакцию",
     "commentError": "Не удалось отправить комментарий",
-    "commentDeleteError": "Не удалось удалить комментарий"
+    "commentDeleteError": "Не удалось удалить комментарий",
+    "commentsLoading": "Загрузка комментариев"
   }
 }

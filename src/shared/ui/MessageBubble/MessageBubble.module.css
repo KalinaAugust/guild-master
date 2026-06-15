@@ -2,9 +2,9 @@
   position: relative;
   display: flex;
   gap: 12px;
-  /* Pin the avatar to the bottom so it doesn't drift to the middle of tall
-     (image) messages. */
-  align-items: flex-end;
+  /* Pin the avatar to the top so it stays level with the name/first line instead
+     of drifting to the middle of tall messages. */
+  align-items: flex-start;
   padding: 12px 14px;
   max-width: 90%;
   align-self: flex-start;
@@ -12,17 +12,18 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px 16px 16px 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 .own {
   align-self: flex-end;
-  /* Reserve room so the absolutely-positioned actions block never overlaps the
-     timestamp in the header row. */
-  min-width: 200px;
   background: rgba(45, 158, 208, 0.12);
   border: 1px solid rgba(125, 211, 252, 0.15);
   border-radius: 16px 16px 4px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.05);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 /* Highlights the message currently being edited in the composer. */
@@ -70,10 +71,8 @@
   gap: 4px;
   padding: 2px 8px;
   border-radius: 12px;
-  background: rgba(20, 28, 46, 0.45);
+  background: rgb(20, 28, 46);
   border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   opacity: 0;
   transition: opacity 0.2s ease;
@@ -88,9 +87,12 @@
   background: transparent !important;
 }
 
-.actionBtn:hover { color: var(--accent-primary); }
+/* Coloured as soon as the actions reveal on hover: pencil blue, trash red. */
+.actionBtn { color: var(--accent-primary); }
+.deleteBtn { color: #ff4d4d; }
 
-.deleteBtn:hover { color: #ff4d4d; }
+.actionBtn:hover { color: var(--accent-hover); }
+.deleteBtn:hover { color: #ff6b6b; }
 
 .emoji {
   font-size: 1.45em;

@@ -67,6 +67,8 @@
     "deleteOccurrenceDesc": "This is a recurring event. Do you want to delete only this occurrence or the entire series?",
     "deleteOnlyThis": "Only this occurrence",
     "deleteAll": "Entire series",
+    "repeatEvent": "Repeat Event",
+    "repeatEventTitle": "Repeat Event",
     "error": "An error occurred",
     "validation": {
       "titleRequired": "Title is required",
@@ -310,9 +312,6 @@
     "titlePlaceholder": "Announcement title",
     "contentLabel": "Content",
     "contentPlaceholder": "Write your announcement… Markdown supported.",
-    "write": "Write",
-    "preview": "Preview",
-    "previewEmpty": "Nothing to preview yet.",
     "pinLabel": "Pin to top",
     "publishButton": "Publish",
     "saveButton": "Save",
@@ -333,14 +332,15 @@
       "like": "Like",
       "dislike": "Dislike",
       "heart": "Love",
-      "doubt": "Doubt",
-      "poop": "Poop"
+      "celebrate": "Celebrate",
+      "insightful": "Insightful"
     },
     "createError": "Failed to publish announcement",
     "updateError": "Failed to save announcement",
     "deleteError": "Failed to delete announcement",
     "reactError": "Failed to update reaction",
     "commentError": "Failed to send comment",
-    "commentDeleteError": "Failed to delete comment"
+    "commentDeleteError": "Failed to delete comment",
+    "commentsLoading": "Loading comments"
   }
 }

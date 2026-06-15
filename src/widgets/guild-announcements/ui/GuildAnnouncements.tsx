@@ -6,7 +6,7 @@ import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
-import { AnnouncementCard, AnnouncementWizard } from '@/features/guild-announcement';
+import { AnnouncementCard, AnnouncementModal } from '@/features/guild-announcement';
 import {
   useGetGuildAnnouncementsQuery,
   type Announcement,
@@ -36,16 +36,16 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   const announcements = data?.announcements ?? [];
   const canCreate = data?.canCreate ?? false;
 
-  const [wizardOpen, setWizardOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; title: string; content: string } | null>(null);
 
   const openCreate = () => {
     setEditing(null);
-    setWizardOpen(true);
+    setModalOpen(true);
   };
   const openEdit = (a: Announcement) => {
     setEditing({ id: a.id, title: a.title, content: a.content });
-    setWizardOpen(true);
+    setModalOpen(true);
   };
 
   return (
@@ -55,7 +55,7 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
           <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
         </div>
         {canCreate && (
-          <Button type="button" variant="secondary_glass" className={styles.newButton} onClick={openCreate}>
+          <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate}>
             <Plus size={16} />
             {t('newAnnouncement')}
           </Button>
@@ -79,9 +79,9 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
       </div>
 
       {activeGuildId && (
-        <AnnouncementWizard
-          open={wizardOpen}
-          onClose={() => setWizardOpen(false)}
+        <AnnouncementModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
           guildId={activeGuildId}
           editing={editing}
         />

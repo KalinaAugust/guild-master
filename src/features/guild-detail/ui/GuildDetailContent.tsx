@@ -14,9 +14,8 @@ import {
 } from '@/entities/guild';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
-import { Skeleton } from '@/shared/ui/Skeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
-import { DetailLayout } from '@/shared/ui/DetailLayout';
+import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
 import { GuildMembersSection } from '@/widgets/guild-members';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
@@ -87,15 +86,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   };
 
   if (isLoading) {
-    return (
-      <div className={styles.stateContainer}>
-        <div className={styles.detailSkeleton}>
-          <Skeleton className={styles.skTitle} />
-          <Skeleton className={styles.skLine} />
-          <Skeleton className={styles.skLineShort} />
-        </div>
-      </div>
-    );
+    return <DetailLayoutSkeleton backHref="/guilds" backLabel={t('backToGuilds')} />;
   }
 
   if (!guild) {

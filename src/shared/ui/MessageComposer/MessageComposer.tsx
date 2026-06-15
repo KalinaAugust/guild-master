@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useLayoutEffect, useEffect, useMemo } from 'react';
 import Image from 'next/image';
-import { Send, Check, X, Pencil, Paperclip } from 'lucide-react';
+import { Send, Check, X, Pencil, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/shared/ui/Button';
 import { Textarea } from '@/shared/ui/Textarea';
@@ -211,7 +211,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               disabled={isSubmitting}
               aria-label={attachLabel}
             >
-              <Paperclip size={22} />
+              <ImageIcon size={24} />
             </button>
             <input
               type="file"

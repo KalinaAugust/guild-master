@@ -146,31 +146,62 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message, eventCreated, eventUpdated });
       }
 
-      // Tool call — execute and continue the loop
-      const toolCall = choice.message.tool_calls[0];
-      let toolResultContent: string;
+      // Tool calls — execute all of them in parallel and continue the loop
+      const toolCalls = choice.message.tool_calls;
+      const toolResults = await Promise.all(
+        toolCalls.map(async (toolCall) => {
+          if (toolCall.type !== 'function') {
+            console.error('[ai-helper] Unexpected non-function tool call type:', toolCall.type);
+            return {
+              id: toolCall.id,
+              content: 'Unknown tool type',
+              invalid: false,
+            };
+          }
 
-      if (toolCall.type !== 'function') {
-        console.error('[ai-helper] Unexpected non-function tool call type:', toolCall.type);
-        toolResultContent = 'Unknown tool type';
-      } else {
-        const outcome = await handleToolCall(toolCall.function.name, toolCall.function.arguments, guildId, canManageEvents);
-        if (!outcome) {
-          return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
-        }
-        toolResultContent = outcome.content;
-        if (outcome.eventCreated) eventCreated = true;
-        if (outcome.eventUpdated) eventUpdated = true;
+          const outcome = await handleToolCall(
+            toolCall.function.name,
+            toolCall.function.arguments,
+            guildId,
+            canManageEvents
+          );
+
+          if (!outcome) {
+            return {
+              id: toolCall.id,
+              content: 'Invalid tool arguments from model',
+              invalid: true,
+            };
+          }
+
+          return {
+            id: toolCall.id,
+            content: outcome.content,
+            eventCreated: outcome.eventCreated,
+            eventUpdated: outcome.eventUpdated,
+            invalid: false,
+          };
+        })
+      );
+
+      const hasInvalid = toolResults.some((r) => r.invalid);
+      if (hasInvalid) {
+        return NextResponse.json({ error: 'Invalid tool arguments from model' }, { status: 502 });
       }
+
+      toolResults.forEach((r) => {
+        if (r.eventCreated) eventCreated = true;
+        if (r.eventUpdated) eventUpdated = true;
+      });
 
       currentMessages = [
         ...currentMessages,
         choice.message,
-        {
+        ...toolResults.map((r) => ({
           role: 'tool' as const,
-          tool_call_id: toolCall.id,
-          content: toolResultContent,
-        },
+          tool_call_id: r.id,
+          content: r.content,
+        })),
       ];
     }
 

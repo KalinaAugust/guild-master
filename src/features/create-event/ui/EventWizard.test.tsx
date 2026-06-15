@@ -6,6 +6,7 @@ import { EventWizard } from './EventWizard';
 import { calendarReducer } from '@/entities/calendar';
 import { guildReducer } from '@/entities/guild';
 import { baseApi } from '@/shared/api/baseApi';
+import type { UIState } from '@/shared/types';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -41,7 +42,7 @@ vi.mock('@/entities/guild', async (importOriginal) => {
   };
 });
 
-function makeStore(uiOverrides = {}) {
+function makeStore(uiOverrides: Partial<UIState> = {}) {
   return configureStore({
     reducer: {
       [baseApi.reducerPath]: baseApi.reducer,
@@ -55,6 +56,7 @@ function makeStore(uiOverrides = {}) {
         isEventModalOpen: false,
         selectedDate: null,
         viewDate: '2026-05-20T00:00:00.000Z',
+        excludedEventTypes: [],
         ...uiOverrides,
       },
       guild: { currentGuildId: null, isGuildEditModalOpen: false, editingGuild: null },

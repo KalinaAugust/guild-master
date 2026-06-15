@@ -6,8 +6,9 @@
 .icon {
   margin-left: 6px;
   vertical-align: middle;
-  /* Consistent accent color for the name flair icon across the whole app. */
-  color: var(--accent-yellow);
+  /* Default accent color for the name flair icon; override per context by setting
+     --name-icon-color on any ancestor. */
+  color: var(--name-icon-color, var(--accent-yellow));
 }
 /* The last word + icon stay on the same line and wrap together. */
 .lastChunk {

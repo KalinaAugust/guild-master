@@ -31,10 +31,11 @@
   flex: 0 0 max(450px, 30%);
   padding-left: 24px;
   border-left: 1px solid var(--glass-border);
-  /* Match the .polls scrollbar gutter so the header divider lines up with the
-     body divider (both shifted 16px right by the negative margin). */
-  margin-right: -16px;
-  padding-right: 16px;
+  /* Mirror the .polls negative margin so both border-left dividers (header + body)
+     stay aligned; padding-right cancels the bleed for the content so the New poll
+     button keeps its position. */
+  margin-right: -14px;
+  padding-right: 14px;
 }
 
 .newPollButton {
@@ -73,10 +74,11 @@
   overflow-y: auto;
   padding-left: 24px;
   border-left: 1px solid var(--glass-border);
-  /* Bleed into the panel's right padding, then inset the content back by the same
-     amount so the scrollbar sits in that gutter instead of over the cards. */
-  margin-right: -16px;
-  padding-right: 16px;
+  /* Bleed into the wrapper's right padding so the scrollbar sits near the panel edge. */
+  margin-right: -14px;
+  /* Always reserve the scrollbar gutter so the right gap stays identical whether or
+     not the column overflows. */
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
@@ -105,10 +107,10 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  /* Same gutter trick as .polls: bleed right, then pad the content back so the
-     scrollbar never overlaps the message bubbles. */
+  /* Same gutter trick as .polls: bleed right so the scrollbar sits near the edge,
+     and reserve the gutter so the right gap stays identical with or without scroll. */
   margin-right: -10px;
-  padding-right: 10px;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }

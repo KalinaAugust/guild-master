@@ -7,6 +7,7 @@ export interface CreateEventArgs {
   time: string;
   type: 'raid' | 'game' | 'meeting' | 'other' | 'dungeon' | 'party' | 'sport' | 'dnd' | 'boardgame';
   description: string;
+  weekDays?: number[];
 }
 
 export const executeCreateEvent = async (
@@ -20,6 +21,7 @@ export const executeCreateEvent = async (
       time: args.time,
       type: args.type,
       description: args.description,
+      weekDays: args.weekDays,
       guild_id: guildId,
     });
     return { success: true, eventId: data.id };

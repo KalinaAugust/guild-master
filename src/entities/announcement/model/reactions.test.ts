@@ -29,7 +29,7 @@ describe('applyOptimisticReaction', () => {
   it('does nothing for an unknown type bucket', () => {
     const a = make();
     a.reactions = [{ type: 'like', count: 0, reacted: false }];
-    applyOptimisticReaction(a, 'poop');
+    applyOptimisticReaction(a, 'celebrate');
     expect(a.reactions).toHaveLength(1);
   });
 });

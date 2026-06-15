@@ -7,13 +7,16 @@ import { toast } from 'sonner';
 import { Pin, PinOff, Pencil, Trash2, MessageSquare } from 'lucide-react';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Markdown } from '@/shared/ui/Markdown';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { resolveDisplayName } from '@/entities/user';
 import {
   useSetAnnouncementPinnedMutation,
   useDeleteAnnouncementMutation,
+  useGetAnnouncementCommentsQuery,
   type Announcement,
   type AnnouncementComment,
 } from '@/entities/announcement';
@@ -43,6 +46,11 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [commentsOpen, setCommentsOpen] = useState(false);
 
+  // Keep a live subscription to the comments from the moment the card renders, so
+  // they are fetched as soon as the announcements load and stay in cache. Opening
+  // the comments tab then reads ready data instead of triggering a loading spinner.
+  useGetAnnouncementCommentsQuery({ guildId, announcementId: a.id });
+
   const authorName = resolveDisplayName({ fullName: a.author.fullName, alias: a.author.alias, displayAsAlias: a.author.displayAsAlias });
 
   const handlePinToggle = async () => {
@@ -69,20 +77,13 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
         </ProfileLink>
         <div className={styles.headText}>
           <ProfileLink publicId={a.author.publicId} className={styles.author}>
-            {authorName}
+            <NameWithIcon name={authorName} icon={a.author.icon} iconSize={14} />
           </ProfileLink>
           <span className={styles.time}>
             {dayjs(a.createdAt).locale(locale).format('LLL')}
             {a.updatedAt !== a.createdAt && <span className={styles.edited}> · {t('edited')}</span>}
           </span>
         </div>
-
-        {a.isPinned && (
-          <span className={styles.pinnedBadge}>
-            <Pin size={12} aria-hidden="true" />
-            {t('pinnedBadge')}
-          </span>
-        )}
 
         {a.canManage && (
           <div className={styles.actions}>
@@ -105,7 +106,19 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
         )}
       </header>
 
-      <h3 className={styles.title}>{a.title}</h3>
+      <div className={styles.divider} />
+
+      <div className={styles.titleRow}>
+        <GradientTitle as="h3" fontSize="1.15rem" className={styles.title}>
+          {a.title}
+        </GradientTitle>
+        {a.isPinned && (
+          <span className={styles.pinnedBadge}>
+            <Pin size={12} aria-hidden="true" />
+            {t('pinnedBadge')}
+          </span>
+        )}
+      </div>
       <Markdown source={a.content} className={styles.content} />
 
       <footer className={styles.foot}>
