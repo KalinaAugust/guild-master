@@ -7,7 +7,9 @@ import { toast } from 'sonner';
 import { Trash2 } from 'lucide-react';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { MessageComposer } from '@/shared/ui/MessageComposer';
+import { Spinner } from '@/shared/ui/Spinner';
 import { resolveDisplayName } from '@/entities/user';
 import {
   useGetAnnouncementCommentsQuery,
@@ -62,7 +64,11 @@ export const AnnouncementComments: React.FC<AnnouncementCommentsProps> = ({
   return (
     <div className={styles.wrap}>
       <ul className={styles.list}>
-        {isLoading && <li className={styles.muted}>…</li>}
+        {isLoading && (
+          <li className={styles.muted}>
+            <Spinner size="sm" aria-label={t('commentsLoading')} />
+          </li>
+        )}
         {!isLoading &&
           comments.map((c) => (
             <li key={c.id} className={styles.row}>
@@ -72,7 +78,11 @@ export const AnnouncementComments: React.FC<AnnouncementCommentsProps> = ({
               <div className={styles.bubble}>
                 <div className={styles.meta}>
                   <ProfileLink publicId={c.profile.publicId} className={styles.author}>
-                    {resolveDisplayName({ fullName: c.profile.fullName, alias: c.profile.alias, displayAsAlias: c.profile.displayAsAlias })}
+                    <NameWithIcon
+                      name={resolveDisplayName({ fullName: c.profile.fullName, alias: c.profile.alias, displayAsAlias: c.profile.displayAsAlias })}
+                      icon={c.profile.icon}
+                      iconSize={14}
+                    />
                   </ProfileLink>
                   <span className={styles.time}>{dayjs(c.createdAt).locale(locale).fromNow()}</span>
                   {c.canDelete && !c.id.startsWith('temp-') && (

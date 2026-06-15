@@ -6,11 +6,13 @@ import updateLocale from 'dayjs/plugin/updateLocale';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 dayjs.extend(localeData);
 dayjs.extend(updateLocale);
 dayjs.extend(utc);
 dayjs.extend(relativeTime);
 dayjs.extend(isoWeek);
+dayjs.extend(localizedFormat);
 
 export default dayjs;

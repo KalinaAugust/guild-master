@@ -340,6 +340,7 @@
     "deleteError": "Failed to delete announcement",
     "reactError": "Failed to update reaction",
     "commentError": "Failed to send comment",
-    "commentDeleteError": "Failed to delete comment"
+    "commentDeleteError": "Failed to delete comment",
+    "commentsLoading": "Loading comments"
   }
 }
