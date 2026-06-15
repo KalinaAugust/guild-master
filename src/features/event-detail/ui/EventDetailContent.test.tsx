@@ -55,6 +55,7 @@ function makeStore() {
         isEventModalOpen: false,
         selectedDate: null,
         viewDate: '2026-05-01T00:00:00.000Z',
+        excludedEventTypes: [],
       },
     },
   });

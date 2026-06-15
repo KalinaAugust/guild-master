@@ -21,6 +21,12 @@ describe('executeEditEvent', () => {
     expect(updateEvent).toHaveBeenCalledWith('e1', { date: '2026-07-01', time: '18:00' });
   });
 
+  it('forwards weekDays to updateEvent for recurring events', async () => {
+    vi.mocked(updateEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeEditEvent({ id: 'e1', weekDays: [2, 4] });
+    expect(updateEvent).toHaveBeenCalledWith('e1', { weekDays: [2, 4] });
+  });
+
   it('returns error when updateEvent throws', async () => {
     vi.mocked(updateEvent).mockRejectedValue(new Error('db error'));
     const result = await executeEditEvent({ id: 'e1', title: 'Test' });

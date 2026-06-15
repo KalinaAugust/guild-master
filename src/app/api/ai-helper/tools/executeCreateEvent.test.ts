@@ -34,6 +34,12 @@ describe('executeCreateEvent', () => {
     });
   });
 
+  it('forwards weekDays to createEvent for recurring events', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeCreateEvent({ ...args, weekDays: [1, 3, 5] }, 'g1');
+    expect(createEvent).toHaveBeenCalledWith(expect.objectContaining({ weekDays: [1, 3, 5] }));
+  });
+
   it('returns error on failure', async () => {
     vi.mocked(createEvent).mockRejectedValue(new Error('db error'));
     const result = await executeCreateEvent(args, 'g1');
