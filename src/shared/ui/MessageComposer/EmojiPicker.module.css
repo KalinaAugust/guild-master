@@ -76,6 +76,8 @@
   overflow-y: auto;
   padding-top: 4px;
   padding-right: 4px;
+  /* Reserve the scrollbar gutter so the right gap stays identical with or without scroll. */
+  scrollbar-gutter: stable;
 }
 
 /* Custom scrollbar styling for the emoji container */

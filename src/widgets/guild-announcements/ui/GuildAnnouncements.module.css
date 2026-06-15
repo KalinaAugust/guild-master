@@ -16,13 +16,12 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  /* Bleed into the panel's padding on both sides, then inset the content back by
-     the same amount: the scrollbar sits in the right gutter and card hover/edge
-     rendering has room on the left instead of being clipped by the scrollport. */
-  margin-left: -16px;
-  padding-left: 16px;
+  /* Bleed into the panel's right padding so the scrollbar sits near the edge. */
   margin-right: -16px;
-  padding-right: 16px;
+  /* Always reserve the scrollbar gutter so the right gap stays identical whether or
+     not the list overflows (otherwise the classic ::-webkit-scrollbar steals width
+     only when scrolling appears). */
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
