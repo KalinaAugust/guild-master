@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Sword, Layers, Music, Users, Gamepad2, Activity, CalendarDays, Dices, Puzzle } from 'lucide-react';
+import { Sword, Skull, PartyPopper, Users, Gamepad2, Dumbbell, Dices, Puzzle, Calendar } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import type { ActivityEvent, ActivityType } from '@/shared/types';
@@ -10,14 +10,14 @@ import styles from './UpcomingEventsStrip.module.css';
 
 const TYPE_ICON: Record<ActivityType, React.ReactNode> = {
   raid:    <Sword size={13} />,
-  dungeon: <Layers size={13} />,
-  party:   <Music size={13} />,
+  dungeon: <Skull size={13} />,
+  party:   <PartyPopper size={13} />,
   meeting: <Users size={13} />,
   game:    <Gamepad2 size={13} />,
-  sport:   <Activity size={13} />,
+  sport:   <Dumbbell size={13} />,
   dnd:     <Dices size={13} />,
   boardgame: <Puzzle size={13} />,
-  other:   <CalendarDays size={13} />,
+  other:   <Calendar size={13} />,
 };
 
 interface Props {
