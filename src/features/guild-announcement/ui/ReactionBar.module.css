@@ -15,5 +15,6 @@
 .reaction:hover:not(:disabled) { background: rgba(255, 255, 255, 0.09); }
 .reaction:disabled { cursor: default; opacity: 0.7; }
 .active { border-color: var(--accent-primary); background: rgba(120, 130, 255, 0.18); }
-.emoji { font-size: 1rem; line-height: 1; }
+.icon { display: block; color: var(--text-muted); }
+.active .icon { color: var(--accent-secondary); }
 .count { font-variant-numeric: tabular-nums; min-width: 0.75rem; }

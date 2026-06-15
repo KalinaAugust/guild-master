@@ -20,7 +20,7 @@ describe('buildAnnouncement', () => {
     expect(a.author.fullName).toBe('Neo');
     expect(a.reactions.find((r) => r.type === 'like')).toMatchObject({ count: 2, reacted: true });
     expect(a.reactions.find((r) => r.type === 'heart')).toMatchObject({ count: 1, reacted: false });
-    expect(a.reactions.find((r) => r.type === 'poop')).toMatchObject({ count: 0, reacted: false });
+    expect(a.reactions.find((r) => r.type === 'insightful')).toMatchObject({ count: 0, reacted: false });
     expect(a.reactions).toHaveLength(5);
   });
 

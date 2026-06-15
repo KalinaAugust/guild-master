@@ -332,8 +332,8 @@
       "like": "Like",
       "dislike": "Dislike",
       "heart": "Love",
-      "doubt": "Doubt",
-      "poop": "Poop"
+      "celebrate": "Celebrate",
+      "insightful": "Insightful"
     },
     "createError": "Failed to publish announcement",
     "updateError": "Failed to save announcement",

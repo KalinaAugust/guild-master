@@ -1,6 +1,6 @@
-export type ReactionType = 'like' | 'dislike' | 'heart' | 'doubt' | 'poop';
+export type ReactionType = 'like' | 'dislike' | 'heart' | 'celebrate' | 'insightful';
 
-export const REACTION_TYPES: ReactionType[] = ['like', 'dislike', 'heart', 'doubt', 'poop'];
+export const REACTION_TYPES: ReactionType[] = ['like', 'dislike', 'heart', 'celebrate', 'insightful'];
 
 export interface ReactionSummary {
   type: ReactionType;
