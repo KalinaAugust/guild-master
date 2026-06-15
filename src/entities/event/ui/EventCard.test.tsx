@@ -85,21 +85,4 @@ describe('EventCard', () => {
     render(<EventCard event={event} />);
     expect(screen.queryByText(/\d+ \/ \d+/)).not.toBeInTheDocument();
   });
-
-  it('shows repeat button only when onRepeat is provided', () => {
-    const { rerender } = render(<EventCard event={event} />);
-    expect(screen.queryAllByRole('button')).toHaveLength(0);
-    rerender(<EventCard event={event} onRepeat={vi.fn()} />);
-    expect(screen.getAllByRole('button')).toHaveLength(1);
-  });
-
-  it('calls onRepeat when repeat button clicked, without triggering onClick', () => {
-    const onClick = vi.fn();
-    const onRepeat = vi.fn();
-    render(<EventCard event={event} onClick={onClick} onRepeat={onRepeat} />);
-    const [repeatBtn] = screen.getAllByRole('button');
-    fireEvent.click(repeatBtn);
-    expect(onRepeat).toHaveBeenCalledWith(event);
-    expect(onClick).not.toHaveBeenCalled();
-  });
 });

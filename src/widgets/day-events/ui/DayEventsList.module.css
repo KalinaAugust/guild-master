@@ -63,32 +63,3 @@
     width: 100%;
   }
 }
-
-.repeatForm {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.formRow {
-  display: flex;
-  gap: 16px;
-}
-
-.formRow > * {
-  flex: 1;
-}
-
-.formActions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.modalDesc {
-  margin-bottom: 20px;
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  line-height: 1.5;
-}
