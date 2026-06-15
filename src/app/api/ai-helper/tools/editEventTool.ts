@@ -34,6 +34,15 @@ export const editEventTool: ChatCompletionTool = {
           type: 'string',
           description: 'New description. Pass empty string to clear.',
         },
+        weekDays: {
+          type: 'array',
+          items: {
+            type: 'integer',
+            minimum: 0,
+            maximum: 6,
+          },
+          description: 'New days of the week the event repeats on. 0 = Sunday, 1 = Monday, etc. Pass an empty array to clear recurrence.',
+        },
       },
       required: ['id'],
     },

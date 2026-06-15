@@ -29,6 +29,15 @@ export const createEventTool: ChatCompletionTool = {
           type: 'string',
           description: 'Optional longer description of the event. Empty string if not specified.',
         },
+        weekDays: {
+          type: 'array',
+          items: {
+            type: 'integer',
+            minimum: 0,
+            maximum: 6,
+          },
+          description: 'Days of the week the event repeats on. 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday. Omit or leave empty if the event is not recurring.',
+        },
       },
       required: ['title', 'date', 'time', 'type', 'description'],
     },

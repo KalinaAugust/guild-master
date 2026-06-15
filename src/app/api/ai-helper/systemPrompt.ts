@@ -19,6 +19,7 @@ export function getSystemPrompt(): string {
   - Date format: YYYY-MM-DD (e.g. "2026-06-15")
   - Time format: HH:mm 24-hour (e.g. "19:30"), default to "12:00" if not specified
   - Event types: raid, game, meeting, dungeon, party, sport, dnd, boardgame, other — pick the closest match
+  - Recurrence: If the user requests a recurring event (e.g. "every Tuesday", "weekly on Mondays and Thursdays", "daily"), populate the weekDays parameter. weekDays is an array of weekday integers: 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday. The date parameter should be the starting date of the recurrence.
   - After successfully creating an event include an HTML link: You can view the event here (translate this phrase to the user's language): <a href="/events/{id}" target="_blank" rel="noopener noreferrer">{title}</a>
 
   When finding events:
@@ -36,6 +37,7 @@ export function getSystemPrompt(): string {
   - Always call findEvents first to locate the event and obtain its id
   - Confirm the intended change with the user before calling editEvent if there is any ambiguity
   - If changing date or time, always provide BOTH date AND time fields together (use the existing value for the one not being changed)
+  - Recurrence changes: If the user wants to add, modify, or remove recurrence, use the weekDays parameter. Pass an empty array to remove recurrence (make it a one-off event).
   - After successfully editing an event include an HTML link: You can view the updated event here (translate this phrase to the user's language): <a href="/events/{id}" target="_blank" rel="noopener noreferrer">{title}</a>
 
   Formatting:

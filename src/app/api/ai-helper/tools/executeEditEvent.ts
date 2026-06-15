@@ -8,6 +8,7 @@ export interface EditEventArgs {
   time?: string;
   type?: ActivityType;
   description?: string;
+  weekDays?: number[];
 }
 
 export const executeEditEvent = async (
