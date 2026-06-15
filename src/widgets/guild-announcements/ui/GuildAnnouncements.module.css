@@ -16,8 +16,11 @@
   overflow-y: auto;
   flex: 1;
   min-height: 0;
-  /* Bleed into the panel's right padding, then inset the content back by the same
-     amount so the scrollbar sits in that gutter instead of beside the cards. */
+  /* Bleed into the panel's padding on both sides, then inset the content back by
+     the same amount: the scrollbar sits in the right gutter and card hover/edge
+     rendering has room on the left instead of being clipped by the scrollport. */
+  margin-left: -16px;
+  padding-left: 16px;
   margin-right: -16px;
   padding-right: 16px;
   scrollbar-width: thin;
