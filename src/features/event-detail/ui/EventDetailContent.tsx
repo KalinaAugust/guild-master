@@ -23,10 +23,9 @@ import { Input } from '@/shared/ui/Input';
 import * as Form from '@radix-ui/react-form';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { Button } from '@/shared/ui/Button';
-import { Skeleton } from '@/shared/ui/Skeleton';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
-import { DetailLayout } from '@/shared/ui/DetailLayout';
+import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
 import {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
@@ -279,16 +278,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   };
 
   if (isEventLoading) {
-    return (
-      <div className={styles.stateContainer}>
-        <div className={styles.detailSkeleton}>
-          <Skeleton className={styles.skTitle} />
-          <Skeleton className={styles.skHero} />
-          <Skeleton className={styles.skLine} />
-          <Skeleton className={styles.skLineShort} />
-        </div>
-      </div>
-    );
+    return <DetailLayoutSkeleton backLabel={commonT('backToDay')} />;
   }
 
   if (!event) {

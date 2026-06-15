@@ -6,8 +6,8 @@ import styles from './DetailLayout.module.css';
 
 interface DetailLayoutProps {
   backHref: string;
-  backLabel: string;
-  title: string;
+  backLabel: ReactNode;
+  title: ReactNode;
   left: ReactNode;
   right: ReactNode;
   /** Optional — some states render no footer. */
