@@ -1,0 +1,50 @@
+.card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.pinned { border-color: var(--accent-primary); }
+.head { display: flex; align-items: center; gap: 0.6rem; }
+.headText { display: flex; flex-direction: column; min-width: 0; }
+.author { font-weight: 600; font-size: 0.95rem; }
+.time { font-size: 0.78rem; color: var(--text-muted); }
+.edited { font-style: italic; }
+.pinnedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: var(--accent-primary);
+  margin-left: 0.4rem;
+}
+.actions { display: flex; gap: 0.2rem; margin-left: auto; }
+.action {
+  display: inline-flex;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 0.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.action:hover { background: rgba(255, 255, 255, 0.08); color: var(--text-primary); }
+.danger:hover { color: #ff6b6b; }
+.title { margin: 0; font-size: 1.15rem; line-height: 1.3; }
+.foot { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.25rem; }
+.commentsToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.commentsToggle:hover { color: var(--text-primary); }
