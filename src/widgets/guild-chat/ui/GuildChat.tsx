@@ -181,7 +181,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
         <div className={styles.headerPolls}>
           <Button
             type="button"
-            variant="secondary_glass"
+            variant="primary"
             className={styles.newPollButton}
             onClick={() => setIsPollWizardOpen(true)}
           >

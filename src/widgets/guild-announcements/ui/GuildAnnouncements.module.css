@@ -8,7 +8,7 @@
   padding-bottom: 24px;
 }
 .guildSelect { min-width: 220px; }
-.newButton { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.newButton { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; height: 45px; }
 .feed {
   display: flex;
   flex-direction: column;

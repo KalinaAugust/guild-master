@@ -1,2 +1,2 @@
 export { AnnouncementCard } from './ui/AnnouncementCard';
-export { AnnouncementWizard } from './ui/AnnouncementWizard';
+export { AnnouncementModal } from './ui/AnnouncementModal';

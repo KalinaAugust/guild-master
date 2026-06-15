@@ -1,0 +1,155 @@
+.wrapper {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: var(--text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.wrapper:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.wrapper:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.toolbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.linkPopover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0.5rem;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  background: #142539;
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-glass);
+}
+
+.linkInput {
+  width: 240px;
+  height: 32px;
+  padding: 0 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.linkInput:focus {
+  border-color: var(--accent-primary);
+}
+
+.linkInput::placeholder {
+  color: var(--text-muted);
+}
+
+.linkApply {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 7px;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.linkApply:hover {
+  filter: brightness(1.1);
+}
+
+.toolBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.toolBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.toolBtnActive {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--text-highlight);
+}
+
+/* ProseMirror editable surface (class applied via editorProps.attributes). */
+.content {
+  min-height: 180px;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: 12px 16px;
+  font-size: 1rem;
+  line-height: 1.55;
+  outline: none;
+}
+
+.content :global(p) {
+  margin: 0 0 0.5em;
+}
+
+.content :global(p:last-child) {
+  margin-bottom: 0;
+}
+
+.content :global(h2) {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0.6em 0 0.3em;
+}
+
+.content :global(h3) {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0.6em 0 0.3em;
+}
+
+.content :global(ul),
+.content :global(ol) {
+  margin: 0 0 0.5em;
+  padding-left: 1.4em;
+}
+
+.content :global(a) {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
+/* Placeholder shown on the empty first paragraph. */
+.content :global(p.is-editor-empty:first-child::before) {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  color: var(--text-muted);
+  pointer-events: none;
+}

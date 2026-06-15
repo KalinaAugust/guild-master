@@ -1,0 +1,15 @@
+.modal {
+  max-width: 700px;
+  width: 92vw;
+  /* Keep the shared --glass-bg, but blur the backdrop harder so the feed
+     behind reads as a soft glass frost instead of legible text. */
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+.form { display: flex; flex-direction: column; gap: 1rem; }
+.formGroup { display: flex; flex-direction: column; gap: 0.4rem; }
+.editorHead { display: flex; align-items: center; justify-content: space-between; }
+.editorLabel { font-size: 0.85rem; color: var(--text-muted); }
+.pinRow { display: flex; align-items: center; justify-content: space-between; }
+.pinLabel { font-size: 0.9rem; }
+.actions { display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; }
