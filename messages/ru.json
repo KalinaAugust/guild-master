@@ -42,7 +42,8 @@
       "other": "Прочее"
     },
     "guildChat": "Чат гильдии",
-    "announcements": "Анонсы"
+    "announcements": "Анонсы",
+    "callToAction": "Сбор"
   },
   "Auth": {
     "login": "Вход"
@@ -342,5 +343,35 @@
     "commentError": "Не удалось отправить комментарий",
     "commentDeleteError": "Не удалось удалить комментарий",
     "commentsLoading": "Загрузка комментариев"
+  },
+  "CallToAction": {
+    "newAction": "Новый сбор",
+    "createTitle": "Новый сбор",
+    "titleLabel": "Название",
+    "titlePlaceholder": "На что собираем людей?",
+    "dateLabel": "Дата",
+    "timeLabel": "Время",
+    "typeLabel": "Тип",
+    "descriptionPlaceholder": "Опишите активность…",
+    "targetLabel": "Участников для запуска",
+    "targetPlaceholder": "например, 5",
+    "wantButton": "Я в деле",
+    "wantedButton": "Я в деле",
+    "progress": "{count} / {target}",
+    "launchedBadge": "Запущено",
+    "openEvent": "Открыть событие",
+    "deleteLabel": "Удалить",
+    "empty": "Пока нет сборов.",
+    "publishButton": "Опубликовать",
+    "launchedToast": "Порог достигнут — событие создано в календаре!",
+    "createError": "Не удалось опубликовать сбор",
+    "toggleError": "Не удалось обновить участие",
+    "deleteError": "Не удалось удалить сбор",
+    "validation": {
+      "titleRequired": "Укажите название",
+      "dateRequired": "Укажите дату",
+      "timeRequired": "Укажите время",
+      "targetMin": "Минимум 1 участник"
+    }
   }
 }

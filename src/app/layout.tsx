@@ -49,6 +49,7 @@ export default async function RootLayout({
     'GuildChat',
     'GuildPoll',
     'Announcements',
+    'CallToAction',
     'GuildMembers',
     'UpcomingEvents',
     'Notifications',

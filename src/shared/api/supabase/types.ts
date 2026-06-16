@@ -143,6 +143,109 @@ export type Database = {
           },
         ]
       }
+      call_to_action_interests: {
+        Row: {
+          created_at: string
+          cta_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cta_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cta_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_to_action_interests_cta_id_fkey"
+            columns: ["cta_id"]
+            isOneToOne: false
+            referencedRelation: "call_to_actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_to_action_interests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_to_actions: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string
+          event_date: string
+          event_id: string | null
+          guild_id: string
+          id: string
+          launched_at: string | null
+          target_count: number
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string
+          event_date: string
+          event_id?: string | null
+          guild_id: string
+          id?: string
+          launched_at?: string | null
+          target_count: number
+          title: string
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string
+          event_date?: string
+          event_id?: string | null
+          guild_id?: string
+          id?: string
+          launched_at?: string | null
+          target_count?: number
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_to_actions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_to_actions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_to_actions_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_comment_reads: {
         Row: {
           event_id: string
@@ -794,6 +897,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_call_to_action: {
+        Args: {
+          p_description: string
+          p_event_date: string
+          p_guild_id: string
+          p_target_count: number
+          p_title: string
+          p_type: string
+        }
+        Returns: string
+      }
+      toggle_call_to_action_interest: {
+        Args: { p_cta_id: string }
+        Returns: undefined
+      }
       generate_public_id: { Args: { id_length?: number }; Returns: string }
       get_profile_stats: {
         Args: { profile_id: string }

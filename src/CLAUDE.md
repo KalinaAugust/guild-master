@@ -67,6 +67,13 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `announcements` | `id`, `guild_id`, `created_by`, `title`, `content` (markdown source), `is_pinned`, `created_at`, `updated_at`. RLS: select for guild members; insert/update/delete only `ADMIN`/`OWNER` (`has_guild_role`). Feed served on `/announcements`. |
 | `announcement_comments` | `id`, `announcement_id` (cascade), `user_id`, `body`, `created_at`, `updated_at`. RLS: select for members, insert own, delete by author or `ADMIN`/`OWNER`. Not editable. |
 | `announcement_reactions` | `id`, `announcement_id` (cascade), `user_id`, `type` (`like\|dislike\|heart\|celebrate\|insightful`) — `unique(announcement_id, user_id, type)`. RLS: select for members, insert/delete own. |
+| `call_to_actions` | `id`, `guild_id` (cascade), `created_by`, `title`, `description`, `type` (event activity type), `event_date` (timestamptz — planned date+time), `target_count` (int ≥1), `event_id` (nullable FK → `events`, set on launch), `launched_at` (nullable), `created_at`, `updated_at`. RLS: select for members; insert by **any** member; update/delete by author or `ADMIN`/`OWNER` (`has_guild_role`). Feed served on `/call-to-action`. |
+| `call_to_action_interests` | `id`, `cta_id` (cascade), `user_id`, `created_at` — `unique(cta_id, user_id)`. The "I'm in" presses. RLS: select for members, insert/delete own. |
+
+**Call to Action RPCs** (the page's mutations go through these, not direct table writes):
+- `create_call_to_action(p_guild_id, p_title, p_description, p_type, p_event_date, p_target_count) → uuid` — inserts the CTA and the creator's own interest (counter starts at 1), then attempts launch. Member-gated.
+- `toggle_call_to_action_interest(p_cta_id)` — adds/removes the caller's interest (cancel allowed only before launch), then attempts launch on add.
+- `_maybe_launch_cta(p_cta_id)` — internal helper (EXECUTE revoked from `anon`/`authenticated`): when interested count ≥ `target_count` and not yet launched, creates an `events` row from the CTA, copies all interested users into `event_participants` (`confirmed`), and stamps `event_id`/`launched_at`. This is how a reached threshold auto-creates the calendar event.
 
 All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
 

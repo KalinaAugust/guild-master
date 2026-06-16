@@ -1,0 +1,164 @@
+.card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  align-items: flex-start;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.type_raid .iconWrapper { color: #ff4d4d; background: rgba(255, 77, 77, 0.1); box-shadow: 0 0 15px rgba(255, 77, 77, 0.2); }
+.type_game .iconWrapper { color: #4da3ff; background: rgba(77, 163, 255, 0.1); box-shadow: 0 0 15px rgba(77, 163, 255, 0.2); }
+.type_meeting .iconWrapper { color: #4dff88; background: rgba(77, 255, 136, 0.1); box-shadow: 0 0 15px rgba(77, 255, 136, 0.2); }
+.type_other .iconWrapper { color: #ffb347; background: rgba(255, 179, 71, 0.1); box-shadow: 0 0 15px rgba(255, 179, 71, 0.2); }
+.type_dungeon .iconWrapper { color: #a855f7; background: rgba(168, 85, 247, 0.1); box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+.type_party .iconWrapper { color: #f472b6; background: rgba(244, 114, 182, 0.1); box-shadow: 0 0 15px rgba(244, 114, 182, 0.2); }
+.type_sport .iconWrapper { color: #34d399; background: rgba(52, 211, 153, 0.1); box-shadow: 0 0 15px rgba(52, 211, 153, 0.2); }
+.type_dnd .iconWrapper { color: #f59e0b; background: rgba(245, 158, 11, 0.1); box-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+.type_boardgame .iconWrapper { color: #818cf8; background: rgba(129, 140, 248, 0.1); box-shadow: 0 0 15px rgba(129, 140, 248, 0.2); }
+
+.content {
+  flex-grow: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  gap: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.timeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-left: 10px;
+  margin-left: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.description {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.descriptionPlaceholder {
+  margin: 4px 0 0;
+  height: calc(0.9rem * 1.4);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wantButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.launchedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4dff88;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(77, 255, 136, 0.1);
+  border: 1px solid rgba(77, 255, 136, 0.25);
+}
+
+.eventLink {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.eventLink:hover {
+  text-decoration: underline;
+}
+
+.deleteBtn {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: #ff4d4d;
+}
