@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
@@ -11,6 +11,7 @@ import { CreateCallToActionModal } from '@/features/call-to-action';
 import {
   CallToActionCard,
   useGetCallToActionsQuery,
+  useMarkCallToActionsReadMutation,
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,
 } from '@/entities/call-to-action';
@@ -41,6 +42,12 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
 
   const [toggleInterest] = useToggleCallToActionInterestMutation();
   const [deleteCallToAction] = useDeleteCallToActionMutation();
+
+  // Opening the board clears the sidebar unread dot for the active guild.
+  const [markRead] = useMarkCallToActionsReadMutation();
+  useEffect(() => {
+    if (activeGuildId) markRead(activeGuildId);
+  }, [activeGuildId, markRead]);
 
   const handleToggle = async (ctaId: string) => {
     if (!activeGuildId) return;

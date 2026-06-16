@@ -21,6 +21,16 @@ export const callToActionApi = baseApi.injectEndpoints({
       providesTags: (_, __, guildId) => listTag(guildId),
     }),
 
+    getCallToActionsUnread: builder.query<{ hasUnread: boolean }, string>({
+      query: (guildId) => `guilds/${guildId}/call-to-actions/unread`,
+      providesTags: (_, __, guildId) => [{ type: 'CallToActionRead' as const, id: `LIST-${guildId}` }],
+    }),
+
+    markCallToActionsRead: builder.mutation<{ marked: boolean }, string>({
+      query: (guildId) => ({ url: `guilds/${guildId}/call-to-actions/read`, method: 'POST' }),
+      invalidatesTags: (_, __, guildId) => [{ type: 'CallToActionRead' as const, id: `LIST-${guildId}` }],
+    }),
+
     createCallToAction: builder.mutation<CallToAction, { guildId: string; input: CreateCallToActionInput }>({
       query: ({ guildId, input }) => ({
         url: `guilds/${guildId}/call-to-actions`,
@@ -72,6 +82,8 @@ export const callToActionApi = baseApi.injectEndpoints({
 
 export const {
   useGetCallToActionsQuery,
+  useGetCallToActionsUnreadQuery,
+  useMarkCallToActionsReadMutation,
   useCreateCallToActionMutation,
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,

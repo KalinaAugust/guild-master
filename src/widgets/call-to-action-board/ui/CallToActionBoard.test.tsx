@@ -30,11 +30,12 @@ const mockGetQuery = vi.fn();
 vi.mock('@/entities/call-to-action', () => ({
   CallToActionCard: ({ cta }: { cta: { title: string } }) => <div>{cta.title}</div>,
   useGetCallToActionsQuery: (...args: unknown[]) => mockGetQuery(...args),
+  useMarkCallToActionsReadMutation: () => [vi.fn(), { isLoading: false }],
   useToggleCallToActionInterestMutation: () => [vi.fn(), { isLoading: false }],
   useDeleteCallToActionMutation: () => [vi.fn(), { isLoading: false }],
 }));
 
-const guilds: Guild[] = [{ id: 'g1', name: 'Guild', avatarUrl: null } as Guild];
+const guilds: Guild[] = [{ id: 'g1', name: 'Guild', ownerId: 'o1' }];
 
 describe('CallToActionBoard', () => {
   it('shows the new action button and empty state when the viewer can create', () => {

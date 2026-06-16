@@ -28,6 +28,16 @@ export const announcementApi = baseApi.injectEndpoints({
       providesTags: (_, __, guildId) => listTag(guildId),
     }),
 
+    getAnnouncementsUnread: builder.query<{ hasUnread: boolean }, string>({
+      query: (guildId) => `guilds/${guildId}/announcements/unread`,
+      providesTags: (_, __, guildId) => [{ type: 'AnnouncementRead' as const, id: `LIST-${guildId}` }],
+    }),
+
+    markAnnouncementsRead: builder.mutation<{ marked: boolean }, string>({
+      query: (guildId) => ({ url: `guilds/${guildId}/announcements/read`, method: 'POST' }),
+      invalidatesTags: (_, __, guildId) => [{ type: 'AnnouncementRead' as const, id: `LIST-${guildId}` }],
+    }),
+
     createAnnouncement: builder.mutation<Announcement, { guildId: string; input: CreateAnnouncementInput }>({
       query: ({ guildId, input }) => ({
         url: `guilds/${guildId}/announcements`,
@@ -231,6 +241,8 @@ export const announcementApi = baseApi.injectEndpoints({
 
 export const {
   useGetGuildAnnouncementsQuery,
+  useGetAnnouncementsUnreadQuery,
+  useMarkAnnouncementsReadMutation,
   useCreateAnnouncementMutation,
   useUpdateAnnouncementMutation,
   useSetAnnouncementPinnedMutation,

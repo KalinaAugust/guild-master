@@ -95,6 +95,42 @@ export type Database = {
           },
         ]
       }
+      announcement_reads: {
+        Row: {
+          guild_id: string
+          id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          guild_id: string
+          id?: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          guild_id?: string
+          id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcement_reads_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "announcement_reads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       announcements: {
         Row: {
           content: string
@@ -172,6 +208,42 @@ export type Database = {
           },
           {
             foreignKeyName: "call_to_action_interests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_to_action_reads: {
+        Row: {
+          guild_id: string
+          id: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          guild_id: string
+          id?: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          guild_id?: string
+          id?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_to_action_reads_guild_id_fkey"
+            columns: ["guild_id"]
+            isOneToOne: false
+            referencedRelation: "guilds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_to_action_reads_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"

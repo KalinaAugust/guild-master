@@ -6,6 +6,8 @@ export type {
 } from './model/types';
 export {
   useGetCallToActionsQuery,
+  useGetCallToActionsUnreadQuery,
+  useMarkCallToActionsReadMutation,
   useCreateCallToActionMutation,
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,

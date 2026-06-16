@@ -11,6 +11,8 @@ export type {
 export { REACTION_TYPES } from './model/types';
 export {
   useGetGuildAnnouncementsQuery,
+  useGetAnnouncementsUnreadQuery,
+  useMarkAnnouncementsReadMutation,
   useCreateAnnouncementMutation,
   useUpdateAnnouncementMutation,
   useSetAnnouncementPinnedMutation,
