@@ -33,7 +33,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
   const unreadByHref: Record<string, boolean | undefined> = {
     '/guild-chat': chatUnread?.hasUnread,
     '/announcements': announcementsUnread?.hasUnread,
-    '/call-to-action': ctaUnread?.hasUnread,
+    '/looking-for-group': ctaUnread?.hasUnread,
   };
 
   return (
