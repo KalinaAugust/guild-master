@@ -54,16 +54,20 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   // once a minute and show a relative label.
   const msLeft = eventTime.diff(dayjs());
   const ONE_DAY = 24 * 60 * 60 * 1000;
+  const expired = msLeft <= 0;
   const underDay = msLeft > 0 && msLeft < ONE_DAY;
 
   const [, setTick] = useState(0);
   useEffect(() => {
+    if (expired) return; // nothing left to count down
     const id = setInterval(() => setTick((n) => n + 1), underDay ? 1_000 : 60_000);
     return () => clearInterval(id);
-  }, [underDay]);
+  }, [expired, underDay]);
 
   let countdown: string;
-  if (underDay) {
+  if (expired) {
+    countdown = t('timesUp');
+  } else if (underDay) {
     const totalSeconds = Math.floor(msLeft / 1000);
     const hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
     const mm = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
@@ -113,7 +117,10 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
         <GradientTitle as="h3" fontSize="1.15rem" className={styles.title}>
           {cta.title}
         </GradientTitle>
-        <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
+        <span
+          className={`${styles.timer} ${expired ? styles.timerExpired : ''}`}
+          title={eventTime.locale(locale).format('LLL')}
+        >
           <Timer size={14} aria-hidden="true" />
           {countdown}
         </span>

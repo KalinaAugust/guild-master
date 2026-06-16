@@ -90,6 +90,7 @@ All tables use RLS. Supabase client is created via `createServerClient` with `ge
 ## Scheduled Jobs (pg_cron)
 
 - **`cleanup-chat-attachments-daily`** (03:17 UTC) — `net.http_post` (pg_net) invokes the `cleanup-chat-attachments` Edge Function with the public anon key (satisfies `verify_jwt`; the function uses the service role internally). It deletes `chat-attachments` files whose `guild_messages` row is older than 30 days and nulls their `attachment_url`. Retention policy: chat images do **not** persist beyond ~30 days.
+- **`delete-expired-call-to-actions-hourly`** (every hour, `0 * * * *`) — runs `public.delete_expired_call_to_actions()` (SECURITY DEFINER, EXECUTE revoked from anon/authenticated), which deletes `call_to_actions` rows whose `event_date` is more than 1 day in the past. The card shows a "time's up" state once `event_date` passes, then disappears ~24h later when this job removes it. Interests cascade; the linked `events` row is left intact (the CTA's `event_id` FK is `on delete set null`, and deleting the CTA does not touch the event).
 
 ## Styling and UI
 

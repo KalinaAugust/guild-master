@@ -27,6 +27,12 @@
   border-radius: 999px;
   white-space: nowrap;
 }
+
+.timerExpired {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+}
 .author { font-weight: 600; font-size: 0.95rem; color: var(--accent-secondary); }
 .time { font-size: 0.78rem; color: var(--text-muted); }
 

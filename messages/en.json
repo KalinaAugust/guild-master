@@ -359,6 +359,7 @@
     "wantedButton": "I'm in",
     "progress": "{count} / {target}",
     "launchedBadge": "Launched",
+    "timesUp": "Time's up",
     "openEvent": "Open event",
     "deleteLabel": "Delete",
     "empty": "No calls to action yet.",

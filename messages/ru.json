@@ -359,6 +359,7 @@
     "wantedButton": "Я в деле",
     "progress": "{count} / {target}",
     "launchedBadge": "Запущено",
+    "timesUp": "Время вышло",
     "openEvent": "Открыть событие",
     "deleteLabel": "Удалить",
     "empty": "Пока нет сборов.",
