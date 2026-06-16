@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import {
-  Clock, Users, Trash2, CheckCircle2, CalendarCheck,
+  Clock, Users, Trash2, CheckCircle2, CalendarCheck, Timer,
   Sword, Gamepad2, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle,
 } from 'lucide-react';
 import type { ActivityType } from '@/shared/types';
@@ -49,6 +49,14 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   const locale = useLocale();
   const launched = cta.eventId !== null;
   const eventTime = dayjs(cta.eventDate);
+
+  // Re-render once a minute so the countdown stays current.
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((n) => n + 1), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  const countdown = eventTime.locale(locale).fromNow();
   const authorName = resolveDisplayName({
     fullName: cta.author.fullName,
     alias: cta.author.alias,
@@ -67,6 +75,11 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           </ProfileLink>
           <span className={styles.time}>{dayjs(cta.createdAt).locale(locale).format('LLL')}</span>
         </div>
+
+        <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
+          <Timer size={14} aria-hidden="true" />
+          {countdown}
+        </span>
 
         {onDelete && cta.canManage && (
           <div className={styles.actions}>

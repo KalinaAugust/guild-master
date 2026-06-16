@@ -13,6 +13,21 @@
 
 .head { display: flex; align-items: center; gap: 0.6rem; }
 .headText { display: flex; flex-direction: column; min-width: 0; }
+
+.timer {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 .author { font-weight: 600; font-size: 0.95rem; color: var(--accent-secondary); }
 .time { font-size: 0.78rem; color: var(--text-muted); }
 
