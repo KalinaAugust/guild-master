@@ -50,22 +50,25 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   const launched = cta.eventId !== null;
   const eventTime = dayjs(cta.eventDate);
 
-  // Re-render once a minute so the countdown stays current.
-  const [, setTick] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setTick((n) => n + 1), 60_000);
-    return () => clearInterval(id);
-  }, []);
-
-  // Under a day to go → show remaining time as HH:MM; otherwise a relative label.
+  // Under a day to go → tick every second and show HH:MM:SS; otherwise tick
+  // once a minute and show a relative label.
   const msLeft = eventTime.diff(dayjs());
   const ONE_DAY = 24 * 60 * 60 * 1000;
+  const underDay = msLeft > 0 && msLeft < ONE_DAY;
+
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setTick((n) => n + 1), underDay ? 1_000 : 60_000);
+    return () => clearInterval(id);
+  }, [underDay]);
+
   let countdown: string;
-  if (msLeft > 0 && msLeft < ONE_DAY) {
-    const totalMinutes = Math.floor(msLeft / 60_000);
-    const hh = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
-    const mm = String(totalMinutes % 60).padStart(2, '0');
-    countdown = `${hh}:${mm}`;
+  if (underDay) {
+    const totalSeconds = Math.floor(msLeft / 1000);
+    const hh = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    const mm = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+    const ss = String(totalSeconds % 60).padStart(2, '0');
+    countdown = `${hh}:${mm}:${ss}`;
   } else {
     countdown = eventTime.locale(locale).fromNow();
   }
