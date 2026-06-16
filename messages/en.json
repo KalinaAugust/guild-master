@@ -347,7 +347,7 @@
   "CallToAction": {
     "newAction": "New action",
     "helpAria": "How Call to Action works",
-    "helpTooltip": "Rally your guild for an activity: set how many participants are needed to launch. Members tap “I'm in” — once the target is reached, an event is automatically added to the calendar with everyone who joined. Until then anyone can join or back out. If the date passes without filling up, the call expires and is removed a day later.",
+    "helpTooltip": "Rally your guild for an activity: set how many participants are needed to launch. Members tap “I'm in” — once the target is reached, an event is automatically added to the calendar with everyone who joined. Until then anyone can join or back out.",
     "createTitle": "New call to action",
     "titleLabel": "Title",
     "titlePlaceholder": "What are we rallying for?",
