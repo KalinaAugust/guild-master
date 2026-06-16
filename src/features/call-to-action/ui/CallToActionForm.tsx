@@ -9,6 +9,7 @@ import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
 import { FormField } from '@/shared/ui/FormField';
+import dayjs from '@/shared/lib/dayjs';
 import { createCtaFormSchema, type CtaFormData } from '../model/schema';
 import styles from './CallToActionForm.module.css';
 
@@ -31,7 +32,7 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
   const commonT = useTranslations('Common');
 
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [time, setTime] = useState('19:00');
   const [type, setType] = useState<ActivityType>('game');
   const [description, setDescription] = useState('');
