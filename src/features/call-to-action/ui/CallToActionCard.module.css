@@ -139,21 +139,13 @@
   gap: 0.4rem;
 }
 
-.launchedGroup {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  /* Keep the badge + link left-aligned next to the meta instead of far right. */
-  margin-right: auto;
-}
-
 .eventLink {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--accent-primary);
+  color: var(--text-primary);
   text-decoration: none;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;

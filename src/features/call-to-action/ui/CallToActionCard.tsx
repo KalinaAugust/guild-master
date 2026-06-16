@@ -136,21 +136,21 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
             <Users size={14} className={styles.accentIcon} />
             {t('progress', { count: cta.interestedCount, target: cta.targetCount })}
           </span>
-        </div>
-
-        {launched ? (
-          <div className={styles.launchedGroup}>
+          {launched && (
             <span className={styles.launchedBadge}>
               <CalendarCheck size={12} aria-hidden="true" />
               {t('launchedBadge')}
             </span>
-            {cta.eventId && (
-              <Link href={`/events/${cta.eventId}`} className={styles.eventLink}>
-                {t('openEvent')}
-                <ArrowRight size={16} aria-hidden="true" />
-              </Link>
-            )}
-          </div>
+          )}
+        </div>
+
+        {launched ? (
+          cta.eventId && (
+            <Link href={`/events/${cta.eventId}`} className={styles.eventLink}>
+              {t('openEvent')}
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          )
         ) : (
           <Button
             type="button"
