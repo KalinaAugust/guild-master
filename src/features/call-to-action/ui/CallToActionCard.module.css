@@ -143,6 +143,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
+  /* Keep the badge + link left-aligned next to the meta instead of far right. */
+  margin-right: auto;
 }
 
 .eventLink {
