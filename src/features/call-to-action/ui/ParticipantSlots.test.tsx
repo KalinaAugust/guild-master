@@ -41,15 +41,16 @@ describe('ParticipantSlots', () => {
     expect(countByClass(container, 'empty')).toBe(5);
   });
 
-  it('caps empty circles at 15 when the target exceeds 15', () => {
+  it('draws an empty circle per open slot without capping, even past 15', () => {
     const { container } = render(<ParticipantSlots participants={[]} targetCount={40} />);
-    expect(countByClass(container, 'empty')).toBe(15);
+    expect(countByClass(container, 'empty')).toBe(40);
   });
 
-  it('shows 15 avatars plus an overflow chip and no empty slots when participants exceed 15', () => {
+  it('shows 15 avatars plus an overflow chip and the remaining empty slots when participants exceed 15', () => {
     const { container } = render(<ParticipantSlots participants={makeParticipants(20)} targetCount={40} />);
     expect(container.querySelectorAll('a').length).toBe(15);
-    expect(countByClass(container, 'empty')).toBe(0);
+    // 40 target - 20 joined = 20 still-open slots.
+    expect(countByClass(container, 'empty')).toBe(20);
     expect(countByClass(container, 'overflow')).toBeGreaterThan(0);
     expect(screen.getByText('+5')).toBeInTheDocument();
   });

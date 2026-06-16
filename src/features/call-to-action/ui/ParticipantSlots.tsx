@@ -24,8 +24,8 @@ export const ParticipantSlots: React.FC<ParticipantSlotsProps> = ({ participants
   const overflow = participants.length > MAX_SLOTS;
   const shown = overflow ? participants.slice(0, MAX_SLOTS) : participants;
   const hidden = overflow ? participants.slice(MAX_SLOTS) : [];
-  // Empty circles fill the row up to the target, but never push the row past the cap.
-  const emptyCount = overflow ? 0 : Math.max(Math.min(targetCount, MAX_SLOTS) - shown.length, 0);
+  // Draw an empty circle for every still-open slot, however many the target needs.
+  const emptyCount = Math.max(targetCount - participants.length, 0);
 
   return (
     <div className={styles.row}>
