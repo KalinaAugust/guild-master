@@ -17,15 +17,16 @@
   overflow: hidden;
 }
 
+/* UserAvatar fill rounds itself (20px) and adds a border; let the square
+   wrapper define the shape instead. */
+.slot > div {
+  border-radius: 0;
+  border: none;
+}
+
 .slotLink {
   display: inline-flex;
   border-radius: 12px;
-  transition: transform 0.15s ease;
-}
-
-.slotLink:hover {
-  transform: translateY(-2px);
-  z-index: 1;
 }
 
 .empty {
