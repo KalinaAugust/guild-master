@@ -3,6 +3,7 @@ export type {
   CallToActionsResult,
   CreateCallToActionInput,
   CtaAuthor,
+  CtaParticipant,
 } from './model/types';
 export {
   useGetCallToActionsQuery,

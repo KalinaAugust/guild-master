@@ -1,5 +1,5 @@
 import type { ActivityType } from '@/shared/types';
-import type { CallToAction, CtaAuthor } from '../model/types';
+import type { CallToAction, CtaAuthor, CtaParticipant } from '../model/types';
 
 const PROFILE_FIELDS = 'public_id, full_name, avatar_url, alias, display_as_alias, icon';
 
@@ -7,7 +7,7 @@ export const CTA_SELECT =
   `id, guild_id, created_by, title, description, type, event_date, target_count, ` +
   `event_id, launched_at, created_at, ` +
   `profiles(${PROFILE_FIELDS}), ` +
-  `call_to_action_interests(user_id)`;
+  `call_to_action_interests(user_id, created_at, profiles(${PROFILE_FIELDS}))`;
 
 interface ProfileRow {
   public_id: string | null;
@@ -16,6 +16,12 @@ interface ProfileRow {
   alias: string | null;
   display_as_alias: boolean | null;
   icon: string | null;
+}
+
+interface InterestRow {
+  user_id: string;
+  created_at: string;
+  profiles: ProfileRow | null;
 }
 
 export interface CallToActionRow {
@@ -31,7 +37,7 @@ export interface CallToActionRow {
   launched_at: string | null;
   created_at: string;
   profiles: ProfileRow | null;
-  call_to_action_interests: { user_id: string }[] | null;
+  call_to_action_interests: InterestRow[] | null;
 }
 
 const mapAuthor = (p: ProfileRow | null): CtaAuthor => ({
@@ -48,7 +54,13 @@ export const buildCallToAction = (
   currentUserId: string | null,
   canManage: boolean,
 ): CallToAction => {
-  const interests = row.call_to_action_interests ?? [];
+  const interests = [...(row.call_to_action_interests ?? [])].sort((a, b) =>
+    a.created_at.localeCompare(b.created_at),
+  );
+  const participants: CtaParticipant[] = interests.map((i) => ({
+    userId: i.user_id,
+    ...mapAuthor(i.profiles),
+  }));
   return {
     id: row.id,
     guildId: row.guild_id,
@@ -58,8 +70,9 @@ export const buildCallToAction = (
     type: row.type as ActivityType,
     eventDate: row.event_date,
     targetCount: row.target_count,
-    interestedCount: interests.length,
-    interested: !!currentUserId && interests.some((i) => i.user_id === currentUserId),
+    interestedCount: participants.length,
+    participants,
+    interested: !!currentUserId && participants.some((p) => p.userId === currentUserId),
     eventId: row.event_id,
     launchedAt: row.launched_at,
     createdAt: row.created_at,

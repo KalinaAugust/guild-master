@@ -35,6 +35,7 @@ const base: CallToAction = {
   eventDate: '2026-07-01T19:00:00.000Z',
   targetCount: 5,
   interestedCount: 2,
+  participants: [],
   interested: false,
   eventId: null,
   launchedAt: null,

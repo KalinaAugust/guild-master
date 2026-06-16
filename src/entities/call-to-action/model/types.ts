@@ -9,6 +9,11 @@ export interface CtaAuthor {
   icon: string | null;
 }
 
+/** A user who has confirmed participation ("I'm in") in a call to action. */
+export interface CtaParticipant extends CtaAuthor {
+  userId: string;
+}
+
 export interface CallToAction {
   id: string;
   guildId: string;
@@ -19,6 +24,8 @@ export interface CallToAction {
   eventDate: string; // ISO timestamptz
   targetCount: number;
   interestedCount: number;
+  /** Confirmed participants, ordered by join time. */
+  participants: CtaParticipant[];
   /** Whether the current user has pressed "Want". */
   interested: boolean;
   eventId: string | null; // set once launched

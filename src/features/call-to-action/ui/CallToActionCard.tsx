@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 import { resolveDisplayName } from '@/entities/user';
 import type { CallToAction } from '@/entities/call-to-action';
+import { ParticipantSlots } from './ParticipantSlots';
 import styles from './CallToActionCard.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -98,6 +99,8 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
       </div>
 
       {cta.description && <p className={styles.content}>{cta.description}</p>}
+
+      <ParticipantSlots participants={cta.participants} targetCount={cta.targetCount} />
 
       <footer className={styles.foot}>
         <div className={styles.meta}>
