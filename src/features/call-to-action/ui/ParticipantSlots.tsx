@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Users } from 'lucide-react';
+import { Users, Plus } from 'lucide-react';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
@@ -43,7 +43,9 @@ export const ParticipantSlots: React.FC<ParticipantSlotsProps> = ({ participants
       })}
 
       {Array.from({ length: emptyCount }).map((_, i) => (
-        <span key={`empty-${i}`} className={`${styles.slot} ${styles.empty}`} aria-hidden="true" />
+        <span key={`empty-${i}`} className={`${styles.slot} ${styles.empty}`} aria-hidden="true">
+          <Plus size={18} />
+        </span>
       ))}
 
       {overflow && (
