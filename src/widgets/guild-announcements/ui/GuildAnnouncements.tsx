@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
@@ -9,6 +9,7 @@ import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { AnnouncementCard, AnnouncementModal } from '@/features/guild-announcement';
 import {
   useGetGuildAnnouncementsQuery,
+  useMarkAnnouncementsReadMutation,
   type Announcement,
   type AnnouncementComment,
 } from '@/entities/announcement';
@@ -35,6 +36,12 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   const { data, isLoading } = useGetGuildAnnouncementsQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const announcements = data?.announcements ?? [];
   const canCreate = data?.canCreate ?? false;
+
+  // Opening the feed clears the sidebar unread dot for the active guild.
+  const [markRead] = useMarkAnnouncementsReadMutation();
+  useEffect(() => {
+    if (activeGuildId) markRead(activeGuildId);
+  }, [activeGuildId, markRead]);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; title: string; content: string } | null>(null);

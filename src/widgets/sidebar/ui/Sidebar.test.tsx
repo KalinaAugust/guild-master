@@ -18,6 +18,14 @@ vi.mock('@/entities/guild-message', () => ({
   useGetGuildChatUnreadQuery: () => ({ data: { hasUnread: false } }),
 }));
 
+vi.mock('@/entities/announcement', () => ({
+  useGetAnnouncementsUnreadQuery: () => ({ data: { hasUnread: false } }),
+}));
+
+vi.mock('@/entities/call-to-action', () => ({
+  useGetCallToActionsUnreadQuery: () => ({ data: { hasUnread: false } }),
+}));
+
 import { Sidebar } from './Sidebar';
 
 describe('Sidebar', () => {

@@ -67,6 +67,15 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `announcements` | `id`, `guild_id`, `created_by`, `title`, `content` (markdown source), `is_pinned`, `created_at`, `updated_at`. RLS: select for guild members; insert/update/delete only `ADMIN`/`OWNER` (`has_guild_role`). Feed served on `/announcements`. |
 | `announcement_comments` | `id`, `announcement_id` (cascade), `user_id`, `body`, `created_at`, `updated_at`. RLS: select for members, insert own, delete by author or `ADMIN`/`OWNER`. Not editable. |
 | `announcement_reactions` | `id`, `announcement_id` (cascade), `user_id`, `type` (`like\|dislike\|heart\|celebrate\|insightful`) — `unique(announcement_id, user_id, type)`. RLS: select for members, insert/delete own. |
+| `call_to_actions` | `id`, `guild_id` (cascade), `created_by`, `title`, `description`, `type` (event activity type), `event_date` (timestamptz — planned date+time), `target_count` (int ≥1), `event_id` (nullable FK → `events`, set on launch), `launched_at` (nullable), `created_at`, `updated_at`. RLS: select for members; insert by **any** member; update/delete by author or `ADMIN`/`OWNER` (`has_guild_role`). Feed served on `/call-to-action`. |
+| `call_to_action_interests` | `id`, `cta_id` (cascade), `user_id`, `created_at` — `unique(cta_id, user_id)`. The "I'm in" presses. RLS: select for members, insert/delete own. |
+| `announcement_reads` | `id`, `guild_id` (cascade), `user_id`, `last_read_at` — `unique(guild_id, user_id)`. Per-guild last-seen timestamp for the announcements feed; drives the sidebar unread dot. Mirror of `guild_message_reads`. RLS: select/insert/update own row only. |
+| `call_to_action_reads` | `id`, `guild_id` (cascade), `user_id`, `last_read_at` — `unique(guild_id, user_id)`. Per-guild last-seen timestamp for the Call to Action feed; drives the sidebar unread dot. RLS: select/insert/update own row only. |
+
+**Call to Action RPCs** (the page's mutations go through these, not direct table writes):
+- `create_call_to_action(p_guild_id, p_title, p_description, p_type, p_event_date, p_target_count) → uuid` — inserts the CTA and the creator's own interest (counter starts at 1), then attempts launch. Member-gated.
+- `toggle_call_to_action_interest(p_cta_id)` — adds/removes the caller's interest (cancel allowed only before launch), then attempts launch on add.
+- `_maybe_launch_cta(p_cta_id)` — internal helper (EXECUTE revoked from `anon`/`authenticated`): when interested count ≥ `target_count` and not yet launched, creates an `events` row from the CTA, copies all interested users into `event_participants` (`confirmed`), and stamps `event_id`/`launched_at`. This is how a reached threshold auto-creates the calendar event.
 
 All tables use RLS. Supabase client is created via `createServerClient` with `getAll/setAll` cookie methods.
 
@@ -81,6 +90,7 @@ All tables use RLS. Supabase client is created via `createServerClient` with `ge
 ## Scheduled Jobs (pg_cron)
 
 - **`cleanup-chat-attachments-daily`** (03:17 UTC) — `net.http_post` (pg_net) invokes the `cleanup-chat-attachments` Edge Function with the public anon key (satisfies `verify_jwt`; the function uses the service role internally). It deletes `chat-attachments` files whose `guild_messages` row is older than 30 days and nulls their `attachment_url`. Retention policy: chat images do **not** persist beyond ~30 days.
+- **`delete-expired-call-to-actions-hourly`** (every hour, `0 * * * *`) — runs `public.delete_expired_call_to_actions()` (SECURITY DEFINER, EXECUTE revoked from anon/authenticated), which deletes `call_to_actions` rows whose `event_date` is more than 1 day in the past. The card shows a "time's up" state once `event_date` passes, then disappears ~24h later when this job removes it. Interests cascade; the linked `events` row is left intact (the CTA's `event_id` FK is `on delete set null`, and deleting the CTA does not touch the event).
 
 ## Styling and UI
 

@@ -42,7 +42,8 @@
       "other": "Other"
     },
     "guildChat": "Guild Chat",
-    "announcements": "Announcements"
+    "announcements": "Announcements",
+    "callToAction": "Looking for group"
   },
   "Auth": {
     "login": "Login"
@@ -342,5 +343,38 @@
     "commentError": "Failed to send comment",
     "commentDeleteError": "Failed to delete comment",
     "commentsLoading": "Loading comments"
+  },
+  "CallToAction": {
+    "newAction": "New action",
+    "helpAria": "How Call to Action works",
+    "helpTooltip": "Rally your guild for an activity: set how many participants are needed to launch. Members tap “I'm in” — once the target is reached, an event is automatically added to the calendar with everyone who joined. Until then anyone can join or back out.",
+    "createTitle": "New call to action",
+    "titleLabel": "Title",
+    "titlePlaceholder": "What are we rallying for?",
+    "dateLabel": "Date",
+    "timeLabel": "Time",
+    "typeLabel": "Type",
+    "descriptionPlaceholder": "Describe the activity…",
+    "targetLabel": "Participants to launch",
+    "targetPlaceholder": "e.g. 5",
+    "wantButton": "I'm in",
+    "wantedButton": "I'm in",
+    "progress": "{count} / {target}",
+    "launchedBadge": "Launched",
+    "timesUp": "Time's up",
+    "openEvent": "Open event",
+    "deleteLabel": "Delete",
+    "empty": "No calls to action yet.",
+    "publishButton": "Publish",
+    "launchedToast": "Target reached — event created in the calendar!",
+    "createError": "Failed to publish call to action",
+    "toggleError": "Failed to update your participation",
+    "deleteError": "Failed to delete call to action",
+    "validation": {
+      "titleRequired": "Title is required",
+      "dateRequired": "Date is required",
+      "timeRequired": "Time is required",
+      "targetMin": "At least 1 participant"
+    }
   }
 }

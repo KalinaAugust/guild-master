@@ -1,0 +1,58 @@
+.row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  /* Separated avatars (no overlap), with breathing room when they wrap. */
+  gap: 10px;
+}
+
+.slot {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* UserAvatar fill rounds itself (20px) and adds a border; let the square
+   wrapper define the shape instead. */
+.slot > div {
+  border-radius: 0;
+  border: none;
+}
+
+.slotLink {
+  display: inline-flex;
+  border-radius: 12px;
+}
+
+.empty {
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.overflow {
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: default;
+}
+
+.overflowCount {
+  line-height: 1;
+}
+
+.overflowList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 220px;
+  overflow-y: auto;
+  text-align: left;
+}
