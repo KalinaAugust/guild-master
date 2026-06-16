@@ -139,10 +139,28 @@
   gap: 0.4rem;
 }
 
+.launchedGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
 .eventLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--accent-primary);
   text-decoration: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
-.eventLink:hover { text-decoration: underline; }
+.eventLink:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: rgba(56, 189, 248, 0.6);
+  transform: translateY(-1px);
+}

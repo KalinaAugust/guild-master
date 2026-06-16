@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import {
-  Clock, Users, Trash2, CheckCircle2, CalendarCheck, Timer,
+  Clock, Users, Trash2, CheckCircle2, CalendarCheck, Timer, ArrowRight,
   Sword, Gamepad2, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle,
 } from 'lucide-react';
 import type { ActivityType } from '@/shared/types';
@@ -117,12 +117,6 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           <Timer size={14} aria-hidden="true" />
           {countdown}
         </span>
-        {launched && (
-          <span className={styles.launchedBadge}>
-            <CalendarCheck size={12} aria-hidden="true" />
-            {t('launchedBadge')}
-          </span>
-        )}
       </div>
 
       {cta.description && <p className={styles.content}>{cta.description}</p>}
@@ -145,11 +139,18 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
         </div>
 
         {launched ? (
-          cta.eventId && (
-            <Link href={`/events/${cta.eventId}`} className={styles.eventLink}>
-              {t('openEvent')}
-            </Link>
-          )
+          <div className={styles.launchedGroup}>
+            <span className={styles.launchedBadge}>
+              <CalendarCheck size={12} aria-hidden="true" />
+              {t('launchedBadge')}
+            </span>
+            {cta.eventId && (
+              <Link href={`/events/${cta.eventId}`} className={styles.eventLink}>
+                {t('openEvent')}
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+            )}
+          </div>
         ) : (
           <Button
             type="button"
