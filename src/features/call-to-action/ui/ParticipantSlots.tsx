@@ -35,7 +35,7 @@ export const ParticipantSlots: React.FC<ParticipantSlotsProps> = ({ participants
           <Tooltip key={p.userId} content={<NameWithIcon name={name} icon={p.icon} fallback={p.userId} iconSize={13} />}>
             <ProfileLink publicId={p.publicId} className={styles.slotLink} aria-label={name || undefined}>
               <span className={styles.slot}>
-                <UserAvatar avatarUrl={p.avatarUrl} name={name} size="sm" />
+                <UserAvatar avatarUrl={p.avatarUrl} name={name} fill />
               </span>
             </ProfileLink>
           </Tooltip>
@@ -57,7 +57,7 @@ export const ParticipantSlots: React.FC<ParticipantSlotsProps> = ({ participants
           }
         >
           <span className={`${styles.slot} ${styles.overflow}`}>
-            <Users size={13} />
+            <Users size={16} />
             <span className={styles.overflowCount}>+{hidden.length}</span>
           </span>
         </Tooltip>
