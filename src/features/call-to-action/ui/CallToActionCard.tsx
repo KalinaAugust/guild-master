@@ -56,7 +56,19 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
     const id = setInterval(() => setTick((n) => n + 1), 60_000);
     return () => clearInterval(id);
   }, []);
-  const countdown = eventTime.locale(locale).fromNow();
+
+  // Under a day to go → show remaining time as HH:MM; otherwise a relative label.
+  const msLeft = eventTime.diff(dayjs());
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  let countdown: string;
+  if (msLeft > 0 && msLeft < ONE_DAY) {
+    const totalMinutes = Math.floor(msLeft / 60_000);
+    const hh = String(Math.floor(totalMinutes / 60)).padStart(2, '0');
+    const mm = String(totalMinutes % 60).padStart(2, '0');
+    countdown = `${hh}:${mm}`;
+  } else {
+    countdown = eventTime.locale(locale).fromNow();
+  }
   const authorName = resolveDisplayName({
     fullName: cta.author.fullName,
     alias: cta.author.alias,
@@ -98,6 +110,10 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
         <GradientTitle as="h3" fontSize="1.15rem" className={styles.title}>
           {cta.title}
         </GradientTitle>
+        <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
+          <Timer size={14} aria-hidden="true" />
+          {countdown}
+        </span>
         {launched && (
           <span className={styles.launchedBadge}>
             <CalendarCheck size={12} aria-hidden="true" />
@@ -118,10 +134,6 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           <span className={styles.metaItem}>
             <Clock size={14} className={styles.accentIcon} />
             {eventTime.format('DD MMM, HH:mm')}
-          </span>
-          <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
-            <Timer size={14} aria-hidden="true" />
-            {countdown}
           </span>
           <span className={styles.metaItem}>
             <Users size={14} className={styles.accentIcon} />
