@@ -21,15 +21,15 @@ import { ParticipantSlots } from './ParticipantSlots';
 import styles from './CallToActionCard.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
-  raid: <Sword size={14} />,
-  game: <Gamepad2 size={14} />,
-  meeting: <Users size={14} />,
-  other: <Calendar size={14} />,
-  dungeon: <Skull size={14} />,
-  party: <PartyPopper size={14} />,
-  sport: <Dumbbell size={14} />,
-  dnd: <Dices size={14} />,
-  boardgame: <Puzzle size={14} />,
+  raid: <Sword size={18} />,
+  game: <Gamepad2 size={18} />,
+  meeting: <Users size={18} />,
+  other: <Calendar size={18} />,
+  dungeon: <Skull size={18} />,
+  party: <PartyPopper size={18} />,
+  sport: <Dumbbell size={18} />,
+  dnd: <Dices size={18} />,
+  boardgame: <Puzzle size={18} />,
 };
 
 interface CallToActionCardProps {
@@ -133,7 +133,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
 
       <footer className={styles.foot}>
         <div className={styles.meta}>
-          <span className={`${styles.metaItem} ${styles.typeIcon}`}>{typeIcons[cta.type]}</span>
+          <span className={styles.typeIcon}>{typeIcons[cta.type]}</span>
           <span className={styles.metaItem}>
             <Clock size={14} className={styles.accentIcon} />
             {eventTime.format('DD MMM, HH:mm')}
