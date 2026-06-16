@@ -43,7 +43,7 @@
     },
     "guildChat": "Чат гильдии",
     "announcements": "Анонсы",
-    "callToAction": "Сбор"
+    "callToAction": "Поиск группы"
   },
   "Auth": {
     "login": "Вход"
