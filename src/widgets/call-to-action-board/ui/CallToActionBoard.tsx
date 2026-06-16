@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
+import { Plus, HelpCircle } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
+import { Tooltip } from '@/shared/ui/Tooltip';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { CallToActionCard, CreateCallToActionModal } from '@/features/call-to-action';
 import {
@@ -76,12 +77,19 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
         <div className={styles.guildSelect}>
           <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
         </div>
-        {canCreate && (
-          <Button type="button" variant="primary" className={styles.newButton} onClick={() => setModalOpen(true)}>
-            <Plus size={16} />
-            {t('newAction')}
-          </Button>
-        )}
+        <div className={styles.actions}>
+          <Tooltip content={t('helpTooltip')} side="bottom">
+            <button type="button" className={styles.helpButton} aria-label={t('helpAria')}>
+              <HelpCircle size={20} />
+            </button>
+          </Tooltip>
+          {canCreate && (
+            <Button type="button" variant="primary" className={styles.newButton} onClick={() => setModalOpen(true)}>
+              <Plus size={16} />
+              {t('newAction')}
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className={styles.feed}>

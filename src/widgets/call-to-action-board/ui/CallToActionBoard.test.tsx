@@ -13,6 +13,10 @@ vi.mock('@/shared/ui/Panel', () => ({
   Panel: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
+vi.mock('@/shared/ui/Tooltip', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 vi.mock('@/features/select-guild', () => ({
   useGuildSelection: () => ({
     activeGuildId: 'g1',
