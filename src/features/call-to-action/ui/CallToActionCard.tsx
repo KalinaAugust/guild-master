@@ -76,11 +76,6 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           <span className={styles.time}>{dayjs(cta.createdAt).locale(locale).format('LLL')}</span>
         </div>
 
-        <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
-          <Timer size={14} aria-hidden="true" />
-          {countdown}
-        </span>
-
         {onDelete && cta.canManage && (
           <div className={styles.actions}>
             <Tooltip content={t('deleteLabel')}>
@@ -123,6 +118,10 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           <span className={styles.metaItem}>
             <Clock size={14} />
             {eventTime.format('DD MMM, HH:mm')}
+          </span>
+          <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
+            <Timer size={14} aria-hidden="true" />
+            {countdown}
           </span>
           <span className={styles.metaItem}>
             <Users size={14} />

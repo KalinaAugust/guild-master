@@ -15,7 +15,6 @@
 .headText { display: flex; flex-direction: column; min-width: 0; }
 
 .timer {
-  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
