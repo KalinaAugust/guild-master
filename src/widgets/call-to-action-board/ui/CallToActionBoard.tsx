@@ -7,9 +7,8 @@ import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
-import { CreateCallToActionModal } from '@/features/call-to-action';
+import { CallToActionCard, CreateCallToActionModal } from '@/features/call-to-action';
 import {
-  CallToActionCard,
   useGetCallToActionsQuery,
   useMarkCallToActionsReadMutation,
   useToggleCallToActionInterestMutation,

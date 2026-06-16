@@ -23,12 +23,12 @@ vi.mock('@/features/select-guild', () => ({
 }));
 
 vi.mock('@/features/call-to-action', () => ({
+  CallToActionCard: ({ cta }: { cta: { title: string } }) => <div>{cta.title}</div>,
   CreateCallToActionModal: () => <div data-testid="cta-modal" />,
 }));
 
 const mockGetQuery = vi.fn();
 vi.mock('@/entities/call-to-action', () => ({
-  CallToActionCard: ({ cta }: { cta: { title: string } }) => <div>{cta.title}</div>,
   useGetCallToActionsQuery: (...args: unknown[]) => mockGetQuery(...args),
   useMarkCallToActionsReadMutation: () => [vi.fn(), { isLoading: false }],
   useToggleCallToActionInterestMutation: () => [vi.fn(), { isLoading: false }],

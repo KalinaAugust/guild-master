@@ -12,4 +12,3 @@ export {
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,
 } from './api/callToActionApi';
-export { CallToActionCard } from './ui/CallToActionCard';
