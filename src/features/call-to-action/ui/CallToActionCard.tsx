@@ -116,7 +116,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
         <div className={styles.meta}>
           <span className={`${styles.metaItem} ${styles.typeIcon}`}>{typeIcons[cta.type]}</span>
           <span className={styles.metaItem}>
-            <Clock size={14} />
+            <Clock size={14} className={styles.accentIcon} />
             {eventTime.format('DD MMM, HH:mm')}
           </span>
           <span className={styles.timer} title={eventTime.locale(locale).format('LLL')}>
@@ -124,7 +124,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
             {countdown}
           </span>
           <span className={styles.metaItem}>
-            <Users size={14} />
+            <Users size={14} className={styles.accentIcon} />
             {t('progress', { count: cta.interestedCount, target: cta.targetCount })}
           </span>
         </div>

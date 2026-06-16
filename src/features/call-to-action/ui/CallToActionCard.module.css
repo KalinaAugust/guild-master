@@ -109,6 +109,8 @@
   color: var(--text-secondary);
 }
 
+.accentIcon { color: var(--accent-secondary); }
+
 .type_raid .typeIcon { color: #ff4d4d; }
 .type_game .typeIcon { color: #4da3ff; }
 .type_meeting .typeIcon { color: #4dff88; }
