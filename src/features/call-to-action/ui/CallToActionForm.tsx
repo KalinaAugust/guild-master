@@ -91,23 +91,25 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
           <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
         </FormField>
       </div>
-      <div className={styles.formGroup}>
-        <label>{t('typeLabel')}</label>
-        <Select
-          value={type}
-          onValueChange={(val) => setType(val as ActivityType)}
-          options={typeOptions}
-        />
+      <div className={styles.row}>
+        <div className={styles.formGroup}>
+          <label>{t('typeLabel')}</label>
+          <Select
+            value={type}
+            onValueChange={(val) => setType(val as ActivityType)}
+            options={typeOptions}
+          />
+        </div>
+        <FormField name="targetCount" label={t('targetLabel')} error={errors.targetCount}>
+          <Input
+            type="number"
+            min={1}
+            placeholder={t('targetPlaceholder')}
+            value={targetCount}
+            onChange={(e) => setTargetCount(e.target.value)}
+          />
+        </FormField>
       </div>
-      <FormField name="targetCount" label={t('targetLabel')} error={errors.targetCount}>
-        <Input
-          type="number"
-          min={1}
-          placeholder={t('targetPlaceholder')}
-          value={targetCount}
-          onChange={(e) => setTargetCount(e.target.value)}
-        />
-      </FormField>
       <FormField name="description" label={commonT('description')}>
         <Textarea
           placeholder={t('descriptionPlaceholder')}
