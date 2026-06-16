@@ -121,6 +121,8 @@ export const AnnouncementCard: React.FC<AnnouncementCardProps> = ({
       </div>
       <Markdown source={a.content} className={styles.content} />
 
+      <div className={styles.divider} />
+
       <footer className={styles.foot}>
         <ReactionBar guildId={guildId} announcementId={a.id} reactions={a.reactions} canReact={!!userId} />
         <button type="button" className={styles.commentsToggle} onClick={() => setCommentsOpen((v) => !v)}>
