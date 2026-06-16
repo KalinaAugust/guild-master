@@ -102,6 +102,8 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
 
       <ParticipantSlots participants={cta.participants} targetCount={cta.targetCount} />
 
+      <div className={styles.divider} />
+
       <footer className={styles.foot}>
         <div className={styles.meta}>
           <span className={`${styles.metaItem} ${styles.typeIcon}`}>{typeIcons[cta.type]}</span>
