@@ -78,15 +78,24 @@
   max-height: 220px;
   overflow-y: auto;
   scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
 .column::-webkit-scrollbar {
   width: 6px;
 }
 
+.column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .column::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
+}
+
+.column::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .option {
