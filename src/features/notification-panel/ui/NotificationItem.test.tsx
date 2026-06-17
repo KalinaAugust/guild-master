@@ -18,6 +18,9 @@ vi.mock('next-intl', () => ({
   useTranslations: () => Object.assign((k: string) => k, { rich: (k: string) => k }),
   useLocale: () => 'en',
 }));
+vi.mock('@/shared/lib/hooks', () => ({ useAppDispatch: () => vi.fn() }));
+vi.mock('@/entities/guild', () => ({ setCurrentGuild: vi.fn() }));
+vi.mock('@/entities/user', () => ({ updateLastActiveGuild: vi.fn() }));
 
 const base = {
   id: 'n1', type: 'join_request', entity_type: 'guild', entity_id: 'g1',

@@ -969,6 +969,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      _maybe_launch_cta: { Args: { p_cta_id: string }; Returns: undefined }
       create_call_to_action: {
         Args: {
           p_description: string
@@ -980,6 +981,7 @@ export type Database = {
         }
         Returns: string
       }
+      delete_expired_call_to_actions: { Args: never; Returns: undefined }
       toggle_call_to_action_interest: {
         Args: { p_cta_id: string }
         Returns: undefined
