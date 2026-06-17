@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/api/supabase/server';
 import type { Json, TablesUpdate } from '@/shared/api/supabase/types';
-import { sanitizeSettings, type ProfileSettingsInput } from '@/features/update-profile-settings/model/types';
+import { sanitizeSettings, type ProfileSettingsInput } from '@/features/update-profile/settings/model/types';
 
 export async function PATCH(request: NextRequest) {
   const supabase = await createClient();
