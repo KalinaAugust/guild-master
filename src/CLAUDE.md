@@ -72,6 +72,8 @@ When creating a Supabase client on the server (Server Components or `proxy.ts`):
 | `announcement_reads` | `id`, `guild_id` (cascade), `user_id`, `last_read_at` — `unique(guild_id, user_id)`. Per-guild last-seen timestamp for the announcements feed; drives the sidebar unread dot. Mirror of `guild_message_reads`. RLS: select/insert/update own row only. |
 | `call_to_action_reads` | `id`, `guild_id` (cascade), `user_id`, `last_read_at` — `unique(guild_id, user_id)`. Per-guild last-seen timestamp for the Call to Action feed; drives the sidebar unread dot. RLS: select/insert/update own row only. |
 
+**Notification triggers:** INSERT on `call_to_actions` fires `trg_notify_new_call_to_action` → `notify_new_call_to_action()`; INSERT on `announcements` fires `trg_notify_new_announcement` → `notify_new_announcement()`. Both insert a `new_call_to_action` / `new_announcement` row into `notifications` for every guild member except `created_by`. Matching cleanup triggers (`trg_delete_call_to_action_notifications`, `trg_delete_announcement_notifications`) remove those notifications on DELETE.
+
 **Call to Action RPCs** (the page's mutations go through these, not direct table writes):
 - `create_call_to_action(p_guild_id, p_title, p_description, p_type, p_event_date, p_target_count) → uuid` — inserts the CTA and the creator's own interest (counter starts at 1), then attempts launch. Member-gated.
 - `toggle_call_to_action_interest(p_cta_id)` — adds/removes the caller's interest (cancel allowed only before launch), then attempts launch on add.
