@@ -3,7 +3,6 @@
 import React, { useState, useCallback } from 'react';
 import Cropper, { Point, Area } from 'react-easy-crop';
 import { Modal } from '@/shared/ui/Modal';
-import { Button } from '@/shared/ui/Button';
 import getCroppedImg from '@/shared/lib/getCroppedImg';
 import styles from './CropperModal.module.css';
 
@@ -47,7 +46,17 @@ export const CropperModal: React.FC<CropperModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Обрезать фото">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Обрезать фото"
+      cancelText="Отмена"
+      onCancel={onClose}
+      cancelButtonProps={{ disabled: isProcessing }}
+      submitText={isProcessing ? 'Сохранение...' : 'Сохранить'}
+      onSubmit={handleSave}
+      submitButtonProps={{ isLoading: isProcessing }}
+    >
       <div className={styles.cropperContainer}>
         <Cropper
           image={image}
@@ -75,15 +84,6 @@ export const CropperModal: React.FC<CropperModalProps> = ({
             onChange={(e) => setZoom(Number(e.target.value))}
             className={styles.slider}
           />
-        </div>
-
-        <div className={styles.actions}>
-          <Button variant="secondary" onClick={onClose} disabled={isProcessing}>
-            Отмена
-          </Button>
-          <Button onClick={handleSave} isLoading={isProcessing}>
-            {isProcessing ? 'Сохранение...' : 'Сохранить'}
-          </Button>
         </div>
       </div>
     </Modal>

@@ -3,7 +3,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Modal } from '../Modal';
-import { Button } from '../Button';
 import styles from './ConfirmModal.module.css';
 
 interface ConfirmModalProps {
@@ -47,16 +46,21 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={title}>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      cancelText={cancelLabel || commonT('cancel')}
+      onCancel={onClose}
+      cancelButtonProps={{ disabled: isLoading }}
+      submitText={confirmLabel || commonT('confirm')}
+      onSubmit={handleConfirm}
+      submitButtonProps={{
+        variant: variant === 'danger' ? 'danger' : 'primary',
+        isLoading
+      }}
+    >
       {description && <p className={styles.description}>{description}</p>}
-      <div className={styles.footer}>
-        <Button variant="secondary" onClick={onClose} disabled={isLoading}>
-          {cancelLabel || commonT('cancel')}
-        </Button>
-        <Button variant={variant === 'danger' ? 'danger' : 'primary'} onClick={handleConfirm} isLoading={isLoading}>
-          {confirmLabel || commonT('confirm')}
-        </Button>
-      </div>
     </Modal>
   );
 };

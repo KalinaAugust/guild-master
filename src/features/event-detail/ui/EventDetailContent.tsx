@@ -509,44 +509,55 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         isOpen={deleteRecurringOpen}
         onClose={() => setDeleteRecurringOpen(false)}
         title={eventT('deleteOccurrenceTitle')}
+        footerActions={
+          <>
+            <Button
+              variant="secondary"
+              onClick={() => setDeleteRecurringOpen(false)}
+              disabled={isDeleting || isUpdating}
+            >
+              {commonT('cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDeleteOnlyOccurrence}
+              isLoading={isUpdating}
+              disabled={isDeleting}
+            >
+              {eventT('deleteOnlyThis')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDeleteAllOccurrences}
+              isLoading={isDeleting}
+              disabled={isUpdating}
+            >
+              {eventT('deleteAll')}
+            </Button>
+          </>
+        }
       >
         <p style={{ marginBottom: '20px', fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
           {eventT('deleteOccurrenceDesc')}
         </p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-          <Button
-            variant="secondary"
-            onClick={() => setDeleteRecurringOpen(false)}
-            disabled={isDeleting || isUpdating}
-          >
-            {commonT('cancel')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDeleteOnlyOccurrence}
-            isLoading={isUpdating}
-            disabled={isDeleting}
-          >
-            {eventT('deleteOnlyThis')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDeleteAllOccurrences}
-            isLoading={isDeleting}
-            disabled={isUpdating}
-          >
-            {eventT('deleteAll')}
-          </Button>
-        </div>
       </Modal>
 
       <Modal
         isOpen={repeatModalOpen}
         onClose={() => setRepeatModalOpen(false)}
         title={eventT('repeatEventTitle')}
+        cancelText={commonT('cancel')}
+        onCancel={() => setRepeatModalOpen(false)}
+        cancelButtonProps={{ disabled: isCreatingEvent }}
+        submitText={eventT('repeatEvent')}
+        submitButtonProps={{
+          type: 'submit',
+          form: 'repeat-event-form',
+          isLoading: isCreatingEvent,
+        }}
       >
         {event && (
-          <Form.Root onSubmit={handleRepeatSubmit} className={styles.repeatForm}>
+          <Form.Root id="repeat-event-form" onSubmit={handleRepeatSubmit} className={styles.repeatForm}>
             <p className={styles.modalDesc}>
               {event.title}
             </p>
@@ -574,23 +585,6 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                   }}
                 />
               </FormField>
-            </div>
-            <div className={styles.formActions}>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => setRepeatModalOpen(false)}
-                disabled={isCreatingEvent}
-              >
-                {commonT('cancel')}
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                isLoading={isCreatingEvent}
-              >
-                {eventT('repeatEvent')}
-              </Button>
             </div>
           </Form.Root>
         )}
