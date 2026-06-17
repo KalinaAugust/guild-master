@@ -1,0 +1,130 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 45px;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.trigger:hover {
+  background: rgba(56, 189, 248, 0.03);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.trigger:focus-visible,
+.trigger[data-state='open'] {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.trigger.error,
+.trigger[data-invalid] {
+  border-color: #ff6b6b;
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder .value {
+  color: var(--text-secondary);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.content {
+  background: var(--modal-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-glass);
+  padding: 12px;
+  z-index: var(--z-popover);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  animation: slideUpAndFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* react-day-picker theming via its exposed CSS variables + a few overrides. */
+.calendar {
+  --rdp-accent-color: var(--accent-primary);
+  --rdp-accent-background-color: rgba(56, 189, 248, 0.15);
+  --rdp-today-color: var(--accent-secondary);
+  --rdp-day-width: 38px;
+  --rdp-day-height: 38px;
+  --rdp-day_button-width: 38px;
+  --rdp-day_button-height: 38px;
+  --rdp-selected-border: 2px solid var(--accent-primary);
+  --rdp-outside-opacity: 0.35;
+  --rdp-weekday-opacity: 0.6;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.calendar :global(.rdp-caption_label),
+.calendar :global(.rdp-weekday) {
+  color: var(--text-secondary);
+}
+
+.calendar :global(.rdp-day_button) {
+  border-radius: 10px;
+}
+
+.calendar :global(.rdp-day_button:hover) {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.calendar :global(.rdp-selected) :global(.rdp-day_button) {
+  background: var(--accent-primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.calendar :global(.rdp-chevron) {
+  fill: var(--text-secondary);
+}
+
+.calendar :global(.rdp-button_previous:hover) :global(.rdp-chevron),
+.calendar :global(.rdp-button_next:hover) :global(.rdp-chevron) {
+  fill: var(--accent-secondary);
+}
+
+.calendar :global(.rdp-dropdowns) {
+  color: var(--text-primary);
+}
+
+.calendar :global(.rdp-dropdown) {
+  color: var(--text-primary);
+  background: var(--modal-bg);
+}
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

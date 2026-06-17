@@ -4,6 +4,7 @@ import { EventForm } from './EventForm';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+  useLocale: () => 'en',
 }));
 
 const baseProps = {
@@ -39,10 +40,14 @@ describe('EventForm', () => {
 
   it('calls onSubmit with form data when all required fields are valid', () => {
     const onSubmit = vi.fn();
-    render(<EventForm {...baseProps} onSubmit={onSubmit} />);
+    render(
+      <EventForm
+        {...baseProps}
+        onSubmit={onSubmit}
+        initialData={{ date: '2026-06-01', time: '19:00', type: 'game', description: '' }}
+      />
+    );
     fireEvent.change(screen.getByPlaceholderText('titlePlaceholder'), { target: { value: 'Raid Night' } });
-    const dateInput = document.querySelector('input[type="date"]') as HTMLInputElement;
-    fireEvent.change(dateInput, { target: { value: '2026-06-01' } });
     const form = screen.getByRole('button', { name: 'Submit' }).closest('form')!;
     fireEvent.submit(form);
     expect(onSubmit).toHaveBeenCalledWith(
@@ -59,7 +64,7 @@ describe('EventForm', () => {
 
   it('hides date input in isDayView mode (not edit)', () => {
     render(<EventForm {...baseProps} isDayView={true} isEdit={false} />);
-    expect(document.querySelector('input[type="date"]')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'openCalendar' })).not.toBeInTheDocument();
   });
 
   it('calls onCancel when cancel button is clicked', () => {

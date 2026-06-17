@@ -19,7 +19,8 @@ import {
 import { useGuildPermissions } from '@/entities/guild';
 import { Modal } from '@/shared/ui/Modal';
 import { FormField } from '@/shared/ui/FormField';
-import { Input } from '@/shared/ui/Input';
+import { DatePicker } from '@/shared/ui/DatePicker';
+import { TimePicker } from '@/shared/ui/TimePicker';
 import * as Form from '@radix-ui/react-form';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { Button } from '@/shared/ui/Button';
@@ -60,6 +61,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const t = useTranslations('EventDetail');
   const eventT = useTranslations('Event');
   const commonT = useTranslations('Common');
+  const pickerT = useTranslations('DateTimePicker');
 
   const { data, isLoading: isEventLoading } = useGetEventByIdQuery(eventId);
   const event = data?.event;
@@ -549,17 +551,26 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             </p>
             <div className={styles.formRow}>
               <FormField name="date" label={eventT('dateLabel')} error={repeatErrors.date}>
-                <Input
-                  type="date"
+                <DatePicker
                   value={repeatDate}
-                  onChange={(e) => setRepeatDate(e.target.value)}
+                  onChange={setRepeatDate}
+                  locale={locale}
+                  hasError={!!repeatErrors.date}
+                  placeholder={pickerT('selectDate')}
+                  labels={{ open: pickerT('openCalendar') }}
                 />
               </FormField>
               <FormField name="time" label={eventT('timeLabel')} error={repeatErrors.time}>
-                <Input
-                  type="time"
+                <TimePicker
                   value={repeatTime}
-                  onChange={(e) => setRepeatTime(e.target.value)}
+                  onChange={setRepeatTime}
+                  hasError={!!repeatErrors.time}
+                  placeholder={pickerT('selectTime')}
+                  labels={{
+                    open: pickerT('openTime'),
+                    hours: pickerT('hours'),
+                    minutes: pickerT('minutes'),
+                  }}
                 />
               </FormField>
             </div>

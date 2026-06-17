@@ -1,4 +1,12 @@
 {
+  "DateTimePicker": {
+    "selectDate": "Выберите дату",
+    "selectTime": "Выберите время",
+    "openCalendar": "Открыть календарь",
+    "openTime": "Открыть выбор времени",
+    "hours": "Часы",
+    "minutes": "Минуты"
+  },
   "Common": {
     "title": "Мастер Гильдий",
     "calendar": "Календарь",

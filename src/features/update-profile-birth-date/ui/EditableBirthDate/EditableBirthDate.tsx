@@ -1,7 +1,8 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Pencil, Check, X } from 'lucide-react';
-import { Input } from '@/shared/ui/Input';
+import { DatePicker } from '@/shared/ui/DatePicker';
 import { Button } from '@/shared/ui/Button';
 import { updateBirthDate } from '@/entities/user';
 import { useEditableField } from '@/shared/lib/useEditableField';
@@ -15,6 +16,7 @@ interface EditableBirthDateProps {
 }
 
 export const EditableBirthDate = ({ initialBirthDate, userId, locale }: EditableBirthDateProps) => {
+  const pickerT = useTranslations('DateTimePicker');
   const { isEditing, value, setValue, saved, isSaving, isUnchanged, startEditing, cancel, save } =
     useEditableField<string>({
       initial: initialBirthDate ?? '',
@@ -44,13 +46,17 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
 
   return (
     <div className={styles.edit}>
-      <Input
-        type="date"
+      <DatePicker
         value={value}
-        onChange={(e) => setValue(e.target.value)}
-        max={new Date().toISOString().slice(0, 10)}
-        autoFocus
+        onChange={setValue}
+        locale={locale}
+        max={dayjs().format('YYYY-MM-DD')}
+        captionLayout="dropdown"
+        fromYear={1920}
+        toYear={new Date().getFullYear()}
+        placeholder={pickerT('selectDate')}
         disabled={isSaving}
+        labels={{ open: pickerT('openCalendar') }}
       />
       <div className={styles.actions}>
         <Button

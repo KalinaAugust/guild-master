@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import * as Form from '@radix-ui/react-form';
 import { ActivityType } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
@@ -9,6 +9,8 @@ import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
 import { FormField } from '@/shared/ui/FormField';
+import { DatePicker } from '@/shared/ui/DatePicker';
+import { TimePicker } from '@/shared/ui/TimePicker';
 import dayjs from '@/shared/lib/dayjs';
 import { createCtaFormSchema, type CtaFormData } from '../model/schema';
 import styles from './CallToActionForm.module.css';
@@ -30,6 +32,8 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
 }) => {
   const t = useTranslations('CallToAction');
   const commonT = useTranslations('Common');
+  const pickerT = useTranslations('DateTimePicker');
+  const locale = useLocale();
 
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
@@ -83,10 +87,28 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
       </FormField>
       <div className={styles.row}>
         <FormField name="date" label={t('dateLabel')} error={errors.date}>
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          <DatePicker
+            value={date}
+            onChange={setDate}
+            locale={locale}
+            min={dayjs().format('YYYY-MM-DD')}
+            hasError={!!errors.date}
+            placeholder={pickerT('selectDate')}
+            labels={{ open: pickerT('openCalendar') }}
+          />
         </FormField>
         <FormField name="time" label={t('timeLabel')} error={errors.time}>
-          <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+          <TimePicker
+            value={time}
+            onChange={setTime}
+            hasError={!!errors.time}
+            placeholder={pickerT('selectTime')}
+            labels={{
+              open: pickerT('openTime'),
+              hours: pickerT('hours'),
+              minutes: pickerT('minutes'),
+            }}
+          />
         </FormField>
       </div>
       <div className={styles.row}>
