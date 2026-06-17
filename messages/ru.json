@@ -194,7 +194,9 @@
     "eventJoinRequest": "Новая заявка на «{eventTitle}»",
     "eventJoinRequestApproved": "Ваша заявка на «{eventTitle}» одобрена",
     "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена",
-    "eventComment": "Новые комментарии в «{eventTitle}»"
+    "eventComment": "Новые комментарии в «{eventTitle}»",
+    "newCallToAction": "Новый призыв к действию в «{guildName}»",
+    "newAnnouncement": "Новый анонс в «{guildName}»"
   },
   "PublicProfile": {
     "joined": "Дата регистрации",

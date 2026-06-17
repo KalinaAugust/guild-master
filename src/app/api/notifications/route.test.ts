@@ -46,4 +46,32 @@ describe('GET /api/notifications', () => {
     expect(json[0].event_title).toBe('Raid');
     expect(json[0].guild_name).toBe('Alpha');
   });
+
+  it('returns 500 when the CTA enrichment query errors', async () => {
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: [
+        { id: 'n3', type: 'new_call_to_action', entity_type: 'call_to_action', entity_id: 'c1', is_read: false, created_at: 't' },
+      ] }))
+      .mockReturnValueOnce(query({ data: null, error: { message: 'boom' } }));
+    useFrom(from);
+    expect((await GET()).status).toBe(500);
+  });
+
+  it('enriches call_to_action notifications with title, guild_id and guild name', async () => {
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: [
+        { id: 'n2', type: 'new_call_to_action', entity_type: 'call_to_action', entity_id: 'c1', is_read: false, created_at: 't' },
+      ] }))
+      .mockReturnValueOnce(query({ data: [
+        { id: 'c1', title: 'Raid night', guild_id: 'g1', guilds: { name: 'Alpha' } },
+      ] }));
+    useFrom(from);
+    const res = await GET();
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json[0].title).toBe('Raid night');
+    expect(json[0].guild_id).toBe('g1');
+    expect(json[0].guild_name).toBe('Alpha');
+    expect(json[0].event_title).toBeNull();
+  });
 });

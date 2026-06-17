@@ -194,7 +194,9 @@
     "eventJoinRequest": "New application for «{eventTitle}»",
     "eventJoinRequestApproved": "Your application for «{eventTitle}» was approved",
     "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined",
-    "eventComment": "New comments in «{eventTitle}»"
+    "eventComment": "New comments in «{eventTitle}»",
+    "newCallToAction": "New Call to Action in «{guildName}»",
+    "newAnnouncement": "New announcement in «{guildName}»"
   },
   "PublicProfile": {
     "joined": "Joined",

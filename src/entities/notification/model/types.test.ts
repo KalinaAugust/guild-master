@@ -11,6 +11,8 @@ const base: Notification = {
   event_title: null,
   event_date: null,
   guild_name: null,
+  guild_id: null,
+  title: null,
 };
 
 const t = (key: string, values?: Record<string, string>) => {
@@ -52,5 +54,21 @@ describe('NOTIFICATION_TYPE_CONFIG', () => {
   it('event_comment: getLabel uses the event title', () => {
     const label = NOTIFICATION_TYPE_CONFIG.event_comment.getLabel!(t, { ...base, event_title: 'Raid' });
     expect(label).toBe(t('eventComment', { eventTitle: 'Raid' }));
+  });
+
+  it('new_call_to_action: getLabel includes guildName and config has feed link', () => {
+    const cfg = NOTIFICATION_TYPE_CONFIG.new_call_to_action;
+    expect(cfg.feedHref).toBe('/looking-for-group');
+    expect(cfg.switchesGuild).toBe(true);
+    const label = cfg.getLabel!(t, { ...base, guild_name: 'Alpha' });
+    expect(label).toBe(t('newCallToAction', { guildName: 'Alpha' }));
+  });
+
+  it('new_announcement: getLabel includes guildName and config has feed link', () => {
+    const cfg = NOTIFICATION_TYPE_CONFIG.new_announcement;
+    expect(cfg.feedHref).toBe('/announcements');
+    expect(cfg.switchesGuild).toBe(true);
+    const label = cfg.getLabel!(t, { ...base, guild_name: 'Alpha' });
+    expect(label).toBe(t('newAnnouncement', { guildName: 'Alpha' }));
   });
 });
