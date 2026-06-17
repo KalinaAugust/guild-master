@@ -27,6 +27,50 @@ interface TimePickerProps {
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
+interface ColumnProps {
+  label?: string;
+  values: number[];
+  selected?: number;
+  onPick: (value: number) => void;
+}
+
+const Column: React.FC<ColumnProps> = ({ label, values, selected, onPick }) => {
+  const ref = React.useRef<HTMLUListElement>(null);
+
+  // Translate the wheel into manual scrolling. A Radix Popover portals outside the
+  // Dialog, whose `react-remove-scroll` lock swallows wheel events for anything not
+  // inside it — so native scrolling never reaches this list. Scrolling `scrollTop`
+  // ourselves works regardless of the lock.
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0) return;
+      e.preventDefault();
+      el.scrollTop += e.deltaY;
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
+
+  return (
+    <ul ref={ref} className={styles.column} aria-label={label}>
+      {values.map((v) => (
+        <li key={v}>
+          <button
+            type="button"
+            className={`${styles.option} ${selected === v ? styles.selected : ''}`}
+            aria-pressed={selected === v}
+            onClick={() => onPick(v)}
+          >
+            {pad(v)}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
 export const TimePicker: React.FC<TimePickerProps> = ({
   value,
   onChange,
@@ -49,9 +93,6 @@ export const TimePicker: React.FC<TimePickerProps> = ({
 
   const commit = (h: number, m: number) => onChange(`${pad(h)}:${pad(m)}`);
 
-  const handleHour = (h: number) => commit(h, selM ?? 0);
-  const handleMinute = (m: number) => commit(selH ?? 0, m);
-
   const triggerClass = [styles.trigger, hasError && styles.error, !value && styles.placeholder]
     .filter(Boolean)
     .join(' ');
@@ -73,34 +114,18 @@ export const TimePicker: React.FC<TimePickerProps> = ({
       <Popover.Portal>
         <Popover.Content className={styles.content} sideOffset={6} align="start">
           <div className={styles.columns}>
-            <ul className={styles.column} aria-label={labels?.hours}>
-              {hours.map((h) => (
-                <li key={h}>
-                  <button
-                    type="button"
-                    className={`${styles.option} ${selH === h ? styles.selected : ''}`}
-                    aria-pressed={selH === h}
-                    onClick={() => handleHour(h)}
-                  >
-                    {pad(h)}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <ul className={styles.column} aria-label={labels?.minutes}>
-              {minutes.map((m) => (
-                <li key={m}>
-                  <button
-                    type="button"
-                    className={`${styles.option} ${selM === m ? styles.selected : ''}`}
-                    aria-pressed={selM === m}
-                    onClick={() => handleMinute(m)}
-                  >
-                    {pad(m)}
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <Column
+              label={labels?.hours}
+              values={hours}
+              selected={selH}
+              onPick={(h) => commit(h, selM ?? 0)}
+            />
+            <Column
+              label={labels?.minutes}
+              values={minutes}
+              selected={selM}
+              onPick={(m) => commit(selH ?? 0, m)}
+            />
           </div>
         </Popover.Content>
       </Popover.Portal>
