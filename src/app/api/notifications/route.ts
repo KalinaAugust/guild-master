@@ -61,21 +61,30 @@ export async function GET() {
   }
 
   const buildFeedMap = async (table: 'call_to_actions' | 'announcements', ids: string[]) => {
-    if (ids.length === 0) return {} as Record<string, FeedRow>;
-    const { data } = await supabase
+    if (ids.length === 0) return { map: {} as Record<string, FeedRow>, error: null };
+    const { data, error: queryError } = await supabase
       .from(table)
       .select('id, title, guild_id, guilds(name)')
       .in('id', ids);
-    return Object.fromEntries(
-      (data ?? []).map((r) => {
-        const guild = r.guilds as { name: string } | null;
-        return [r.id, { title: r.title, guild_id: r.guild_id ?? null, guild_name: guild?.name ?? null }];
-      })
-    ) as Record<string, FeedRow>;
+    if (queryError) return { map: {} as Record<string, FeedRow>, error: queryError };
+    return {
+      map: Object.fromEntries(
+        (data ?? []).map((r) => {
+          const guild = r.guilds as { name: string } | null;
+          return [r.id, { title: r.title, guild_id: r.guild_id ?? null, guild_name: guild?.name ?? null }];
+        })
+      ) as Record<string, FeedRow>,
+      error: null,
+    };
   };
 
-  ctaMap = await buildFeedMap('call_to_actions', ctaIds);
-  announcementMap = await buildFeedMap('announcements', announcementIds);
+  const ctaResult = await buildFeedMap('call_to_actions', ctaIds);
+  if (ctaResult.error) return NextResponse.json({ error: ctaResult.error.message }, { status: 500 });
+  ctaMap = ctaResult.map;
+
+  const announcementResult = await buildFeedMap('announcements', announcementIds);
+  if (announcementResult.error) return NextResponse.json({ error: announcementResult.error.message }, { status: 500 });
+  announcementMap = announcementResult.map;
 
   const result = notifications.map((n) => {
     const id = n.entity_id ?? '';
