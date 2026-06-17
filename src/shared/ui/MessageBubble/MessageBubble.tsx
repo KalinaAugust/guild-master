@@ -32,6 +32,8 @@ export interface MessageBubbleLabels {
   edit: string;
   delete: string;
   confirmDelete: string;
+  /** Accessible label for the image lightbox close button. */
+  closeImage?: string;
 }
 
 interface MessageBubbleProps {
@@ -167,6 +169,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           isOpen={lightboxOpen}
           onClose={() => setLightboxOpen(false)}
           src={attachmentUrl}
+          closeLabel={labels.closeImage}
         />
       )}
     </div>

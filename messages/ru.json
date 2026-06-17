@@ -265,7 +265,8 @@
     "removeAttachment": "Убрать изображение",
     "attachmentError": "Не удалось загрузить изображение",
     "updateError": "Не удалось изменить сообщение",
-    "deleteError": "Не удалось удалить сообщение"
+    "deleteError": "Не удалось удалить сообщение",
+    "closeLightbox": "Закрыть изображение"
   },
   "GuildPoll": {
     "newPoll": "Новый опрос",

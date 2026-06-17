@@ -23,7 +23,6 @@
   position: relative;
   width: 90vw;
   height: 85vh;
-  pointer-events: none;
 }
 
 .image {
