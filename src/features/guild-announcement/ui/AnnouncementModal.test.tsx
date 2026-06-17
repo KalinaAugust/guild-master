@@ -11,7 +11,7 @@ vi.mock('sonner', () => ({
 }));
 
 vi.mock('@/shared/ui/RichTextEditor', () => ({
-  RichTextEditor: ({ value, onChange, placeholder }: any) => (
+  RichTextEditor: ({ value, onChange, placeholder }: { value: string; onChange: (val: string) => void; placeholder?: string }) => (
     <textarea
       placeholder={placeholder}
       value={value}
