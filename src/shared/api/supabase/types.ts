@@ -986,6 +986,10 @@ export type Database = {
         Args: { p_cta_id: string }
         Returns: undefined
       }
+      launch_call_to_action: {
+        Args: { p_cta_id: string }
+        Returns: string
+      }
       generate_public_id: { Args: { id_length?: number }; Returns: string }
       get_profile_stats: {
         Args: { profile_id: string }
