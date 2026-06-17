@@ -201,6 +201,12 @@
 .type_boardgame { --cta-type-color: #818cf8; }
 .type_boardgame .typeIcon { color: var(--cta-type-color); background: rgba(129, 140, 248, 0.12); box-shadow: 0 0 14px rgba(129, 140, 248, 0.25); }
 
+.footActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .wantButton {
   display: inline-flex;
   align-items: center;
