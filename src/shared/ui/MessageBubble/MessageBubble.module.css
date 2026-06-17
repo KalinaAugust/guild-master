@@ -44,8 +44,12 @@
   display: block;
   margin-top: 6px;
   max-width: 280px;
+  padding: 0;
+  border: none;
+  background: none;
   border-radius: 12px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .attachmentImg {

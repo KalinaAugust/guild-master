@@ -9,6 +9,7 @@ import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { ImageLightbox } from '@/shared/ui/ImageLightbox';
 import styles from './MessageBubble.module.css';
 
 const renderBodyWithLargeEmojis = (text: string) => {
@@ -72,6 +73,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
   isDeleting = false,
 }) => {
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const isEdited = dayjs(updatedAt).diff(dayjs(createdAt), 'second') > 2;
@@ -107,10 +109,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         </div>
 
         {attachmentUrl && (
-          <a
-            href={attachmentUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
             className={styles.attachment}
           >
             <Image
@@ -121,7 +122,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
               unoptimized
               className={styles.attachmentImg}
             />
-          </a>
+          </button>
         )}
         {body && <p className={styles.text}>{renderBodyWithLargeEmojis(body)}</p>}
       </div>
@@ -160,6 +161,14 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         description={labels.confirmDelete}
         confirmLabel={labels.delete}
       />
+
+      {attachmentUrl && (
+        <ImageLightbox
+          isOpen={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          src={attachmentUrl}
+        />
+      )}
     </div>
   );
 };
