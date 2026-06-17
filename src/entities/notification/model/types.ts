@@ -1,4 +1,4 @@
-import { Calendar, UserRoundPlus, UserPlus, CheckCircle, XCircle, MessageSquare } from 'lucide-react';
+import { Calendar, UserRoundPlus, UserPlus, CheckCircle, XCircle, MessageSquare, Swords, Megaphone } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface Notification {
@@ -11,6 +11,8 @@ export interface Notification {
   event_title: string | null;
   event_date: string | null;
   guild_name: string | null;
+  guild_id: string | null;
+  title: string | null;
 }
 
 export type NotificationTranslationFn = (key: string, values?: Record<string, string>) => string;
@@ -23,6 +25,10 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   // key is stored here (the `<guild>` tag wraps `{guildName}`).
   messageKey?: string;
   linksToGuild?: boolean;
+  // Guild-scoped feed notifications (CTA / announcement): link to the feed
+  // page and switch the active guild on click.
+  feedHref?: string;
+  switchesGuild?: boolean;
 }> = {
   new_event: {
     Icon: Calendar,
@@ -62,5 +68,17 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   event_comment: {
     Icon: MessageSquare,
     getLabel: (t, n) => t('eventComment', { eventTitle: n.event_title ?? '' }),
+  },
+  new_call_to_action: {
+    Icon: Swords,
+    feedHref: '/call-to-action',
+    switchesGuild: true,
+    getLabel: (t, n) => t('newCallToAction', { guildName: n.guild_name ?? '' }),
+  },
+  new_announcement: {
+    Icon: Megaphone,
+    feedHref: '/announcements',
+    switchesGuild: true,
+    getLabel: (t, n) => t('newAnnouncement', { guildName: n.guild_name ?? '' }),
   },
 };
