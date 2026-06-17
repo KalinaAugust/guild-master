@@ -195,6 +195,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
                   variant="primary"
                   onClick={() => setConfirmLaunch(true)}
                   isLoading={isLaunching}
+                  className={styles.launchButton}
                 >
                   <CalendarCheck size={16} />
                   {t('launchNowButton')}

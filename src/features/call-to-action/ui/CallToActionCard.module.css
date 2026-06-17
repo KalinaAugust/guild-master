@@ -207,7 +207,8 @@
   flex-wrap: wrap;
 }
 
-.wantButton {
+.wantButton,
+.launchButton {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
