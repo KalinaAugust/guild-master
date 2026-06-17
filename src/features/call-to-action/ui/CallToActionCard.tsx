@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import {
   Clock, Users, Trash2, CheckCircle2, CalendarCheck, Timer, ArrowRight,
-  Sword, Gamepad2, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle,
+  Gamepad2, Calendar, PartyPopper, Dumbbell, Dices, Puzzle,
 } from 'lucide-react';
 import type { ActivityType } from '@/shared/types';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
@@ -21,11 +21,9 @@ import { ParticipantSlots } from './ParticipantSlots';
 import styles from './CallToActionCard.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
-  raid: <Sword size={18} />,
   game: <Gamepad2 size={18} />,
   meeting: <Users size={18} />,
   other: <Calendar size={18} />,
-  dungeon: <Skull size={18} />,
   party: <PartyPopper size={18} />,
   sport: <Dumbbell size={18} />,
   dnd: <Dices size={18} />,

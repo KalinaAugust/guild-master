@@ -10,7 +10,7 @@ const RAW_EVENT = {
   id: 'e1',
   title: 'Raid',
   description: null,
-  type: 'raid',
+  type: 'game',
   event_date: '2026-05-22T10:00:00',
   guild_id: 'g1',
   created_by: 'u1',

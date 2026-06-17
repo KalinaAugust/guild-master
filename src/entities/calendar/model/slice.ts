@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { UIState, ActivityEvent, ActivityType } from '@/shared/types';
 import dayjs from 'dayjs';
 
-const ALL_TYPES: ActivityType[] = ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame'];
+const ALL_TYPES: ActivityType[] = ['game', 'meeting', 'other', 'party', 'sport', 'dnd', 'boardgame'];
 
 const initialState: UIState = {
   isEventModalOpen: false,

@@ -31,7 +31,7 @@ const base: CallToAction = {
   createdBy: 'u1',
   title: 'Mythic Raid',
   description: 'Need a full party',
-  type: 'raid',
+  type: 'game',
   eventDate: '2026-07-01T19:00:00.000Z',
   targetCount: 5,
   interestedCount: 2,

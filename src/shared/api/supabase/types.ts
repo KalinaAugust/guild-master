@@ -1006,6 +1006,10 @@ export type Database = {
         Args: { p_option_ids: string[]; p_poll_id: string }
         Returns: undefined
       }
+      transfer_guild_ownership: {
+        Args: { p_guild_id: string; p_new_owner_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

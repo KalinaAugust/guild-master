@@ -4,7 +4,7 @@ import { useNextEvent } from './useNextEvent';
 import type { ActivityEvent } from '@/shared/types';
 
 const make = (date: string, time: string, id = '1'): ActivityEvent => ({
-  id, title: 'Test', date, time, type: 'raid',
+  id, title: 'Test', date, time, type: 'game',
 });
 
 describe('useNextEvent', () => {

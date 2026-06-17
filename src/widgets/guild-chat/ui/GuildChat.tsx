@@ -119,6 +119,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
     edit: t('edit'),
     delete: t('delete'),
     confirmDelete: t('confirmDelete'),
+    closeImage: t('closeLightbox'),
   };
 
   // Single composer entry point: save the message being edited, otherwise send a

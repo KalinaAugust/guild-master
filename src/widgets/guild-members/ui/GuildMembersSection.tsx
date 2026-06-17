@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-import { UserMinus, Shield, ShieldCheck, ShieldOff, MoreVertical } from 'lucide-react';
+import { UserMinus, Shield, ShieldCheck, ShieldOff, MoreVertical, Crown } from 'lucide-react';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
@@ -12,6 +12,7 @@ import {
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
   useUpdateGuildMemberRoleMutation,
+  useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
 import { resolveDisplayName } from '@/entities/user';
@@ -35,7 +36,8 @@ interface GuildMembersSectionProps {
 type PendingAction =
   | { type: 'remove'; userId: string; name: string }
   | { type: 'promote'; userId: string; name: string }
-  | { type: 'revoke'; userId: string; name: string };
+  | { type: 'revoke'; userId: string; name: string }
+  | { type: 'transfer'; userId: string; name: string };
 
 const ROLE_ORDER: Record<string, number> = { OWNER: 0, ADMIN: 1, MEMBER: 2 };
 
@@ -46,6 +48,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember, { isLoading: isRemoving }] = useRemoveGuildMemberMutation();
   const [updateRole, { isLoading: isUpdatingRole }] = useUpdateGuildMemberRoleMutation();
+  const [transferOwnership, { isLoading: isTransferring }] = useTransferGuildOwnershipMutation();
   const [pending, setPending] = useState<PendingAction | null>(null);
   const { canManageMembers, isOwner } = useGuildPermissions(guildId, userId);
   const effectiveCanManage = !readOnly && (!userId || canManageMembers);
@@ -74,6 +77,8 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
     try {
       if (pending.type === 'remove') {
         await removeMember({ guildId, userId: pending.userId }).unwrap();
+      } else if (pending.type === 'transfer') {
+        await transferOwnership({ guildId, newOwnerId: pending.userId }).unwrap();
       } else {
         await updateRole({
           guildId,
@@ -83,7 +88,9 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
       }
       setPending(null);
     } catch {
-      toast.error(pending.type === 'remove' ? t('removeError') : t('roleError'));
+      if (pending.type === 'remove') toast.error(t('removeError'));
+      else if (pending.type === 'transfer') toast.error(t('transferError'));
+      else toast.error(t('roleError'));
     }
   };
 
@@ -94,6 +101,9 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
     }
     if (pending.type === 'promote') {
       return { title: t('makeAdmin'), description: t('promoteConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
+    }
+    if (pending.type === 'transfer') {
+      return { title: t('transferOwnership'), description: t('transferConfirm', { name: pending.name }), label: t('transferOwnership'), variant: 'danger' as const };
     }
     return { title: t('revokeAdmin'), description: t('revokeConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
   };
@@ -140,7 +150,8 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
             const canRemove = effectiveCanManage && !isSelf && member.role !== 'OWNER' &&
               (member.role !== 'ADMIN' || isOwner);
             const canChangeRole = effectiveCanManage && !isSelf && isOwner && member.role !== 'OWNER';
-            const showMenu = canRemove || canChangeRole;
+            const canTransfer = canChangeRole;
+            const showMenu = canRemove || canChangeRole || canTransfer;
             return (
             <li key={member.userId} className={styles.item}>
               <ProfileLink
@@ -194,6 +205,15 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                           <span>{t('revokeAdmin')}</span>
                         </DropdownMenu.Item>
                       )}
+                      {canTransfer && (
+                        <DropdownMenu.Item
+                          className={styles.menuItem}
+                          onSelect={() => setPending({ type: 'transfer', userId: member.userId, name: memberName ?? member.userId })}
+                        >
+                          <Crown size={16} />
+                          <span>{t('transferOwnership')}</span>
+                        </DropdownMenu.Item>
+                      )}
                       {canRemove && (
                         <DropdownMenu.Item
                           className={`${styles.menuItem} ${styles.menuItemDanger}`}
@@ -221,7 +241,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
         description={copy.description}
         confirmLabel={copy.label}
         variant={copy.variant}
-        isLoading={isRemoving || isUpdatingRole}
+        isLoading={isRemoving || isUpdatingRole || isTransferring}
       />
     </div>
   );

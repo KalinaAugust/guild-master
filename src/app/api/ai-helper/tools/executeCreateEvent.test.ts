@@ -8,7 +8,7 @@ const args = {
   title: 'Dragon Raid',
   date: '2026-06-01',
   time: '20:00',
-  type: 'raid' as const,
+  type: 'game' as const,
   description: 'Bring potions',
 };
 
@@ -28,7 +28,7 @@ describe('executeCreateEvent', () => {
       title: 'Dragon Raid',
       date: '2026-06-01',
       time: '20:00',
-      type: 'raid',
+      type: 'game',
       description: 'Bring potions',
       guild_id: 'g1',
     });
@@ -60,7 +60,7 @@ describe('executeCreateEvent', () => {
       title: 'Dragon Raid',
       date: '2026-06-01',
       time: '20:00',
-      type: 'raid',
+      type: 'game',
       description: 'Bring potions',
       guild_id: 'g1',
       weekDays: [1, 3, 5],

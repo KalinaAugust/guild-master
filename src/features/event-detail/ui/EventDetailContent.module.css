@@ -52,11 +52,9 @@
   font-weight: 600;
 }
 
-.typeHero_raid    { border-left-color: #ff4d4d; background: rgba(255, 77,  77,  0.08); color: #ff4d4d; }
 .typeHero_game    { border-left-color: #4da3ff; background: rgba(77,  163, 255, 0.08); color: #4da3ff; }
 .typeHero_meeting { border-left-color: #4dff88; background: rgba(77,  255, 136, 0.08); color: #4dff88; }
 .typeHero_other   { border-left-color: #ffb347; background: rgba(255, 179, 71,  0.08); color: #ffb347; }
-.typeHero_dungeon { border-left-color: #a855f7; background: rgba(168, 85,  247, 0.08); color: #a855f7; }
 .typeHero_party   { border-left-color: #f472b6; background: rgba(244, 114, 182, 0.08); color: #f472b6; }
 .typeHero_sport   { border-left-color: #34d399; background: rgba(52,  211, 153, 0.08); color: #34d399; }
 .typeHero_dnd     { border-left-color: #f59e0b; background: rgba(245, 158, 11,  0.08); color: #f59e0b; }

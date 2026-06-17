@@ -109,8 +109,6 @@
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.chip_raid    { background: rgba(176, 96, 96, 0.15);   color: var(--event-raid-border); }
-.chip_dungeon { background: rgba(168, 85, 247, 0.15);  color: var(--event-dungeon-border); }
 .chip_party   { background: rgba(244, 114, 182, 0.15); color: var(--event-party-border); }
 .chip_meeting { background: rgba(90, 144, 184, 0.15);  color: var(--event-meeting-border); }
 .chip_game    { background: rgba(74, 144, 104, 0.15);  color: var(--event-game-border); }

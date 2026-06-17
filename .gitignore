@@ -49,3 +49,6 @@ next-env.d.ts
 .antigravitycli/
 .claude/
 .mcp.json
+
+# graphify knowledge-graph output
+graphify-out/

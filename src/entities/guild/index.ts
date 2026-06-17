@@ -13,6 +13,7 @@ export {
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
   useUpdateGuildMemberRoleMutation,
+  useTransferGuildOwnershipMutation,
   useLeaveGuildMutation,
   useGetGuildByIdQuery,
   useSubmitJoinRequestMutation,

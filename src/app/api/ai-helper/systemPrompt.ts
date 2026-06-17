@@ -18,14 +18,14 @@ export function getSystemPrompt(): string {
   - Always confirm the event details with the user before calling the tool if any required field is unclear
   - Date format: YYYY-MM-DD (e.g. "2026-06-15")
   - Time format: HH:mm 24-hour (e.g. "19:30"), default to "12:00" if not specified
-  - Event types: raid, game, meeting, dungeon, party, sport, dnd, boardgame, other — pick the closest match
+  - Event types: game, meeting, party, sport, dnd, boardgame, other — pick the closest match
   - Recurrence: If the user requests a recurring event (e.g. "every Tuesday", "weekly on Mondays and Thursdays", "daily"), populate the weekDays parameter. weekDays is an array of weekday integers: 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday. The date parameter should be the starting date of the recurrence.
   - After successfully creating an event include an HTML link: You can view the event here (translate this phrase to the user's language): <a href="/events/{id}" target="_blank" rel="noopener noreferrer">{title}</a>
 
   When finding events:
   - Use the findEvents tool whenever the user asks to find, list, show, or check events
   - Use dateFrom/dateTo for date range queries (e.g. "this week", "next month", "upcoming")
-  - Use type to filter by event kind (raid, game, meeting, dungeon, party, sport, dnd, boardgame, other)
+  - Use type to filter by event kind (game, meeting, party, sport, dnd, boardgame, other)
   - Use keyword to search by title substring
   - Combine filters as needed; all parameters are optional
   - If no events match, tell the user clearly

@@ -64,18 +64,18 @@ describe('EventFilterDropdown', () => {
   it('renders active icons when excludedEventTypes is empty (all enabled)', () => {
     renderDropdown({ excludedEventTypes: [] });
     expect(screen.queryByText('Event.filter.all')).not.toBeInTheDocument();
-    expect(screen.getByText('+6')).toBeInTheDocument();
+    expect(screen.getByText('+4')).toBeInTheDocument();
   });
 
   it('renders active icons when some types are disabled', () => {
-    renderDropdown({ excludedEventTypes: ['raid', 'game'] });
-    // Out of 9 types, 2 are excluded, leaving 7 active. 3 displayed, +4 in counter.
-    expect(screen.getByText('+4')).toBeInTheDocument();
+    renderDropdown({ excludedEventTypes: ['game', 'meeting'] });
+    // Out of 7 types, 2 are excluded, leaving 5 active. 3 displayed, +2 in counter.
+    expect(screen.getByText('+2')).toBeInTheDocument();
   });
 
   it('renders "None" when all event types are excluded', () => {
     renderDropdown({
-      excludedEventTypes: ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame'],
+      excludedEventTypes: ['game', 'meeting', 'other', 'party', 'sport', 'dnd', 'boardgame'],
     });
     expect(screen.getByText('Event.filter.none')).toBeInTheDocument();
   });
@@ -88,7 +88,7 @@ describe('EventFilterDropdown', () => {
 
     expect(screen.getByRole('button', { name: 'Event.filter.enableAll' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Event.filter.disableAll' })).toBeInTheDocument();
-    expect(screen.getByText('Common.eventTypes.raid')).toBeInTheDocument();
+    expect(screen.getByText('Common.eventTypes.game')).toBeInTheDocument();
   });
 
   it('disables all event types when "Disable all" is clicked', () => {
@@ -101,11 +101,11 @@ describe('EventFilterDropdown', () => {
     fireEvent.click(disableAllBtn);
 
     const state = store.getState() as { ui: { excludedEventTypes: ActivityType[] } };
-    expect(state.ui.excludedEventTypes).toHaveLength(9);
+    expect(state.ui.excludedEventTypes).toHaveLength(7);
   });
 
   it('enables all event types when "Enable all" is clicked', () => {
-    const { store } = renderDropdown({ excludedEventTypes: ['raid', 'game'] });
+    const { store } = renderDropdown({ excludedEventTypes: ['game', 'meeting'] });
     
     const trigger = screen.getByRole('button', { name: 'Event.filter.ariaLabel' });
     fireEvent.click(trigger);

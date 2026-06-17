@@ -30,7 +30,7 @@ describe('createEvent', () => {
       title: 'Raid',
       date: '2026-06-01',
       time: '20:00',
-      type: 'raid',
+      type: 'game',
       description: 'Bring potions',
       guild_id: 'g1',
     });
@@ -52,7 +52,7 @@ describe('createEvent', () => {
     vi.mocked(createClient).mockResolvedValue(mock as never);
 
     await expect(
-      createEvent({ title: 'Raid', date: '2026-06-01', time: '20:00', type: 'raid', description: '', guild_id: 'g1' })
+      createEvent({ title: 'Raid', date: '2026-06-01', time: '20:00', type: 'game', description: '', guild_id: 'g1' })
     ).rejects.toThrow('db fail');
   });
 });

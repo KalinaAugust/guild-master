@@ -13,7 +13,7 @@ const valid = {
   title: 'Raid Night',
   date: '2026-06-01',
   time: '20:00',
-  type: 'raid' as const,
+  type: 'game' as const,
   description: '',
 };
 
@@ -57,7 +57,7 @@ describe('createEventFormSchema', () => {
   });
 
   it('accepts all valid event types', () => {
-    const types = ['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport'] as const;
+    const types = ['game', 'meeting', 'other', 'party', 'sport'] as const;
     for (const type of types) {
       expect(schema.safeParse({ ...valid, type }).success).toBe(true);
     }

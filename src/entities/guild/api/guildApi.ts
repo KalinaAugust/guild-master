@@ -67,6 +67,21 @@ export const guildApi = baseApi.injectEndpoints({
         { type: 'GuildMember' as const, id: `LIST-${guildId}` },
       ],
     }),
+    transferGuildOwnership: builder.mutation<
+      { success: boolean },
+      { guildId: string; newOwnerId: string }
+    >({
+      query: ({ guildId, newOwnerId }) => ({
+        url: `guilds/${guildId}/transfer-ownership`,
+        method: 'POST',
+        body: { newOwnerId },
+      }),
+      invalidatesTags: (_, __, { guildId }) => [
+        { type: 'GuildMember' as const, id: `LIST-${guildId}` },
+        { type: 'Guild' as const, id: guildId },
+        { type: 'Guild' as const, id: 'LIST' },
+      ],
+    }),
     leaveGuild: builder.mutation<{ success: boolean }, string>({
       query: (guildId) => ({ url: `guilds/${guildId}/leave`, method: 'POST' }),
       invalidatesTags: (_, __, guildId) => [
@@ -116,6 +131,7 @@ export const {
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
   useUpdateGuildMemberRoleMutation,
+  useTransferGuildOwnershipMutation,
   useLeaveGuildMutation,
   useGetGuildByIdQuery,
   useSubmitJoinRequestMutation,

@@ -21,9 +21,7 @@
     },
     "eventTypes": {
       "game": "Игра",
-      "raid": "Рейд",
       "meeting": "Встреча",
-      "dungeon": "Подземелье",
       "party": "Вечеринка",
       "sport": "Спорт",
       "dnd": "D&D",
@@ -32,9 +30,7 @@
     },
     "eventTypesPlural": {
       "game": "Игры",
-      "raid": "Рейды",
       "meeting": "Встречи",
-      "dungeon": "Подземелья",
       "party": "Вечеринки",
       "sport": "Спорт",
       "dnd": "D&D",
@@ -235,7 +231,10 @@
     "promoteConfirm": "Назначить {name} админом?",
     "revokeConfirm": "Снять права админа с {name}?",
     "confirm": "Подтвердить",
-    "roleError": "Не удалось изменить роль"
+    "roleError": "Не удалось изменить роль",
+    "transferOwnership": "Передать гильдию",
+    "transferConfirm": "Передать владение гильдией участнику {name}? Вы станете админом, это действие необратимо.",
+    "transferError": "Не удалось передать гильдию"
   },
   "UpcomingEvents": {
     "nextEvent": "Следующее событие",
@@ -266,7 +265,8 @@
     "removeAttachment": "Убрать изображение",
     "attachmentError": "Не удалось загрузить изображение",
     "updateError": "Не удалось изменить сообщение",
-    "deleteError": "Не удалось удалить сообщение"
+    "deleteError": "Не удалось удалить сообщение",
+    "closeLightbox": "Закрыть изображение"
   },
   "GuildPoll": {
     "newPoll": "Новый опрос",

@@ -33,12 +33,6 @@
 }
 
 /* Type specific styles */
-.type_raid .iconWrapper {
-  color: #ff4d4d;
-  background: rgba(255, 77, 77, 0.1);
-  box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
-}
-
 .type_game .iconWrapper {
   color: #4da3ff;
   background: rgba(77, 163, 255, 0.1);
@@ -55,12 +49,6 @@
   color: #ffb347;
   background: rgba(255, 179, 71, 0.1);
   box-shadow: 0 0 15px rgba(255, 179, 71, 0.2);
-}
-
-.type_dungeon .iconWrapper {
-  color: #a855f7;
-  background: rgba(168, 85, 247, 0.1);
-  box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
 }
 
 .type_party .iconWrapper {

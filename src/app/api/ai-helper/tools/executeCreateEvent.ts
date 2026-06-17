@@ -5,7 +5,7 @@ export interface CreateEventArgs {
   title: string;
   date: string;
   time: string;
-  type: 'raid' | 'game' | 'meeting' | 'other' | 'dungeon' | 'party' | 'sport' | 'dnd' | 'boardgame';
+  type: 'game' | 'meeting' | 'other' | 'party' | 'sport' | 'dnd' | 'boardgame';
   description: string;
   weekDays?: number[];
 }

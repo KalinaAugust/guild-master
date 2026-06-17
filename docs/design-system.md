@@ -113,10 +113,8 @@ Guild Master color-codes calendar events by their type. Each event type has a ba
 
 | Event Type | Background Variable | Value | Border Variable | Value |
 | :--- | :--- | :--- | :--- | :--- |
-| **Raid** | `--event-raid` | `#5c3030` | `--event-raid-border` | `#b06060` |
 | **Meeting** | `--event-meeting` | `#1e4d80` | `--event-meeting-border` | `#5a90b8` |
 | **Game** | `--event-game` | `#254d38` | `--event-game-border` | `#4a9068` |
-| **Dungeon** | `--event-dungeon` | `#2d1250` | `--event-dungeon-border` | `#a855f7` |
 | **Party** | `--event-party` | `#4d1a3a` | `--event-party-border` | `#f472b6` |
 | **Sport** | `--event-sport` | `#0f3d2e` | `--event-sport-border` | `#34d399` |
 | **DnD** | `--event-dnd` | `#3d2c0a` | `--event-dnd-border` | `#f59e0b` |

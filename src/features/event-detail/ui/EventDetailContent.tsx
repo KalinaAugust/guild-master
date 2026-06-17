@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { Sword, Gamepad2, Users, Calendar, Skull, PartyPopper, Dumbbell, Dices, Puzzle, CheckCircle } from 'lucide-react';
+import { Gamepad2, Users, Calendar, PartyPopper, Dumbbell, Dices, Puzzle, CheckCircle } from 'lucide-react';
 import { ActivityType } from '@/shared/types';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import { openEventModal } from '@/entities/calendar';
@@ -41,11 +41,9 @@ import { EventTabs } from './EventTabs';
 import styles from './EventDetailContent.module.css';
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
-  raid:    <Sword size={32} />,
   game:    <Gamepad2 size={32} />,
   meeting: <Users size={32} />,
   other:   <Calendar size={32} />,
-  dungeon: <Skull size={32} />,
   party:   <PartyPopper size={32} />,
   sport:   <Dumbbell size={32} />,
   dnd:     <Dices size={32} />,

@@ -21,9 +21,7 @@
     },
     "eventTypes": {
       "game": "Game",
-      "raid": "Raid",
       "meeting": "Meeting",
-      "dungeon": "Dungeon",
       "party": "Party",
       "sport": "Sport",
       "dnd": "D&D",
@@ -32,9 +30,7 @@
     },
     "eventTypesPlural": {
       "game": "Games",
-      "raid": "Raids",
       "meeting": "Meetings",
-      "dungeon": "Dungeons",
       "party": "Parties",
       "sport": "Sports",
       "dnd": "D&D",
@@ -235,7 +231,10 @@
     "promoteConfirm": "Make {name} an admin?",
     "revokeConfirm": "Revoke admin rights from {name}?",
     "confirm": "Confirm",
-    "roleError": "Failed to update role"
+    "roleError": "Failed to update role",
+    "transferOwnership": "Transfer guild",
+    "transferConfirm": "Transfer ownership of the guild to {name}? You will become an admin, and this action cannot be undone.",
+    "transferError": "Failed to transfer guild"
   },
   "UpcomingEvents": {
     "nextEvent": "Next Event",
@@ -266,7 +265,8 @@
     "removeAttachment": "Remove image",
     "attachmentError": "Failed to upload image",
     "updateError": "Failed to update message",
-    "deleteError": "Failed to delete message"
+    "deleteError": "Failed to delete message",
+    "closeLightbox": "Close image"
   },
   "GuildPoll": {
     "newPoll": "New poll",

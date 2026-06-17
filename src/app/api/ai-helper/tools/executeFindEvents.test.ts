@@ -5,7 +5,7 @@ import { fetchEvents } from '@/entities/event/api/getEvents';
 vi.mock('@/entities/event/api/getEvents');
 
 const EVENTS = [
-  { id: '1', title: 'Dragon Raid', type: 'raid', event_date: '2026-06-01T18:00:00', description: null },
+  { id: '1', title: 'Dragon Raid', type: 'party', event_date: '2026-06-01T18:00:00', description: null },
   { id: '2', title: 'Team Meeting', type: 'meeting', event_date: '2026-06-15T10:00:00', description: 'Weekly sync' },
   { id: '3', title: 'Board Game Night', type: 'game', event_date: '2026-05-20T19:00:00', description: null },
 ];
@@ -33,7 +33,7 @@ describe('executeFindEvents', () => {
 
   it('filters by type', async () => {
     vi.mocked(fetchEvents).mockResolvedValue(EVENTS as never);
-    const result = await executeFindEvents({ type: 'raid' }, 'g1');
+    const result = await executeFindEvents({ type: 'party' }, 'g1');
     expect('events' in result && result.events).toHaveLength(1);
     expect('events' in result && result.events[0].id).toBe('1');
   });
@@ -47,7 +47,7 @@ describe('executeFindEvents', () => {
 
   it('combines multiple filters', async () => {
     vi.mocked(fetchEvents).mockResolvedValue(EVENTS as never);
-    const result = await executeFindEvents({ dateFrom: '2026-06-01', type: 'raid' }, 'g1');
+    const result = await executeFindEvents({ dateFrom: '2026-06-01', type: 'party' }, 'g1');
     expect('events' in result && result.events).toHaveLength(1);
     expect('events' in result && result.events[0].id).toBe('1');
   });
