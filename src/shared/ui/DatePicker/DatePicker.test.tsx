@@ -17,7 +17,7 @@ describe('DatePicker', () => {
     const onChange = vi.fn();
     render(<DatePicker value="2026-06-15" onChange={onChange} locale="en" labels={{ open: 'open' }} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'open' }));
+    fireEvent.click(screen.getByRole('button', { name: /^open/ }));
     const dialog = screen.getByRole('dialog');
     // Pick the 20th of the shown month (June 2026).
     fireEvent.click(within(dialog).getByRole('button', { name: /20.*June 2026|June.*20.*2026|^20$/ }));

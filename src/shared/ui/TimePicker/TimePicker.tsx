@@ -36,6 +36,7 @@ interface ColumnProps {
 
 const Column: React.FC<ColumnProps> = ({ label, values, selected, onPick }) => {
   const ref = React.useRef<HTMLUListElement>(null);
+  const selectedRef = React.useRef<HTMLButtonElement>(null);
 
   // Translate the wheel into manual scrolling. A Radix Popover portals outside the
   // Dialog, whose `react-remove-scroll` lock swallows wheel events for anything not
@@ -53,11 +54,17 @@ const Column: React.FC<ColumnProps> = ({ label, values, selected, onPick }) => {
     return () => el.removeEventListener('wheel', onWheel);
   }, []);
 
+  // Bring the selected value into view when the column mounts (popover opens).
+  React.useEffect(() => {
+    selectedRef.current?.scrollIntoView({ block: 'nearest' });
+  }, []);
+
   return (
     <ul ref={ref} className={styles.column} aria-label={label}>
       {values.map((v) => (
         <li key={v}>
           <button
+            ref={selected === v ? selectedRef : undefined}
             type="button"
             className={`${styles.option} ${selected === v ? styles.selected : ''}`}
             aria-pressed={selected === v}
@@ -104,7 +111,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({
         type="button"
         className={triggerClass}
         disabled={disabled}
-        aria-label={labels?.open}
+        aria-label={[labels?.open, value].filter(Boolean).join(', ') || undefined}
         data-invalid={hasError || undefined}
       >
         <span className={styles.value}>{value || placeholder}</span>

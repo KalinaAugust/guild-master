@@ -79,7 +79,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         type="button"
         className={triggerClass}
         disabled={disabled}
-        aria-label={labels?.open}
+        aria-label={[labels?.open, display].filter(Boolean).join(', ') || undefined}
         data-invalid={hasError || undefined}
       >
         <span className={styles.value}>{display || placeholder}</span>

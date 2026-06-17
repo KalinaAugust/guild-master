@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Pencil, Check, X } from 'lucide-react';
 import { DatePicker } from '@/shared/ui/DatePicker';
 import { Button } from '@/shared/ui/Button';
@@ -15,6 +16,7 @@ interface EditableBirthDateProps {
 }
 
 export const EditableBirthDate = ({ initialBirthDate, userId, locale }: EditableBirthDateProps) => {
+  const pickerT = useTranslations('DateTimePicker');
   const { isEditing, value, setValue, saved, isSaving, isUnchanged, startEditing, cancel, save } =
     useEditableField<string>({
       initial: initialBirthDate ?? '',
@@ -52,9 +54,9 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
         captionLayout="dropdown"
         fromYear={1920}
         toYear={new Date().getFullYear()}
-        placeholder="Add your birth date"
+        placeholder={pickerT('selectDate')}
         disabled={isSaving}
-        labels={{ open: 'Edit birth date' }}
+        labels={{ open: pickerT('openCalendar') }}
       />
       <div className={styles.actions}>
         <Button
