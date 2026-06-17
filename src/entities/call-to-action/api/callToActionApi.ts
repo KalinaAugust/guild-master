@@ -57,6 +57,22 @@ export const callToActionApi = baseApi.injectEndpoints({
       },
     }),
 
+    launchCallToAction: builder.mutation<CallToAction, { guildId: string; ctaId: string }>({
+      query: ({ guildId, ctaId }) => ({
+        url: `guilds/${guildId}/call-to-actions/${ctaId}/launch`,
+        method: 'POST',
+      }),
+      invalidatesTags: () => ['Event'],
+      async onQueryStarted({ guildId }, { dispatch, queryFulfilled }) {
+        try {
+          const { data: updated } = await queryFulfilled;
+          dispatch(replaceInList(guildId, updated));
+        } catch {
+          /* surfaced via toast in the board */
+        }
+      },
+    }),
+
     deleteCallToAction: builder.mutation<{ deleted: boolean }, { guildId: string; ctaId: string }>({
       query: ({ guildId, ctaId }) => ({
         url: `guilds/${guildId}/call-to-actions/${ctaId}`,
@@ -86,5 +102,6 @@ export const {
   useMarkCallToActionsReadMutation,
   useCreateCallToActionMutation,
   useToggleCallToActionInterestMutation,
+  useLaunchCallToActionMutation,
   useDeleteCallToActionMutation,
 } = callToActionApi;

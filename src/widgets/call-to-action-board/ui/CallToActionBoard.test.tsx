@@ -37,6 +37,7 @@ vi.mock('@/entities/call-to-action', () => ({
   useMarkCallToActionsReadMutation: () => [vi.fn(), { isLoading: false }],
   useToggleCallToActionInterestMutation: () => [vi.fn(), { isLoading: false }],
   useDeleteCallToActionMutation: () => [vi.fn(), { isLoading: false }],
+  useLaunchCallToActionMutation: () => [vi.fn(), { isLoading: false }],
 }));
 
 const guilds: Guild[] = [{ id: 'g1', name: 'Guild', ownerId: 'o1' }];

@@ -25,6 +25,11 @@ vi.mock('@/shared/ui/Tooltip', () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
+vi.mock('@/shared/ui/ConfirmModal', () => ({
+  ConfirmModal: ({ isOpen, onConfirm, title }: { isOpen: boolean; onConfirm: () => void; title: string }) =>
+    isOpen ? <button onClick={onConfirm}>{title}</button> : null,
+}));
+
 const base: CallToAction = {
   id: 'c1',
   guildId: 'g1',
@@ -95,5 +100,35 @@ describe('CallToActionCard', () => {
     const expiredCta = { ...base, eventDate: '2026-06-15T00:00:00.000Z' };
     render(<CallToActionCard cta={expiredCta} onToggleInterest={vi.fn()} />);
     expect(screen.queryByText('wantButton')).not.toBeInTheDocument();
+  });
+
+  it('shows the launch button for canManage and launches after confirm', () => {
+    const onLaunch = vi.fn();
+    render(
+      <CallToActionCard
+        cta={{ ...base, canManage: true }}
+        onToggleInterest={vi.fn()}
+        onLaunch={onLaunch}
+      />,
+    );
+    fireEvent.click(screen.getByText('launchNowButton'));
+    fireEvent.click(screen.getByText('launchConfirmTitle')); // mocked ConfirmModal confirm
+    expect(onLaunch).toHaveBeenCalledWith('c1');
+  });
+
+  it('does not show the launch button when canManage is false', () => {
+    render(<CallToActionCard cta={base} onToggleInterest={vi.fn()} onLaunch={vi.fn()} />);
+    expect(screen.queryByText('launchNowButton')).not.toBeInTheDocument();
+  });
+
+  it('hides the launch button when launched', () => {
+    render(
+      <CallToActionCard
+        cta={{ ...base, canManage: true, eventId: 'e9', launchedAt: '2026-06-17T00:00:00.000Z' }}
+        onToggleInterest={vi.fn()}
+        onLaunch={vi.fn()}
+      />,
+    );
+    expect(screen.queryByText('launchNowButton')).not.toBeInTheDocument();
   });
 });

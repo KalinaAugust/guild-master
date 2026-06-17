@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 import { resolveDisplayName } from '@/entities/user';
 import type { CallToAction } from '@/entities/call-to-action';
+import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Markdown } from '@/shared/ui/Markdown';
 import { ParticipantSlots } from './ParticipantSlots';
 import styles from './CallToActionCard.module.css';
@@ -35,14 +36,18 @@ interface CallToActionCardProps {
   cta: CallToAction;
   onToggleInterest: (ctaId: string) => void;
   onDelete?: (ctaId: string) => void;
+  onLaunch?: (ctaId: string) => void;
   isToggling?: boolean;
+  isLaunching?: boolean;
 }
 
 export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   cta,
   onToggleInterest,
   onDelete,
+  onLaunch,
   isToggling,
+  isLaunching,
 }) => {
   const t = useTranslations('CallToAction');
   const locale = useLocale();
@@ -56,6 +61,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   const expired = msLeft <= 0;
   const underDay = msLeft > 0 && msLeft < ONE_DAY;
 
+  const [confirmLaunch, setConfirmLaunch] = useState(false);
   const [, setTick] = useState(0);
   useEffect(() => {
     if (expired) return; // nothing left to count down
@@ -166,25 +172,51 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           )
         ) : (
           !expired && (
-            <Button
-              type="button"
-              variant={cta.interested ? 'secondary' : 'primary'}
-              onClick={() => onToggleInterest(cta.id)}
-              isLoading={isToggling}
-              className={styles.wantButton}
-            >
-              {cta.interested ? (
-                <>
-                  <CheckCircle2 size={16} />
-                  {t('wantedButton')}
-                </>
-              ) : (
-                t('wantButton')
+            <div className={styles.footActions}>
+              <Button
+                type="button"
+                variant={cta.interested ? 'secondary' : 'primary'}
+                onClick={() => onToggleInterest(cta.id)}
+                isLoading={isToggling}
+                className={styles.wantButton}
+              >
+                {cta.interested ? (
+                  <>
+                    <CheckCircle2 size={16} />
+                    {t('wantedButton')}
+                  </>
+                ) : (
+                  t('wantButton')
+                )}
+              </Button>
+              {onLaunch && cta.canManage && (
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => setConfirmLaunch(true)}
+                  isLoading={isLaunching}
+                  className={styles.launchButton}
+                >
+                  <CalendarCheck size={16} />
+                  {t('launchNowButton')}
+                </Button>
               )}
-            </Button>
+            </div>
           )
         )}
       </footer>
+      {onLaunch && cta.canManage && (
+        <ConfirmModal
+          isOpen={confirmLaunch}
+          onClose={() => setConfirmLaunch(false)}
+          onConfirm={() => onLaunch(cta.id)}
+          title={t('launchConfirmTitle')}
+          description={t('launchConfirmBody', { count: cta.interestedCount })}
+          confirmLabel={t('launchConfirmConfirm')}
+          variant="primary"
+          isLoading={isLaunching}
+        />
+      )}
     </article>
   );
 };
