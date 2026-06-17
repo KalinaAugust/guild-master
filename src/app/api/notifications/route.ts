@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/shared/api/supabase/server';
 
+type FeedRow = { title: string; guild_id: string | null; guild_name: string | null };
+
 export async function GET() {
   const supabase = await createClient();
 
@@ -13,20 +15,21 @@ export async function GET() {
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!notifications?.length) return NextResponse.json([]);
 
-  const eventIds = [...new Set(
+  const idsOf = (entityType: string) => [...new Set(
     notifications
-      .filter((n) => n.entity_type === 'event' && n.entity_id)
+      .filter((n) => n.entity_type === entityType && n.entity_id)
       .map((n) => n.entity_id as string)
   )];
 
-  const guildIds = [...new Set(
-    notifications
-      .filter((n) => n.entity_type === 'guild' && n.entity_id)
-      .map((n) => n.entity_id as string)
-  )];
+  const eventIds = idsOf('event');
+  const guildIds = idsOf('guild');
+  const ctaIds = idsOf('call_to_action');
+  const announcementIds = idsOf('announcement');
 
   let eventsMap: Record<string, { title: string; event_date: string; guild_name: string | null }> = {};
   let guildsMap: Record<string, string> = {};
+  let ctaMap: Record<string, FeedRow> = {};
+  let announcementMap: Record<string, FeedRow> = {};
 
   if (eventIds.length > 0) {
     const { data: events, error: eventsError } = await supabase
@@ -57,16 +60,43 @@ export async function GET() {
     guildsMap = Object.fromEntries((guilds ?? []).map((g) => [g.id, g.name]));
   }
 
-  const result = notifications.map((n) => ({
-    ...n,
-    event_title: n.entity_type === 'event' ? (eventsMap[n.entity_id ?? '']?.title ?? null) : null,
-    event_date: n.entity_type === 'event' ? (eventsMap[n.entity_id ?? '']?.event_date ?? null) : null,
-    guild_name: n.entity_type === 'event'
-      ? (eventsMap[n.entity_id ?? '']?.guild_name ?? null)
-      : n.entity_type === 'guild'
-        ? (guildsMap[n.entity_id ?? ''] ?? null)
-        : null,
-  }));
+  const buildFeedMap = async (table: 'call_to_actions' | 'announcements', ids: string[]) => {
+    if (ids.length === 0) return {} as Record<string, FeedRow>;
+    const { data } = await supabase
+      .from(table)
+      .select('id, title, guild_id, guilds(name)')
+      .in('id', ids);
+    return Object.fromEntries(
+      (data ?? []).map((r) => {
+        const guild = r.guilds as { name: string } | null;
+        return [r.id, { title: r.title, guild_id: r.guild_id ?? null, guild_name: guild?.name ?? null }];
+      })
+    ) as Record<string, FeedRow>;
+  };
+
+  ctaMap = await buildFeedMap('call_to_actions', ctaIds);
+  announcementMap = await buildFeedMap('announcements', announcementIds);
+
+  const result = notifications.map((n) => {
+    const id = n.entity_id ?? '';
+    const feed = n.entity_type === 'call_to_action'
+      ? ctaMap[id]
+      : n.entity_type === 'announcement'
+        ? announcementMap[id]
+        : undefined;
+    return {
+      ...n,
+      event_title: n.entity_type === 'event' ? (eventsMap[id]?.title ?? null) : null,
+      event_date: n.entity_type === 'event' ? (eventsMap[id]?.event_date ?? null) : null,
+      title: feed?.title ?? null,
+      guild_id: feed?.guild_id ?? null,
+      guild_name: n.entity_type === 'event'
+        ? (eventsMap[id]?.guild_name ?? null)
+        : n.entity_type === 'guild'
+          ? (guildsMap[id] ?? null)
+          : (feed?.guild_name ?? null),
+    };
+  });
 
   return NextResponse.json(result);
 }
