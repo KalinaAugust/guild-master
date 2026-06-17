@@ -8,6 +8,7 @@ import { createClient } from '@/shared/api/supabase/server';
 import dayjs from '@/shared/lib/dayjs';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
+import { PrivateNoteBlock } from '@/features/manage-user-note';
 import { OwnProfile } from './OwnProfile';
 import {
   NameWithIcon,
@@ -81,6 +82,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
 
         <section className={styles.main}>
           {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
+          {viewer && <PrivateNoteBlock targetUserId={raw.id} />}
           {profile.about && <AboutBlock about={profile.about} />}
           {profile.interests && profile.interests.length > 0 && (
             <InterestsBlock interests={profile.interests} />

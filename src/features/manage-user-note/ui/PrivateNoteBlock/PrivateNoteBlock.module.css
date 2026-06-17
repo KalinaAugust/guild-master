@@ -1,0 +1,67 @@
+.block {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+  border-radius: 24px;
+  padding: 1rem 1.25rem;
+  margin-top: 12px;
+}
+
+.blockHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.blockIconTile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(56, 189, 248, 0.05) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 10px rgba(56, 189, 248, 0.12);
+}
+
+.blockIcon {
+  color: var(--accent-secondary);
+}
+
+.blockTitle {
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.helpButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: help;
+  transition: color 0.15s ease, background 0.15s ease;
+  padding: 0;
+  margin-left: 2px;
+}
+.helpButton:hover {
+  color: var(--accent-secondary);
+  background: rgba(255, 255, 255, 0.06);
+}
+.helpIcon {
+  flex-shrink: 0;
+}
