@@ -6,8 +6,8 @@ import { Button } from '@/shared/ui/Button';
 import {
   ProfileSettingsDialog,
   type ProfileSettingsInitial,
-} from '@/features/update-profile-settings';
-import { EditableInterests, INTERESTS_MAX } from '@/features/update-profile-interests';
+} from '@/features/update-profile/settings';
+import { EditableInterests, INTERESTS_MAX } from '@/features/update-profile/interests';
 import { ProfileBlock } from './ProfileBlocks';
 
 export const OwnProfileSettings = ({ initial }: { initial: ProfileSettingsInitial }) => {

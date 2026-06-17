@@ -40,14 +40,19 @@ export default defineConfig([
   },
   {
     // Intentional single-consumer slices — cohesive, self-contained units we
-    // deliberately keep isolated, not accidental over-slicing. Merging them
-    // into their lone consumer (the header widget / notification-panel feature)
-    // would bloat it and break modularity. `entities/notification` is a proper
-    // domain entity; the features are independently meaningful.
+    // deliberately keep isolated, not accidental over-slicing. Merging each
+    // into its lone consumer (a widget or another feature) would bloat that
+    // consumer and break modularity. `entities/notification` is a proper
+    // domain entity; the features are independently meaningful (e.g.
+    // `call-to-action`/`filter-events`/`guild-poll` are full features each
+    // composed by a single widget — board / calendar / chat).
     files: [
       './src/entities/notification/**',
       './src/features/ai-helper/**',
+      './src/features/call-to-action/**',
+      './src/features/filter-events/**',
       './src/features/guild-announcement/**',
+      './src/features/guild-poll/**',
       './src/features/language-switcher/**',
       './src/features/notification-panel/**',
     ],
@@ -84,8 +89,9 @@ export default defineConfig([
   },
   {
     // Data-layer functions in entity/feature `api` segments talk to the shared
-    // Supabase / baseApi infrastructure.
-    files: ['./src/entities/*/api/**', './src/features/*/api/**'],
+    // Supabase / baseApi infrastructure. The `*/*/api` glob covers slices that
+    // live inside a feature group (e.g. `features/update-profile/settings`).
+    files: ['./src/entities/*/api/**', './src/features/*/api/**', './src/features/*/*/api/**'],
     rules: {
       'fsd/no-public-api-sidestep': 'off',
     },
@@ -98,8 +104,8 @@ export default defineConfig([
       './src/widgets/header/ui/UserMenu.tsx',
       './src/features/auth/ui/LoginForm.tsx',
       './src/features/ai-helper/ui/AiHelperModal.tsx',
-      './src/features/update-profile-name/ui/EditableName/EditableName.tsx',
-      './src/features/update-profile-avatar/ui/AvatarUpload/AvatarUpload.tsx',
+      './src/features/update-profile/name/ui/EditableName/EditableName.tsx',
+      './src/features/update-profile/avatar/ui/AvatarUpload/AvatarUpload.tsx',
       './src/shared/lib/hooks.ts',
     ],
     rules: {
