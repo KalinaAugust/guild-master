@@ -8,7 +8,13 @@ import styles from './Select.module.css';
 interface SelectProps {
   value: string;
   onValueChange: (value: string) => void;
-  options: { label: React.ReactNode; value: string; avatar?: string; avatarFallback?: React.ReactNode }[];
+  options: {
+    label: React.ReactNode;
+    value: string;
+    avatar?: string;
+    avatarFallback?: React.ReactNode;
+    icon?: React.ReactNode;
+  }[];
   placeholder?: string;
   className?: string;
   centered?: boolean;
@@ -45,7 +51,9 @@ export const Select: React.FC<SelectProps> = ({
             <SelectPrimitive.Item key={opt.value} value={opt.value} className={`${styles.item} ${centered ? styles.itemCentered : ''}`}>
               <SelectPrimitive.ItemText>
                 <span className={styles.itemContent}>
-                  {opt.avatar ? (
+                  {opt.icon ? (
+                    <span className={styles.selectIcon}>{opt.icon}</span>
+                  ) : opt.avatar ? (
                     <Image
                       src={opt.avatar}
                       alt="avatar"

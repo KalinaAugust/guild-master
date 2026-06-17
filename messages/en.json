@@ -368,6 +368,7 @@
     "wantButton": "I'm in",
     "wantedButton": "I'm in",
     "progress": "{count} / {target}",
+    "participantsTitle": "Participants",
     "launchedBadge": "Launched",
     "timesUp": "Time's up",
     "openEvent": "Open event",

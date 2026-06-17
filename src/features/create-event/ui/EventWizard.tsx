@@ -13,6 +13,7 @@ import {
 } from '@/entities/event';
 import { useGetGuildMembersQuery } from '@/entities/guild';
 import { resolveDisplayName } from '@/entities/user';
+import { Search } from 'lucide-react';
 import { Button } from '@/shared/ui/Button';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
@@ -240,6 +241,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                     <Input
                       className={styles.memberFilter}
                       type="text"
+                      icon={<Search size={18} />}
                       value={filterQuery}
                       onChange={(e) => {
                         setFilterQuery(e.target.value);

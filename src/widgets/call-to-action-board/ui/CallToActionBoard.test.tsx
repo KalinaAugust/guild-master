@@ -66,4 +66,23 @@ describe('CallToActionBoard', () => {
     render(<CallToActionBoard guilds={guilds} userId="u1" initialGuildId="g1" />);
     expect(screen.getByText('Mythic Raid')).toBeInTheDocument();
   });
+
+  it('sorts expired call to actions to the bottom', () => {
+    mockGetQuery.mockReturnValue({
+      data: {
+        callToActions: [
+          { id: 'c1', title: 'Expired Raid', eventDate: '2020-01-01T00:00:00.000Z' },
+          { id: 'c2', title: 'Active Dungeon', eventDate: '2030-01-01T00:00:00.000Z' },
+        ],
+        canCreate: true,
+      },
+      isLoading: false,
+    });
+    render(<CallToActionBoard guilds={guilds} userId="u1" initialGuildId="g1" />);
+    
+    const cards = screen.getAllByText(/Raid|Dungeon/);
+    expect(cards).toHaveLength(2);
+    expect(cards[0]).toHaveTextContent('Active Dungeon');
+    expect(cards[1]).toHaveTextContent('Expired Raid');
+  });
 });

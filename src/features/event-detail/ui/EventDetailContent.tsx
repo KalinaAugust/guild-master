@@ -26,6 +26,7 @@ import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { Button } from '@/shared/ui/Button';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
+import { Markdown } from '@/shared/ui/Markdown';
 import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
 import {
   useUpdateParticipantStatusMutation,
@@ -384,7 +385,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             {event.description && (
               <div className={styles.infoGroup}>
                 <span className={styles.label}>{commonT('description')}</span>
-                <p className={styles.description}>{event.description}</p>
+                <Markdown source={event.description} className={styles.description} />
               </div>
             )}
           </>

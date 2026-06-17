@@ -90,4 +90,10 @@ describe('CallToActionCard', () => {
     render(<CallToActionCard cta={base} onToggleInterest={vi.fn()} onDelete={vi.fn()} />);
     expect(screen.queryByLabelText('deleteLabel')).not.toBeInTheDocument();
   });
+
+  it('hides the want button when expired and not launched', () => {
+    const expiredCta = { ...base, eventDate: '2026-06-15T00:00:00.000Z' };
+    render(<CallToActionCard cta={expiredCta} onToggleInterest={vi.fn()} />);
+    expect(screen.queryByText('wantButton')).not.toBeInTheDocument();
+  });
 });

@@ -17,6 +17,7 @@ import { Button } from '@/shared/ui/Button';
 import dayjs from '@/shared/lib/dayjs';
 import { resolveDisplayName } from '@/entities/user';
 import type { CallToAction } from '@/entities/call-to-action';
+import { Markdown } from '@/shared/ui/Markdown';
 import { ParticipantSlots } from './ParticipantSlots';
 import styles from './CallToActionCard.module.css';
 
@@ -124,9 +125,16 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
         </span>
       </div>
 
-      {cta.description && <p className={styles.content}>{cta.description}</p>}
+      {cta.description && (
+        <div className={styles.descriptionContainer}>
+          <Markdown source={cta.description} className={styles.descriptionMarkdown} />
+        </div>
+      )}
 
-      <ParticipantSlots participants={cta.participants} targetCount={cta.targetCount} />
+      <div className={styles.participantsSection}>
+        <h4 className={styles.participantsTitle}>{t('participantsTitle')}</h4>
+        <ParticipantSlots participants={cta.participants} targetCount={cta.targetCount} />
+      </div>
 
       <div className={styles.divider} />
 
@@ -157,22 +165,24 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
             </Link>
           )
         ) : (
-          <Button
-            type="button"
-            variant={cta.interested ? 'secondary' : 'primary'}
-            onClick={() => onToggleInterest(cta.id)}
-            isLoading={isToggling}
-            className={styles.wantButton}
-          >
-            {cta.interested ? (
-              <>
-                <CheckCircle2 size={16} />
-                {t('wantedButton')}
-              </>
-            ) : (
-              t('wantButton')
-            )}
-          </Button>
+          !expired && (
+            <Button
+              type="button"
+              variant={cta.interested ? 'secondary' : 'primary'}
+              onClick={() => onToggleInterest(cta.id)}
+              isLoading={isToggling}
+              className={styles.wantButton}
+            >
+              {cta.interested ? (
+                <>
+                  <CheckCircle2 size={16} />
+                  {t('wantedButton')}
+                </>
+              ) : (
+                t('wantButton')
+              )}
+            </Button>
+          )
         )}
       </footer>
     </article>

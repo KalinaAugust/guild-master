@@ -368,6 +368,7 @@
     "wantButton": "Я в деле",
     "wantedButton": "Я в деле",
     "progress": "{count} / {target}",
+    "participantsTitle": "Участники",
     "launchedBadge": "Запущено",
     "timesUp": "Время вышло",
     "openEvent": "Открыть событие",
