@@ -58,7 +58,7 @@ describe('NOTIFICATION_TYPE_CONFIG', () => {
 
   it('new_call_to_action: getLabel includes guildName and config has feed link', () => {
     const cfg = NOTIFICATION_TYPE_CONFIG.new_call_to_action;
-    expect(cfg.feedHref).toBe('/call-to-action');
+    expect(cfg.feedHref).toBe('/looking-for-group');
     expect(cfg.switchesGuild).toBe(true);
     const label = cfg.getLabel!(t, { ...base, guild_name: 'Alpha' });
     expect(label).toBe(t('newCallToAction', { guildName: 'Alpha' }));

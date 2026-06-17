@@ -71,7 +71,7 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
   },
   new_call_to_action: {
     Icon: Swords,
-    feedHref: '/call-to-action',
+    feedHref: '/looking-for-group',
     switchesGuild: true,
     getLabel: (t, n) => t('newCallToAction', { guildName: n.guild_name ?? '' }),
   },
