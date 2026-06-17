@@ -21,3 +21,11 @@ export { updateBirthDate } from './api/updateBirthDate';
 export { updateAlias } from './api/updateAlias';
 export { updateInterests } from './api/updateInterests';
 export { updateLastActiveGuild } from "./api/updateLastActiveGuild";
+
+export {
+  userNotesApi,
+  useGetUserNotesQuery,
+  useUpdateUserNoteMutation,
+  useDeleteUserNoteMutation,
+  type UserNote,
+} from './api/userNotesApi';
