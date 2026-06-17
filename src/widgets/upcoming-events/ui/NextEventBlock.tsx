@@ -4,19 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { Clock, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import dayjs from '@/shared/lib/dayjs';
+import { getRelativeDay } from '@/shared/lib/relativeDay';
 import { useGetParticipantsQuery } from '@/entities/event';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import type { ActivityEvent } from '@/shared/types';
 import { ParticipantsTooltip } from './ParticipantsTooltip';
 import styles from './UpcomingEventsStrip.module.css';
-
-const relativeDay = (date: string, today: string, tomorrow: string): string => {
-  const diff = dayjs(date).startOf('day').diff(dayjs().startOf('day'), 'day');
-  if (diff === 0) return today;
-  if (diff === 1) return tomorrow;
-  return dayjs(date).format('D MMM');
-};
 
 const ParticipantsBadge: React.FC<{ eventId: string }> = ({ eventId }) => {
   const t = useTranslations('UpcomingEvents');
@@ -52,7 +45,7 @@ export const NextEventBlock: React.FC<Props> = ({ event }) => {
           </Link>
           <span className={styles.eventMeta}>
             <Clock size={12} />
-            {relativeDay(event.date, t('today'), t('tomorrow'))} · {event.time}
+            {getRelativeDay(event.date, t('today'), t('tomorrow'))} · {event.time}
           </span>
           <span className={styles.dot}>·</span>
           <ParticipantsBadge eventId={event.id} />
