@@ -51,7 +51,7 @@ describe('EventForm', () => {
   });
 
   it('shows title error when submitting empty title', () => {
-    render(<EventForm {...baseProps} initialData={{ date: '2026-06-01', time: '20:00', type: 'raid', description: '' }} />);
+    render(<EventForm {...baseProps} initialData={{ date: '2026-06-01', time: '20:00', type: 'game', description: '' }} />);
     const form = screen.getByRole('button', { name: 'Submit' }).closest('form')!;
     fireEvent.submit(form);
     expect(screen.getByText('validation.titleRequired')).toBeInTheDocument();
@@ -70,7 +70,7 @@ describe('EventForm', () => {
   });
 
   it('pre-fills form with initialData', () => {
-    render(<EventForm {...baseProps} initialData={{ title: 'Pre-filled', date: '2026-06-01', time: '18:00', type: 'raid', description: 'Desc' }} />);
+    render(<EventForm {...baseProps} initialData={{ title: 'Pre-filled', date: '2026-06-01', time: '18:00', type: 'game', description: 'Desc' }} />);
     expect(screen.getByDisplayValue('Pre-filled')).toBeInTheDocument();
   });
 });

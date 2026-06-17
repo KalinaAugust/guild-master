@@ -134,11 +134,9 @@
 }
 
 /* Event type colors */
-.iconType_raid { color: var(--event-raid-border); }
 .iconType_game { color: var(--event-game-border); }
 .iconType_meeting { color: var(--event-meeting-border); }
 .iconType_other { color: var(--event-other-border); }
-.iconType_dungeon { color: var(--event-dungeon-border); }
 .iconType_party { color: var(--event-party-border); }
 .iconType_sport { color: var(--event-sport-border); }
 .iconType_dnd { color: var(--event-dnd-border); }

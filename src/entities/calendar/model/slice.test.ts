@@ -62,16 +62,16 @@ describe('uiSlice', () => {
   });
 
   it('should handle toggleEventType', () => {
-    let state = reducer(undefined, toggleEventType('raid'));
-    expect(state.excludedEventTypes).toEqual(['raid']);
+    let state = reducer(undefined, toggleEventType('game'));
+    expect(state.excludedEventTypes).toEqual(['game']);
 
-    state = reducer(state, toggleEventType('raid'));
+    state = reducer(state, toggleEventType('game'));
     expect(state.excludedEventTypes).toEqual([]);
   });
 
   it('should handle setAllEventTypesEnabled', () => {
     let state = reducer(undefined, setAllEventTypesEnabled(false));
-    expect(state.excludedEventTypes).toEqual(['raid', 'game', 'meeting', 'other', 'dungeon', 'party', 'sport', 'dnd', 'boardgame']);
+    expect(state.excludedEventTypes).toEqual(['game', 'meeting', 'other', 'party', 'sport', 'dnd', 'boardgame']);
 
     state = reducer(state, setAllEventTypesEnabled(true));
     expect(state.excludedEventTypes).toEqual([]);

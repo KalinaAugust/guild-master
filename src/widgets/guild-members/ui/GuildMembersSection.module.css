@@ -175,5 +175,5 @@
 .menuItemDanger:hover,
 .menuItemDanger[data-highlighted] {
   background: rgba(235, 64, 52, 0.1);
-  color: var(--event-raid-border);
+  color: #b06060;
 }

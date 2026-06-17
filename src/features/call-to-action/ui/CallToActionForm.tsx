@@ -41,9 +41,7 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
 
   const typeOptions = useMemo(() => [
     { label: commonT('eventTypes.game'), value: 'game' as ActivityType },
-    { label: commonT('eventTypes.raid'), value: 'raid' as ActivityType },
     { label: commonT('eventTypes.meeting'), value: 'meeting' as ActivityType },
-    { label: commonT('eventTypes.dungeon'), value: 'dungeon' as ActivityType },
     { label: commonT('eventTypes.party'), value: 'party' as ActivityType },
     { label: commonT('eventTypes.sport'), value: 'sport' as ActivityType },
     { label: commonT('eventTypes.dnd'), value: 'dnd' as ActivityType },

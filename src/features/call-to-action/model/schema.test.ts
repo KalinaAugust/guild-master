@@ -3,7 +3,7 @@ import { createCtaFormSchema } from './schema';
 
 const msgs = { titleRequired: 'tr', dateRequired: 'dr', timeRequired: 'tir', targetMin: 'tm' };
 const schema = createCtaFormSchema(msgs);
-const base = { title: 'Raid', date: '2026-07-01', time: '19:00', type: 'raid', description: '', targetCount: 5 };
+const base = { title: 'Raid', date: '2026-07-01', time: '19:00', type: 'game', description: '', targetCount: 5 };
 
 describe('createCtaFormSchema', () => {
   it('accepts a valid payload', () => {

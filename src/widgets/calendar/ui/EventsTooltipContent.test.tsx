@@ -4,7 +4,7 @@ import { EventsTooltipContent } from './EventsTooltipContent';
 import type { ActivityEvent } from '@/shared/types';
 
 const events: ActivityEvent[] = [
-  { id: 'e1', title: 'Dragon Raid', date: '2026-06-01', time: '20:00', type: 'raid' },
+  { id: 'e1', title: 'Dragon Raid', date: '2026-06-01', time: '20:00', type: 'game' },
   { id: 'e2', title: 'Team Meeting', date: '2026-06-01', time: '10:00', type: 'meeting' },
 ];
 

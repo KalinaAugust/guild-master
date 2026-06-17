@@ -8,7 +8,7 @@ const event: ActivityEvent = {
   title: 'Dragon Raid',
   date: '2026-06-01',
   time: '20:00',
-  type: 'raid',
+  type: 'game',
 };
 
 describe('EventCard', () => {

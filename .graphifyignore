@@ -1,0 +1,29 @@
+# .graphifyignore — controls what `/graphify` scans (syntax = .gitignore).
+#
+# graphify ALREADY auto-skips these by default, so they are intentionally NOT
+# listed here: node_modules, .next, dist, build, out, coverage, __snapshots__,
+# .turbo, .cache, .git, graphify-out, and lockfiles (pnpm-lock.yaml, etc.).
+#
+# Below = project-specific noise we add on top of those defaults.
+
+# --- Generated, not hand-written source ---
+src/shared/api/supabase/types.ts   # auto-generated Supabase DB types (huge, mechanical)
+next-env.d.ts                       # Next.js generated ambient types
+
+# --- Env & secrets ---
+.env*
+
+# --- Static assets (binary, no code structure to extract) ---
+public/
+
+# --- i18n message catalogs (data, not architecture) ---
+messages/
+
+# --- Tests ---
+# Excluded to keep the graph focused on production code: in the last build,
+# test files spawned several noise-only communities (Entity API Tests,
+# Announcement Card Tests, Guild Route Tests) and many duplicate `useClient()`
+# / `mock*` nodes. Delete this block if you WANT tests in the graph.
+*.test.ts
+*.test.tsx
+src/shared/lib/test/

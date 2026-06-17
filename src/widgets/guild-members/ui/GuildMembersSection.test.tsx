@@ -8,6 +8,7 @@ vi.mock('@/entities/guild', () => ({
   useAddGuildMemberMutation: vi.fn(),
   useRemoveGuildMemberMutation: vi.fn(),
   useUpdateGuildMemberRoleMutation: vi.fn(),
+  useTransferGuildOwnershipMutation: vi.fn(),
   useGuildPermissions: vi.fn(() => ({ canManageMembers: false, isOwner: false })),
 }));
 
@@ -26,6 +27,7 @@ import {
   useAddGuildMemberMutation,
   useRemoveGuildMemberMutation,
   useUpdateGuildMemberRoleMutation,
+  useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
 
@@ -45,11 +47,13 @@ describe('GuildMembersSection', () => {
   const addMemberMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
   const removeMemberMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
   const updateRoleMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
+  const transferOwnershipMock = vi.fn().mockReturnValue({ unwrap: vi.fn().mockResolvedValue({}) });
 
   beforeEach(() => {
     addMemberMock.mockClear();
     removeMemberMock.mockClear();
     updateRoleMock.mockClear();
+    transferOwnershipMock.mockClear();
     vi.mocked(useGetGuildMembersQuery).mockReturnValue(
       { data: mockMembers, isLoading: false } as never
     );
@@ -61,6 +65,9 @@ describe('GuildMembersSection', () => {
     );
     vi.mocked(useUpdateGuildMemberRoleMutation).mockReturnValue(
       [updateRoleMock, { isLoading: false }] as never
+    );
+    vi.mocked(useTransferGuildOwnershipMutation).mockReturnValue(
+      [transferOwnershipMock, { isLoading: false }] as never
     );
   });
 
@@ -183,6 +190,42 @@ describe('GuildMembersSection', () => {
     await user.click(await screen.findByText('removeMember'));
     await user.click(await screen.findByRole('button', { name: 'remove' }));
     expect(removeMemberMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2' });
+  });
+
+  it('owner sees Transfer guild for a member', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    expect(await screen.findByText('transferOwnership')).toBeInTheDocument();
+  });
+
+  it('admin does not see Transfer guild', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: false } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember, adminMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u9" />);
+    await user.click(screen.getAllByRole('button', { name: 'memberActions' })[0]);
+    await screen.findByText('removeMember');
+    expect(screen.queryByText('transferOwnership')).not.toBeInTheDocument();
+  });
+
+  it('transfers ownership to a member after confirming', async () => {
+    const user = userEvent.setup();
+    vi.mocked(useGuildPermissions).mockReturnValue({ canManageMembers: true, isOwner: true } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" userId="u1" />);
+    await user.click(screen.getByRole('button', { name: 'memberActions' }));
+    await user.click(await screen.findByText('transferOwnership'));
+    await user.click(await screen.findByRole('button', { name: 'transferOwnership' }));
+    expect(transferOwnershipMock).toHaveBeenCalledWith({ guildId: 'g1', newOwnerId: 'u2' });
   });
 
   it('shows "user not found" toast on 404 error', async () => {

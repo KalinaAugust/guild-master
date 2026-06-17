@@ -10,7 +10,7 @@ const rawRow = {
   id: 'e1',
   title: 'Morning Raid',
   description: 'Bring potions',
-  type: 'raid',
+  type: 'game',
   event_date: '2026-05-28T20:00:00+00:00',
   guild_id: 'g1',
 };
@@ -35,7 +35,7 @@ describe('getEventById', () => {
     expect(result).not.toBeNull();
     expect(result!.event.id).toBe('e1');
     expect(result!.event.title).toBe('Morning Raid');
-    expect(result!.event.type).toBe('raid');
+    expect(result!.event.type).toBe('game');
     expect(result!.event.date).toBe('2026-05-28');
     expect(result!.event.time).toBe('20:00');
     expect(result!.event.description).toBe('Bring potions');

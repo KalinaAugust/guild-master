@@ -129,11 +129,9 @@
   color: var(--text-primary);
 }
 
-.type_raid .typeIcon { color: #ff4d4d; background: rgba(255, 77, 77, 0.12); box-shadow: 0 0 14px rgba(255, 77, 77, 0.25); }
 .type_game .typeIcon { color: #4da3ff; background: rgba(77, 163, 255, 0.12); box-shadow: 0 0 14px rgba(77, 163, 255, 0.25); }
 .type_meeting .typeIcon { color: #4dff88; background: rgba(77, 255, 136, 0.12); box-shadow: 0 0 14px rgba(77, 255, 136, 0.25); }
 .type_other .typeIcon { color: #ffb347; background: rgba(255, 179, 71, 0.12); box-shadow: 0 0 14px rgba(255, 179, 71, 0.25); }
-.type_dungeon .typeIcon { color: #a855f7; background: rgba(168, 85, 247, 0.12); box-shadow: 0 0 14px rgba(168, 85, 247, 0.25); }
 .type_party .typeIcon { color: #f472b6; background: rgba(244, 114, 182, 0.12); box-shadow: 0 0 14px rgba(244, 114, 182, 0.25); }
 .type_sport .typeIcon { color: #34d399; background: rgba(52, 211, 153, 0.12); box-shadow: 0 0 14px rgba(52, 211, 153, 0.25); }
 .type_dnd .typeIcon { color: #f59e0b; background: rgba(245, 158, 11, 0.12); box-shadow: 0 0 14px rgba(245, 158, 11, 0.25); }

@@ -1,4 +1,4 @@
-export type ActivityType = 'raid' | 'game' | 'meeting' | 'other' | 'dungeon' | 'party' | 'sport' | 'dnd' | 'boardgame';
+export type ActivityType = 'game' | 'meeting' | 'other' | 'party' | 'sport' | 'dnd' | 'boardgame';
 
 export interface ActivityEvent {
   id: string;

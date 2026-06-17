@@ -24,7 +24,7 @@ vi.mock('next/link', () => ({
 
 vi.mock('@/entities/event', () => ({
   useGetEventByIdQuery: vi.fn().mockReturnValue({
-    data: { event: { id: 'e1', title: 'Morning Raid', date: '2026-05-28', time: '20:00', type: 'raid', description: 'Bring potions' }, guildId: 'g1' },
+    data: { event: { id: 'e1', title: 'Morning Raid', date: '2026-05-28', time: '20:00', type: 'game', description: 'Bring potions' }, guildId: 'g1' },
     isLoading: false,
   }),
   useGetParticipantsQuery: vi.fn().mockReturnValue({

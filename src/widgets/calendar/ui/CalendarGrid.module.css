@@ -157,11 +157,9 @@
   flex-shrink: 0;
 }
 
-.event_raid { background: var(--event-raid); border-left-color: var(--event-raid-border); }
 .event_game { background: var(--event-game); border-left-color: var(--event-game-border); }
 .event_meeting { background: var(--event-meeting); border-left-color: var(--event-meeting-border); }
 .event_other { background: var(--event-other); border-left-color: var(--event-other-border); }
-.event_dungeon { background: var(--event-dungeon); border-left-color: var(--event-dungeon-border); }
 .event_party { background: var(--event-party); border-left-color: var(--event-party-border); }
 .event_sport { background: var(--event-sport); border-left-color: var(--event-sport-border); }
 .event_dnd { background: var(--event-dnd); border-left-color: var(--event-dnd-border); }
@@ -193,11 +191,9 @@
   flex-shrink: 0;
 }
 
-.iconType_raid { color: var(--event-raid-border); }
 .iconType_game { color: var(--event-game-border); }
 .iconType_meeting { color: var(--event-meeting-border); }
 .iconType_other { color: var(--event-other-border); }
-.iconType_dungeon { color: var(--event-dungeon-border); }
 .iconType_party { color: var(--event-party-border); }
 .iconType_sport { color: var(--event-sport-border); }
 .iconType_dnd { color: var(--event-dnd-border); }
