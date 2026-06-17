@@ -1,15 +1,14 @@
 'use client';
 
-import { Lock, HelpCircle } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { EditableField } from '@/shared/ui/EditableField';
-import { Tooltip } from '@/shared/ui/Tooltip';
+import { ProfileBlock } from '@/shared/ui/ProfileBlock';
 import {
   useGetUserNotesQuery,
   useUpdateUserNoteMutation,
   useDeleteUserNoteMutation,
 } from '@/entities/user';
-import styles from './PrivateNoteBlock.module.css';
 
 interface PrivateNoteBlockProps {
   targetUserId: string;
@@ -37,18 +36,7 @@ export const PrivateNoteBlock = ({ targetUserId }: PrivateNoteBlockProps) => {
   }
 
   return (
-    <section className={styles.block}>
-      <div className={styles.blockHeader}>
-        <span className={styles.blockIconTile}>
-          <Lock size={16} className={styles.blockIcon} />
-        </span>
-        <h2 className={styles.blockTitle}>{t('title')}</h2>
-        <Tooltip content={t('helpTooltip')}>
-          <button type="button" className={styles.helpButton} aria-label={t('helpTooltip')}>
-            <HelpCircle size={14} className={styles.helpIcon} />
-          </button>
-        </Tooltip>
-      </div>
+    <ProfileBlock icon={Lock} title={t('title')} help={t('helpTooltip')}>
       <EditableField
         initial={currentNote}
         onSave={handleSave}
@@ -61,6 +49,6 @@ export const PrivateNoteBlock = ({ targetUserId }: PrivateNoteBlockProps) => {
         multiline
         rows={4}
       />
-    </section>
+    </ProfileBlock>
   );
 };

@@ -1,40 +1,17 @@
-import type { ComponentType, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { FileText, Sparkles, Cake, Users } from 'lucide-react';
 import type { CommonGuild, SocialLink } from '@/entities/user';
 import { SOCIAL_META, SocialIcon } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileBlock, type BlockIcon } from '@/shared/ui/ProfileBlock';
 import dayjs from '@/shared/lib/dayjs';
 import { NameWithIcon as SharedNameWithIcon } from '@/shared/ui/NameWithIcon';
 import styles from './ProfileBlocks.module.css';
 
-type BlockIcon = ComponentType<{ size?: number; className?: string }>;
-
-/**
- * Unified profile block shell: a glass panel with an icon + title header and a
- * body. Every block on the profile page (Name, Email, About, Interests, …)
- * shares this chrome so headers and spacing stay consistent.
- */
-export const ProfileBlock = ({
-  icon: Icon,
-  title,
-  children,
-}: {
-  icon: BlockIcon;
-  title: string;
-  children: ReactNode;
-}) => (
-  <section className={styles.block}>
-    <div className={styles.blockHeader}>
-      <span className={styles.blockIconTile}>
-        <Icon size={16} className={styles.blockIcon} />
-      </span>
-      <h2 className={styles.blockTitle}>{title}</h2>
-    </div>
-    {children}
-  </section>
-);
+// Re-exported for the profile page composition (OwnProfile, OwnProfileClient).
+export { ProfileBlock };
 
 /** Convenience block for a single primary value (Email, Joined, Birth date, …). */
 export const ValueBlock = ({
