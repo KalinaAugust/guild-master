@@ -1,7 +1,7 @@
 'use client';
 
 import { Pencil, Check, X } from 'lucide-react';
-import { Input } from '@/shared/ui/Input';
+import { DatePicker } from '@/shared/ui/DatePicker';
 import { Button } from '@/shared/ui/Button';
 import { updateBirthDate } from '@/entities/user';
 import { useEditableField } from '@/shared/lib/useEditableField';
@@ -44,13 +44,17 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
 
   return (
     <div className={styles.edit}>
-      <Input
-        type="date"
+      <DatePicker
         value={value}
-        onChange={(e) => setValue(e.target.value)}
-        max={new Date().toISOString().slice(0, 10)}
-        autoFocus
+        onChange={setValue}
+        locale={locale}
+        max={dayjs().format('YYYY-MM-DD')}
+        captionLayout="dropdown"
+        fromYear={1920}
+        toYear={new Date().getFullYear()}
+        placeholder="Add your birth date"
         disabled={isSaving}
+        labels={{ open: 'Edit birth date' }}
       />
       <div className={styles.actions}>
         <Button

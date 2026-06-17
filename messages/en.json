@@ -1,4 +1,12 @@
 {
+  "DateTimePicker": {
+    "selectDate": "Select date",
+    "selectTime": "Select time",
+    "openCalendar": "Open calendar",
+    "openTime": "Open time picker",
+    "hours": "Hours",
+    "minutes": "Minutes"
+  },
   "Common": {
     "title": "Guild Master",
     "calendar": "Calendar",

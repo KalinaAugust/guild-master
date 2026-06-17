@@ -54,7 +54,8 @@ export default async function RootLayout({
     'UpcomingEvents',
     'Notifications',
     'AiHelper',
-    'Auth'
+    'Auth',
+    'DateTimePicker'
   ];
   const filteredMessages = Object.keys(messages)
     .filter((key) => requiredNamespaces.includes(key))
