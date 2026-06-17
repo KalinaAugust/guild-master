@@ -48,13 +48,13 @@ function makeStore(uiOverrides = {}) {
   });
 }
 
-function renderDropdown(uiOverrides = {}) {
+function renderDropdown(uiOverrides = {}, props = {}) {
   const store = makeStore(uiOverrides);
   return {
     store,
     ...render(
       <Provider store={store}>
-        <EventFilterDropdown />
+        <EventFilterDropdown {...props} />
       </Provider>
     ),
   };
@@ -115,5 +115,36 @@ describe('EventFilterDropdown', () => {
 
     const state = store.getState() as { ui: { excludedEventTypes: ActivityType[] } };
     expect(state.ui.excludedEventTypes).toHaveLength(0);
+  });
+
+  it('renders "I am a participant" filter switch when userId is provided', () => {
+    renderDropdown({}, { userId: 'user-1' });
+
+    const trigger = screen.getByRole('button', { name: 'Event.filter.ariaLabel' });
+    fireEvent.click(trigger);
+
+    expect(screen.getByText('Event.filter.onlyParticipating')).toBeInTheDocument();
+  });
+
+  it('does not render "I am a participant" filter switch when userId is absent', () => {
+    renderDropdown({}, {});
+
+    const trigger = screen.getByRole('button', { name: 'Event.filter.ariaLabel' });
+    fireEvent.click(trigger);
+
+    expect(screen.queryByText('Event.filter.onlyParticipating')).not.toBeInTheDocument();
+  });
+
+  it('toggles onlyParticipating state when clicking the participant switch', () => {
+    const { store } = renderDropdown({ onlyParticipating: false }, { userId: 'user-1' });
+
+    const trigger = screen.getByRole('button', { name: 'Event.filter.ariaLabel' });
+    fireEvent.click(trigger);
+
+    const switchBtn = screen.getByRole('switch', { name: 'Event.filter.onlyParticipating' });
+    fireEvent.click(switchBtn);
+
+    const state = store.getState() as { ui: { onlyParticipating: boolean } };
+    expect(state.ui.onlyParticipating).toBe(true);
   });
 });

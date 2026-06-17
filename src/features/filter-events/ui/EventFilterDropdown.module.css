@@ -129,6 +129,12 @@
   color: var(--text-primary);
 }
 
+.divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: 6px 0;
+}
+
 .arrow {
   fill: var(--modal-bg);
 }

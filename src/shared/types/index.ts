@@ -18,6 +18,7 @@ export interface UIState {
   viewDate: string;
   editingEvent?: ActivityEvent;
   excludedEventTypes: ActivityType[];
+  onlyParticipating?: boolean;
 }
 
 export interface CommonGuild {

@@ -93,7 +93,8 @@
       "none": "None",
       "enableAll": "Enable all",
       "disableAll": "Disable all",
-      "ariaLabel": "Event type filter"
+      "ariaLabel": "Event type filter",
+      "onlyParticipating": "I am a participant"
     }
   },
   "EventDetail": {

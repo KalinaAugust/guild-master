@@ -93,7 +93,8 @@
       "none": "Ничего",
       "enableAll": "Включить все",
       "disableAll": "Выключить все",
-      "ariaLabel": "Фильтр типов событий"
+      "ariaLabel": "Фильтр типов событий",
+      "onlyParticipating": "я участник"
     }
   },
   "EventDetail": {

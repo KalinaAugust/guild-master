@@ -2,21 +2,30 @@
 
 import React from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
-import { toggleEventType, setAllEventTypesEnabled } from '@/entities/calendar';
+import { toggleEventType, setAllEventTypesEnabled, toggleOnlyParticipating } from '@/entities/calendar';
 import { ACTIVITY_TYPES, typeIcons } from '@/entities/event';
 import { Switch } from '@/shared/ui/Switch';
 import { Button } from '@/shared/ui/Button';
 import { ActivityType } from '@/shared/types';
 import styles from './EventFilterDropdown.module.css';
 
-export const EventFilterDropdown: React.FC = () => {
+interface EventFilterDropdownProps {
+  userId?: string;
+}
+
+export const EventFilterDropdown: React.FC<EventFilterDropdownProps> = ({ userId }) => {
   const dispatch = useAppDispatch();
   const t = useTranslations('Event');
   const tCommon = useTranslations('Common');
   const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
+  const onlyParticipating = useAppSelector((state) => state.ui.onlyParticipating);
+
+  const handleToggleOnlyParticipating = () => {
+    dispatch(toggleOnlyParticipating());
+  };
 
   const handleToggle = (type: ActivityType) => {
     dispatch(toggleEventType(type));
@@ -102,6 +111,26 @@ export const EventFilterDropdown: React.FC = () => {
                 </div>
               );
             })}
+            {userId && (
+              <>
+                <div className={styles.divider} />
+                <div className={styles.item}>
+                  <div className={styles.itemLeft}>
+                    <span className={styles.typeIcon}>
+                      <User size={16} />
+                    </span>
+                    <span className={styles.itemLabel}>
+                      {t('filter.onlyParticipating')}
+                    </span>
+                  </div>
+                  <Switch
+                    checked={onlyParticipating || false}
+                    onCheckedChange={handleToggleOnlyParticipating}
+                    ariaLabel={t('filter.onlyParticipating')}
+                  />
+                </div>
+              </>
+            )}
           </div>
           <Popover.Arrow className={styles.arrow} />
         </Popover.Content>

@@ -8,5 +8,6 @@ export {
   setViewDate,
   toggleEventType,
   setAllEventTypesEnabled,
+  toggleOnlyParticipating,
 } from './model/slice';
 

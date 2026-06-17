@@ -9,6 +9,7 @@ import reducer, {
   setViewDate,
   toggleEventType,
   setAllEventTypesEnabled,
+  toggleOnlyParticipating,
 } from './slice';
 
 describe('uiSlice', () => {
@@ -17,6 +18,7 @@ describe('uiSlice', () => {
     selectedDate: null,
     viewDate: dayjs('2026-05-01').toISOString(),
     excludedEventTypes: [],
+    onlyParticipating: false,
   };
 
   it('should return the initial state', () => {
@@ -75,6 +77,14 @@ describe('uiSlice', () => {
 
     state = reducer(state, setAllEventTypesEnabled(true));
     expect(state.excludedEventTypes).toEqual([]);
+  });
+
+  it('should handle toggleOnlyParticipating', () => {
+    let state = reducer(undefined, toggleOnlyParticipating());
+    expect(state.onlyParticipating).toBe(true);
+
+    state = reducer(state, toggleOnlyParticipating());
+    expect(state.onlyParticipating).toBe(false);
   });
 });
 

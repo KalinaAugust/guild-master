@@ -9,7 +9,7 @@ import styles from './CalendarGrid.module.css';
 import { useAppDispatch, useAppSelector } from '@/shared/lib/hooks';
 import { openEventModal, setSelectedDate } from '@/entities/calendar';
 import { EventFilterDropdown } from '@/features/filter-events';
-import { useGetEventsQuery } from '@/entities/event';
+import { useGetEventsQuery, useGetMyEventIdsQuery } from '@/entities/event';
 import { Guild, useGuildPermissions } from '@/entities/guild';
 import { ActivityEvent } from '@/shared/types';
 import { Select } from '@/shared/ui/Select';
@@ -37,9 +37,13 @@ export const CalendarGrid: React.FC<{
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
   const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
+  const onlyParticipating = useAppSelector((state) => state.ui.onlyParticipating);
 
   const { data: fetchedEvents } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
+  });
+  const { data: myIdsData } = useGetMyEventIdsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId || !userId,
   });
 
   const events = fetchedEvents ?? (activeGuildId === initialGuildId ? initialEvents : []);
@@ -102,7 +106,7 @@ export const CalendarGrid: React.FC<{
           </div>
           <div className={styles.separator} />
           <div className={styles.filterDropdown}>
-            <EventFilterDropdown />
+            <EventFilterDropdown userId={userId} />
           </div>
         </div>
         <div className={styles.controlsRight}>
@@ -125,7 +129,11 @@ export const CalendarGrid: React.FC<{
         ))}
         {days.map((day, index) => {
           const dayEvents = events
-            .filter(event => event.date === day.fullDate && !excludedEventTypes.includes(event.type))
+            .filter(event => {
+              const matchesType = !excludedEventTypes.includes(event.type);
+              const matchesParticipation = !onlyParticipating || (myIdsData?.eventIds?.includes(event.id));
+              return event.date === day.fullDate && matchesType && matchesParticipation;
+            })
             .sort((a, b) => a.time.localeCompare(b.time));
 
           const displayedEvents = dayEvents.slice(0, 2);

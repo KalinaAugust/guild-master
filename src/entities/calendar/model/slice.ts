@@ -9,6 +9,7 @@ const initialState: UIState = {
   selectedDate: null,
   viewDate: dayjs().toISOString(),
   excludedEventTypes: [],
+  onlyParticipating: false,
 };
 
 export const uiSlice = createSlice({
@@ -46,6 +47,9 @@ export const uiSlice = createSlice({
         state.excludedEventTypes.push(type);
       }
     },
+    toggleOnlyParticipating: (state) => {
+      state.onlyParticipating = !state.onlyParticipating;
+    },
     setAllEventTypesEnabled: (state, action: PayloadAction<boolean>) => {
       if (action.payload) {
         state.excludedEventTypes = [];
@@ -65,6 +69,7 @@ export const {
   setViewDate,
   toggleEventType,
   setAllEventTypesEnabled,
+  toggleOnlyParticipating,
 } = uiSlice.actions;
 export default uiSlice.reducer;
 
