@@ -6,7 +6,11 @@ import { useGetNotificationsQuery, useMarkAllReadMutation, NOTIFICATION_TYPE_CON
 import { NotificationPanel } from './NotificationPanel';
 import styles from './NotificationBell.module.css';
 
-export const NotificationBell = () => {
+interface Props {
+  userId?: string;
+}
+
+export const NotificationBell = ({ userId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: notifications = [] } = useGetNotificationsQuery(undefined, {
     refetchOnFocus: true,
@@ -41,7 +45,7 @@ export const NotificationBell = () => {
           <span className={styles.badge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
         )}
       </button>
-      {isOpen && <NotificationPanel notifications={knownNotifications} onMarkAllRead={markAllRead} onClose={() => setIsOpen(false)} />}
+      {isOpen && <NotificationPanel notifications={knownNotifications} userId={userId} onMarkAllRead={markAllRead} onClose={() => setIsOpen(false)} />}
     </div>
   );
 };

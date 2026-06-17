@@ -13,7 +13,7 @@ export const Header = async () => {
         {user ? (
           <>
             <AiHelperButton />
-            <NotificationBell />
+            <NotificationBell userId={user.id} />
           </>
         ) : (
           <div className={styles.authLinks}>
