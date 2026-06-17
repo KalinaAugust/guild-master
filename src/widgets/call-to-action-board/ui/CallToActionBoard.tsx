@@ -15,6 +15,7 @@ import {
   useMarkCallToActionsReadMutation,
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,
+  useLaunchCallToActionMutation,
 } from '@/entities/call-to-action';
 import type { Guild } from '@/entities/guild';
 import { CallToActionSkeleton } from './CallToActionSkeleton';
@@ -40,9 +41,11 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
 
   const [modalOpen, setModalOpen] = useState(false);
   const [togglingId, setTogglingId] = useState<string | null>(null);
+  const [launchingId, setLaunchingId] = useState<string | null>(null);
 
   const [toggleInterest] = useToggleCallToActionInterestMutation();
   const [deleteCallToAction] = useDeleteCallToActionMutation();
+  const [launchCallToAction] = useLaunchCallToActionMutation();
 
   const sortedCallToActions = useMemo(() => {
     const now = dayjs();
@@ -84,6 +87,19 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
     }
   };
 
+  const handleLaunch = async (ctaId: string) => {
+    if (!activeGuildId) return;
+    setLaunchingId(ctaId);
+    try {
+      await launchCallToAction({ guildId: activeGuildId, ctaId }).unwrap();
+      toast.success(t('manualLaunchedToast'));
+    } catch {
+      toast.error(t('launchError'));
+    } finally {
+      setLaunchingId(null);
+    }
+  };
+
   return (
     <Panel className={styles.panel}>
       <div className={styles.header}>
@@ -116,6 +132,8 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
               onToggleInterest={handleToggle}
               onDelete={handleDelete}
               isToggling={togglingId === cta.id}
+              onLaunch={handleLaunch}
+              isLaunching={launchingId === cta.id}
             />
           ))}
       </div>

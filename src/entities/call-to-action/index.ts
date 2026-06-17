@@ -12,4 +12,5 @@ export {
   useCreateCallToActionMutation,
   useToggleCallToActionInterestMutation,
   useDeleteCallToActionMutation,
+  useLaunchCallToActionMutation,
 } from './api/callToActionApi';
