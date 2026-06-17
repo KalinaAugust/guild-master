@@ -17,25 +17,27 @@ interface EditableBirthDateProps {
 
 export const EditableBirthDate = ({ initialBirthDate, userId, locale }: EditableBirthDateProps) => {
   const pickerT = useTranslations('DateTimePicker');
+  const t = useTranslations('UpdateProfile');
+  const tc = useTranslations('Common');
   const { isEditing, value, setValue, saved, isSaving, isUnchanged, startEditing, cancel, save } =
     useEditableField<string>({
       initial: initialBirthDate ?? '',
       onSave: (v) => updateBirthDate(userId, v || null),
-      successMessage: 'Birth date updated',
-      errorMessage: 'Failed to update birth date',
+      successMessage: t('birthDate.updated'),
+      errorMessage: t('birthDate.updateError'),
     });
 
   if (!isEditing) {
     return (
       <div className={styles.view}>
         <span className={saved ? styles.value : styles.placeholder}>
-          {saved ? dayjs(saved).locale(locale).format('D MMMM YYYY') : 'Add your birth date'}
+          {saved ? dayjs(saved).locale(locale).format('D MMMM YYYY') : t('birthDate.empty')}
         </span>
         <Button
           variant="ghost"
           size="icon_sm"
           onClick={startEditing}
-          aria-label="Edit birth date"
+          aria-label={`${tc('edit')} ${t('birthDate.label')}`}
           className={styles.editButton}
         >
           <Pencil size={16} />
@@ -65,7 +67,7 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
           onClick={save}
           isLoading={isSaving}
           disabled={isUnchanged}
-          aria-label="Save"
+          aria-label={tc('save')}
           className={styles.actionButton}
         >
           <Check size={18} />
@@ -75,7 +77,7 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
           size="icon_sm"
           onClick={cancel}
           disabled={isSaving}
-          aria-label="Cancel"
+          aria-label={tc('cancel')}
           className={styles.actionButton}
         >
           <X size={18} />

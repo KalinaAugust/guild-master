@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Pencil, Check, X } from 'lucide-react';
 import { Input } from '@/shared/ui/Input';
 import { Button } from '@/shared/ui/Button';
@@ -26,6 +27,8 @@ export const EditableInterests = ({
   userId,
   onEditStateChange,
 }: EditableInterestsProps) => {
+  const t = useTranslations('UpdateProfile');
+  const tc = useTranslations('Common');
   const {
     isEditing,
     value: interests,
@@ -39,8 +42,8 @@ export const EditableInterests = ({
   } = useEditableField<string[]>({
     initial: initialInterests,
     onSave: (v) => updateInterests(userId, v),
-    successMessage: 'Interests updated',
-    errorMessage: 'Failed to update interests',
+    successMessage: t('interests.updated'),
+    errorMessage: t('interests.updateError'),
     isEqual: sameList,
   });
   const [draft, setDraft] = useState('');
@@ -76,13 +79,13 @@ export const EditableInterests = ({
             ))}
           </div>
         ) : (
-          <p className={styles.placeholder}>Add your interests</p>
+          <p className={styles.placeholder}>{t('interests.empty')}</p>
         )}
         <Button
           variant="ghost"
           size="icon_sm"
           onClick={startEditing}
-          aria-label="Edit interests"
+          aria-label={`${tc('edit')} ${t('interests.label')}`}
           className={styles.editButton}
         >
           <Pencil size={16} />
@@ -119,7 +122,7 @@ export const EditableInterests = ({
             }
           }}
           maxLength={INTEREST_MAX_LEN}
-          placeholder="Add interest and press Enter"
+          placeholder={t('interests.placeholder')}
           disabled={isSaving || interests.length >= INTERESTS_MAX}
           autoFocus
         />
@@ -130,7 +133,7 @@ export const EditableInterests = ({
             onClick={save}
             isLoading={isSaving}
             disabled={isUnchanged}
-            aria-label="Save"
+            aria-label={tc('save')}
             className={styles.actionButton}
           >
             <Check size={18} />
@@ -140,7 +143,7 @@ export const EditableInterests = ({
             size="icon_sm"
             onClick={handleCancel}
             disabled={isSaving}
-            aria-label="Cancel"
+            aria-label={tc('cancel')}
             className={styles.actionButton}
           >
             <X size={18} />

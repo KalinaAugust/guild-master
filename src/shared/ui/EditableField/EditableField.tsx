@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Pencil, Check, X } from 'lucide-react';
 import { Input } from '@/shared/ui/Input';
 import { Textarea } from '@/shared/ui/Textarea';
@@ -34,6 +35,7 @@ export const EditableField = ({
   multiline = false,
   rows = 3,
 }: EditableFieldProps) => {
+  const tc = useTranslations('Common');
   const { isEditing, value, setValue, saved, isSaving, isUnchanged, startEditing, cancel, save } =
     useEditableField<string>({
       initial,
@@ -52,7 +54,7 @@ export const EditableField = ({
           variant="ghost"
           size="icon_sm"
           onClick={startEditing}
-          aria-label={`Edit ${label}`}
+          aria-label={`${tc('edit')} ${label}`}
           className={styles.editButton}
         >
           <Pencil size={16} />
@@ -90,7 +92,7 @@ export const EditableField = ({
           onClick={save}
           isLoading={isSaving}
           disabled={isUnchanged}
-          aria-label="Save"
+          aria-label={tc('save')}
           className={styles.actionButton}
         >
           <Check size={18} />
@@ -100,7 +102,7 @@ export const EditableField = ({
           size="icon_sm"
           onClick={cancel}
           disabled={isSaving}
-          aria-label="Cancel"
+          aria-label={tc('cancel')}
           className={styles.actionButton}
         >
           <X size={18} />

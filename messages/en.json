@@ -22,6 +22,7 @@
     "backToCalendar": "Back to calendar",
     "backToDay": "Back to day",
     "edit": "Edit",
+    "unread": "unread",
     "description": "Description",
     "locales": {
       "en": "English",
@@ -169,6 +170,7 @@
     "emptyMember": "You are not a member of any guilds",
     "deleteLabel": "Delete guild",
     "avatarSection": "Avatar",
+    "avatarChange": "Change",
     "membersSection": "Members",
     "settingsSection": "Settings",
     "successCreated": "Guild created",
@@ -402,5 +404,68 @@
     "emptyText": "Add a private note about this user...",
     "inputPlaceholder": "Only you can see this note...",
     "helpTooltip": "This note is private. It is only visible to you and will appear as a tooltip when hovering over this user's name in lists."
+  },
+  "UpdateProfile": {
+    "name": {
+      "label": "name",
+      "empty": "Add your name",
+      "placeholder": "Your name",
+      "updated": "Name updated",
+      "updateError": "Failed to update name"
+    },
+    "alias": {
+      "label": "alias",
+      "empty": "Add an alias",
+      "placeholder": "Alias / character name",
+      "updated": "Alias updated",
+      "updateError": "Failed to update alias"
+    },
+    "about": {
+      "label": "about",
+      "empty": "Add something about yourself",
+      "placeholder": "A few words about yourself",
+      "updated": "About updated",
+      "updateError": "Failed to update about"
+    },
+    "interests": {
+      "label": "interests",
+      "empty": "Add your interests",
+      "placeholder": "Add interest and press Enter",
+      "updated": "Interests updated",
+      "updateError": "Failed to update interests"
+    },
+    "birthDate": {
+      "label": "birth date",
+      "empty": "Add your birth date",
+      "updated": "Birth date updated",
+      "updateError": "Failed to update birth date"
+    },
+    "avatar": {
+      "change": "Change",
+      "updated": "Avatar updated successfully",
+      "updateError": "Failed to update avatar"
+    },
+    "settings": {
+      "title": "Profile settings",
+      "showAsAlias": "Show me as alias",
+      "iconAfterName": "Icon after name",
+      "socials": "Socials",
+      "socialPlaceholder": "handle or link",
+      "fieldPrivacy": "Field privacy",
+      "noIcon": "No icon",
+      "updated": "Profile updated",
+      "updateError": "Failed to update profile",
+      "fields": {
+        "name": "Real name",
+        "alias": "Alias",
+        "about": "About",
+        "interests": "Interests",
+        "socials": "Socials",
+        "birth_date": "Birth date",
+        "email": "Email",
+        "joined": "Join date",
+        "common_guilds": "Common guilds"
+      }
+    }
   }
 }

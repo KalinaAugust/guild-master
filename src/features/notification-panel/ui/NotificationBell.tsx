@@ -2,6 +2,7 @@
 
 import { Bell } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { useGetNotificationsQuery, useMarkAllReadMutation, NOTIFICATION_TYPE_CONFIG } from '@/entities/notification';
 import { NotificationPanel } from './NotificationPanel';
 import styles from './NotificationBell.module.css';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export const NotificationBell = ({ userId }: Props) => {
+  const t = useTranslations('Notifications');
   const [isOpen, setIsOpen] = useState(false);
   const { data: notifications = [] } = useGetNotificationsQuery(undefined, {
     refetchOnFocus: true,
@@ -39,7 +41,7 @@ export const NotificationBell = ({ userId }: Props) => {
 
   return (
     <div ref={wrapperRef} className={styles.wrapper}>
-      <button className={styles.bell} onClick={handleToggle} aria-label="Notifications">
+      <button className={styles.bell} onClick={handleToggle} aria-label={t('title')}>
         <Bell size={20} />
         {unreadCount > 0 && (
           <span className={styles.badge}>{unreadCount > 99 ? '99+' : unreadCount}</span>

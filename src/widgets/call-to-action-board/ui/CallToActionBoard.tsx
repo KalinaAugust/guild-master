@@ -36,7 +36,7 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
 
   const { data, isLoading } = useGetCallToActionsQuery(activeGuildId ?? '', { skip: !activeGuildId });
-  const callToActions = data?.callToActions ?? [];
+  const callToActions = data?.callToActions;
   const canCreate = data?.canCreate ?? false;
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +49,8 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
 
   const sortedCallToActions = useMemo(() => {
     const now = dayjs();
-    return [...callToActions].sort((a, b) => {
+    const list = callToActions ?? [];
+    return [...list].sort((a, b) => {
       const aExpired = dayjs(a.eventDate).diff(now) <= 0;
       const bExpired = dayjs(b.eventDate).diff(now) <= 0;
 

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRef, useState, ChangeEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import { Image as ImageIcon, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 import { CropperModal } from '@/shared/ui/CropperModal';
@@ -17,6 +18,7 @@ interface GuildAvatarUploadProps {
 }
 
 export const GuildAvatarUpload = ({ avatarUrl, onSelect, disabled }: GuildAvatarUploadProps) => {
+  const t = useTranslations('Guild');
   const [imgToCrop, setImgToCrop] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -74,7 +76,7 @@ export const GuildAvatarUpload = ({ avatarUrl, onSelect, disabled }: GuildAvatar
 
         <div className={styles.overlay}>
           <Camera size={20} />
-          <span className={styles.overlayText}>Change</span>
+          <span className={styles.overlayText}>{t('avatarChange')}</span>
         </div>
 
         <input

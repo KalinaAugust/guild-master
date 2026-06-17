@@ -15,6 +15,9 @@ vi.mock('next-intl', () => ({
       errorMessage: 'Failed to update note',
       emptyText: 'Add a private note about this user...',
       inputPlaceholder: 'Only you can see this note...',
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
     };
     return messages[key] || key;
   },

@@ -1,3 +1,9 @@
 # Project Rules for Gemini
 
 - The contents of the root CLAUDE.md file are automatically injected into the context at the start of the session.
+- MANDATORY: If `graphify-out/graph.json` exists, you MUST run `graphify query "<question>"` (for questions), `graphify explain "<concept>"` (for concepts), or `graphify path "<A>" "<B>"` (for relationships) before grepping or reading raw source files (using `grep_search` or `view_file` tools). Only read/grep raw files to modify/debug specific lines, or after graphify has oriented you. This rule also applies to all subagents.
+- **Explicit Instructions Only:** Do NOT change, fix, or modify anything in the codebase without explicit instruction or request from the user.
+- **Clarification:** If you are unsure how to proceed, face ambiguous requirements, or have multiple implementation choices, ALWAYS stop and ask the user clarifying questions.
+- **Prerequisites for Work:** Proceed with code implementation or execution only after receiving clear answers to all of your questions.
+
+

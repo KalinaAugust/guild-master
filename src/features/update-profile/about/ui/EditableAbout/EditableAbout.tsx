@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { EditableField } from '@/shared/ui/EditableField';
 import { updateAbout } from '@/entities/user';
 
@@ -10,17 +11,20 @@ interface EditableAboutProps {
   userId: string;
 }
 
-export const EditableAbout = ({ initialAbout, userId }: EditableAboutProps) => (
-  <EditableField
-    initial={initialAbout ?? ''}
-    onSave={(value) => updateAbout(userId, value)}
-    successMessage="About updated"
-    errorMessage="Failed to update about"
-    label="about"
-    emptyText="Add something about yourself"
-    inputPlaceholder="A few words about yourself"
-    maxLength={ABOUT_MAX}
-    multiline
-    rows={3}
-  />
-);
+export const EditableAbout = ({ initialAbout, userId }: EditableAboutProps) => {
+  const t = useTranslations('UpdateProfile');
+  return (
+    <EditableField
+      initial={initialAbout ?? ''}
+      onSave={(value) => updateAbout(userId, value)}
+      successMessage={t('about.updated')}
+      errorMessage={t('about.updateError')}
+      label={t('about.label')}
+      emptyText={t('about.empty')}
+      inputPlaceholder={t('about.placeholder')}
+      maxLength={ABOUT_MAX}
+      multiline
+      rows={3}
+    />
+  );
+};

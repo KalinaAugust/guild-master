@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { EditableField } from '@/shared/ui/EditableField';
 import { updateAlias } from '@/entities/user';
 
@@ -10,15 +11,18 @@ interface EditableAliasProps {
   userId: string;
 }
 
-export const EditableAlias = ({ initialAlias, userId }: EditableAliasProps) => (
-  <EditableField
-    initial={initialAlias ?? ''}
-    onSave={(value) => updateAlias(userId, value)}
-    successMessage="Alias updated"
-    errorMessage="Failed to update alias"
-    label="alias"
-    emptyText="Add an alias"
-    inputPlaceholder="Alias / character name"
-    maxLength={ALIAS_MAX}
-  />
-);
+export const EditableAlias = ({ initialAlias, userId }: EditableAliasProps) => {
+  const t = useTranslations('UpdateProfile');
+  return (
+    <EditableField
+      initial={initialAlias ?? ''}
+      onSave={(value) => updateAlias(userId, value)}
+      successMessage={t('alias.updated')}
+      errorMessage={t('alias.updateError')}
+      label={t('alias.label')}
+      emptyText={t('alias.empty')}
+      inputPlaceholder={t('alias.placeholder')}
+      maxLength={ALIAS_MAX}
+    />
+  );
+};

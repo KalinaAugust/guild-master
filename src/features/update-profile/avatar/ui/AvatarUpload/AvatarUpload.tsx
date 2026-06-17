@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState, useRef, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { User, Camera } from 'lucide-react';
 import { Spinner } from '@/shared/ui/Spinner';
 import { toast } from 'sonner';
@@ -22,6 +23,7 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const t = useTranslations('UpdateProfile');
 
   const handleContainerClick = () => {
     if (isUploading) return;
@@ -51,12 +53,12 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
     setIsUploading(true);
     try {
       await updateAvatar(userId, blob);
-      toast.success('Avatar updated successfully');
+      toast.success(t('avatar.updated'));
       setIsModalOpen(false);
       router.refresh();
     } catch (error) {
       console.error('Error updating avatar:', error);
-      toast.error('Failed to update avatar');
+      toast.error(t('avatar.updateError'));
     } finally {
       setIsUploading(false);
       // Clear input so same file can be selected again
@@ -91,7 +93,7 @@ export const AvatarUpload = ({ initialAvatarUrl, userId }: AvatarUploadProps) =>
           ) : (
             <>
               <Camera size={24} />
-              <span className={styles.overlayText}>Change</span>
+              <span className={styles.overlayText}>{t('avatar.change')}</span>
             </>
           )}
         </div>

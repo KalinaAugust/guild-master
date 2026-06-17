@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Button } from '@/shared/ui/Button';
@@ -34,16 +35,16 @@ export interface ProfileSettingsInitial {
   privacy: Record<PrivacyField, PrivacyLevel>;
 }
 
-const PRIVACY_ROWS: { field: PrivacyField; label: string }[] = [
-  { field: 'name', label: 'Real name' },
-  { field: 'alias', label: 'Alias' },
-  { field: 'about', label: 'About' },
-  { field: 'interests', label: 'Interests' },
-  { field: 'socials', label: 'Socials' },
-  { field: 'birth_date', label: 'Birth date' },
-  { field: 'email', label: 'Email' },
-  { field: 'joined', label: 'Join date' },
-  { field: 'common_guilds', label: 'Common guilds' },
+const PRIVACY_FIELDS: PrivacyField[] = [
+  'name',
+  'alias',
+  'about',
+  'interests',
+  'socials',
+  'birth_date',
+  'email',
+  'joined',
+  'common_guilds',
 ];
 
 interface Props {
@@ -54,6 +55,8 @@ interface Props {
 
 export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
   const router = useRouter();
+  const t = useTranslations('UpdateProfile');
+  const tc = useTranslations('Common');
   const [updateSettings, { isLoading }] = useUpdateProfileSettingsMutation();
 
   const [displayAsAlias, setDisplayAsAlias] = useState(initial.displayAsAlias);
@@ -78,11 +81,11 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
     };
     try {
       await updateSettings(payload).unwrap();
-      toast.success('Profile updated');
+      toast.success(t('settings.updated'));
       onClose();
       router.refresh();
     } catch {
-      toast.error('Failed to update profile');
+      toast.error(t('settings.updateError'));
     }
   };
 
@@ -90,36 +93,36 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
     <WizardDialog
       open={isOpen}
       onClose={onClose}
-      title="Profile settings"
+      title={t('settings.title')}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose} disabled={isLoading}>Cancel</Button>
-          <Button onClick={handleSave} isLoading={isLoading}>Save</Button>
+          <Button variant="secondary" onClick={onClose} disabled={isLoading}>{tc('cancel')}</Button>
+          <Button onClick={handleSave} isLoading={isLoading}>{tc('save')}</Button>
         </>
       }
     >
       <WizardColumn>
         <div className={styles.section}>
           <label className={styles.toggleRow}>
-            <span>Show me as alias</span>
-            <Switch checked={displayAsAlias} onCheckedChange={setDisplayAsAlias} ariaLabel="Show me as alias" />
+            <span>{t('settings.showAsAlias')}</span>
+            <Switch checked={displayAsAlias} onCheckedChange={setDisplayAsAlias} ariaLabel={t('settings.showAsAlias')} />
           </label>
         </div>
 
         <div className={styles.section}>
-          <span className={styles.label}>Icon after name</span>
+          <span className={styles.label}>{t('settings.iconAfterName')}</span>
           <IconPicker value={icon} onChange={(v: ProfileIcon | null) => setIcon(v)} />
         </div>
 
         <div className={styles.section}>
-          <span className={styles.label}>Socials</span>
+          <span className={styles.label}>{t('settings.socials')}</span>
           {SOCIAL_PLATFORMS.map((platform) => (
             <div key={platform} className={styles.socialRow}>
               <span className={styles.socialLabel}>{SOCIAL_META[platform].label}</span>
               <Input
                 value={socials.find((s) => s.platform === platform)?.value ?? ''}
                 onChange={(e) => setSocial(platform, e.target.value)}
-                placeholder="handle or link"
+                placeholder={t('settings.socialPlaceholder')}
               />
             </div>
           ))}
@@ -128,11 +131,11 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
 
       <WizardColumn>
         <div className={styles.section}>
-          <span className={styles.label}>Field privacy</span>
+          <span className={styles.label}>{t('settings.fieldPrivacy')}</span>
           <div className={styles.privacyList}>
-            {PRIVACY_ROWS.map(({ field, label }) => (
+            {PRIVACY_FIELDS.map((field) => (
               <div key={field} className={styles.privacyRow}>
-                <span>{label}</span>
+                <span>{t(`settings.fields.${field}`)}</span>
                 <PrivacySelector
                   value={privacy[field]}
                   onChange={(level) => setPrivacy({ ...privacy, [field]: level })}

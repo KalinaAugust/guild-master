@@ -3,6 +3,22 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { EditableName } from './EditableName';
 import { updateFullName } from '@/entities/user';
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const messages: Record<string, string> = {
+      'name.label': 'name',
+      'name.empty': 'Add your name',
+      'name.placeholder': 'Your name',
+      'name.updated': 'Name updated',
+      'name.updateError': 'Failed to update name',
+      edit: 'Edit',
+      save: 'Save',
+      cancel: 'Cancel',
+    };
+    return messages[key] || key;
+  },
+}));
+
 vi.mock('@/entities/user', async (importOriginal) => {
   const original = await importOriginal<typeof import('@/entities/user')>();
   return {
