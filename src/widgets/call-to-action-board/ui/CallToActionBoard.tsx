@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { Plus, HelpCircle } from 'lucide-react';
+import dayjs from '@/shared/lib/dayjs';
 import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
@@ -42,6 +43,18 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
 
   const [toggleInterest] = useToggleCallToActionInterestMutation();
   const [deleteCallToAction] = useDeleteCallToActionMutation();
+
+  const sortedCallToActions = useMemo(() => {
+    const now = dayjs();
+    return [...callToActions].sort((a, b) => {
+      const aExpired = dayjs(a.eventDate).diff(now) <= 0;
+      const bExpired = dayjs(b.eventDate).diff(now) <= 0;
+
+      if (aExpired && !bExpired) return 1;
+      if (!aExpired && bExpired) return -1;
+      return 0;
+    });
+  }, [callToActions]);
 
   // Opening the board clears the sidebar unread dot for the active guild.
   const [markRead] = useMarkCallToActionsReadMutation();
@@ -94,9 +107,9 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
 
       <div className={styles.feed}>
         {isLoading && <CallToActionSkeleton />}
-        {!isLoading && callToActions.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
+        {!isLoading && sortedCallToActions.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
         {!isLoading &&
-          callToActions.map((cta) => (
+          sortedCallToActions.map((cta) => (
             <CallToActionCard
               key={cta.id}
               cta={cta}

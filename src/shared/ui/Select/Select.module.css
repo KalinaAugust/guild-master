@@ -137,6 +137,15 @@
   color: var(--text-secondary);
 }
 
+.selectIcon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .item:hover, .item[data-highlighted] {
   background: var(--accent-glow);
   color: var(--accent-secondary);

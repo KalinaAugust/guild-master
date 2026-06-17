@@ -4,10 +4,11 @@ import React, { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import * as Form from '@radix-ui/react-form';
 import { ActivityType } from '@/shared/types';
+import { typeIcons } from '@/entities/event';
 import { Select } from '@/shared/ui/Select';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
-import { Textarea } from '@/shared/ui/Textarea';
+import { RichTextEditor } from '@/shared/ui/RichTextEditor';
 import { FormField } from '@/shared/ui/FormField';
 import { DatePicker } from '@/shared/ui/DatePicker';
 import { TimePicker } from '@/shared/ui/TimePicker';
@@ -44,13 +45,13 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
   const typeOptions = useMemo(() => [
-    { label: commonT('eventTypes.game'), value: 'game' as ActivityType },
-    { label: commonT('eventTypes.meeting'), value: 'meeting' as ActivityType },
-    { label: commonT('eventTypes.party'), value: 'party' as ActivityType },
-    { label: commonT('eventTypes.sport'), value: 'sport' as ActivityType },
-    { label: commonT('eventTypes.dnd'), value: 'dnd' as ActivityType },
-    { label: commonT('eventTypes.boardgame'), value: 'boardgame' as ActivityType },
-    { label: commonT('eventTypes.other'), value: 'other' as ActivityType },
+    { label: commonT('eventTypes.game'), value: 'game' as ActivityType, icon: <span style={{ color: 'var(--event-game-border)', display: 'flex' }}>{typeIcons.game}</span> },
+    { label: commonT('eventTypes.meeting'), value: 'meeting' as ActivityType, icon: <span style={{ color: 'var(--event-meeting-border)', display: 'flex' }}>{typeIcons.meeting}</span> },
+    { label: commonT('eventTypes.party'), value: 'party' as ActivityType, icon: <span style={{ color: 'var(--event-party-border)', display: 'flex' }}>{typeIcons.party}</span> },
+    { label: commonT('eventTypes.sport'), value: 'sport' as ActivityType, icon: <span style={{ color: 'var(--event-sport-border)', display: 'flex' }}>{typeIcons.sport}</span> },
+    { label: commonT('eventTypes.dnd'), value: 'dnd' as ActivityType, icon: <span style={{ color: 'var(--event-dnd-border)', display: 'flex' }}>{typeIcons.dnd}</span> },
+    { label: commonT('eventTypes.boardgame'), value: 'boardgame' as ActivityType, icon: <span style={{ color: 'var(--event-boardgame-border)', display: 'flex' }}>{typeIcons.boardgame}</span> },
+    { label: commonT('eventTypes.other'), value: 'other' as ActivityType, icon: <span style={{ color: 'var(--event-other-border)', display: 'flex' }}>{typeIcons.other}</span> },
   ], [commonT]);
 
   const handleSubmit = (e: React.SubmitEvent) => {
@@ -131,10 +132,10 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
         </FormField>
       </div>
       <FormField name="description" label={commonT('description')}>
-        <Textarea
+        <RichTextEditor
           placeholder={t('descriptionPlaceholder')}
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={setDescription}
         />
       </FormField>
       {!hideActions && (

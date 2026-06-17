@@ -29,4 +29,15 @@ describe('Input', () => {
     const { container } = render(<Input className="custom" />);
     expect(container.querySelector('input')?.className).toContain('custom');
   });
+
+  it('renders an icon when icon prop is provided', () => {
+    render(<Input icon={<span data-testid="icon">icon</span>} />);
+    expect(screen.getByTestId('icon')).toBeInTheDocument();
+  });
+
+  it('applies custom className to the wrapper when icon is provided', () => {
+    const { container } = render(<Input icon={<span>icon</span>} className="custom-wrapper" />);
+    const wrapper = container.querySelector('.custom-wrapper');
+    expect(wrapper?.className).toContain('inputWrapper');
+  });
 });

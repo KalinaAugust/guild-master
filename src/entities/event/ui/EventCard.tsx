@@ -4,6 +4,7 @@ import React from 'react';
 import { Gamepad2, Users, Calendar, Clock, Trash2, Edit2, PartyPopper, Dumbbell, Dices, Puzzle } from 'lucide-react';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
+import { stripMarkdown } from '@/shared/lib/stripMarkdown';
 import styles from './EventCard.module.css';
 
 interface ParticipantCount {
@@ -57,7 +58,7 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
         </div>
 
         {event.description ? (
-          <p className={styles.description}>{event.description}</p>
+          <p className={styles.description}>{stripMarkdown(event.description)}</p>
         ) : (
           <div className={styles.descriptionPlaceholder} aria-hidden="true" />
         )}
