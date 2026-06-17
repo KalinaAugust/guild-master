@@ -4,7 +4,7 @@ import { AnnouncementCard } from './AnnouncementCard';
 import type { Announcement } from '@/entities/announcement';
 
 vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string, params?: any) => {
+  useTranslations: () => (key: string, params?: { count?: number }) => {
     if (key === 'commentsCount') return params?.count === 1 ? '1 comment' : `${params?.count || 0} comments`;
     return key;
   },

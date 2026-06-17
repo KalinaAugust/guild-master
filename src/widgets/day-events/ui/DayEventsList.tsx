@@ -222,39 +222,41 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
           setEventToDelete(null);
         }}
         title={t('deleteOccurrenceTitle')}
+        footerActions={
+          <>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setDeleteRecurringOpen(false);
+                setEventObjectToDelete(null);
+                setEventToDelete(null);
+              }}
+              disabled={isDeleting || isUpdating}
+            >
+              {commonT('cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDeleteOnlyOccurrence}
+              isLoading={isUpdating}
+              disabled={isDeleting}
+            >
+              {t('deleteOnlyThis')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleDeleteAllOccurrences}
+              isLoading={isDeleting}
+              disabled={isUpdating}
+            >
+              {t('deleteAll')}
+            </Button>
+          </>
+        }
       >
         <p style={{ marginBottom: '20px', fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
           {t('deleteOccurrenceDesc')}
         </p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setDeleteRecurringOpen(false);
-              setEventObjectToDelete(null);
-              setEventToDelete(null);
-            }}
-            disabled={isDeleting || isUpdating}
-          >
-            {commonT('cancel')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDeleteOnlyOccurrence}
-            isLoading={isUpdating}
-            disabled={isDeleting}
-          >
-            {t('deleteOnlyThis')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDeleteAllOccurrences}
-            isLoading={isDeleting}
-            disabled={isUpdating}
-          >
-            {t('deleteAll')}
-          </Button>
-        </div>
       </Modal>
     </div>
   );

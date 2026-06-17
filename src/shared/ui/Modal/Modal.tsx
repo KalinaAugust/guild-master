@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
+import { Button, ButtonProps } from '@/shared/ui/Button';
 import styles from './Modal.module.css';
 
 interface ModalProps {
@@ -12,6 +13,13 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   className?: string;
+  submitText?: string;
+  onSubmit?: () => void | Promise<void>;
+  submitButtonProps?: Partial<ButtonProps>;
+  cancelText?: string;
+  onCancel?: () => void;
+  cancelButtonProps?: Partial<ButtonProps>;
+  footerActions?: React.ReactNode;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -20,7 +28,16 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   className,
+  submitText,
+  onSubmit,
+  submitButtonProps,
+  cancelText,
+  onCancel,
+  cancelButtonProps,
+  footerActions,
 }) => {
+  const hasFooter = !!submitText || !!cancelText || !!footerActions;
+
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
@@ -39,9 +56,37 @@ export const Modal: React.FC<ModalProps> = ({
               <X size={20} />
             </DialogPrimitive.Close>
           </div>
-          <div className={styles.body}>
+          <div className={`${styles.body} ${hasFooter ? styles.bodyWithFooter : ''}`}>
             {children}
           </div>
+          {hasFooter && (
+            <div className={styles.footer}>
+              {footerActions ? (
+                footerActions
+              ) : (
+                <>
+                  {cancelText && (
+                    <Button
+                      variant="secondary"
+                      onClick={onCancel || onClose}
+                      {...cancelButtonProps}
+                    >
+                      {cancelText}
+                    </Button>
+                  )}
+                  {submitText && (
+                    <Button
+                      variant="primary"
+                      onClick={onSubmit}
+                      {...submitButtonProps}
+                    >
+                      {submitText}
+                    </Button>
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

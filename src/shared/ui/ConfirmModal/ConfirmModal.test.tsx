@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { ConfirmModal } from './ConfirmModal';
 
 vi.mock('next-intl', () => ({
@@ -7,8 +7,58 @@ vi.mock('next-intl', () => ({
 }));
 
 vi.mock('../Modal', () => ({
-  Modal: ({ isOpen, children, title }: { isOpen: boolean; children: React.ReactNode; title: string }) =>
-    isOpen ? <div role="dialog"><h2>{title}</h2>{children}</div> : null,
+  Modal: ({
+    isOpen,
+    children,
+    title,
+    submitText,
+    onSubmit,
+    submitButtonProps,
+    cancelText,
+    onCancel,
+    cancelButtonProps,
+    footerActions,
+  }: {
+    isOpen: boolean;
+    children: React.ReactNode;
+    title?: string;
+    submitText?: string;
+    onSubmit?: () => void;
+    submitButtonProps?: { disabled?: boolean; isLoading?: boolean };
+    cancelText?: string;
+    onCancel?: () => void;
+    cancelButtonProps?: { disabled?: boolean };
+    footerActions?: React.ReactNode;
+  }) => {
+    if (!isOpen) return null;
+    return (
+      <div role="dialog">
+        <h2>{title}</h2>
+        {children}
+        <div>
+          {footerActions ? (
+            footerActions
+          ) : (
+            <>
+              {cancelText && (
+                <button onClick={onCancel} disabled={cancelButtonProps?.disabled}>
+                  {cancelText}
+                </button>
+              )}
+              {submitText && (
+                <button
+                  onClick={onSubmit}
+                  disabled={submitButtonProps?.disabled || submitButtonProps?.isLoading}
+                >
+                  {submitText}
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    );
+  },
 }));
 
 describe('ConfirmModal', () => {
@@ -75,4 +125,3 @@ describe('ConfirmModal', () => {
     expect(base.onClose).not.toHaveBeenCalled();
   });
 });
-

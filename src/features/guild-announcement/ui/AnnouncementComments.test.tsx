@@ -17,7 +17,7 @@ vi.mock('@/shared/ui/ProfileLink', () => ({
 }));
 
 vi.mock('@/shared/ui/MessageComposer', () => ({
-  MessageComposer: ({ onSubmit, placeholder }: any) => (
+  MessageComposer: ({ onSubmit, placeholder }: { onSubmit: (value: string) => void; placeholder?: string }) => (
     <div>
       <input
         placeholder={placeholder}

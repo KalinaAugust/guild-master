@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import { Button } from '@/shared/ui/Button';
 import { Modal } from '@/shared/ui/Modal';
 import { useCreateCallToActionMutation } from '@/entities/call-to-action';
 import { CallToActionForm } from './CallToActionForm';
@@ -55,7 +54,20 @@ export const CreateCallToActionModal: React.FC<CreateCallToActionModalProps> = (
   };
 
   return (
-    <Modal isOpen={open} onClose={onClose} title={t('createTitle')} className={styles.modal}>
+    <Modal
+      isOpen={open}
+      onClose={onClose}
+      title={t('createTitle')}
+      className={styles.modal}
+      cancelText={commonT('cancel')}
+      onCancel={onClose}
+      submitText={t('publishButton')}
+      submitButtonProps={{
+        type: 'submit',
+        form: FORM_ID,
+        isLoading
+      }}
+    >
       <CallToActionForm
         key={session}
         formId={FORM_ID}
@@ -64,14 +76,6 @@ export const CreateCallToActionModal: React.FC<CreateCallToActionModalProps> = (
         onSubmit={handleSubmit}
         onCancel={onClose}
       />
-      <div className={styles.actions}>
-        <Button type="button" variant="secondary" onClick={onClose}>
-          {commonT('cancel')}
-        </Button>
-        <Button type="submit" variant="primary" form={FORM_ID} isLoading={isLoading}>
-          {t('publishButton')}
-        </Button>
-      </div>
     </Modal>
   );
 };

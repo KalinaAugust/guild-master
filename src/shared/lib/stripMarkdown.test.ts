@@ -4,7 +4,7 @@ import { stripMarkdown } from './stripMarkdown';
 describe('stripMarkdown', () => {
   it('returns empty string for undefined or empty input', () => {
     expect(stripMarkdown('')).toBe('');
-    expect(stripMarkdown(undefined as any)).toBe('');
+    expect(stripMarkdown(undefined as unknown as string)).toBe('');
   });
 
   it('removes bold and italic formatting', () => {

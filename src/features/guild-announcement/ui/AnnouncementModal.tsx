@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
-import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { RichTextEditor } from '@/shared/ui/RichTextEditor';
 import { Switch } from '@/shared/ui/Switch';
@@ -15,6 +14,8 @@ import {
   useUpdateAnnouncementMutation,
 } from '@/entities/announcement';
 import styles from './AnnouncementModal.module.css';
+
+const FORM_ID = 'announcement-form';
 
 interface AnnouncementModalProps {
   open: boolean;
@@ -85,8 +86,17 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
       onClose={handleClose}
       title={editing ? t('editTitle') : t('createTitle')}
       className={styles.modal}
+      cancelText={commonT('cancel')}
+      onCancel={handleClose}
+      submitText={editing ? t('saveButton') : t('publishButton')}
+      submitButtonProps={{
+        type: 'submit',
+        form: FORM_ID,
+        disabled: !isValid,
+        isLoading
+      }}
     >
-      <Form.Root onSubmit={handleSubmit} className={styles.form}>
+      <Form.Root id={FORM_ID} onSubmit={handleSubmit} className={styles.form}>
         <FormField name="title" label={t('titleLabel')} className={styles.formGroup}>
           <Input
             type="text"
@@ -115,15 +125,6 @@ export const AnnouncementModal: React.FC<AnnouncementModalProps> = ({
             <Switch checked={isPinned} onCheckedChange={setIsPinned} ariaLabel={t('pinLabel')} />
           </div>
         )}
-
-        <div className={styles.actions}>
-          <Button type="button" variant="secondary" onClick={handleClose}>
-            {commonT('cancel')}
-          </Button>
-          <Button type="submit" variant="primary" disabled={!isValid} isLoading={isLoading}>
-            {editing ? t('saveButton') : t('publishButton')}
-          </Button>
-        </div>
       </Form.Root>
     </Modal>
   );
