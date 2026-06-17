@@ -8,6 +8,7 @@ describe('ProfileLink', () => {
 
     const link = screen.getByRole('link', { name: 'Alice' });
     expect(link).toHaveAttribute('href', '/profile/a1B2c3D4');
+    expect(link).toHaveAttribute('data-user-public-id', 'a1B2c3D4');
     expect(link).not.toHaveAttribute('target');
   });
 
