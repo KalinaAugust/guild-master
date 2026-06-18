@@ -40,9 +40,8 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  /* 5 items (42px each) + 4 gaps (6px) */
-  max-height: 234px;
+  gap: 8px;
+  max-height: 17.75rem;
   overflow-y: auto;
 }
 
@@ -63,15 +62,45 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 8px 12px;
+  gap: 0.875rem;
+  flex-shrink: 0;
+  min-height: 3.5rem;
+  padding: 16px;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
-  border-radius: 8px;
+  border-radius: 12px;
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--shadow-glass);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.selfItem {
+  border: 1px solid var(--accent-primary);
+  background: rgba(45, 158, 208, 0.14);
+  box-shadow: 0 0 16px rgba(45, 158, 208, 0.25), inset 0 0 8px rgba(45, 158, 208, 0.15), var(--shadow-glass);
+}
+
+.selfItem:hover {
+  background: rgba(45, 158, 208, 0.18);
+  border-color: var(--accent-hover);
+}
+
+.avatarLink {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.avatarLink > div {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
 }
 
 .nameCol {
@@ -84,6 +113,7 @@
 
 .name {
   font-size: 0.875rem;
+  font-weight: 600;
   color: var(--accent-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,11 +121,20 @@
 }
 
 .note {
-  font-size: 0.72rem;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.4;
   color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.roleGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .role {
@@ -103,18 +142,14 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  flex-shrink: 0;
 }
 
 .ownerIcon,
 .adminIcon,
 .memberIcon {
-  width: 24px;
-  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
 .ownerIcon {

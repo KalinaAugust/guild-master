@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import clsx from 'clsx';
+import { GradientTitle } from '@/shared/ui/GradientTitle';
 import styles from './DetailLayout.module.css';
 
 interface DetailLayoutProps {
@@ -25,13 +26,15 @@ export const DetailLayout = ({
   footer,
   rightClassName,
 }: DetailLayoutProps) => (
-  <div className={styles.container}>
+  <div className={clsx(styles.container, 'detail-layout-active')}>
     <div className={styles.header}>
       <Link href={backHref} className={styles.backLink}>
         <ChevronLeft size={20} aria-hidden />
         {backLabel}
       </Link>
-      <h1 className={styles.title}>{title}</h1>
+      <GradientTitle as="h1" className={styles.title} fontSize="1.25rem">
+        {title}
+      </GradientTitle>
     </div>
 
     <div className={styles.body}>
@@ -44,3 +47,4 @@ export const DetailLayout = ({
     {footer && <div className={styles.footer}>{footer}</div>}
   </div>
 );
+

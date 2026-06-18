@@ -10,7 +10,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guild_id, guilds (id, name, owner_id, description, avatar_url)')
+    .select('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)')
     .eq('user_id', user.id);
 
   if (error || !data) {
@@ -20,6 +20,7 @@ export async function GET() {
   const guilds = data.reduce<
     Array<{
       id: string;
+      publicId: string;
       name: string;
       ownerId: string;
       description?: string;
@@ -31,6 +32,7 @@ export async function GET() {
     (acc, m) => {
       const g = m.guilds as unknown as {
         id: string;
+        public_id: string;
         name: string;
         owner_id: string;
         description: string | null;
@@ -39,6 +41,7 @@ export async function GET() {
       if (g) {
         acc.push({
           id: g.id,
+          publicId: g.public_id,
           name: g.name,
           ownerId: g.owner_id,
           description: g.description || undefined,
@@ -147,13 +150,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Failed to add owner as member' }, { status: 500 });
   }
 
+  const g = guild as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
+
   return NextResponse.json(
     {
-      id: guild.id,
-      name: guild.name,
-      ownerId: guild.owner_id,
-      description: guild.description || undefined,
-      avatarUrl: guild.avatar_url || undefined,
+      id: g.id,
+      publicId: g.public_id,
+      name: g.name,
+      ownerId: g.owner_id,
+      description: g.description || undefined,
+      avatarUrl: g.avatar_url || undefined,
     },
     { status: 201 }
   );

@@ -23,7 +23,9 @@ const ParticipantsBadge: React.FC<{ eventId: string }> = ({ eventId }) => {
     >
       <span className={styles.participantsBadge}>
         <Users size={12} />
-        {t('confirmedCount', { count: confirmed.length })}
+        <span className={styles.participantsText}>
+          {t('confirmedCount', { count: confirmed.length })}
+        </span>
       </span>
     </Tooltip>
   );
@@ -40,7 +42,7 @@ export const NextEventBlock: React.FC<Props> = ({ event }) => {
       <div className={styles.blockLabel}>{t('nextEvent')}</div>
       {event ? (
         <div className={styles.eventRow}>
-          <Link href={`/events/${event.id}`} className={styles.eventLink} target="_blank" rel="noopener noreferrer">
+          <Link href={`/events/${event.publicId ?? event.id}`} className={styles.eventLink} target="_blank" rel="noopener noreferrer">
             {event.title}
           </Link>
           <span className={styles.eventMeta}>

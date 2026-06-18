@@ -4,6 +4,7 @@ import dayjs from '@/shared/lib/dayjs';
 
 interface DbEvent {
   id: string;
+  public_id: string;
   title: string;
   description: string | null;
   type: string;
@@ -41,6 +42,7 @@ function generateOccurrences(raw: DbEvent): DbEvent[] {
         occurrences.push({
           ...raw,
           id: `${raw.id}_${currentSecs}`,
+          public_id: `${raw.public_id}_${currentSecs}`,
           event_date: `${currentSecs}T${timeStr}`,
         });
       }
@@ -54,10 +56,10 @@ export const getServerEvents = async (guildId: string): Promise<ActivityEvent[]>
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('events')
-    .select('*')
+    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
     .eq('guild_id', guildId)
     .order('event_date', { ascending: true });
-    
+
   if (error) {
     console.error('Error fetching events:', error);
     return [];
@@ -78,6 +80,7 @@ export const getServerEvents = async (guildId: string): Promise<ActivityEvent[]>
     const d = dayjs.utc(raw.event_date);
     return {
       id: raw.id,
+      publicId: raw.public_id,
       title: raw.title,
       description: raw.description || undefined,
       type: raw.type as ActivityType,
@@ -94,10 +97,10 @@ export const fetchEvents = async (guildId: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('events')
-    .select('*')
+    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
     .eq('guild_id', guildId)
     .order('event_date', { ascending: true });
-    
+
   if (error) {
     console.error('Error fetching events:', error);
     throw error;

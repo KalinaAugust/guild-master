@@ -1,24 +1,41 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { createClient } from '@/shared/api/supabase/server';
 import { GuildDetailContent, type MembershipStatus } from '@/features/guild-detail';
 import { GuildEditWizardConnected } from '@/features/manage-guilds';
+import { isUuid } from '@/shared/lib/isUuid';
 import styles from './GuildDetailPage.module.css';
 
 interface GuildDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ publicId: string }>;
 }
 
 export default async function GuildDetailPage({ params }: GuildDetailPageProps) {
-  const { id } = await params;
+  const { publicId } = await params;
   const supabase = await createClient();
 
-  const { data: guild } = await supabase
-    .from('guilds')
-    .select('id')
-    .eq('id', id)
-    .maybeSingle();
+  let guild = null;
+  if (isUuid(publicId)) {
+    const { data } = await supabase
+      .from('guilds')
+      .select('id, public_id')
+      .eq('id', publicId)
+      .maybeSingle();
+
+    if (data) {
+      redirect(`/guilds/${data.public_id}`);
+    }
+  } else {
+    const { data } = await supabase
+      .from('guilds')
+      .select('id, public_id')
+      .eq('public_id', publicId)
+      .maybeSingle();
+    guild = data;
+  }
 
   if (!guild) notFound();
+
+  const id = guild.id; // UUID to query membership and pass to components
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -51,7 +68,7 @@ export default async function GuildDetailPage({ params }: GuildDetailPageProps) 
 
   return (
     <main className={styles.main}>
-      <GuildDetailContent guildId={id} initialMembershipStatus={membershipStatus} />
+      <GuildDetailContent guildId={id} initialMembershipStatus={membershipStatus} userId={user?.id} />
       {membershipStatus === 'owner' && user && (
         <GuildEditWizardConnected userId={user.id} />
       )}

@@ -36,12 +36,12 @@ describe('GET /api/guilds/[id]', () => {
   });
   it('returns guild details with member count', async () => {
     const from = vi.fn()
-      .mockReturnValueOnce(query({ data: { id: 'g1', name: 'Alpha', description: null, owner_id: 'u1', profiles: { full_name: 'Boss' } } }))
+      .mockReturnValueOnce(query({ data: { id: 'g1', public_id: 'g1', name: 'Alpha', description: null, owner_id: 'u1', profiles: { full_name: 'Boss' } } }))
       .mockReturnValueOnce(query({ count: 3 }));
     vi.mocked(createClient).mockResolvedValue({ from } as never);
     const res = await GET({} as never, params('g1'));
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ id: 'g1', ownerName: 'Boss', memberCount: 3 });
+    expect(await res.json()).toMatchObject({ id: 'g1', publicId: 'g1', ownerName: 'Boss', memberCount: 3 });
   });
 });
 
@@ -60,10 +60,10 @@ describe('PATCH /api/guilds/[id]', () => {
     expect((await PATCH(body({ name: 'X' }), params('g1'))).status).toBe(403);
   });
   it('updates and returns the guild', async () => {
-    authed(vi.fn().mockReturnValue(query({ data: { id: 'g1', name: 'X', owner_id: 'u1', description: null } })));
+    authed(vi.fn().mockReturnValue(query({ data: { id: 'g1', public_id: 'g1', name: 'X', owner_id: 'u1', description: null } })));
     const res = await PATCH(body({ name: 'X' }), params('g1'));
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ id: 'g1', name: 'X', ownerId: 'u1' });
+    expect(await res.json()).toEqual({ id: 'g1', publicId: 'g1', name: 'X', ownerId: 'u1' });
   });
 });
 

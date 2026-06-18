@@ -33,6 +33,7 @@ describe('getMyGuilds', () => {
         guild_id: 'guild-1',
         guilds: {
           id: 'guild-1',
+          public_id: 'guild-1',
           name: 'First Guild',
           description: 'Description 1',
           avatar_url: 'http://avatar1.com',
@@ -44,6 +45,7 @@ describe('getMyGuilds', () => {
         guild_id: 'guild-2',
         guilds: {
           id: 'guild-2',
+          public_id: 'guild-2',
           name: 'Second Guild',
           description: 'Description 2',
           avatar_url: null,
@@ -68,6 +70,7 @@ describe('getMyGuilds', () => {
     expect(result).toEqual([
       {
         id: 'guild-1',
+        publicId: 'guild-1',
         name: 'First Guild',
         description: 'Description 1',
         ownerId: 'owner-1',
@@ -75,13 +78,15 @@ describe('getMyGuilds', () => {
       },
       {
         id: 'guild-2',
+        publicId: 'guild-2',
         name: 'Second Guild',
         description: 'Description 2',
         ownerId: 'user-123',
+        avatarUrl: undefined,
       },
     ]);
     expect(mockSupabase.from).toHaveBeenCalledWith('guild_members');
-    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, guilds (*)');
+    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)');
     expect(mockSupabase.eq).toHaveBeenCalledWith('user_id', mockUser.id);
   });
 
@@ -110,7 +115,7 @@ describe('getMyGuilds', () => {
     const mockGuildsData = [
       {
         guild_id: 'guild-1',
-        guilds: { id: 'guild-1', name: 'Valid Guild', owner_id: 'owner-1', description: null },
+        guilds: { id: 'guild-1', public_id: 'guild-1', name: 'Valid Guild', owner_id: 'owner-1', description: null },
       },
       {
         guild_id: 'guild-2',
@@ -131,6 +136,13 @@ describe('getMyGuilds', () => {
     const result = await getMyGuilds();
 
     expect(result).toHaveLength(1);
-    expect(result[0]).toEqual({ id: 'guild-1', name: 'Valid Guild', ownerId: 'owner-1' });
+    expect(result[0]).toEqual({
+      id: 'guild-1',
+      publicId: 'guild-1',
+      name: 'Valid Guild',
+      ownerId: 'owner-1',
+      description: undefined,
+      avatarUrl: undefined,
+    });
   });
 });

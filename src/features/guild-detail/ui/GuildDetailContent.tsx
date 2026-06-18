@@ -26,11 +26,13 @@ export type MembershipStatus = 'owner' | 'member' | 'pending' | 'none' | 'guest'
 interface GuildDetailContentProps {
   guildId: string;
   initialMembershipStatus: MembershipStatus;
+  userId?: string;
 }
 
 export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
   guildId,
   initialMembershipStatus,
+  userId,
 }) => {
   const t = useTranslations('GuildDetail');
   const commonT = useTranslations('Common');
@@ -151,7 +153,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
                 <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
                   <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                  <GuildMembersSection guildId={guildId} readOnly fill />
+                  <GuildMembersSection guildId={guildId} userId={userId} readOnly fill />
                 </div>
               </>
             )}
@@ -160,7 +162,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
               <>
                 <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
                   <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
-                  <GuildMembersSection guildId={guildId} readOnly fill />
+                  <GuildMembersSection guildId={guildId} userId={userId} readOnly fill />
                 </div>
               </>
             )}

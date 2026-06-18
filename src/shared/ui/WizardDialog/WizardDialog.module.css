@@ -2,8 +2,37 @@
   position: fixed;
   inset: 0;
   z-index: var(--z-wizard);
-  background: linear-gradient(135deg, rgba(3, 13, 26, 0.97) 0%, rgba(10, 37, 64, 0.97) 50%, rgba(14, 52, 96, 0.97) 100%);
-  backdrop-filter: blur(24px);
+  background-image: 
+    /* Layer 1: Larger soft stars (600px grid) */
+    radial-gradient(circle at 100px 150px, rgba(255, 255, 255, 0.9) 0.8px, rgba(255, 255, 255, 0.25) 1.3px, transparent 2px),
+    radial-gradient(circle at 450px 380px, rgba(255, 255, 255, 0.9) 0.8px, rgba(255, 255, 255, 0.25) 1.3px, transparent 2px),
+    
+    /* Layer 2: Medium stars (450px grid) */
+    radial-gradient(circle at 80px 320px, rgba(255, 255, 255, 0.75) 0.8px, transparent 1.5px),
+    radial-gradient(circle at 350px 100px, rgba(255, 255, 255, 0.75) 0.8px, transparent 1.5px),
+    radial-gradient(circle at 220px 250px, rgba(255, 255, 255, 0.7) 0.8px, transparent 1.5px),
+
+    /* Layer 3: Fine star dust (300px grid) */
+    radial-gradient(circle at 50px 50px, rgba(255, 255, 255, 0.45) 0.6px, transparent 1.2px),
+    radial-gradient(circle at 250px 200px, rgba(255, 255, 255, 0.45) 0.6px, transparent 1.2px),
+    radial-gradient(circle at 150px 270px, rgba(255, 255, 255, 0.4) 0.6px, transparent 1.2px),
+
+    /* Layer 4: Space Nebulae Glows */
+    radial-gradient(circle at 12% 25%, rgba(139, 92, 246, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 88% 75%, rgba(45, 158, 208, 0.16) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
+
+    /* Base Gradient */
+    linear-gradient(135deg, rgba(4, 5, 15, 0.96) 0%, rgba(15, 12, 30, 0.96) 50%, rgba(25, 18, 45, 0.96) 100%);
+
+  background-size: 
+    600px 600px, 600px 600px, /* Layer 1 */
+    450px 450px, 450px 450px, 450px 450px, /* Layer 2 */
+    300px 300px, 300px 300px, 300px 300px, /* Layer 3 */
+    100% 100%, 100% 100%, 100% 100%, /* Layer 4 */
+    100% 100%;
+
+  backdrop-filter: blur(40px);
   display: flex;
   flex-direction: column;
   animation: wizardShow 200ms cubic-bezier(0.16, 1, 0.3, 1);

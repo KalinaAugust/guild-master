@@ -130,7 +130,7 @@ export const CommonGuildsBlock = ({ guilds }: { guilds: CommonGuild[] }) => (
       <ul className={styles.guilds}>
         {guilds.map((g) => (
           <li key={g.id}>
-            <Link href={`/guilds/${g.id}`} className={styles.guildItem}>
+            <Link href={`/guilds/${g.publicId ?? g.id}`} className={styles.guildItem}>
               <UserAvatar avatarUrl={g.avatarUrl} name={g.name} size="sm" />
               <span className={styles.guildName}>{g.name}</span>
             </Link>

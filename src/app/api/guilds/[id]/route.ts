@@ -11,7 +11,7 @@ export async function GET(
 
   const { data: guild, error } = await supabase
     .from('guilds')
-    .select('id, name, description, avatar_url, owner_id, profiles!guilds_owner_id_fkey(full_name)')
+    .select('id, public_id, name, description, avatar_url, owner_id, profiles!guilds_owner_id_fkey(full_name)')
     .eq('id', id)
     .maybeSingle();
 
@@ -25,14 +25,16 @@ export async function GET(
     .eq('guild_id', id);
 
   type ProfileShape = { full_name: string | null } | null;
+  const g = guild as unknown as { id: string; public_id: string; name: string; description: string | null; avatar_url: string | null; owner_id: string; profiles: ProfileShape };
 
   return NextResponse.json({
-    id: guild.id,
-    name: guild.name,
-    description: guild.description || undefined,
-    avatarUrl: guild.avatar_url || undefined,
-    ownerId: guild.owner_id,
-    ownerName: (guild.profiles as ProfileShape)?.full_name ?? null,
+    id: g.id,
+    publicId: g.public_id,
+    name: g.name,
+    description: g.description || undefined,
+    avatarUrl: g.avatar_url || undefined,
+    ownerId: g.owner_id,
+    ownerName: (g.profiles as ProfileShape)?.full_name ?? null,
     memberCount: count ?? 0,
   });
 }
@@ -67,12 +69,15 @@ export async function PATCH(
 
   if (error || !guild) return NextResponse.json({ error: 'Failed to update guild' }, { status: 500 });
 
+  const g = guild as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
+
   return NextResponse.json({
-    id: guild.id,
-    name: guild.name,
-    ownerId: guild.owner_id,
-    description: guild.description || undefined,
-    avatarUrl: guild.avatar_url || undefined,
+    id: g.id,
+    publicId: g.public_id,
+    name: g.name,
+    ownerId: g.owner_id,
+    description: g.description || undefined,
+    avatarUrl: g.avatar_url || undefined,
   });
 }
 

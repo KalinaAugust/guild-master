@@ -17,6 +17,7 @@ import {
   useCreateEventMutation,
 } from '@/entities/event';
 import { useGuildPermissions } from '@/entities/guild';
+import { useGetUserNotesQuery } from '@/entities/user';
 import { Modal } from '@/shared/ui/Modal';
 import { FormField } from '@/shared/ui/FormField';
 import { DatePicker } from '@/shared/ui/DatePicker';
@@ -70,6 +71,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
   const { data: participantsData, isLoading: isParticipantsLoading } =
     useGetParticipantsQuery(eventId, { skip: !event });
   const currentUserId = participantsData?.currentUserId ?? '';
+  const { data: notes = [] } = useGetUserNotesQuery();
 
   const { canManageEvents } = useGuildPermissions(data?.guildId ?? '', currentUserId);
   // Order: the viewer first, then confirmed participants, then everyone else.
@@ -330,6 +332,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               key={p.id}
               participant={p}
               isCurrentUser={p.user_id === currentUserId}
+              note={notes.find((n) => n.target_user_id === p.user_id)?.note}
               onConfirm={handleConfirm}
               onDecline={handleDecline}
               onLeave={() => setLeaveModalOpen(true)}

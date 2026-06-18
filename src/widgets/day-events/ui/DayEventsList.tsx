@@ -92,7 +92,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   };
 
   const handleViewEvent = (event: ActivityEvent) => {
-    router.push(`/events/${event.id}`);
+    router.push(`/events/${event.publicId ?? event.id}`);
   };
 
   const handleDeleteClick = (id: string) => {

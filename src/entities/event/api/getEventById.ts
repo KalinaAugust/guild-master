@@ -5,6 +5,7 @@ import dayjs from '@/shared/lib/dayjs';
 
 type RawEventRow = {
   id: string;
+  public_id: string;
   title: string;
   description: string | null;
   type: string;
@@ -20,11 +21,12 @@ export const getEventById = async (
 ): Promise<{ event: ActivityEvent; guildId: string } | null> => {
   const { realId, date: occurrenceDate } = parseEventId(id);
   const supabase = await createClient();
+  
   const { data, error } = await supabase
     .from('events')
-    .select('id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
+    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
     .eq('id', realId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     if (error.code === 'PGRST116') return null;
@@ -38,10 +40,12 @@ export const getEventById = async (
   // If this is a recurring occurrence, we use the occurrence date.
   // Otherwise, we use the event's original date.
   const displayDate = occurrenceDate || d.format('YYYY-MM-DD');
+  const eventPublicId = raw.public_id;
 
   return {
     event: {
       id: id, // return the requested (possibly virtual) ID
+      publicId: occurrenceDate ? `${eventPublicId}_${occurrenceDate}` : eventPublicId,
       title: raw.title,
       description: raw.description ?? undefined,
       type: raw.type as ActivityEvent['type'],

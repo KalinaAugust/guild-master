@@ -62,7 +62,7 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
           <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
         </div>
         {canCreate && (
-          <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate} icon={<Plus size={16} />}>
+          <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate} icon={<Plus size={18} strokeWidth={3} />}>
             {t('newAnnouncement')}
           </Button>
         )}

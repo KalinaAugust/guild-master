@@ -160,10 +160,11 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
             const canTransfer = canChangeRole;
             const showMenu = canRemove || canChangeRole || canTransfer;
             return (
-            <li key={member.userId} className={styles.item}>
+            <li key={member.userId} className={`${styles.item} ${isSelf ? styles.selfItem : ''}`} data-suppress-note-tooltip>
               <ProfileLink
                 publicId={member.profile.publicId}
                 aria-label={memberName ?? undefined}
+                className={styles.avatarLink}
               >
                 <UserAvatar
                   avatarUrl={member.profile.avatarUrl}
@@ -177,22 +178,24 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 </ProfileLink>
                 {note && <span className={styles.note}>{note}</span>}
               </div>
-              <span className={styles.role}>{t(`role${member.role}`)}</span>
-              {member.role === 'OWNER' && (
-                <span className={styles.ownerIcon}>
-                  <ShieldCheck size={14} />
-                </span>
-              )}
-              {member.role === 'ADMIN' && (
-                <span className={styles.adminIcon}>
-                  <Shield size={14} />
-                </span>
-              )}
-              {member.role === 'MEMBER' && (
-                <span className={styles.memberIcon}>
-                  <User size={14} />
-                </span>
-              )}
+              <div className={styles.roleGroup}>
+                <span className={styles.role}>{t(`role${member.role}`)}</span>
+                {member.role === 'OWNER' && (
+                  <span className={styles.ownerIcon}>
+                    <ShieldCheck size={14} />
+                  </span>
+                )}
+                {member.role === 'ADMIN' && (
+                  <span className={styles.adminIcon}>
+                    <Shield size={14} />
+                  </span>
+                )}
+                {member.role === 'MEMBER' && (
+                  <span className={styles.memberIcon}>
+                    <User size={14} />
+                  </span>
+                )}
+              </div>
               {showMenu && (
                 <DropdownMenu.Root>
                   <DropdownMenu.Trigger asChild>

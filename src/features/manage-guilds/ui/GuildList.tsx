@@ -25,7 +25,7 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, emptyMessag
         <ul className={styles.list}>
           {guilds.map((guild) => (
             <li key={guild.id} className={styles.row}>
-              <Link href={`/guilds/${guild.id}`} className={styles.rowLink}>
+              <Link href={`/guilds/${guild.publicId ?? guild.id}`} className={styles.rowLink}>
                 {guild.avatarUrl ? (
                   <UserAvatar avatarUrl={guild.avatarUrl} name={guild.name} size="lg" />
                 ) : (

@@ -76,6 +76,13 @@ html, body {
   background: var(--bg-gradient);
   color: var(--text-primary);
   min-height: 100vh;
+  overscroll-behavior: none;
+}
+
+/* Prevent elastic scroll / rubber-banding on macOS Safari for full-screen fixed layouts */
+html:has(.detail-layout-active),
+body:has(.detail-layout-active) {
+  overflow: hidden;
 }
 
 body {

@@ -2,6 +2,7 @@ export type ActivityType = 'game' | 'meeting' | 'other' | 'party' | 'sport' | 'd
 
 export interface ActivityEvent {
   id: string;
+  publicId?: string;
   title: string;
   date: string; // ISO string format
   time: string; // HH:mm format
@@ -23,6 +24,7 @@ export interface UIState {
 
 export interface CommonGuild {
   id: string;
+  publicId?: string;
   name: string;
   avatarUrl: string | null;
 }

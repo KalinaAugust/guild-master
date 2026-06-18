@@ -15,6 +15,7 @@ import styles from './ParticipantItem.module.css';
 interface ParticipantItemProps {
   participant: EventParticipant;
   isCurrentUser: boolean;
+  note?: string;
   onConfirm?: () => void;
   onDecline?: () => void;
   onLeave?: () => void;
@@ -26,6 +27,7 @@ interface ParticipantItemProps {
 export const ParticipantItem: React.FC<ParticipantItemProps> = ({
   participant,
   isCurrentUser,
+  note,
   onConfirm,
   onDecline,
   onLeave,
@@ -55,10 +57,12 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
       ]
         .filter(Boolean)
         .join(' ')}
+      data-suppress-note-tooltip
     >
       <ProfileLink
         publicId={participant.profile.publicId}
         aria-label={participantName ?? undefined}
+        className={styles.avatarLink}
       >
         <UserAvatar
           avatarUrl={participant.profile.avatarUrl}
@@ -67,12 +71,15 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
         />
       </ProfileLink>
       <div className={styles.info}>
-        <ProfileLink publicId={participant.profile.publicId} className={styles.name}>
-          <NameWithIcon name={participantName} icon={participant.profile.icon} fallback="—" iconSize={14} />
-        </ProfileLink>
-        <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
-          {t(`status.${participant.status}` as Parameters<typeof t>[0])}
-        </span>
+        <div className={styles.header}>
+          <ProfileLink publicId={participant.profile.publicId} className={styles.name}>
+            <NameWithIcon name={participantName} icon={participant.profile.icon} fallback="—" iconSize={14} />
+          </ProfileLink>
+          <span className={`${styles.statusLabel} ${styles[`statusLabel_${participant.status}`]}`}>
+            {t(`status.${participant.status}` as Parameters<typeof t>[0])}
+          </span>
+        </div>
+        {note && <span className={styles.note}>{note}</span>}
       </div>
       {showActions && (
         <div className={styles.actions}>

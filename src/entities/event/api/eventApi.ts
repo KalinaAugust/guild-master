@@ -4,6 +4,7 @@ import dayjs from '@/shared/lib/dayjs';
 
 type RawEvent = {
   id: string;
+  public_id: string;
   title: string;
   description: string | null;
   type: string;
@@ -22,6 +23,7 @@ function transformEvent(raw: RawEvent): ActivityEvent {
   const d = dayjs.utc(raw.event_date);
   return {
     id: raw.id,
+    publicId: raw.public_id,
     title: raw.title,
     description: raw.description || undefined,
     type: raw.type as ActivityType,

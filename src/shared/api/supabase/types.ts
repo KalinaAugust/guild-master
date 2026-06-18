@@ -480,6 +480,7 @@ export type Database = {
           exceptions: string[] | null
           guild_id: string
           id: string
+          public_id: string
           title: string
           type: string
           week_days: number[] | null
@@ -492,6 +493,7 @@ export type Database = {
           exceptions?: string[] | null
           guild_id: string
           id?: string
+          public_id?: string
           title: string
           type: string
           week_days?: number[] | null
@@ -504,6 +506,7 @@ export type Database = {
           exceptions?: string[] | null
           guild_id?: string
           id?: string
+          public_id?: string
           title?: string
           type?: string
           week_days?: number[] | null
@@ -686,6 +689,7 @@ export type Database = {
           id: string
           name: string
           owner_id: string
+          public_id: string
         }
         Insert: {
           avatar_url?: string | null
@@ -694,6 +698,7 @@ export type Database = {
           id?: string
           name: string
           owner_id: string
+          public_id?: string
         }
         Update: {
           avatar_url?: string | null
@@ -702,6 +707,7 @@ export type Database = {
           id?: string
           name?: string
           owner_id?: string
+          public_id?: string
         }
         Relationships: [
           {

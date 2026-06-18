@@ -24,7 +24,7 @@ export const getCommonGuilds = async (
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guilds (id, name, avatar_url)')
+    .select('guilds (id, public_id, name, avatar_url)')
     .eq('user_id', ownerId)
     .in('guild_id', viewerGuildIds);
 
@@ -34,8 +34,8 @@ export const getCommonGuilds = async (
   }
 
   return data.reduce<CommonGuild[]>((acc, row) => {
-    const g = row.guilds as unknown as { id: string; name: string; avatar_url: string | null } | null;
-    if (g) acc.push({ id: g.id, name: g.name, avatarUrl: g.avatar_url });
+    const g = row.guilds as unknown as { id: string; public_id: string; name: string; avatar_url: string | null } | null;
+    if (g) acc.push({ id: g.id, publicId: g.public_id, name: g.name, avatarUrl: g.avatar_url });
     return acc;
   }, []);
 };

@@ -21,6 +21,8 @@ const replaceInList = (guildId: string, updated: Announcement) =>
     if (idx !== -1) draft.announcements[idx] = updated;
   });
 
+const pendingReactions: Record<string, { count: number; hasError: boolean }> = {};
+
 export const announcementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getGuildAnnouncements: builder.query<GuildAnnouncementsResult, string>({
@@ -108,6 +110,12 @@ export const announcementApi = baseApi.injectEndpoints({
         body: { type },
       }),
       async onQueryStarted({ guildId, announcementId, type }, { dispatch, queryFulfilled }) {
+        if (!pendingReactions[announcementId]) {
+          pendingReactions[announcementId] = { count: 0, hasError: false };
+        }
+        const state = pendingReactions[announcementId];
+        state.count++;
+
         const patch = dispatch(
           announcementApi.util.updateQueryData('getGuildAnnouncements', guildId, (draft) => {
             const a = draft.announcements.find((x) => x.id === announcementId);
@@ -116,9 +124,31 @@ export const announcementApi = baseApi.injectEndpoints({
         );
         try {
           const { data: updated } = await queryFulfilled;
-          dispatch(replaceInList(guildId, updated));
+          state.count--;
+          if (state.count === 0) {
+            if (state.hasError) {
+              dispatch(
+                announcementApi.util.invalidateTags([
+                  { type: 'Announcement', id: `LIST-${guildId}` },
+                ])
+              );
+            } else {
+              dispatch(replaceInList(guildId, updated));
+            }
+            delete pendingReactions[announcementId];
+          }
         } catch {
+          state.count--;
+          state.hasError = true;
           patch.undo();
+          if (state.count === 0) {
+            dispatch(
+              announcementApi.util.invalidateTags([
+                { type: 'Announcement', id: `LIST-${guildId}` },
+              ])
+            );
+            delete pendingReactions[announcementId];
+          }
         }
       },
     }),

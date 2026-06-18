@@ -22,6 +22,15 @@ export function GlobalUserNoteTooltip() {
         return;
       }
 
+      // Cards that already render the note inline (event participants, guild
+      // members) opt out of the hover tooltip to avoid duplicating it.
+      if (target.closest('[data-suppress-note-tooltip]')) {
+        if (activeElRef.current) {
+          triggerHide();
+        }
+        return;
+      }
+
       const publicId = target.getAttribute('data-user-public-id');
       if (!publicId || !notes) return;
 

@@ -30,14 +30,14 @@ describe('GET /api/guilds', () => {
   it('maps the user\'s guilds', async () => {
     const from = vi.fn()
       .mockReturnValueOnce(query({ data: [
-        { guild_id: 'g1', guilds: { id: 'g1', name: 'Alpha', owner_id: 'u1', description: null } },
+        { guild_id: 'g1', guilds: { id: 'g1', public_id: 'g1', name: 'Alpha', owner_id: 'u1', description: null } },
       ] }))                              // guild membership join
       .mockReturnValue(query({ count: 1 })); // head counts (members + pending requests)
     use({ id: 'u1' }, from);
     const res = await GET();
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([
-      { id: 'g1', name: 'Alpha', ownerId: 'u1', memberCount: 1, pendingRequestCount: 1 },
+      { id: 'g1', publicId: 'g1', name: 'Alpha', ownerId: 'u1', memberCount: 1, pendingRequestCount: 1 },
     ]);
   });
   it('returns 500 on db error', async () => {
@@ -63,12 +63,12 @@ describe('POST /api/guilds', () => {
     const from = vi.fn()
       .mockReturnValueOnce(query({ count: 0, error: null }))                                  // limit check
       .mockReturnValueOnce(query({ error: null }))                                            // profiles upsert
-      .mockReturnValueOnce(query({ data: { id: 'g9', name: 'X', owner_id: 'u1', description: null } })) // insert guild
+      .mockReturnValueOnce(query({ data: { id: 'g9', public_id: 'g9', name: 'X', owner_id: 'u1', description: null } })) // insert guild
       .mockReturnValueOnce(query({ error: null }));                                           // member insert
     use({ id: 'u1' }, from);
     const res = await POST(body({ name: 'X' }));
     expect(res.status).toBe(201);
-    expect(await res.json()).toEqual({ id: 'g9', name: 'X', ownerId: 'u1' });
+    expect(await res.json()).toEqual({ id: 'g9', publicId: 'g9', name: 'X', ownerId: 'u1' });
   });
   it('returns 500 when guild insert fails', async () => {
     const from = vi.fn()

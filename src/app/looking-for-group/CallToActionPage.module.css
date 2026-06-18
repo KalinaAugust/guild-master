@@ -3,12 +3,3 @@
   margin: 0 auto;
   padding-bottom: 1rem;
 }
-
-@media (min-width: 961px) {
-  .main {
-    box-sizing: border-box;
-    height: calc(100dvh - var(--header-height));
-    display: flex;
-    flex-direction: column;
-  }
-}

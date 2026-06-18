@@ -41,7 +41,7 @@ describe('getCommonGuilds', () => {
       .mockReturnValueOnce(Promise.resolve({ data: [{ guild_id: 'g1' }, { guild_id: 'g2' }], error: null }))
       .mockReturnThis();
     builder.in.mockResolvedValue({
-      data: [{ guilds: { id: 'g2', name: 'Night Owls', avatar_url: null } }],
+      data: [{ guilds: { id: 'g2', public_id: 'g2', name: 'Night Owls', avatar_url: null } }],
       error: null,
     });
     const supabase = { from: vi.fn().mockReturnValue(builder) };
@@ -50,7 +50,7 @@ describe('getCommonGuilds', () => {
     );
 
     expect(await getCommonGuilds('viewer-1', 'owner-1')).toEqual([
-      { id: 'g2', name: 'Night Owls', avatarUrl: null },
+      { id: 'g2', publicId: 'g2', name: 'Night Owls', avatarUrl: null },
     ]);
   });
 

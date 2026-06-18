@@ -1,5 +1,6 @@
 export interface Guild {
   id: string;
+  publicId?: string;
   name: string;
   ownerId: string;
   description?: string;
@@ -12,6 +13,7 @@ export interface Guild {
 
 export interface GuildDetail {
   id: string;
+  publicId: string;
   name: string;
   ownerId: string;
   ownerName: string | null;

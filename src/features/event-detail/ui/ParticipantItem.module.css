@@ -1,22 +1,51 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px;
-  border-radius: 8px;
+  gap: 0.875rem;
+  min-height: 3.5rem;
+  padding: 16px;
   margin-bottom: 8px;
-  transition: background 0.15s ease;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
 }
 
 .currentUser {
-  background: rgba(248, 150, 30, 0.08);
-  border: 1px solid rgba(248, 150, 30, 0.25);
+  border: 1px solid var(--accent-primary);
+  background: rgba(45, 158, 208, 0.14);
+  box-shadow: 0 0 16px rgba(45, 158, 208, 0.25), inset 0 0 8px rgba(45, 158, 208, 0.15), var(--shadow-glass);
+}
+
+.currentUser:hover {
+  background: rgba(45, 158, 208, 0.18);
+  border-color: var(--accent-hover);
 }
 
 .status_declined {
   opacity: 0.45;
 }
 
+
+.avatarLink {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.avatarLink > div {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
 
 .info {
   flex: 1;
@@ -26,19 +55,53 @@
   gap: 2px;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
 .name {
-  font-size: 0.8125rem;
-  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--accent-secondary);
 }
 
 .statusLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: 999px;
   font-size: 0.6875rem;
-  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--status-color, var(--text-secondary));
+  background: color-mix(in srgb, var(--status-color, var(--text-secondary)) 16%, transparent);
 }
 
-.statusLabel_confirmed { color: #43aa8b; }
-.statusLabel_pending   { color: #f8961e; }
-.statusLabel_declined  { color: #ff8080; }
+.statusLabel::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.note {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.statusLabel_confirmed { --status-color: #43aa8b; }
+.statusLabel_pending   { --status-color: #f8961e; }
+.statusLabel_declined  { --status-color: #ff8080; }
 
 .actions {
   display: flex;

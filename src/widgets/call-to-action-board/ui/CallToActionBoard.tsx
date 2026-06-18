@@ -114,7 +114,7 @@ export const CallToActionBoard: React.FC<CallToActionBoardProps> = ({
             </button>
           </Tooltip>
           {canCreate && (
-            <Button type="button" variant="primary" className={styles.newButton} onClick={() => setModalOpen(true)} icon={<Plus size={16} />}>
+            <Button type="button" variant="primary" className={styles.newButton} onClick={() => setModalOpen(true)} icon={<Plus size={18} strokeWidth={3} />}>
               {t('newAction')}
             </Button>
           )}

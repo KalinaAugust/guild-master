@@ -14,9 +14,9 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guild_id, guilds (*)')
+    .select('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)')
     .eq('user_id', finalUserId);
-    
+
   if (error || !data) {
     console.error('Error fetching guilds:', error);
     return [];
@@ -24,10 +24,11 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
     
   // Map the nested guilds data and ensure it matches the Guild interface
   return data.reduce<Guild[]>((acc, m) => {
-    const g = m.guilds as unknown as { id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
+    const g = m.guilds as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
     if (g) {
       acc.push({
         id: g.id,
+        publicId: g.public_id,
         name: g.name,
         ownerId: g.owner_id,
         description: g.description || undefined,

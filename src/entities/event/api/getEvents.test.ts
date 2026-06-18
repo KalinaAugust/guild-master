@@ -17,7 +17,7 @@ function makeSupabase(result: unknown) {
 
 describe('fetchEvents', () => {
   it('returns events for guildId', async () => {
-    const rows = [{ id: 'e1', title: 'Raid', event_date: '2026-06-01T20:00:00' }];
+    const rows = [{ id: 'e1', public_id: 'pub1', title: 'Raid', event_date: '2026-06-01T20:00:00' }];
     const mock = makeSupabase({ data: rows, error: null });
     vi.mocked(createClient).mockResolvedValue(mock as never);
 

@@ -64,7 +64,22 @@
   gap: 5px;
   font-size: 0.75rem;
   color: var(--text-muted);
-  cursor: default;
+  cursor: help;
+  transition: color 0.15s;
+}
+
+.participantsBadge:hover {
+  color: var(--text-primary);
+}
+
+.participantsText {
+  border-bottom: 1px dashed var(--text-muted);
+  padding-bottom: 1px;
+  transition: border-color 0.15s;
+}
+
+.participantsBadge:hover .participantsText {
+  border-bottom-color: var(--text-primary);
 }
 
 .emptyText {
