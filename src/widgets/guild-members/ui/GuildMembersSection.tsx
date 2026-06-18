@@ -152,7 +152,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               displayAsAlias: member.profile.displayAsAlias,
             });
             const isSelf = !!userId && member.userId === userId;
-            const note = member.profile.about;
+            const about = member.profile.about;
             const canRemove = effectiveCanManage && !isSelf && member.role !== 'OWNER' &&
               (member.role !== 'ADMIN' || isOwner);
             const canChangeRole = effectiveCanManage && !isSelf && isOwner && member.role !== 'OWNER';
@@ -175,7 +175,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                 <ProfileLink publicId={member.profile.publicId} className={styles.name}>
                   <NameWithIcon name={memberName ?? member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
                 </ProfileLink>
-                {note && <span className={styles.note}>{note}</span>}
+                {about && <span className={styles.note}>{about}</span>}
               </div>
               <div className={styles.roleGroup}>
                 <span className={styles.role}>{t(`role${member.role}`)}</span>

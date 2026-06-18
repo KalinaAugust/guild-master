@@ -330,7 +330,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               key={p.id}
               participant={p}
               isCurrentUser={p.user_id === currentUserId}
-              note={p.profile.about ?? undefined}
+              about={p.profile.about ?? undefined}
               onConfirm={handleConfirm}
               onDecline={handleDecline}
               onLeave={() => setLeaveModalOpen(true)}

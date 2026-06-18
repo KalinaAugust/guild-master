@@ -408,7 +408,7 @@
     "errorMessage": "Failed to update note",
     "emptyText": "Add a private note about this user...",
     "inputPlaceholder": "Only you can see this note...",
-    "helpTooltip": "This note is private. It is only visible to you and will appear as a tooltip when hovering over this user's name in lists."
+    "helpTooltip": "This note is private. It is only visible to you."
   },
   "UpdateProfile": {
     "name": {
