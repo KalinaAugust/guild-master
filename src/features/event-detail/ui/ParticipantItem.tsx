@@ -15,7 +15,7 @@ import styles from './ParticipantItem.module.css';
 interface ParticipantItemProps {
   participant: EventParticipant;
   isCurrentUser: boolean;
-  note?: string;
+  about?: string;
   onConfirm?: () => void;
   onDecline?: () => void;
   onLeave?: () => void;
@@ -27,7 +27,7 @@ interface ParticipantItemProps {
 export const ParticipantItem: React.FC<ParticipantItemProps> = ({
   participant,
   isCurrentUser,
-  note,
+  about,
   onConfirm,
   onDecline,
   onLeave,
@@ -57,7 +57,6 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-suppress-note-tooltip
     >
       <ProfileLink
         publicId={participant.profile.publicId}
@@ -79,7 +78,7 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
             {t(`status.${participant.status}` as Parameters<typeof t>[0])}
           </span>
         </div>
-        {note && <span className={styles.note}>{note}</span>}
+        {about && <span className={styles.note}>{about}</span>}
       </div>
       {showActions && (
         <div className={styles.actions}>

@@ -14,7 +14,6 @@ vi.mock('@/entities/guild', () => ({
 
 vi.mock('@/entities/user', () => ({
   resolveDisplayName: ({ fullName }: { fullName: string | null }) => fullName,
-  useGetUserNotesQuery: vi.fn(() => ({ data: [] })),
 }));
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
@@ -31,18 +30,17 @@ import {
   useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
-import { useGetUserNotesQuery } from '@/entities/user';
 
 const mockMembers = [
-  { userId: 'u1', role: 'OWNER' as const, profile: { publicId: null, fullName: 'Alice', avatarUrl: null, alias: null, displayAsAlias: false, icon: null } },
-  { userId: 'u2', role: 'MEMBER' as const, profile: { publicId: null, fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false, icon: null } },
+  { userId: 'u1', role: 'OWNER' as const, profile: { publicId: null, fullName: 'Alice', avatarUrl: null, alias: null, displayAsAlias: false, icon: null, about: null } },
+  { userId: 'u2', role: 'MEMBER' as const, profile: { publicId: null, fullName: 'Bob', avatarUrl: null, alias: null, displayAsAlias: false, icon: null, about: null } },
 ];
 
 const ownerMember = mockMembers[0]; // u1 OWNER
 const regularMember = mockMembers[1]; // u2 MEMBER
 const adminMember = {
   userId: 'u3', role: 'ADMIN' as const,
-  profile: { publicId: null, fullName: 'Carol', avatarUrl: null, alias: null, displayAsAlias: false, icon: null },
+  profile: { publicId: null, fullName: 'Carol', avatarUrl: null, alias: null, displayAsAlias: false, icon: null, about: null },
 };
 
 describe('GuildMembersSection', () => {
@@ -71,15 +69,15 @@ describe('GuildMembersSection', () => {
     vi.mocked(useTransferGuildOwnershipMutation).mockReturnValue(
       [transferOwnershipMock, { isLoading: false }] as never
     );
-    vi.mocked(useGetUserNotesQuery).mockReturnValue({ data: [] } as never);
   });
 
-  it('renders the private note under a member name', () => {
-    vi.mocked(useGetUserNotesQuery).mockReturnValue({
-      data: [{ target_user_id: 'u2', note: 'Trusted ally', target_public_id: null }],
-    } as never);
+  it('renders the member about text under a member name', () => {
+    const memberWithAbout = {
+      ...regularMember,
+      profile: { ...regularMember.profile, about: 'Trusted ally' },
+    };
     vi.mocked(useGetGuildMembersQuery).mockReturnValue(
-      { data: [ownerMember, regularMember], isLoading: false } as never
+      { data: [ownerMember, memberWithAbout], isLoading: false } as never
     );
     render(<GuildMembersSection guildId="g1" />);
     expect(screen.getByText('Trusted ally')).toBeInTheDocument();

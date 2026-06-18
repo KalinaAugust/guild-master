@@ -31,7 +31,7 @@ export const ProfileLink: React.FC<ProfileLinkProps> = ({
     : styles.link;
 
   return (
-    <Link href={`/profile/${publicId}`} className={linkClass} data-user-public-id={publicId} {...rest}>
+    <Link href={`/profile/${publicId}`} className={linkClass} {...rest}>
       {children}
     </Link>
   );
