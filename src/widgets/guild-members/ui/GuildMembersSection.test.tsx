@@ -31,6 +31,7 @@ import {
   useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
+import { useGetUserNotesQuery } from '@/entities/user';
 
 const mockMembers = [
   { userId: 'u1', role: 'OWNER' as const, profile: { publicId: null, fullName: 'Alice', avatarUrl: null, alias: null, displayAsAlias: false, icon: null } },
@@ -70,6 +71,18 @@ describe('GuildMembersSection', () => {
     vi.mocked(useTransferGuildOwnershipMutation).mockReturnValue(
       [transferOwnershipMock, { isLoading: false }] as never
     );
+    vi.mocked(useGetUserNotesQuery).mockReturnValue({ data: [] } as never);
+  });
+
+  it('renders the private note under a member name', () => {
+    vi.mocked(useGetUserNotesQuery).mockReturnValue({
+      data: [{ target_user_id: 'u2', note: 'Trusted ally', target_public_id: null }],
+    } as never);
+    vi.mocked(useGetGuildMembersQuery).mockReturnValue(
+      { data: [ownerMember, regularMember], isLoading: false } as never
+    );
+    render(<GuildMembersSection guildId="g1" />);
+    expect(screen.getByText('Trusted ally')).toBeInTheDocument();
   });
 
   it('renders member names', () => {

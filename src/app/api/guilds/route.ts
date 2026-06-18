@@ -55,30 +55,40 @@ export async function GET() {
   const guildIds = guilds.map((g) => g.id);
 
   if (guildIds.length > 0) {
-    // Member counts across every guild the user belongs to.
-    const { data: memberRows } = await supabase
-      .from('guild_members')
-      .select('guild_id')
-      .in('guild_id', guildIds);
+    const ownedIds = guilds.filter((g) => g.ownerId === user.id).map((g) => g.id);
 
+    // Count at the DB level (head requests) instead of transferring member rows.
     const memberCounts = new Map<string, number>();
-    for (const row of memberRows ?? []) {
-      memberCounts.set(row.guild_id, (memberCounts.get(row.guild_id) ?? 0) + 1);
-    }
+    await Promise.all(
+      guildIds.map(async (id) => {
+        const { count, error: countError } = await supabase
+          .from('guild_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('guild_id', id);
+        if (countError) {
+          console.error(`Failed to count members for guild ${id}:`, countError);
+          return;
+        }
+        memberCounts.set(id, count ?? 0);
+      })
+    );
 
     // Pending join requests only for owned guilds (RLS hides them otherwise).
-    const ownedIds = guilds.filter((g) => g.ownerId === user.id).map((g) => g.id);
     const pendingCounts = new Map<string, number>();
-    if (ownedIds.length > 0) {
-      const { data: requestRows } = await supabase
-        .from('guild_join_requests')
-        .select('guild_id')
-        .eq('status', 'pending')
-        .in('guild_id', ownedIds);
-      for (const row of requestRows ?? []) {
-        pendingCounts.set(row.guild_id, (pendingCounts.get(row.guild_id) ?? 0) + 1);
-      }
-    }
+    await Promise.all(
+      ownedIds.map(async (id) => {
+        const { count, error: countError } = await supabase
+          .from('guild_join_requests')
+          .select('*', { count: 'exact', head: true })
+          .eq('guild_id', id)
+          .eq('status', 'pending');
+        if (countError) {
+          console.error(`Failed to count pending requests for guild ${id}:`, countError);
+          return;
+        }
+        pendingCounts.set(id, count ?? 0);
+      })
+    );
 
     for (const g of guilds) {
       g.memberCount = memberCounts.get(g.id) ?? 0;

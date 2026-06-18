@@ -27,14 +27,16 @@ vi.mock('@/entities/call-to-action', () => ({
 }));
 
 vi.mock('@/entities/guild', () => ({
-  useGetGuildsQuery: () => ({ data: [] }),
+  useGetGuildsQuery: vi.fn(() => ({ data: [] })),
 }));
 
+import { useGetGuildsQuery } from '@/entities/guild';
 import { Sidebar } from './Sidebar';
 
 describe('Sidebar', () => {
   beforeEach(() => {
     vi.mocked(usePathname).mockReturnValue('/');
+    vi.mocked(useGetGuildsQuery).mockReturnValue({ data: [] } as never);
   });
 
   it('renders a nav item label for each configured item', () => {
@@ -57,5 +59,21 @@ describe('Sidebar', () => {
     vi.mocked(usePathname).mockReturnValue('/profile');
     const { container } = render(<Sidebar />);
     expect(container.querySelector('a[class*="active"]')).toBeNull();
+  });
+
+  it('shows the unread dot on guilds when a guild has pending requests', () => {
+    vi.mocked(useGetGuildsQuery).mockReturnValue({
+      data: [{ id: 'g1', name: 'X', ownerId: 'u1', pendingRequestCount: 2 }],
+    } as never);
+    render(<Sidebar />);
+    expect(screen.getByLabelText('unread')).toBeInTheDocument();
+  });
+
+  it('shows no unread dot when no guild has pending requests', () => {
+    vi.mocked(useGetGuildsQuery).mockReturnValue({
+      data: [{ id: 'g1', name: 'X', ownerId: 'u1', pendingRequestCount: 0 }],
+    } as never);
+    render(<Sidebar />);
+    expect(screen.queryByLabelText('unread')).toBeNull();
   });
 });
