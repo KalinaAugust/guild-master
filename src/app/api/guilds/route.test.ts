@@ -28,12 +28,17 @@ describe('GET /api/guilds', () => {
     expect((await GET()).status).toBe(401);
   });
   it('maps the user\'s guilds', async () => {
-    use({ id: 'u1' }, vi.fn().mockReturnValue(query({ data: [
-      { guild_id: 'g1', guilds: { id: 'g1', name: 'Alpha', owner_id: 'u1', description: null } },
-    ] })));
+    const from = vi.fn()
+      .mockReturnValueOnce(query({ data: [
+        { guild_id: 'g1', guilds: { id: 'g1', name: 'Alpha', owner_id: 'u1', description: null } },
+      ] }))                              // guild membership join
+      .mockReturnValue(query({ count: 1 })); // head counts (members + pending requests)
+    use({ id: 'u1' }, from);
     const res = await GET();
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual([{ id: 'g1', name: 'Alpha', ownerId: 'u1' }]);
+    expect(await res.json()).toEqual([
+      { id: 'g1', name: 'Alpha', ownerId: 'u1', memberCount: 1, pendingRequestCount: 1 },
+    ]);
   });
   it('returns 500 on db error', async () => {
     use({ id: 'u1' }, vi.fn().mockReturnValue(query({ data: null, error: { message: 'boom' } })));

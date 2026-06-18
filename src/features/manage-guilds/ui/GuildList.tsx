@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Shield, Users } from 'lucide-react';
 import { Guild } from '@/entities/guild';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import styles from './GuildList.module.css';
@@ -12,6 +15,7 @@ interface GuildListProps {
 }
 
 export const GuildList: React.FC<GuildListProps> = ({ title, guilds, emptyMessage }) => {
+  const t = useTranslations('Guild');
   return (
     <section className={styles.section}>
       <h2 className={styles.title}>{title}</h2>
@@ -33,6 +37,26 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, emptyMessag
                   <span className={styles.name}>{guild.name}</span>
                   {guild.description && (
                     <span className={styles.description}>{guild.description}</span>
+                  )}
+                </div>
+                <div className={styles.meta}>
+                  {!!guild.pendingRequestCount && (
+                    <span
+                      className={styles.pendingBadge}
+                      aria-label={t('pendingRequestsAria', { count: guild.pendingRequestCount })}
+                      title={t('pendingRequestsAria', { count: guild.pendingRequestCount })}
+                    >
+                      +{guild.pendingRequestCount}
+                    </span>
+                  )}
+                  {typeof guild.memberCount === 'number' && (
+                    <span
+                      className={styles.memberCount}
+                      aria-label={t('membersAria', { count: guild.memberCount })}
+                    >
+                      <Users size={15} />
+                      {guild.memberCount}
+                    </span>
                   )}
                 </div>
               </Link>

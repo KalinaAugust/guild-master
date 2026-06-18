@@ -179,15 +179,9 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
                 onClick={() => onToggleInterest(cta.id)}
                 isLoading={isToggling}
                 className={styles.wantButton}
+                icon={cta.interested ? <CheckCircle2 size={16} /> : undefined}
               >
-                {cta.interested ? (
-                  <>
-                    <CheckCircle2 size={16} />
-                    {t('wantedButton')}
-                  </>
-                ) : (
-                  t('wantButton')
-                )}
+                {cta.interested ? t('wantedButton') : t('wantButton')}
               </Button>
               {onLaunch && cta.canManage && (
                 <Button
@@ -196,8 +190,8 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
                   onClick={() => setConfirmLaunch(true)}
                   isLoading={isLaunching}
                   className={styles.launchButton}
+                  icon={<CalendarCheck size={16} />}
                 >
-                  <CalendarCheck size={16} />
                   {t('launchNowButton')}
                 </Button>
               )}

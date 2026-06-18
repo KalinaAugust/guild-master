@@ -8,6 +8,10 @@ vi.mock('next/link', () => ({
     <a href={href} {...props}>{children}</a>,
 }));
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
 const guilds: Guild[] = [
   { id: '1', name: 'Alpha Guild', ownerId: 'user1' },
   { id: '2', name: 'Beta Guild', ownerId: 'user1', description: 'A great guild' },
@@ -35,5 +39,29 @@ describe('GuildList', () => {
       <GuildList title="Owner" guilds={[]} emptyMessage="No guilds yet" />
     );
     expect(screen.getByText('No guilds yet')).toBeInTheDocument();
+  });
+
+  it('renders the member count for a guild', () => {
+    const withCount: Guild[] = [
+      { id: '1', name: 'Alpha Guild', ownerId: 'user1', memberCount: 7, pendingRequestCount: 0 },
+    ];
+    render(<GuildList title="Owner" guilds={withCount} emptyMessage="No guilds" />);
+    expect(screen.getByText('7')).toBeInTheDocument();
+  });
+
+  it('renders a pending-request badge with a + prefix when requests exist', () => {
+    const withPending: Guild[] = [
+      { id: '1', name: 'Alpha Guild', ownerId: 'user1', memberCount: 3, pendingRequestCount: 2 },
+    ];
+    render(<GuildList title="Owner" guilds={withPending} emptyMessage="No guilds" />);
+    expect(screen.getByText('+2')).toBeInTheDocument();
+  });
+
+  it('renders no pending-request badge when there are none', () => {
+    const noPending: Guild[] = [
+      { id: '1', name: 'Alpha Guild', ownerId: 'user1', memberCount: 3, pendingRequestCount: 0 },
+    ];
+    render(<GuildList title="Owner" guilds={noPending} emptyMessage="No guilds" />);
+    expect(screen.queryByText(/^\+/)).toBeNull();
   });
 });

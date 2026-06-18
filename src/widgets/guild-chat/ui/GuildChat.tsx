@@ -185,8 +185,8 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
             variant="primary"
             className={styles.newPollButton}
             onClick={() => setIsPollWizardOpen(true)}
+            icon={<Plus size={16} />}
           >
-            <Plus size={16} />
             {pollT('newPoll')}
           </Button>
         </div>

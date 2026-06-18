@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useGetGuildByIdQuery,
@@ -157,15 +158,17 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
             {membershipStatus === 'member' && (
               <>
-                <div className={`${styles.statusBadge} ${styles.statusMember}`}>
-                  {t('youAreMember')}
-                </div>
-
                 <div className={`${styles.infoGroup} ${styles.infoGroupGrow}`}>
                   <span className={styles.label}>{t('members')} ({guild.memberCount})</span>
                   <GuildMembersSection guildId={guildId} readOnly fill />
                 </div>
               </>
+            )}
+
+            {membershipStatus === 'none' && (
+              <div className={styles.applyPrompt}>
+                <p className={styles.applyText}>{t('applyHint')}</p>
+              </div>
             )}
 
             {membershipStatus === 'pending' && (
@@ -185,7 +188,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
               {commonT('edit')}
             </Button>
           ) : showApplyFooter ? (
-            <Button type="button" variant="primary" onClick={handleApply} isLoading={isSubmitting}>
+            <Button type="button" variant="primary" onClick={handleApply} isLoading={isSubmitting} icon={<Plus size={18} strokeWidth={3} />}>
               {t('applyToJoin')}
             </Button>
           ) : membershipStatus === 'member' ? (

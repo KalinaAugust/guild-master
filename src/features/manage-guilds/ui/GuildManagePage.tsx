@@ -32,8 +32,7 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <GradientTitle className={styles.pageTitle}>{t('manageTitle')}</GradientTitle>
-        <Button variant="primary" onClick={openCreate} className={styles.createBtn}>
-          <Plus size={18} strokeWidth={3} />
+        <Button variant="primary" onClick={openCreate} className={styles.createBtn} icon={<Plus size={18} strokeWidth={3} />}>
           {t('createButton')}
         </Button>
       </div>

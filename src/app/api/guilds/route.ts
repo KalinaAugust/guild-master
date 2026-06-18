@@ -18,7 +18,15 @@ export async function GET() {
   }
 
   const guilds = data.reduce<
-    Array<{ id: string; name: string; ownerId: string; description?: string; avatarUrl?: string }>
+    Array<{
+      id: string;
+      name: string;
+      ownerId: string;
+      description?: string;
+      avatarUrl?: string;
+      memberCount: number;
+      pendingRequestCount: number;
+    }>
   >(
     (acc, m) => {
       const g = m.guilds as unknown as {
@@ -35,12 +43,58 @@ export async function GET() {
           ownerId: g.owner_id,
           description: g.description || undefined,
           avatarUrl: g.avatar_url || undefined,
+          memberCount: 0,
+          pendingRequestCount: 0,
         });
       }
       return acc;
     },
     []
   );
+
+  const guildIds = guilds.map((g) => g.id);
+
+  if (guildIds.length > 0) {
+    const ownedIds = guilds.filter((g) => g.ownerId === user.id).map((g) => g.id);
+
+    // Count at the DB level (head requests) instead of transferring member rows.
+    const memberCounts = new Map<string, number>();
+    await Promise.all(
+      guildIds.map(async (id) => {
+        const { count, error: countError } = await supabase
+          .from('guild_members')
+          .select('*', { count: 'exact', head: true })
+          .eq('guild_id', id);
+        if (countError) {
+          console.error(`Failed to count members for guild ${id}:`, countError);
+          return;
+        }
+        memberCounts.set(id, count ?? 0);
+      })
+    );
+
+    // Pending join requests only for owned guilds (RLS hides them otherwise).
+    const pendingCounts = new Map<string, number>();
+    await Promise.all(
+      ownedIds.map(async (id) => {
+        const { count, error: countError } = await supabase
+          .from('guild_join_requests')
+          .select('*', { count: 'exact', head: true })
+          .eq('guild_id', id)
+          .eq('status', 'pending');
+        if (countError) {
+          console.error(`Failed to count pending requests for guild ${id}:`, countError);
+          return;
+        }
+        pendingCounts.set(id, count ?? 0);
+      })
+    );
+
+    for (const g of guilds) {
+      g.memberCount = memberCounts.get(g.id) ?? 0;
+      g.pendingRequestCount = pendingCounts.get(g.id) ?? 0;
+    }
+  }
 
   return NextResponse.json(guilds);
 }

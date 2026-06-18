@@ -60,12 +60,6 @@
   margin-bottom: 24px;
 }
 
-.statusMember {
-  background: rgba(77, 255, 136, 0.1);
-  color: #4dff88;
-  border: 1px solid rgba(77, 255, 136, 0.25);
-}
-
 .statusPending {
   background: rgba(108, 99, 255, 0.12);
   color: #a89fff;
@@ -76,6 +70,24 @@
   font-size: 0.9rem;
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+.applyPrompt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.applyText {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
 }
 
 .empty {

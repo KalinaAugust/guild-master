@@ -71,12 +71,28 @@
   border-radius: 8px;
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+}
+
+.nameCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .name {
-  flex: 1;
   font-size: 0.875rem;
-  color: var(--text-primary);
+  color: var(--accent-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,7 +107,8 @@
 }
 
 .ownerIcon,
-.adminIcon {
+.adminIcon,
+.memberIcon {
   width: 24px;
   height: 24px;
   display: flex;
@@ -106,6 +123,10 @@
 
 .adminIcon {
   color: var(--accent-secondary);
+}
+
+.memberIcon {
+  color: var(--text-muted);
 }
 
 .skeletonList {
