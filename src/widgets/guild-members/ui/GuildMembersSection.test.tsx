@@ -14,6 +14,7 @@ vi.mock('@/entities/guild', () => ({
 
 vi.mock('@/entities/user', () => ({
   resolveDisplayName: ({ fullName }: { fullName: string | null }) => fullName,
+  useGetUserNotesQuery: vi.fn(() => ({ data: [] })),
 }));
 
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
@@ -124,7 +125,7 @@ describe('GuildMembersSection', () => {
     );
     render(<GuildMembersSection guildId="g1" userId="u1" />);
     await user.click(screen.getByRole('button', { name: 'memberActions' }));
-    expect(await screen.findByText('makeAdmin')).toBeInTheDocument();
+    expect(await screen.findByText('makeOfficer')).toBeInTheDocument();
     expect(screen.getByText('removeMember')).toBeInTheDocument();
   });
 
@@ -136,7 +137,7 @@ describe('GuildMembersSection', () => {
     );
     render(<GuildMembersSection guildId="g1" userId="u1" />);
     await user.click(screen.getByRole('button', { name: 'memberActions' }));
-    expect(await screen.findByText('revokeAdmin')).toBeInTheDocument();
+    expect(await screen.findByText('revokeOfficer')).toBeInTheDocument();
   });
 
   it('admin sees Remove for a member but no role action and no menu on an admin', async () => {
@@ -150,7 +151,7 @@ describe('GuildMembersSection', () => {
     expect(triggers).toHaveLength(1);
     await user.click(triggers[0]);
     expect(await screen.findByText('removeMember')).toBeInTheDocument();
-    expect(screen.queryByText('makeAdmin')).not.toBeInTheDocument();
+    expect(screen.queryByText('makeOfficer')).not.toBeInTheDocument();
   });
 
   it('promotes a member to admin after confirming', async () => {
@@ -161,7 +162,7 @@ describe('GuildMembersSection', () => {
     );
     render(<GuildMembersSection guildId="g1" userId="u1" />);
     await user.click(screen.getByRole('button', { name: 'memberActions' }));
-    await user.click(await screen.findByText('makeAdmin'));
+    await user.click(await screen.findByText('makeOfficer'));
     await user.click(await screen.findByRole('button', { name: 'confirm' }));
     expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u2', role: 'ADMIN' });
   });
@@ -174,7 +175,7 @@ describe('GuildMembersSection', () => {
     );
     render(<GuildMembersSection guildId="g1" userId="u1" />);
     await user.click(screen.getByRole('button', { name: 'memberActions' }));
-    await user.click(await screen.findByText('revokeAdmin'));
+    await user.click(await screen.findByText('revokeOfficer'));
     await user.click(await screen.findByRole('button', { name: 'confirm' }));
     expect(updateRoleMock).toHaveBeenCalledWith({ guildId: 'g1', userId: 'u3', role: 'MEMBER' });
   });

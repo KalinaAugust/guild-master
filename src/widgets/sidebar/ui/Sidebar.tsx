@@ -7,6 +7,7 @@ import { useAppSelector } from '@/shared/lib/hooks';
 import { useGetGuildChatUnreadQuery } from '@/entities/guild-message';
 import { useGetAnnouncementsUnreadQuery } from '@/entities/announcement';
 import { useGetCallToActionsUnreadQuery } from '@/entities/call-to-action';
+import { useGetGuildsQuery } from '@/entities/guild';
 import { navItems } from '../model/navItems';
 import { SidebarItem } from './SidebarItem';
 import styles from './Sidebar.module.css';
@@ -28,12 +29,20 @@ export const Sidebar = ({ footer }: SidebarProps) => {
   const { data: chatUnread } = useGetGuildChatUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: announcementsUnread } = useGetAnnouncementsUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: ctaUnread } = useGetCallToActionsUnreadQuery(activeGuildId ?? '', pollOptions);
+  const { data: guilds } = useGetGuildsQuery(undefined, {
+    pollingInterval: 60_000,
+    skipPollingIfUnfocused: true,
+  });
+
+  // Pending join requests in any owned guild signal that guilds need attention.
+  const guildsNeedAttention = !!guilds?.some((g) => (g.pendingRequestCount ?? 0) > 0);
 
   // Per-route unread flags; the dot hides on the route it points to.
   const unreadByHref: Record<string, boolean | undefined> = {
     '/guild-chat': chatUnread?.hasUnread,
     '/announcements': announcementsUnread?.hasUnread,
     '/looking-for-group': ctaUnread?.hasUnread,
+    '/guilds': guildsNeedAttention,
   };
 
   return (

@@ -8,6 +8,10 @@ vi.mock('next/link', () => ({
     <a href={href} {...props}>{children}</a>,
 }));
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
 const guilds: Guild[] = [
   { id: '1', name: 'Alpha Guild', ownerId: 'user1' },
   { id: '2', name: 'Beta Guild', ownerId: 'user1', description: 'A great guild' },

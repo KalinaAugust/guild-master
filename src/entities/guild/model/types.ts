@@ -4,6 +4,10 @@ export interface Guild {
   ownerId: string;
   description?: string;
   avatarUrl?: string;
+  /** Total members in the guild (populated by the guild list endpoint). */
+  memberCount?: number;
+  /** Pending join requests awaiting the owner's action (0 unless the viewer owns the guild). */
+  pendingRequestCount?: number;
 }
 
 export interface GuildDetail {

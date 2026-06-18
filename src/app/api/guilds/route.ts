@@ -18,7 +18,15 @@ export async function GET() {
   }
 
   const guilds = data.reduce<
-    Array<{ id: string; name: string; ownerId: string; description?: string; avatarUrl?: string }>
+    Array<{
+      id: string;
+      name: string;
+      ownerId: string;
+      description?: string;
+      avatarUrl?: string;
+      memberCount: number;
+      pendingRequestCount: number;
+    }>
   >(
     (acc, m) => {
       const g = m.guilds as unknown as {
@@ -35,12 +43,48 @@ export async function GET() {
           ownerId: g.owner_id,
           description: g.description || undefined,
           avatarUrl: g.avatar_url || undefined,
+          memberCount: 0,
+          pendingRequestCount: 0,
         });
       }
       return acc;
     },
     []
   );
+
+  const guildIds = guilds.map((g) => g.id);
+
+  if (guildIds.length > 0) {
+    // Member counts across every guild the user belongs to.
+    const { data: memberRows } = await supabase
+      .from('guild_members')
+      .select('guild_id')
+      .in('guild_id', guildIds);
+
+    const memberCounts = new Map<string, number>();
+    for (const row of memberRows ?? []) {
+      memberCounts.set(row.guild_id, (memberCounts.get(row.guild_id) ?? 0) + 1);
+    }
+
+    // Pending join requests only for owned guilds (RLS hides them otherwise).
+    const ownedIds = guilds.filter((g) => g.ownerId === user.id).map((g) => g.id);
+    const pendingCounts = new Map<string, number>();
+    if (ownedIds.length > 0) {
+      const { data: requestRows } = await supabase
+        .from('guild_join_requests')
+        .select('guild_id')
+        .eq('status', 'pending')
+        .in('guild_id', ownedIds);
+      for (const row of requestRows ?? []) {
+        pendingCounts.set(row.guild_id, (pendingCounts.get(row.guild_id) ?? 0) + 1);
+      }
+    }
+
+    for (const g of guilds) {
+      g.memberCount = memberCounts.get(g.id) ?? 0;
+      g.pendingRequestCount = pendingCounts.get(g.id) ?? 0;
+    }
+  }
 
   return NextResponse.json(guilds);
 }

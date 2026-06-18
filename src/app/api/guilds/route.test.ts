@@ -33,7 +33,9 @@ describe('GET /api/guilds', () => {
     ] })));
     const res = await GET();
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual([{ id: 'g1', name: 'Alpha', ownerId: 'u1' }]);
+    expect(await res.json()).toEqual([
+      { id: 'g1', name: 'Alpha', ownerId: 'u1', memberCount: 1, pendingRequestCount: 1 },
+    ]);
   });
   it('returns 500 on db error', async () => {
     use({ id: 'u1' }, vi.fn().mockReturnValue(query({ data: null, error: { message: 'boom' } })));

@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, ReactNode } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { Spinner } from '@/shared/ui/Spinner';
 import styles from './Button.module.css';
@@ -9,6 +9,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
   asChild?: boolean;
   isLoading?: boolean;
+  /** Leading icon, always rendered with consistent spacing before the label. */
+  icon?: ReactNode;
 }
 
 export const Button = ({
@@ -19,6 +21,7 @@ export const Button = ({
   asChild = false,
   className = '',
   isLoading = false,
+  icon,
   disabled,
   ...props
 }: ButtonProps) => {
@@ -52,10 +55,14 @@ export const Button = ({
           )}
           {isLoading ? (
             <span className={styles.contentHidden}>
+              {icon && <span className={styles.icon}>{icon}</span>}
               {children}
             </span>
           ) : (
-            children
+            <>
+              {icon && <span className={styles.icon}>{icon}</span>}
+              {children}
+            </>
           )}
         </>
       )}

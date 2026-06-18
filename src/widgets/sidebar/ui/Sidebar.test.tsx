@@ -26,6 +26,10 @@ vi.mock('@/entities/call-to-action', () => ({
   useGetCallToActionsUnreadQuery: () => ({ data: { hasUnread: false } }),
 }));
 
+vi.mock('@/entities/guild', () => ({
+  useGetGuildsQuery: () => ({ data: [] }),
+}));
+
 import { Sidebar } from './Sidebar';
 
 describe('Sidebar', () => {

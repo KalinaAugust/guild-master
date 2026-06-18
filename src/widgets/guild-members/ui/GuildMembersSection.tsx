@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import { useTranslations } from 'next-intl';
-import { UserMinus, Shield, ShieldCheck, ShieldOff, MoreVertical, Crown } from 'lucide-react';
+import { UserMinus, User, Shield, ShieldCheck, ShieldOff, MoreVertical, Crown } from 'lucide-react';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
@@ -15,7 +15,7 @@ import {
   useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
-import { resolveDisplayName } from '@/entities/user';
+import { resolveDisplayName, useGetUserNotesQuery } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
@@ -45,6 +45,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const t = useTranslations('GuildMembers');
   const [email, setEmail] = useState('');
   const { data: members = [], isLoading } = useGetGuildMembersQuery(guildId);
+  const { data: notes = [] } = useGetUserNotesQuery();
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember, { isLoading: isRemoving }] = useRemoveGuildMemberMutation();
   const [updateRole, { isLoading: isUpdatingRole }] = useUpdateGuildMemberRoleMutation();
@@ -100,18 +101,23 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
       return { title: t('removeMember'), description: t('removeConfirm', { name: pending.name }), label: t('remove'), variant: 'danger' as const };
     }
     if (pending.type === 'promote') {
-      return { title: t('makeAdmin'), description: t('promoteConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
+      return { title: t('makeOfficer'), description: t('promoteConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
     }
     if (pending.type === 'transfer') {
       return { title: t('transferOwnership'), description: t('transferConfirm', { name: pending.name }), label: t('transferOwnership'), variant: 'danger' as const };
     }
-    return { title: t('revokeAdmin'), description: t('revokeConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
+    return { title: t('revokeOfficer'), description: t('revokeConfirm', { name: pending.name }), label: t('confirm'), variant: 'primary' as const };
   };
   const copy = confirmCopy();
 
-  const sorted = [...members].sort(
-    (a, b) => (ROLE_ORDER[a.role] ?? 9) - (ROLE_ORDER[b.role] ?? 9),
-  );
+  const sorted = [...members].sort((a, b) => {
+    // The current user always comes first, regardless of role.
+    if (userId) {
+      if (a.userId === userId) return -1;
+      if (b.userId === userId) return 1;
+    }
+    return (ROLE_ORDER[a.role] ?? 9) - (ROLE_ORDER[b.role] ?? 9);
+  });
 
   return (
     <div className={`${styles.root} ${fill ? styles.rootFill : ''}`}>
@@ -147,6 +153,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               displayAsAlias: member.profile.displayAsAlias,
             });
             const isSelf = !!userId && member.userId === userId;
+            const note = notes.find((n) => n.target_user_id === member.userId)?.note;
             const canRemove = effectiveCanManage && !isSelf && member.role !== 'OWNER' &&
               (member.role !== 'ADMIN' || isOwner);
             const canChangeRole = effectiveCanManage && !isSelf && isOwner && member.role !== 'OWNER';
@@ -164,10 +171,13 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                   size="sm"
                 />
               </ProfileLink>
-              <ProfileLink publicId={member.profile.publicId} className={styles.name}>
-                <NameWithIcon name={memberName ?? member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
-              </ProfileLink>
-              <span className={styles.role}>{member.role}</span>
+              <div className={styles.nameCol}>
+                <ProfileLink publicId={member.profile.publicId} className={styles.name}>
+                  <NameWithIcon name={memberName ?? member.userId} icon={member.profile.icon} fallback={member.userId} iconSize={14} />
+                </ProfileLink>
+                {note && <span className={styles.note}>{note}</span>}
+              </div>
+              <span className={styles.role}>{t(`role${member.role}`)}</span>
               {member.role === 'OWNER' && (
                 <span className={styles.ownerIcon}>
                   <ShieldCheck size={14} />
@@ -176,6 +186,11 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               {member.role === 'ADMIN' && (
                 <span className={styles.adminIcon}>
                   <Shield size={14} />
+                </span>
+              )}
+              {member.role === 'MEMBER' && (
+                <span className={styles.memberIcon}>
+                  <User size={14} />
                 </span>
               )}
               {showMenu && (
@@ -193,7 +208,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                           onSelect={() => setPending({ type: 'promote', userId: member.userId, name: memberName ?? member.userId })}
                         >
                           <Shield size={16} />
-                          <span>{t('makeAdmin')}</span>
+                          <span>{t('makeOfficer')}</span>
                         </DropdownMenu.Item>
                       )}
                       {canChangeRole && member.role === 'ADMIN' && (
@@ -202,7 +217,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
                           onSelect={() => setPending({ type: 'revoke', userId: member.userId, name: memberName ?? member.userId })}
                         >
                           <ShieldOff size={16} />
-                          <span>{t('revokeAdmin')}</span>
+                          <span>{t('revokeOfficer')}</span>
                         </DropdownMenu.Item>
                       )}
                       {canTransfer && (

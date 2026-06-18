@@ -466,7 +466,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                   {commonT('delete')}
                 </Button>
               )}
-              {canManageEvents && (
+              {(canManageEvents || isCreator) && (
                 <Button
                   type="button"
                   variant="secondary"
