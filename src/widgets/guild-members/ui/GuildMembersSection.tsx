@@ -15,7 +15,7 @@ import {
   useTransferGuildOwnershipMutation,
   useGuildPermissions,
 } from '@/entities/guild';
-import { resolveDisplayName, useGetUserNotesQuery } from '@/entities/user';
+import { resolveDisplayName } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
@@ -45,7 +45,6 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
   const t = useTranslations('GuildMembers');
   const [email, setEmail] = useState('');
   const { data: members = [], isLoading } = useGetGuildMembersQuery(guildId);
-  const { data: notes = [] } = useGetUserNotesQuery();
   const [addMember, { isLoading: isAdding }] = useAddGuildMemberMutation();
   const [removeMember, { isLoading: isRemoving }] = useRemoveGuildMemberMutation();
   const [updateRole, { isLoading: isUpdatingRole }] = useUpdateGuildMemberRoleMutation();
@@ -153,14 +152,14 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
               displayAsAlias: member.profile.displayAsAlias,
             });
             const isSelf = !!userId && member.userId === userId;
-            const note = notes.find((n) => n.target_user_id === member.userId)?.note;
+            const note = member.profile.about;
             const canRemove = effectiveCanManage && !isSelf && member.role !== 'OWNER' &&
               (member.role !== 'ADMIN' || isOwner);
             const canChangeRole = effectiveCanManage && !isSelf && isOwner && member.role !== 'OWNER';
             const canTransfer = canChangeRole;
             const showMenu = canRemove || canChangeRole || canTransfer;
             return (
-            <li key={member.userId} className={`${styles.item} ${isSelf ? styles.selfItem : ''}`} data-suppress-note-tooltip>
+            <li key={member.userId} className={`${styles.item} ${isSelf ? styles.selfItem : ''}`}>
               <ProfileLink
                 publicId={member.profile.publicId}
                 aria-label={memberName ?? undefined}

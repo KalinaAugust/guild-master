@@ -43,5 +43,6 @@ export interface EventParticipant {
     alias: string | null;
     displayAsAlias: boolean;
     icon: string | null;
+    about: string | null;
   };
 }

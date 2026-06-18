@@ -57,7 +57,6 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-suppress-note-tooltip
     >
       <ProfileLink
         publicId={participant.profile.publicId}

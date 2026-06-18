@@ -81,8 +81,8 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
         </aside>
 
         <section className={styles.main}>
-          {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
           {viewer && <PrivateNoteBlock targetUserId={raw.id} />}
+          {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
           {profile.about && <AboutBlock about={profile.about} />}
           {profile.interests && profile.interests.length > 0 && (
             <InterestsBlock interests={profile.interests} />
