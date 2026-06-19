@@ -136,7 +136,7 @@ export const CalendarGrid: React.FC<{
             })
             .sort((a, b) => a.time.localeCompare(b.time));
 
-          const displayedEvents = dayEvents.slice(0, 2);
+          const displayedEvents = dayEvents.slice(0, 3);
           const remainingCount = dayEvents.length - displayedEvents.length;
 
           return (

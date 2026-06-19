@@ -23,8 +23,10 @@ export default async function Home() {
 
   return (
     <main className={styles.main}>
-      <UpcomingEventsStrip guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
       <CalendarGrid guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
+      <div className={styles.strip}>
+        <UpcomingEventsStrip guilds={guilds} userId={user?.id} initialEvents={initialEvents} initialGuildId={defaultGuildId} />
+      </div>
       <EventWizard userId={user?.id} />
     </main>
   );
