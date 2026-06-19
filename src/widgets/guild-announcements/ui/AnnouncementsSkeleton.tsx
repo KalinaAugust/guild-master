@@ -14,3 +14,21 @@ export const AnnouncementsSkeleton: React.FC = () => (
     ))}
   </div>
 );
+
+const PollCardSkeleton: React.FC = () => (
+  <div className={styles.pollCardSkeleton}>
+    <Skeleton className={styles.pollTitle} />
+    <Skeleton className={styles.pollOption} />
+    <Skeleton className={styles.pollOption} />
+    <Skeleton className={styles.pollOption} />
+    <Skeleton className={styles.pollFooter} />
+  </div>
+);
+
+/** Placeholder cards shown while guild polls are loading. */
+export const PollsSkeleton: React.FC = () => (
+  <div className={styles.pollsSkeleton} aria-busy="true">
+    <PollCardSkeleton />
+    <PollCardSkeleton />
+  </div>
+);

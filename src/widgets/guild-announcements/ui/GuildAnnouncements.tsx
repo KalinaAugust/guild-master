@@ -7,6 +7,8 @@ import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { AnnouncementCard, AnnouncementModal } from '@/features/guild-announcement';
+import { PollCard, PollWizard } from '@/features/guild-poll';
+import { useGetGuildPollsQuery } from '@/entities/poll';
 import {
   useGetGuildAnnouncementsQuery,
   useMarkAnnouncementsReadMutation,
@@ -14,7 +16,7 @@ import {
   type AnnouncementComment,
 } from '@/entities/announcement';
 import type { Guild } from '@/entities/guild';
-import { AnnouncementsSkeleton } from './AnnouncementsSkeleton';
+import { AnnouncementsSkeleton, PollsSkeleton } from './AnnouncementsSkeleton';
 import styles from './GuildAnnouncements.module.css';
 
 interface GuildAnnouncementsProps {
@@ -31,11 +33,16 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   initialGuildId,
 }) => {
   const t = useTranslations('Announcements');
+  const pollT = useTranslations('GuildPoll');
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
 
   const { data, isLoading } = useGetGuildAnnouncementsQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const announcements = data?.announcements ?? [];
   const canCreate = data?.canCreate ?? false;
+
+  const { data: polls = [], isLoading: isPollsLoading } = useGetGuildPollsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId,
+  });
 
   // Opening the feed clears the sidebar unread dot for the active guild.
   const [markRead] = useMarkAnnouncementsReadMutation();
@@ -45,6 +52,7 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
 
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; title: string; content: string } | null>(null);
+  const [isPollWizardOpen, setIsPollWizardOpen] = useState(false);
 
   const openCreate = () => {
     setEditing(null);
@@ -58,30 +66,55 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   return (
     <Panel className={styles.panel}>
       <div className={styles.header}>
-        <div className={styles.guildSelect}>
-          <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
+        <div className={styles.headerFeed}>
+          <div className={styles.guildSelect}>
+            <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
+          </div>
+          {canCreate && (
+            <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate} icon={<Plus size={18} strokeWidth={3} />}>
+              {t('newAnnouncement')}
+            </Button>
+          )}
         </div>
-        {canCreate && (
-          <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate} icon={<Plus size={18} strokeWidth={3} />}>
-            {t('newAnnouncement')}
+        <div className={styles.headerPolls}>
+          <Button
+            type="button"
+            variant="primary"
+            className={styles.newPollButton}
+            onClick={() => setIsPollWizardOpen(true)}
+            icon={<Plus size={18} strokeWidth={3} />}
+          >
+            {pollT('newPoll')}
           </Button>
-        )}
+        </div>
       </div>
 
-      <div className={styles.feed}>
-        {isLoading && <AnnouncementsSkeleton />}
-        {!isLoading && announcements.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
-        {!isLoading &&
-          announcements.map((a) => (
-            <AnnouncementCard
-              key={a.id}
-              announcement={a}
-              guildId={activeGuildId!}
-              userId={userId}
-              viewerProfile={viewerProfile}
-              onEdit={openEdit}
-            />
-          ))}
+      <div className={styles.body}>
+        <div className={styles.feed}>
+          {isLoading && <AnnouncementsSkeleton />}
+          {!isLoading && announcements.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
+          {!isLoading &&
+            announcements.map((a) => (
+              <AnnouncementCard
+                key={a.id}
+                announcement={a}
+                guildId={activeGuildId!}
+                userId={userId}
+                viewerProfile={viewerProfile}
+                onEdit={openEdit}
+              />
+            ))}
+        </div>
+
+        <aside className={styles.polls}>
+          {activeGuildId && isPollsLoading && <PollsSkeleton />}
+          {activeGuildId && !isPollsLoading && polls.length === 0 && (
+            <p className={styles.empty}>{pollT('emptyPolls')}</p>
+          )}
+          {activeGuildId &&
+            !isPollsLoading &&
+            polls.map((poll) => <PollCard key={poll.id} poll={poll} guildId={activeGuildId} />)}
+        </aside>
       </div>
 
       {activeGuildId && (
@@ -90,6 +123,13 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
           onClose={() => setModalOpen(false)}
           guildId={activeGuildId}
           editing={editing}
+        />
+      )}
+      {activeGuildId && (
+        <PollWizard
+          open={isPollWizardOpen}
+          onClose={() => setIsPollWizardOpen(false)}
+          guildId={activeGuildId}
         />
       )}
     </Panel>
