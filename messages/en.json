@@ -49,7 +49,9 @@
     "guildChat": "Guild Chat",
     "announcements": "Announcements",
     "callToAction": "Looking for group",
-    "copyLink": "Copy link"
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied to clipboard",
+    "copyError": "Failed to copy link"
   },
   "Auth": {
     "login": "Login"
@@ -203,7 +205,8 @@
     "eventJoinRequestDeclined": "Your application for «{eventTitle}» was declined",
     "eventComment": "New comments in «{eventTitle}»",
     "newCallToAction": "New Call to Action in «{guildName}»",
-    "newAnnouncement": "New announcement in «{guildName}»"
+    "newAnnouncement": "New announcement in «{guildName}»",
+    "guildInvitation": "You have been invited to join <guild>{guildName}</guild>"
   },
   "PublicProfile": {
     "joined": "Joined",
@@ -238,6 +241,7 @@
     "remove": "Remove",
     "removeConfirm": "Remove {name} from the guild?",
     "invalidEmail": "Please enter a valid email address",
+    "inviteSent": "Invite sent to {email}",
     "userNotFound": "User with this email not found",
     "alreadyMember": "User is already a member",
     "addError": "Failed to add member",

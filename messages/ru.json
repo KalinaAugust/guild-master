@@ -49,7 +49,9 @@
     "guildChat": "Чат гильдии",
     "announcements": "Анонсы",
     "callToAction": "Поиск группы",
-    "copyLink": "Скопировать ссылку"
+    "copyLink": "Скопировать ссылку",
+    "linkCopied": "Ссылка скопирована",
+    "copyError": "Не удалось скопировать ссылку"
   },
   "Auth": {
     "login": "Вход"
@@ -203,7 +205,8 @@
     "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена",
     "eventComment": "Новые комментарии в «{eventTitle}»",
     "newCallToAction": "Новый призыв к действию в «{guildName}»",
-    "newAnnouncement": "Новый анонс в «{guildName}»"
+    "newAnnouncement": "Новый анонс в «{guildName}»",
+    "guildInvitation": "Вас пригласили присоединиться к <guild>{guildName}</guild>"
   },
   "PublicProfile": {
     "joined": "Дата регистрации",
@@ -238,6 +241,7 @@
     "remove": "Удалить",
     "removeConfirm": "Удалить {name} из гильдии?",
     "invalidEmail": "Введите корректный email",
+    "inviteSent": "Приглашение отправлено на {email}",
     "userNotFound": "Пользователь с таким email не найден",
     "alreadyMember": "Пользователь уже состоит в гильдии",
     "addError": "Не удалось добавить участника",
