@@ -5,11 +5,10 @@ import { Guild } from '@/entities/guild';
 import { acceptInvite, rejectInvite } from '@/entities/guild/api/invites';
 import { Shield } from 'lucide-react';
 import { Button } from '@/shared/ui/Button';
-import { Panel } from '@/shared/ui/Panel';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
-import { ProfileLink } from '@/shared/ui/ProfileLink';
 import styles from './PendingInvitesList.module.css';
 import { toast } from 'sonner';
+import { useTranslations } from 'next-intl';
 import { guildApi } from '@/entities/guild/api/guildApi';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
@@ -23,6 +22,8 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
   const [loadingAction, setLoadingAction] = React.useState<'accept' | 'reject' | null>(null);
   const dispatch = useDispatch();
   const router = useRouter();
+  const t = useTranslations('Guild');
+  const tCommon = useTranslations('Common');
 
   const handleAccept = (guildId: string) => {
     setLoadingId(guildId);
@@ -31,7 +32,7 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
       const res = await acceptInvite(guildId);
       if (res.error) toast.error(res.error);
       else {
-        toast.success('Invite accepted');
+        toast.success(t('inviteAccepted'));
         dispatch(guildApi.util.invalidateTags([{ type: 'Guild', id: 'LIST' }, { type: 'Guild', id: 'INVITES' }]));
         router.refresh();
       }
@@ -47,7 +48,7 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
       const res = await rejectInvite(guildId);
       if (res.error) toast.error(res.error);
       else {
-        toast.success('Invite rejected');
+        toast.success(t('inviteRejected'));
         dispatch(guildApi.util.invalidateTags([{ type: 'Guild', id: 'LIST' }, { type: 'Guild', id: 'INVITES' }]));
         router.refresh();
       }
@@ -60,7 +61,7 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Pending Invites</h2>
+      <h2 className={styles.title}>{t('pendingInvitesTitle')}</h2>
       <ul className={styles.list}>
         {invites.map((guild) => (
           <li key={guild.id} className={styles.row}>
@@ -94,7 +95,7 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
                 disabled={isPending}
                 isLoading={isPending && loadingId === guild.id && loadingAction === 'accept'}
               >
-                Accept
+                {tCommon('accept')}
               </Button>
               <Button 
                 variant="danger" 
@@ -103,7 +104,7 @@ export const PendingInvitesList: React.FC<PendingInvitesListProps> = ({ invites 
                 disabled={isPending}
                 isLoading={isPending && loadingId === guild.id && loadingAction === 'reject'}
               >
-                Reject
+                {tCommon('reject')}
               </Button>
             </div>
           </li>
