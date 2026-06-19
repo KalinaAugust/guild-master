@@ -78,11 +78,18 @@ export async function POST(
 
   const { error: insertError } = await supabase
     .from('guild_members')
-    .insert({ guild_id: guildId, user_id: targetUser.id, role: 'MEMBER' });
+    .insert({ guild_id: guildId, user_id: targetUser.id, role: 'MEMBER', status: 'PENDING' });
 
   if (insertError) {
     return NextResponse.json({ error: 'Failed to add member' }, { status: 500 });
   }
+
+  await adminClient.from('notifications').insert({
+    user_id: targetUser.id,
+    type: 'guild_invitation',
+    entity_type: 'guild',
+    entity_id: guildId,
+  });
 
   const { data: newRow } = await supabase
     .from('guild_members')

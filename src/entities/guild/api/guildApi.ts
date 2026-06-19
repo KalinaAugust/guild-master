@@ -17,6 +17,10 @@ export const guildApi = baseApi.injectEndpoints({
       query: () => 'guilds',
       providesTags: [{ type: 'Guild', id: 'LIST' }],
     }),
+    getPendingInvites: builder.query<Guild[], void>({
+      query: () => 'guilds/invites',
+      providesTags: [{ type: 'Guild', id: 'INVITES' }],
+    }),
     createGuild: builder.mutation<Guild, { name: string; description?: string }>({
       query: (body) => ({ url: 'guilds', method: 'POST', body }),
       invalidatesTags: [{ type: 'Guild', id: 'LIST' }],
@@ -125,6 +129,7 @@ export const guildApi = baseApi.injectEndpoints({
 export const {
   useGetGuildMembersQuery,
   useGetGuildsQuery,
+  useGetPendingInvitesQuery,
   useCreateGuildMutation,
   useDeleteGuildMutation,
   useUpdateGuildMutation,

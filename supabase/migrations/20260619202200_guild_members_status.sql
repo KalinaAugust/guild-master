@@ -1,0 +1,3 @@
+ALTER TABLE guild_members
+ADD COLUMN status text NOT NULL DEFAULT 'ACCEPTED'
+CHECK (status IN ('PENDING', 'ACCEPTED', 'REJECTED'));

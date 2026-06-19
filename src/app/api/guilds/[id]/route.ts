@@ -11,7 +11,7 @@ export async function GET(
 
   const { data: guild, error } = await supabase
     .from('guilds')
-    .select('id, public_id, name, description, avatar_url, owner_id, profiles!guilds_owner_id_fkey(full_name)')
+    .select('id, public_id, name, description, avatar_url, owner_id, profiles!guilds_owner_id_fkey(public_id, full_name, avatar_url)')
     .eq('id', id)
     .maybeSingle();
 
@@ -22,9 +22,10 @@ export async function GET(
   const { count } = await supabase
     .from('guild_members')
     .select('id', { count: 'exact', head: true })
-    .eq('guild_id', id);
+    .eq('guild_id', id)
+    .eq('status', 'ACCEPTED');
 
-  type ProfileShape = { full_name: string | null } | null;
+  type ProfileShape = { public_id: string | null; full_name: string | null; avatar_url: string | null } | null;
   const g = guild as unknown as { id: string; public_id: string; name: string; description: string | null; avatar_url: string | null; owner_id: string; profiles: ProfileShape };
 
   return NextResponse.json({
@@ -35,6 +36,8 @@ export async function GET(
     avatarUrl: g.avatar_url || undefined,
     ownerId: g.owner_id,
     ownerName: (g.profiles as ProfileShape)?.full_name ?? null,
+    ownerAvatarUrl: (g.profiles as ProfileShape)?.avatar_url ?? null,
+    ownerPublicId: (g.profiles as ProfileShape)?.public_id ?? null,
     memberCount: count ?? 0,
   });
 }
