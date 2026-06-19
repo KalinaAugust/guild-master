@@ -62,7 +62,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
           <div className={styles.avatarWrap}>
             <AvatarUpload initialAvatarUrl={profile?.avatar_url || null} userId={user.id} />
           </div>
-          <GradientTitle className={styles.name} fontSize="1.6rem">
+          <GradientTitle className={styles.name} fontSize="20px">
             <NameWithIcon
               name={displayName ?? user.email?.split('@')[0] ?? 'User Profile'}
               icon={profile?.icon ?? null}

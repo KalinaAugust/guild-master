@@ -69,7 +69,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           <div className={styles.avatarWrap}>
             <UserAvatar avatarUrl={profile.avatarUrl} name={profile.displayName} fill />
           </div>
-          <GradientTitle className={styles.name} fontSize="1.3rem">
+          <GradientTitle className={styles.name} fontSize="20px">
             <NameWithIcon name={profile.displayName} icon={profile.icon} />
           </GradientTitle>
           {profile.alias && profile.alias !== profile.displayName && (

@@ -174,6 +174,7 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   <Textarea
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    rows={8}
                   />
                 </FormField>
               </Form.Root>

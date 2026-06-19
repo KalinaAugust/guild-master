@@ -8,14 +8,16 @@ import { Button } from '@/shared/ui/Button';
 import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { GradientTitle } from '@/shared/ui/GradientTitle';
 import { GuildList } from './GuildList';
+import { PendingInvitesList } from './PendingInvitesList';
 import { EditGuildWizard } from './EditGuildWizard';
 import styles from './GuildManagePage.module.css';
 
 interface GuildManagePageProps {
   userId: string;
+  pendingInvites: import('@/entities/guild').Guild[];
 }
 
-export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
+export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId, pendingInvites }) => {
   const t = useTranslations('Guild');
 
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -36,6 +38,8 @@ export const GuildManagePage: React.FC<GuildManagePageProps> = ({ userId }) => {
           {t('createButton')}
         </Button>
       </div>
+
+      <PendingInvitesList invites={pendingInvites} />
 
       {isLoading ? (
         <div className={styles.skeletonList}>

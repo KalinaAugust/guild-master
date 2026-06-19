@@ -64,6 +64,7 @@ export const GuildMembersSection: React.FC<GuildMembersSectionProps> = ({ guildI
     try {
       await addMember({ guildId, email: trimmed }).unwrap();
       setEmail('');
+      toast.success(t('inviteSent', { email: trimmed }));
     } catch (err: unknown) {
       const status = (err as { status?: number }).status;
       if (status === 404) toast.error(t('userNotFound'));

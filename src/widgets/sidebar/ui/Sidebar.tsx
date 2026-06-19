@@ -7,7 +7,7 @@ import { useAppSelector } from '@/shared/lib/hooks';
 import { useGetGuildChatUnreadQuery } from '@/entities/guild-message';
 import { useGetAnnouncementsUnreadQuery } from '@/entities/announcement';
 import { useGetCallToActionsUnreadQuery } from '@/entities/call-to-action';
-import { useGetGuildsQuery } from '@/entities/guild';
+import { useGetGuildsQuery, useGetPendingInvitesQuery } from '@/entities/guild';
 import { navItems } from '../model/navItems';
 import { SidebarItem } from './SidebarItem';
 import styles from './Sidebar.module.css';
@@ -33,9 +33,15 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     pollingInterval: 60_000,
     skipPollingIfUnfocused: true,
   });
+  const { data: pendingInvites } = useGetPendingInvitesQuery(undefined, {
+    pollingInterval: 60_000,
+    skipPollingIfUnfocused: true,
+  });
 
   // Pending join requests in any owned guild signal that guilds need attention.
-  const guildsNeedAttention = !!guilds?.some((g) => (g.pendingRequestCount ?? 0) > 0);
+  const ownedGuildsNeedAttention = !!guilds?.some((g) => (g.pendingRequestCount ?? 0) > 0);
+  const userHasPendingInvites = !!pendingInvites && pendingInvites.length > 0;
+  const guildsNeedAttention = ownedGuildsNeedAttention || userHasPendingInvites;
 
   // Per-route unread flags; the dot hides on the route it points to.
   const unreadByHref: Record<string, boolean | undefined> = {
