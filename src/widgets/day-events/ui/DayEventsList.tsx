@@ -26,9 +26,8 @@ import styles from './DayEventsList.module.css';
 const EventCardWithCounts: React.FC<{
   event: ActivityEvent;
   onClick?: (event: ActivityEvent) => void;
-  onEdit?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
-}> = ({ event, onClick, onEdit, onDelete }) => {
+}> = ({ event, onClick, onDelete }) => {
   const { data } = useGetParticipantsQuery(event.id);
   const participants = data?.participants ?? [];
   const total = participants.length;
@@ -38,7 +37,6 @@ const EventCardWithCounts: React.FC<{
     <EventCard
       event={event}
       onClick={onClick}
-      onEdit={onEdit}
       onDelete={onDelete}
       participantCount={data ? { total, confirmed } : undefined}
     />
@@ -84,11 +82,6 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
     if (isPastDate) return;
     dispatch(setSelectedDate(date));
     dispatch(openEventModal());
-  };
-
-  const handleEditEvent = (event: ActivityEvent) => {
-    if (isPastDate) return;
-    dispatch(openEventModal(event));
   };
 
   const handleViewEvent = (event: ActivityEvent) => {
@@ -187,7 +180,6 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
               key={event.id}
               event={event}
               onClick={handleViewEvent}
-              onEdit={!isPastDate && canManageEvents ? handleEditEvent : undefined}
               onDelete={canManageEvents ? handleDeleteClick : undefined}
             />
           ))}
