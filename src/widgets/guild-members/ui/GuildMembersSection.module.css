@@ -114,7 +114,7 @@
 .name {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--accent-secondary);
+  color: var(--accent-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
