@@ -4,14 +4,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
-import { Button } from '@/shared/ui/Button';
 import { MessageBubble } from '@/shared/ui/MessageBubble';
 import { MessageComposer } from '@/shared/ui/MessageComposer';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
-import { PollCard, PollWizard } from '@/features/guild-poll';
-import { useGetGuildPollsQuery } from '@/entities/poll';
 import type { Guild } from '@/entities/guild';
 import { uploadChatAttachment, type GuildMessage } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
@@ -23,7 +19,7 @@ import {
   useDeleteGuildMessageMutation,
   useMarkGuildChatReadMutation,
 } from '@/entities/guild-message';
-import { MessagesSkeleton, PollsSkeleton } from './ChatSkeletons';
+import { MessagesSkeleton } from './ChatSkeletons';
 import styles from './GuildChat.module.css';
 
 const formatDayLabel = (
@@ -50,7 +46,6 @@ interface GuildChatProps {
 
 export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProfile, initialGuildId }) => {
   const t = useTranslations('GuildChat');
-  const pollT = useTranslations('GuildPoll');
   const locale = useLocale();
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
 
@@ -61,14 +56,10 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
     skipPollingIfUnfocused: true,
   });
   const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
-  const { data: polls = [], isLoading: isPollsLoading } = useGetGuildPollsQuery(activeGuildId ?? '', {
-    skip: !activeGuildId,
-  });
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
   const [markRead] = useMarkGuildChatReadMutation();
-  const [isPollWizardOpen, setIsPollWizardOpen] = useState(false);
   const [editing, setEditing] = useState<{ id: string; body: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -174,21 +165,8 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
   return (
     <Panel className={styles.panel}>
       <div className={styles.header}>
-        <div className={styles.headerChat}>
-          <div className={styles.guildSelect}>
-            <GuildSelect value={activeGuildId} onValueChange={handleGuildSwitch} options={guildOptions} />
-          </div>
-        </div>
-        <div className={styles.headerPolls}>
-          <Button
-            type="button"
-            variant="primary"
-            className={styles.newPollButton}
-            onClick={() => setIsPollWizardOpen(true)}
-            icon={<Plus size={18} strokeWidth={3} />}
-          >
-            {pollT('newPoll')}
-          </Button>
+        <div className={styles.guildSelect}>
+          <GuildSelect value={activeGuildId} onValueChange={handleGuildSwitch} options={guildOptions} />
         </div>
       </div>
 
@@ -258,24 +236,7 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
           />
         </div>
 
-        <aside className={styles.polls}>
-          {activeGuildId && isPollsLoading && <PollsSkeleton />}
-          {activeGuildId && !isPollsLoading && polls.length === 0 && (
-            <p className={styles.empty}>{pollT('emptyPolls')}</p>
-          )}
-          {activeGuildId &&
-            !isPollsLoading &&
-            polls.map((poll) => <PollCard key={poll.id} poll={poll} guildId={activeGuildId} />)}
-        </aside>
       </div>
-
-      {activeGuildId && (
-        <PollWizard
-          open={isPollWizardOpen}
-          onClose={() => setIsPollWizardOpen(false)}
-          guildId={activeGuildId}
-        />
-      )}
     </Panel>
   );
 };

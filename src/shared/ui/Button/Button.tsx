@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { ButtonHTMLAttributes, forwardRef, ReactNode } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { Spinner } from '@/shared/ui/Spinner';
 import styles from './Button.module.css';
@@ -13,7 +13,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: ReactNode;
 }
 
-export const Button = ({
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   variant = 'primary',
   size = 'md',
@@ -24,7 +24,7 @@ export const Button = ({
   icon,
   disabled,
   ...props
-}: ButtonProps) => {
+}, ref) => {
   const Comp = asChild ? Slot : 'button';
   const classes = [
     styles.button,
@@ -36,9 +36,10 @@ export const Button = ({
   ].filter(Boolean).join(' ');
 
   return (
-    <Comp 
-      className={classes} 
-      disabled={disabled || isLoading} 
+    <Comp
+      ref={ref}
+      className={classes}
+      disabled={disabled || isLoading}
       {...props}
     >
       {asChild ? (
@@ -68,6 +69,8 @@ export const Button = ({
       )}
     </Comp>
   );
-};
+});
+
+Button.displayName = 'Button';
 
 

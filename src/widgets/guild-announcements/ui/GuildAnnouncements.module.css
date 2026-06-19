@@ -1,19 +1,94 @@
-.panel { display: flex; flex-direction: column; gap: 1rem; }
+.panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
 .header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--glass-border);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.headerFeed {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  border-bottom: 1px solid var(--glass-border);
-  padding-bottom: 24px;
+  flex: 1;
+  min-width: 0;
 }
+
+.headerPolls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 max(450px, 30%);
+  padding-left: 24px;
+  border-left: 1px solid var(--glass-border);
+}
+
 .guildSelect { min-width: 220px; }
-.newButton { display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; height: 45px; }
+.newButton,
+.newPollButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  gap: 24px;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+
 .feed {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
+
+.feed::-webkit-scrollbar { width: 6px; }
+.feed::-webkit-scrollbar-track { background: transparent; }
+.feed::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+.feed::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+
+.polls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 0 0 max(450px, 30%);
+  min-height: 0;
+  overflow-y: auto;
+  padding-left: 24px;
+  border-left: 1px solid var(--glass-border);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.polls::-webkit-scrollbar { width: 6px; }
+.polls::-webkit-scrollbar-track { background: transparent; }
+.polls::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
+.polls::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+
 .empty { color: var(--text-muted); text-align: center; padding: 2rem 0; }
 
 .skeletonList { display: flex; flex-direction: column; gap: 1rem; }
@@ -28,3 +103,38 @@
 .skTitle { width: 40%; height: 18px; }
 .skBody { width: 100%; height: 48px; }
 .skMeta { width: 30%; height: 16px; }
+
+.pollsSkeleton { display: flex; flex-direction: column; gap: 16px; }
+.pollCardSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 1.25rem;
+  background: rgba(3, 13, 26, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.pollTitle { height: 18px; width: 70%; }
+.pollOption { height: 38px; width: 100%; border-radius: 10px; }
+.pollFooter { height: 14px; width: 40%; }
+
+@media (max-width: 960px) {
+  .headerFeed { flex: 1; }
+  .headerPolls {
+    flex: none;
+    padding-left: 0;
+    border-left: none;
+  }
+  .body { flex-direction: column; }
+  .feed { flex: none; max-height: 60vh; }
+  .polls {
+    flex: none;
+    width: 100%;
+    height: auto;
+    padding-left: 0;
+    padding-top: 24px;
+    border-left: none;
+    border-top: 1px solid var(--glass-border);
+  }
+}

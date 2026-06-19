@@ -1,14 +1,9 @@
-.strip {
-  height: 82px;
-  border-radius: 16px;
-  margin-bottom: 1rem;
-}
-
 .panel {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 70vh;
+  flex: 1;
+  min-height: 0;
   padding: 1.5rem;
   border-radius: 24px;
   background: var(--glass-bg);
@@ -20,18 +15,11 @@
 
 .panelHeader {
   display: flex;
-  justify-content: space-between;
 }
 
 .select {
   height: 45px;
   width: 270px;
-  border-radius: 10px;
-}
-
-.pollButton {
-  height: 45px;
-  width: 130px;
   border-radius: 10px;
 }
 
@@ -74,18 +62,4 @@
 .lineShort {
   height: 12px;
   width: 60%;
-}
-
-.pollsCol {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 0 0 max(450px, 30%);
-  padding-left: 24px;
-  border-left: 1px solid var(--glass-border);
-}
-
-.pollCard {
-  height: 160px;
-  border-radius: 16px;
 }
