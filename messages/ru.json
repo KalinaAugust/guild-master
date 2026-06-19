@@ -48,7 +48,8 @@
     },
     "guildChat": "Чат гильдии",
     "announcements": "Анонсы",
-    "callToAction": "Поиск группы"
+    "callToAction": "Поиск группы",
+    "copyLink": "Скопировать ссылку"
   },
   "Auth": {
     "login": "Вход"
@@ -176,7 +177,8 @@
     "avatarChange": "Изменить",
     "successUpdated": "Гильдия обновлена",
     "membersAria": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участников}}",
-    "pendingRequestsAria": "{count, plural, one {# заявка на вступление} few {# заявки на вступление} many {# заявок на вступление} other {# заявок на вступление}}"
+    "pendingRequestsAria": "{count, plural, one {# заявка на вступление} few {# заявки на вступление} many {# заявок на вступление} other {# заявок на вступление}}",
+    "copyLink": "Скопировать ссылку"
   },
   "AiHelper": {
     "tooltip": "AI помощник",

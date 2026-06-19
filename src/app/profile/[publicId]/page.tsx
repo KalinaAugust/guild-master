@@ -48,7 +48,14 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
     return <OwnProfile user={viewer} />;
   }
 
-  const commonGuilds = viewer ? await getCommonGuilds(viewer.id, raw.id) : [];
+  const commonGuildsPromise = viewer ? getCommonGuilds(viewer.id, raw.id) : Promise.resolve([]);
+  const userNotePromise = viewer 
+    ? supabase.from('user_notes').select('note').eq('user_id', viewer.id).eq('target_user_id', raw.id).maybeSingle()
+    : Promise.resolve({ data: null });
+
+  const [commonGuilds, { data: noteData }] = await Promise.all([commonGuildsPromise, userNotePromise]);
+  const userNote = noteData?.note || '';
+
   const relationship: ViewerRelationship = commonGuilds.length > 0 ? 'guildmate' : 'public';
   const profile = buildVisibleProfile(raw, relationship, commonGuilds);
 
@@ -81,7 +88,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
         </aside>
 
         <section className={styles.main}>
-          {viewer && <PrivateNoteBlock targetUserId={raw.id} />}
+          {viewer && <PrivateNoteBlock targetUserId={raw.id} initialNote={userNote} />}
           {profile.commonGuilds && <CommonGuildsBlock guilds={profile.commonGuilds} />}
           {profile.about && <AboutBlock about={profile.about} />}
           {profile.interests && profile.interests.length > 0 && (

@@ -48,7 +48,8 @@
     },
     "guildChat": "Guild Chat",
     "announcements": "Announcements",
-    "callToAction": "Looking for group"
+    "callToAction": "Looking for group",
+    "copyLink": "Copy link"
   },
   "Auth": {
     "login": "Login"
@@ -176,7 +177,8 @@
     "successCreated": "Guild created",
     "successUpdated": "Guild updated",
     "membersAria": "{count, plural, one {# member} other {# members}}",
-    "pendingRequestsAria": "{count, plural, one {# pending join request} other {# pending join requests}}"
+    "pendingRequestsAria": "{count, plural, one {# pending join request} other {# pending join requests}}",
+    "copyLink": "Copy link"
   },
   "AiHelper": {
     "tooltip": "AI Assistant",

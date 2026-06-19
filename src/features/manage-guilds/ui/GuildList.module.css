@@ -139,3 +139,38 @@
   color: var(--text-secondary);
   padding: 16px 0;
 }
+
+.actions {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.row:hover .actions {
+  opacity: 1;
+}
+
+.copyBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copyBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.copyBtn:active {
+  transform: scale(0.95);
+}
