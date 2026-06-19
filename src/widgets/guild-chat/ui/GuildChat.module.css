@@ -11,31 +11,9 @@
 .header {
   display: flex;
   align-items: center;
-  gap: 24px;
   border-bottom: 1px solid var(--glass-border);
   padding-bottom: 24px;
   margin-bottom: 24px;
-}
-
-.headerChat {
-  display: flex;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-}
-
-.headerPolls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 0 0 max(450px, 30%);
-  padding-left: 24px;
-  border-left: 1px solid var(--glass-border);
-}
-
-.newPollButton {
-  height: 45px;
-  gap: 8px;
 }
 
 .guildSelect {
@@ -58,39 +36,6 @@
   flex: 1;
   min-width: 0;
   min-height: 0;
-}
-
-.polls {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 0 0 max(450px, 30%);
-  min-height: 0;
-  overflow-y: auto;
-  padding-left: 24px;
-  border-left: 1px solid var(--glass-border);
-  /* Always reserve the scrollbar gutter so the right gap stays identical whether or
-     not the column overflows. */
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
-}
-
-.polls::-webkit-scrollbar {
-  width: 6px;
-}
-
-.polls::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.polls::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 3px;
-}
-
-.polls::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.28);
 }
 
 .list {
@@ -151,26 +96,7 @@
 }
 
 @media (max-width: 960px) {
-  .headerChat { flex: 1; }
-  .headerPolls {
-    flex: none;
-    padding-left: 0;
-    border-left: none;
-    margin-right: 0;
-    padding-right: 0;
-  }
   .body { flex-direction: column; }
   .chat { height: auto; }
   .list { flex: none; max-height: 60vh; }
-  .polls {
-    flex: none;
-    width: 100%;
-    height: auto;
-    padding-left: 0;
-    padding-top: 24px;
-    border-left: none;
-    border-top: 1px solid var(--glass-border);
-    margin-right: 0;
-    padding-right: 0;
-  }
 }

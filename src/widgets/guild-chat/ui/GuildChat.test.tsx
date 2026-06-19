@@ -22,15 +22,6 @@ vi.mock('@/features/select-guild', () => ({
   GuildSelect: () => <div data-testid="guild-select" />,
 }));
 
-vi.mock('@/entities/poll', () => ({
-  useGetGuildPollsQuery: () => ({ data: [] }),
-}));
-
-vi.mock('@/features/guild-poll', () => ({
-  PollCard: () => <div data-testid="poll-card" />,
-  PollWizard: () => <div data-testid="poll-wizard" />,
-}));
-
 const guilds = [{ id: 'g1', name: 'Test', avatarUrl: null }] as never;
 
 beforeEach(() => vi.clearAllMocks());
@@ -45,5 +36,10 @@ describe('GuildChat', () => {
   it('renders the composer placeholder for a member', () => {
     render(<GuildChat guilds={guilds} userId="u1" initialGuildId="g1" />);
     expect(screen.getByPlaceholderText('placeholder')).toBeInTheDocument();
+  });
+
+  it('does not render any poll UI', () => {
+    render(<GuildChat guilds={guilds} userId="u1" initialGuildId="g1" />);
+    expect(screen.queryByText('newPoll')).not.toBeInTheDocument();
   });
 });

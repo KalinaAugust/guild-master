@@ -22,21 +22,3 @@ export const MessagesSkeleton: React.FC = () => (
     <MessageRowSkeleton own />
   </div>
 );
-
-const PollCardSkeleton: React.FC = () => (
-  <div className={styles.pollCard}>
-    <Skeleton className={styles.pollTitle} />
-    <Skeleton className={styles.pollOption} />
-    <Skeleton className={styles.pollOption} />
-    <Skeleton className={styles.pollOption} />
-    <Skeleton className={styles.pollFooter} />
-  </div>
-);
-
-/** Placeholder cards shown while guild polls are loading. */
-export const PollsSkeleton: React.FC = () => (
-  <div className={styles.polls} aria-busy="true">
-    <PollCardSkeleton />
-    <PollCardSkeleton />
-  </div>
-);
