@@ -12,15 +12,18 @@ import {
 
 interface PrivateNoteBlockProps {
   targetUserId: string;
+  initialNote?: string;
 }
 
-export const PrivateNoteBlock = ({ targetUserId }: PrivateNoteBlockProps) => {
+export const PrivateNoteBlock = ({ targetUserId, initialNote = '' }: PrivateNoteBlockProps) => {
   const t = useTranslations('PrivateNote');
-  const { data: notes, isLoading } = useGetUserNotesQuery();
+  const { data: notes } = useGetUserNotesQuery();
   const [updateNote] = useUpdateUserNoteMutation();
   const [deleteNote] = useDeleteUserNoteMutation();
 
-  const currentNote = notes?.find((n) => n.target_user_id === targetUserId)?.note || '';
+  const currentNote = notes 
+    ? (notes.find((n) => n.target_user_id === targetUserId)?.note || '')
+    : initialNote;
 
   const handleSave = async (value: string) => {
     const trimmed = value.trim();
@@ -30,10 +33,6 @@ export const PrivateNoteBlock = ({ targetUserId }: PrivateNoteBlockProps) => {
       await updateNote({ targetUserId, note: trimmed }).unwrap();
     }
   };
-
-  if (isLoading) {
-    return null;
-  }
 
   return (
     <ProfileBlock icon={Lock} title={t('title')} help={t('helpTooltip')}>
