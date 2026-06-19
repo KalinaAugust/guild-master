@@ -136,12 +136,22 @@
   opacity: 1;
 }
 
+.actionBtn {
+  background: transparent !important;
+}
+
 .actionBtn:hover {
   color: var(--accent-primary);
+  background: transparent !important;
+}
+
+.deleteBtn {
+  background: transparent !important;
 }
 
 .deleteBtn:hover {
   color: #ff4d4d;
+  background: transparent !important;
 }
 
 .clickable {
