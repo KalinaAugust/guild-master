@@ -572,18 +572,21 @@ export type Database = {
           guild_id: string
           id: string
           role: string | null
+          status: "PENDING" | "ACCEPTED" | "REJECTED"
           user_id: string
         }
         Insert: {
           guild_id: string
           id?: string
           role?: string | null
+          status?: "PENDING" | "ACCEPTED" | "REJECTED"
           user_id: string
         }
         Update: {
           guild_id?: string
           id?: string
           role?: string | null
+          status?: "PENDING" | "ACCEPTED" | "REJECTED"
           user_id?: string
         }
         Relationships: [

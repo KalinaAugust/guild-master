@@ -46,6 +46,13 @@
 
 .name {
   text-align: center;
+  max-width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
 }
 
 /* Social block inside the sidebar renders flat (no nested card / stacked blur). */

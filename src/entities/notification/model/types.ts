@@ -38,6 +38,11 @@ export const NOTIFICATION_TYPE_CONFIG: Record<string, {
     Icon: UserRoundPlus,
     getLabel: (t) => t('invitation'),
   },
+  guild_invitation: {
+    Icon: UserRoundPlus,
+    messageKey: 'guildInvitation',
+    linksToGuild: true,
+  },
   join_request: {
     Icon: UserPlus,
     messageKey: 'joinRequest',

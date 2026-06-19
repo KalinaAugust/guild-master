@@ -7,7 +7,8 @@ export const getGuildMembers = async (guildId: string): Promise<GuildMember[]> =
   const { data, error } = await supabase
     .from('guild_members')
     .select('user_id, role, profiles(public_id, full_name, avatar_url, alias, display_as_alias, icon, about)')
-    .eq('guild_id', guildId);
+    .eq('guild_id', guildId)
+    .eq('status', 'ACCEPTED');
 
   if (error) throw error;
 

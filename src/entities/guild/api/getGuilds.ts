@@ -15,7 +15,8 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
   const { data, error } = await supabase
     .from('guild_members')
     .select('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)')
-    .eq('user_id', finalUserId);
+    .eq('user_id', finalUserId)
+    .eq('status', 'ACCEPTED');
 
   if (error || !data) {
     console.error('Error fetching guilds:', error);

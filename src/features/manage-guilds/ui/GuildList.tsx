@@ -3,10 +3,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Shield, Users, Copy } from 'lucide-react';
-import { Tooltip } from '@/shared/ui/Tooltip';
+import { Shield, Users } from 'lucide-react';
 import { Guild } from '@/entities/guild';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
 import styles from './GuildList.module.css';
 
 interface GuildListProps {
@@ -62,19 +62,10 @@ export const GuildList: React.FC<GuildListProps> = ({ title, guilds, emptyMessag
                 </div>
               </Link>
               <div className={styles.actions}>
-                <Tooltip content={t('copyLink')}>
-                  <button 
-                    className={styles.copyBtn} 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      navigator.clipboard.writeText(`${window.location.origin}/guilds/${guild.publicId ?? guild.id}`);
-                    }}
-                    aria-label={t('copyLink')}
-                  >
-                    <Copy size={18} />
-                  </button>
-                </Tooltip>
+                <CopyLinkButton 
+                  link={`${typeof window !== 'undefined' ? window.location.origin : ''}/guilds/${guild.publicId ?? guild.id}`}
+                  className={styles.copyBtn}
+                />
               </div>
             </li>
           ))}

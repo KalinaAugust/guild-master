@@ -11,6 +11,8 @@ interface DetailLayoutProps {
   title: ReactNode;
   left: ReactNode;
   right: ReactNode;
+  /** Optional actions to render in the header (e.g. copy link button) */
+  actions?: ReactNode;
   /** Optional — some states render no footer. */
   footer?: ReactNode;
   /** Modifier class applied to the right column (e.g. a feature's tab padding). */
@@ -23,6 +25,7 @@ export const DetailLayout = ({
   title,
   left,
   right,
+  actions,
   footer,
   rightClassName,
 }: DetailLayoutProps) => (
@@ -35,6 +38,7 @@ export const DetailLayout = ({
       <GradientTitle as="h1" className={styles.title} fontSize="1.25rem">
         {title}
       </GradientTitle>
+      {actions && <div className={styles.actions}>{actions}</div>}
     </div>
 
     <div className={styles.body}>

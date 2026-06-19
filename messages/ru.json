@@ -49,7 +49,9 @@
     "guildChat": "Чат гильдии",
     "announcements": "Анонсы",
     "callToAction": "Поиск группы",
-    "copyLink": "Скопировать ссылку"
+    "copyLink": "Скопировать ссылку",
+    "linkCopied": "Ссылка скопирована",
+    "copyError": "Не удалось скопировать ссылку"
   },
   "Auth": {
     "login": "Вход"
@@ -161,6 +163,9 @@
     "errorCreate": "Ошибка при создании гильдии",
     "errorLimit": "Достигнут лимит: можно создать не более 10 гильдий",
     "manageTitle": "Управление гильдиями",
+    "pendingInvitesTitle": "Входящие приглашения",
+    "inviteAccepted": "Приглашение принято",
+    "inviteRejected": "Приглашение отклонено",
     "ownerSection": "Вы владелец",
     "memberSection": "Вы участник",
     "createButton": "Создать гильдию",
@@ -203,7 +208,8 @@
     "eventJoinRequestDeclined": "Ваша заявка на «{eventTitle}» отклонена",
     "eventComment": "Новые комментарии в «{eventTitle}»",
     "newCallToAction": "Новый призыв к действию в «{guildName}»",
-    "newAnnouncement": "Новый анонс в «{guildName}»"
+    "newAnnouncement": "Новый анонс в «{guildName}»",
+    "guildInvitation": "Вас пригласили присоединиться к <guild>{guildName}</guild>"
   },
   "PublicProfile": {
     "joined": "Дата регистрации",
@@ -238,6 +244,7 @@
     "remove": "Удалить",
     "removeConfirm": "Удалить {name} из гильдии?",
     "invalidEmail": "Введите корректный email",
+    "inviteSent": "Приглашение отправлено на {email}",
     "userNotFound": "Пользователь с таким email не найден",
     "alreadyMember": "Пользователь уже состоит в гильдии",
     "addError": "Не удалось добавить участника",

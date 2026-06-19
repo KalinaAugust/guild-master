@@ -47,6 +47,25 @@
   margin: 0;
 }
 
+.ownerWrap {
+  display: flex;
+  align-items: center;
+}
+
+.ownerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  padding: 4px 8px 4px 0;
+  border-radius: 8px;
+  transition: opacity 0.2s;
+}
+
+.ownerLink:hover {
+  opacity: 0.8;
+}
+
 
 .statusBadge {
   display: inline-flex;

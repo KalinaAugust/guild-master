@@ -188,6 +188,7 @@
   border-radius: 4px;
   transition: all 0.2s ease;
   flex-shrink: 0;
+  margin-left: -8px;
 }
 
 .menuTrigger:hover,
@@ -228,8 +229,20 @@
   color: var(--accent-secondary);
 }
 
+.menuItem svg {
+  color: var(--accent-secondary);
+}
+
+.menuItemDanger svg {
+  color: inherit;
+}
+
+.menuItemDanger {
+  color: #ef4444;
+}
+
 .menuItemDanger:hover,
 .menuItemDanger[data-highlighted] {
-  background: rgba(235, 64, 52, 0.1);
-  color: #b06060;
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
 }

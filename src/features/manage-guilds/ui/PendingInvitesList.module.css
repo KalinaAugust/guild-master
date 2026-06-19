@@ -1,4 +1,4 @@
-.section {
+.container {
   margin-bottom: 40px;
 }
 
@@ -24,34 +24,21 @@
   display: flex;
   align-items: center;
   border-radius: 16px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: rgba(56, 189, 248, 0.04);
+  border: 1px solid rgba(56, 189, 248, 0.3);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 15px rgba(56, 189, 248, 0.1);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 16px 20px;
+  gap: 16px;
 }
 
 .row:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(56, 189, 248, 0.08);
+  border-color: rgba(56, 189, 248, 0.6);
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.row:active {
-  transform: translateY(0);
-}
-
-.rowLink {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex: 1;
-  padding: 16px 20px;
-  text-decoration: none;
-  color: inherit;
-  min-width: 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 0 25px rgba(56, 189, 248, 0.2);
 }
 
 .iconWrap {
@@ -108,6 +95,7 @@
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  margin-right: auto;
 }
 
 .memberCount {
@@ -119,52 +107,8 @@
   color: var(--text-secondary);
 }
 
-.pendingBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 7px;
-  border-radius: 11px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #fff;
-  background: var(--accent-yellow);
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
-}
-
-.empty {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  padding: 16px 0;
-}
-
 .actions {
   display: flex;
-  align-items: center;
-  margin-right: 20px;
-}
-
-.copyBtn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.copyBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary);
-}
-
-.copyBtn:active {
-  transform: scale(0.95);
+  gap: 8px;
+  margin-left: 16px;
 }

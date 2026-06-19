@@ -7,6 +7,7 @@ export { useGuildPermissions } from './lib/useGuildPermissions';
 export {
   useGetGuildMembersQuery,
   useGetGuildsQuery,
+  useGetPendingInvitesQuery,
   useCreateGuildMutation,
   useDeleteGuildMutation,
   useUpdateGuildMutation,

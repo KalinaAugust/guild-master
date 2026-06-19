@@ -1,11 +1,10 @@
 'use client';
 
 import React from 'react';
-import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices, Puzzle, Copy } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { Tooltip } from '@/shared/ui/Tooltip';
+import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices, Puzzle } from 'lucide-react';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
+import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
 import { stripMarkdown } from '@/shared/lib/stripMarkdown';
 import styles from './EventCard.module.css';
 
@@ -32,8 +31,6 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
 };
 
 export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onDelete }) => {
-  const t = useTranslations('Common');
-
   return (
     <div
       className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
@@ -68,21 +65,12 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
       </div>
 
       <div className={styles.actions}>
-        <Tooltip content={t('copyLink')}>
-          <Button
-            variant="ghost"
-            size="icon_sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              navigator.clipboard.writeText(`${window.location.origin}/events/${event.publicId ?? event.id}`);
-            }}
-            className={styles.actionBtn}
-            aria-label={t('copyLink')}
-          >
-            <Copy size={16} />
-          </Button>
-        </Tooltip>
+        <CopyLinkButton
+          link={`${typeof window !== 'undefined' ? window.location.origin : ''}/events/${event.publicId ?? event.id}`}
+          variant="ghost"
+          size="icon_sm"
+          className={styles.actionBtn}
+        />
         {onDelete && (
           <Button
             variant="ghost"

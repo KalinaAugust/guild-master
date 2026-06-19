@@ -11,7 +11,8 @@ export async function GET() {
   const { data, error } = await supabase
     .from('guild_members')
     .select('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)')
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .eq('status', 'ACCEPTED');
 
   if (error || !data) {
     return NextResponse.json({ error: 'Failed to fetch guilds' }, { status: 500 });
@@ -67,7 +68,8 @@ export async function GET() {
         const { count, error: countError } = await supabase
           .from('guild_members')
           .select('*', { count: 'exact', head: true })
-          .eq('guild_id', id);
+          .eq('guild_id', id)
+          .eq('status', 'ACCEPTED');
         if (countError) {
           console.error(`Failed to count members for guild ${id}:`, countError);
           return;
@@ -144,7 +146,7 @@ export async function POST(request: NextRequest) {
 
   const { error: memberError } = await supabase
     .from('guild_members')
-    .insert({ guild_id: guild.id, user_id: user.id, role: 'OWNER' });
+    .insert({ guild_id: guild.id, user_id: user.id, role: 'OWNER', status: 'ACCEPTED' });
 
   if (memberError) {
     return NextResponse.json({ error: 'Failed to add owner as member' }, { status: 500 });

@@ -17,6 +17,9 @@ import { useAppDispatch } from '@/shared/lib/hooks';
 import { Button } from '@/shared/ui/Button';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
+import { UserAvatar } from '@/shared/ui/UserAvatar';
+import { ProfileLink } from '@/shared/ui/ProfileLink';
+import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
 import { GuildMembersSection } from '@/widgets/guild-members';
 import { JoinRequestItem } from './JoinRequestItem';
 import styles from './GuildDetailContent.module.css';
@@ -113,6 +116,7 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
         backHref="/guilds"
         backLabel={t('backToGuilds')}
         title={guild.name}
+        actions={<CopyLinkButton variant="ghost" size="icon" />}
         left={
           <>
             {guild.description && (
@@ -124,7 +128,19 @@ export const GuildDetailContent: React.FC<GuildDetailContentProps> = ({
 
             <div className={styles.infoGroup}>
               <span className={styles.label}>{t('owner')}</span>
-              <span className={styles.value}>{guild.ownerName ?? '—'}</span>
+              <div className={styles.ownerWrap}>
+                {guild.ownerPublicId ? (
+                  <ProfileLink publicId={guild.ownerPublicId} className={styles.ownerLink}>
+                    <UserAvatar avatarUrl={guild.ownerAvatarUrl || undefined} name={guild.ownerName || ''} size="sm" />
+                    <span className={styles.value}>{guild.ownerName}</span>
+                  </ProfileLink>
+                ) : (
+                  <div className={styles.ownerLink}>
+                    <UserAvatar avatarUrl={guild.ownerAvatarUrl || undefined} name={guild.ownerName || '—'} size="sm" />
+                    <span className={styles.value}>{guild.ownerName ?? '—'}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </>
         }

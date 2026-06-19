@@ -9,6 +9,9 @@ export interface Guild {
   memberCount?: number;
   /** Pending join requests awaiting the owner's action (0 unless the viewer owns the guild). */
   pendingRequestCount?: number;
+  ownerName?: string | null;
+  ownerAvatarUrl?: string | null;
+  ownerPublicId?: string | null;
 }
 
 export interface GuildDetail {
@@ -17,6 +20,8 @@ export interface GuildDetail {
   name: string;
   ownerId: string;
   ownerName: string | null;
+  ownerAvatarUrl: string | null;
+  ownerPublicId: string | null;
   description?: string;
   avatarUrl?: string;
   memberCount: number;
