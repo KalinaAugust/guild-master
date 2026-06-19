@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Gamepad2, Users, Calendar, Clock, Trash2, Edit2, PartyPopper, Dumbbell, Dices, Puzzle, Copy } from 'lucide-react';
+import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices, Puzzle, Copy } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import { ActivityEvent, ActivityType } from '@/shared/types';
@@ -18,7 +18,6 @@ interface EventCardProps {
   event: ActivityEvent;
   participantCount?: ParticipantCount;
   onClick?: (event: ActivityEvent) => void;
-  onEdit?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
 }
 
@@ -32,7 +31,7 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   boardgame: <Puzzle size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onEdit, onDelete }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onDelete }) => {
   const t = useTranslations('Common');
 
   return (
@@ -84,16 +83,6 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
             <Copy size={16} />
           </Button>
         </Tooltip>
-        {onEdit && (
-          <Button
-            variant="ghost"
-            size="icon_sm"
-            onClick={(e) => { e.stopPropagation(); onEdit(event); }}
-            className={styles.actionBtn}
-          >
-            <Edit2 size={16} />
-          </Button>
-        )}
         {onDelete && (
           <Button
             variant="ghost"

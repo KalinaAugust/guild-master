@@ -12,6 +12,10 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }));
 
+vi.mock('@/shared/ui/Tooltip', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+}));
+
 const guilds: Guild[] = [
   { id: '1', name: 'Alpha Guild', ownerId: 'user1' },
   { id: '2', name: 'Beta Guild', ownerId: 'user1', description: 'A great guild' },
