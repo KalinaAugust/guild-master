@@ -28,6 +28,7 @@ import { ListRowSkeleton } from '@/shared/ui/ListRowSkeleton';
 import { ConfirmModal } from '@/shared/ui/ConfirmModal';
 import { Markdown } from '@/shared/ui/Markdown';
 import { DetailLayout, DetailLayoutSkeleton } from '@/shared/ui/DetailLayout';
+import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
 import {
   useUpdateParticipantStatusMutation,
   useAddSelfAsParticipantMutation,
@@ -350,6 +351,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
         backHref={`/day/${event.date}?guildId=${data.guildId}`}
         backLabel={commonT('backToDay')}
         title={event.title}
+        actions={<CopyLinkButton variant="ghost" size="icon" />}
         rightClassName={canReadComments ? styles.columnRightTabs : undefined}
         left={
           <>
