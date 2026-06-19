@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Plus } from 'lucide-react';
 import { Panel } from '@/shared/ui/Panel';
 import { Button } from '@/shared/ui/Button';
+import { Tooltip } from '@/shared/ui/Tooltip';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import { AnnouncementCard, AnnouncementModal } from '@/features/guild-announcement';
 import { PollCard, PollWizard } from '@/features/guild-poll';
@@ -71,21 +72,31 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
             <GuildSelect value={activeGuildId ?? ''} onValueChange={handleGuildChange} options={guildOptions} />
           </div>
           {canCreate && (
-            <Button type="button" variant="primary" className={styles.newButton} onClick={openCreate} icon={<Plus size={18} strokeWidth={3} />}>
-              {t('newAnnouncement')}
-            </Button>
+            <Tooltip content={t('newAnnouncement')}>
+              <Button
+                type="button"
+                variant="primary"
+                className={styles.newButton}
+                onClick={openCreate}
+                aria-label={t('newAnnouncement')}
+              >
+                <Plus size={18} strokeWidth={3} />
+              </Button>
+            </Tooltip>
           )}
         </div>
         <div className={styles.headerPolls}>
-          <Button
-            type="button"
-            variant="primary"
-            className={styles.newPollButton}
-            onClick={() => setIsPollWizardOpen(true)}
-            icon={<Plus size={18} strokeWidth={3} />}
-          >
-            {pollT('newPoll')}
-          </Button>
+          <Tooltip content={pollT('newPoll')}>
+            <Button
+              type="button"
+              variant="primary"
+              className={styles.newPollButton}
+              onClick={() => setIsPollWizardOpen(true)}
+              aria-label={pollT('newPoll')}
+            >
+              <Plus size={18} strokeWidth={3} />
+            </Button>
+          </Tooltip>
         </div>
       </div>
 
