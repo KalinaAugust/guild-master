@@ -13,7 +13,8 @@ import {
   useDeleteEventMutation, 
   useUpdateEventMutation, 
   useGetEventsQuery, 
-  useGetParticipantsQuery 
+  useGetParticipantsQuery,
+  useGetMyEventIdsQuery
 } from '@/entities/event';
 import { ActivityEvent } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
@@ -27,7 +28,8 @@ const EventCardWithCounts: React.FC<{
   event: ActivityEvent;
   onClick?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
-}> = ({ event, onClick, onDelete }) => {
+  isPendingInvite?: boolean;
+}> = ({ event, onClick, onDelete, isPendingInvite }) => {
   const { data } = useGetParticipantsQuery(event.id);
   const participants = data?.participants ?? [];
   const total = participants.length;
@@ -39,6 +41,7 @@ const EventCardWithCounts: React.FC<{
       onClick={onClick}
       onDelete={onDelete}
       participantCount={data ? { total, confirmed } : undefined}
+      showInviteBadge={isPendingInvite}
     />
   );
 };
@@ -62,6 +65,9 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
 
   const { data: events = [], isLoading } = useGetEventsQuery(activeGuildId ?? '', {
+    skip: !activeGuildId,
+  });
+  const { data: myIdsData } = useGetMyEventIdsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
   });
   const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
@@ -181,6 +187,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
               event={event}
               onClick={handleViewEvent}
               onDelete={canManageEvents ? handleDeleteClick : undefined}
+              isPendingInvite={myIdsData?.pendingEventIds?.includes(event.id)}
             />
           ))}
         </div>

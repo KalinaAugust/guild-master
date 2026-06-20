@@ -8,13 +8,13 @@ beforeEach(() => vi.clearAllMocks());
 
 describe('getMyEventIds', () => {
   it('returns an empty array when not authenticated', async () => {
-    vi.mocked(createClient).mockResolvedValue(mockClient({ user: null, from: vi.fn() }) as never);
-    await expect(getMyEventIds('g1')).resolves.toEqual([]);
+    vi.mocked(createClient).mockResolvedValue(mockClient({ user: null }) as any);
+    await expect(getMyEventIds('g1')).resolves.toEqual({ eventIds: [], pendingEventIds: [] });
   });
 
   it('returns the event ids the user participates in', async () => {
-    const from = vi.fn().mockReturnValue(query({ data: [{ event_id: 'e1' }, { event_id: 'e2' }] }));
-    vi.mocked(createClient).mockResolvedValue(mockClient({ user: { id: 'u1' }, from }) as never);
-    await expect(getMyEventIds('g1')).resolves.toEqual(['e1', 'e2']);
+    const from = vi.fn().mockReturnValue(query({ data: [{ event_id: 'e1', status: 'confirmed' }, { event_id: 'e2', status: 'pending' }], error: null }));
+    vi.mocked(createClient).mockResolvedValue(mockClient({ user: { id: 'u1' }, from }) as any);
+    await expect(getMyEventIds('g1')).resolves.toEqual({ eventIds: ['e1', 'e2'], pendingEventIds: ['e2'] });
   });
 });

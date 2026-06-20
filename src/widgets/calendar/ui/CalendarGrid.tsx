@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Plus, Mail } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import dayjs from '@/shared/lib/dayjs';
@@ -20,6 +20,7 @@ import { EventsTooltipContent } from './EventsTooltipContent';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
+import { typeIcons } from '@/entities/event/config/activityTypes';
 
 export const CalendarGrid: React.FC<{
   guilds: Guild[];
@@ -123,6 +124,10 @@ export const CalendarGrid: React.FC<{
             })
             .sort((a, b) => a.time.localeCompare(b.time));
 
+          const pendingDayEvents = events.filter(
+            event => event.date === day.fullDate && myIdsData?.pendingEventIds?.includes(event.id)
+          );
+
           const displayedEvents = dayEvents.slice(0, 3);
           const remainingCount = dayEvents.length - displayedEvents.length;
 
@@ -134,7 +139,36 @@ export const CalendarGrid: React.FC<{
               } ${day.isWeekend ? styles.weekend : ''}`}
               onClick={() => handleDayClick(day.fullDate)}
             >
-              <span className={styles.dateNumber}>{day.date}</span>
+              <div className={styles.dateHeaderContainer}>
+                <span className={styles.dateNumber}>{day.date}</span>
+                {pendingDayEvents.length > 0 && (
+                  <div className={styles.invitesContainer}>
+                    <Tooltip 
+                      content={
+                        <div className={styles.inviteTooltipContent}>
+                          <div className={styles.inviteTooltipSubtitle}>{t('youAreInvited')}</div>
+                          <EventsTooltipContent events={pendingDayEvents} onEventClick={handleEventClick} />
+                        </div>
+                      } 
+                      side="top"
+                    >
+                      <div 
+                        className={styles.inviteBadge} 
+                        onClick={(e) => {
+                          if (pendingDayEvents.length === 1) {
+                            handleEventClick(e, pendingDayEvents[0]);
+                          } else {
+                            e.stopPropagation();
+                            handleDayClick(day.fullDate);
+                          }
+                        }}
+                      >
+                        <Mail size={12} strokeWidth={2.5} />
+                      </div>
+                    </Tooltip>
+                  </div>
+                )}
+              </div>
               {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && canManageEvents && (
                 <Tooltip content={t('addEvent')} side="top">
                   <Button

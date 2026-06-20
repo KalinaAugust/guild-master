@@ -58,6 +58,7 @@
   },
   "Event": {
     "createTitle": "New Event",
+    "youAreInvited": "You are invited",
     "editTitle": "Edit Event",
     "addEvent": "Add Event",
     "noEvents": "Nothing scheduled for this day",

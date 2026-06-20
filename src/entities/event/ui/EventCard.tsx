@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices, Puzzle } from 'lucide-react';
+import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices, Puzzle, Mail } from 'lucide-react';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
@@ -18,6 +18,7 @@ interface EventCardProps {
   participantCount?: ParticipantCount;
   onClick?: (event: ActivityEvent) => void;
   onDelete?: (id: string) => void;
+  showInviteBadge?: boolean;
 }
 
 const typeIcons: Record<ActivityType, React.ReactNode> = {
@@ -30,7 +31,7 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   boardgame: <Puzzle size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onDelete }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onDelete, showInviteBadge }) => {
   return (
     <div
       className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
@@ -42,7 +43,14 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
 
       <div className={styles.content}>
         <div className={styles.header}>
-          <h3 className={styles.title}>{event.title}</h3>
+          <div className={styles.titleWrapper}>
+            <h3 className={styles.title}>{event.title}</h3>
+            {showInviteBadge && (
+              <div className={styles.inviteBadge} title="You are invited">
+                <Mail size={12} strokeWidth={2.5} />
+              </div>
+            )}
+          </div>
           <div className={styles.meta}>
             <div className={styles.timeWrapper}>
               <Clock size={14} />
