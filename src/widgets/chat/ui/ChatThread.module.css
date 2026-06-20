@@ -16,12 +16,6 @@
   margin-bottom: 24px;
 }
 
-.guildSelect {
-  width: 270px;
-  max-width: 350px;
-  flex-shrink: 0;
-}
-
 .body {
   display: flex;
   gap: 24px;

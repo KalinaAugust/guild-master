@@ -1,1 +1,1 @@
-export { GuildChat } from './ui/GuildChat';
+export { GuildThread } from './ui/GuildThread';

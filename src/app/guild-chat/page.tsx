@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getMyGuilds } from '@/entities/guild';
 import { getUser } from '@/entities/user/api/getUser';
-import { GuildChat } from '@/widgets/chat';
+import { GuildThread } from '@/widgets/chat';
 import styles from './GuildChatPage.module.css';
 
 export default async function GuildChatPage() {
@@ -19,7 +19,7 @@ export default async function GuildChatPage() {
 
   return (
     <main className={styles.main}>
-      <GuildChat
+      <GuildThread
         guilds={guilds}
         userId={user?.id}
         viewerProfile={
