@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/shared/lib/hooks';
 import { useGetGuildChatUnreadQuery } from '@/entities/guild-message';
+import { useGetDmUnreadQuery } from '@/entities/direct-message';
 import { useGetAnnouncementsUnreadQuery } from '@/entities/announcement';
 import { useGetCallToActionsUnreadQuery } from '@/entities/call-to-action';
 import { useGetGuildsQuery, useGetPendingInvitesQuery } from '@/entities/guild';
@@ -27,6 +28,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     skipPollingIfUnfocused: true,
   };
   const { data: chatUnread } = useGetGuildChatUnreadQuery(activeGuildId ?? '', pollOptions);
+  const { data: dmUnread } = useGetDmUnreadQuery(undefined, { pollingInterval: 60_000, skipPollingIfUnfocused: true });
   const { data: announcementsUnread } = useGetAnnouncementsUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: ctaUnread } = useGetCallToActionsUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: guilds } = useGetGuildsQuery(undefined, {
@@ -45,7 +47,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
 
   // Per-route unread flags; the dot hides on the route it points to.
   const unreadByHref: Record<string, boolean | undefined> = {
-    '/guild-chat': chatUnread?.hasUnread,
+    '/guild-chat': chatUnread?.hasUnread || dmUnread?.hasUnread,
     '/announcements': announcementsUnread?.hasUnread,
     '/looking-for-group': ctaUnread?.hasUnread,
     '/guilds': guildsNeedAttention,
