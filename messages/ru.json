@@ -264,9 +264,10 @@
     "transferError": "Не удалось передать гильдию"
   },
   "UpcomingEvents": {
-    "nextEvent": "Следующее событие",
+    "todayEvents": "События сегодня",
     "thisWeek": "Осталось на неделе",
-    "noUpcoming": "Событий не запланировано",
+    "onlyMine": "События, где я участник",
+    "noToday": "На сегодня событий нет",
     "today": "Сегодня",
     "tomorrow": "Завтра",
     "confirmedCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",

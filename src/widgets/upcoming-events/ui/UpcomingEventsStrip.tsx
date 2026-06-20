@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useMemo, useSyncExternalStore } from 'react';
+import React, { useMemo, useState, useSyncExternalStore } from 'react';
+import { useTranslations } from 'next-intl';
 import { useGetEventsQuery, useGetMyEventIdsQuery } from '@/entities/event';
 import { useAppSelector } from '@/shared/lib/hooks';
+import { Switch } from '@/shared/ui/Switch';
 import type { Guild } from '@/entities/guild';
 import type { ActivityEvent } from '@/shared/types';
-import { useNextEvent } from '../lib/useNextEvent';
+import { useTodayEvents } from '../lib/useTodayEvents';
 import { useWeekEventsByType } from '../lib/useWeekEventsByType';
-import { NextEventBlock } from './NextEventBlock';
+import { TodayBlock } from './TodayBlock';
 import { WeekByTypeBlock } from './WeekByTypeBlock';
 import styles from './UpcomingEventsStrip.module.css';
 
@@ -18,6 +20,8 @@ interface Props {
   initialGuildId?: string;
 }
 
+type FilterMode = 'all' | 'mine';
+
 // Stable references for the hydration guard, so useSyncExternalStore never
 // re-subscribes between renders.
 const emptySubscribe = () => () => {};
@@ -25,12 +29,16 @@ const getClientSnapshot = () => true;
 const getServerSnapshot = () => false;
 
 export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEvents = [], initialGuildId }) => {
+  const t = useTranslations('UpcomingEvents');
+
   // Hydration guard: false on the server and during hydration, true on the client.
   const isMounted = useSyncExternalStore(
     emptySubscribe,
     getClientSnapshot,
     getServerSnapshot
   );
+
+  const [mode, setMode] = useState<FilterMode>('mine');
 
   const currentGuildId = useAppSelector(state => state.guild.currentGuildId);
   const activeGuildId = useMemo(
@@ -46,9 +54,18 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
   });
 
   const events = fetchedEvents ?? (activeGuildId === initialGuildId ? initialEvents : []);
+  const onlyMine = mode === 'mine';
 
-  const nextEvent = useNextEvent(events);
-  const eventsByType = useWeekEventsByType(events, myIdsData?.eventIds ?? []);
+  const myEventIds = useMemo(() => myIdsData?.eventIds ?? [], [myIdsData]);
+  const myIdSet = useMemo(() => new Set(myEventIds), [myEventIds]);
+
+  const todayEvents = useTodayEvents(events);
+  const displayedToday = useMemo(
+    () => (onlyMine ? todayEvents.filter(e => myIdSet.has(e.id.split('_')[0])) : todayEvents),
+    [onlyMine, todayEvents, myIdSet]
+  );
+
+  const eventsByType = useWeekEventsByType(events, myEventIds, onlyMine);
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
 
   if (!isMounted) {
@@ -57,13 +74,23 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
 
   return (
     <div className={styles.strip}>
-      <NextEventBlock event={nextEvent} />
-      {hasWeekEvents && (
-        <>
-          <div className={styles.divider} />
-          <WeekByTypeBlock eventsByType={eventsByType} />
-        </>
-      )}
+      <label className={styles.filterToggle}>
+        <Switch
+          checked={onlyMine}
+          onCheckedChange={(checked) => setMode(checked ? 'mine' : 'all')}
+          ariaLabel={t('onlyMine')}
+        />
+        <span className={styles.filterToggleLabel}>{t('onlyMine')}</span>
+      </label>
+      <div className={styles.content}>
+        <TodayBlock events={displayedToday} />
+        {hasWeekEvents && (
+          <>
+            <div className={styles.divider} />
+            <WeekByTypeBlock eventsByType={eventsByType} />
+          </>
+        )}
+      </div>
     </div>
   );
 };

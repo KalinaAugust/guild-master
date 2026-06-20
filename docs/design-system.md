@@ -113,13 +113,13 @@ Guild Master color-codes calendar events by their type. Each event type has a ba
 
 | Event Type | Background Variable | Value | Border Variable | Value |
 | :--- | :--- | :--- | :--- | :--- |
-| **Meeting** | `--event-meeting` | `#1e4d80` | `--event-meeting-border` | `#5a90b8` |
-| **Game** | `--event-game` | `#254d38` | `--event-game-border` | `#4a9068` |
+| **Meeting** | `--event-meeting` | `#103d4a` | `--event-meeting-border` | `#22d3ee` |
+| **Game** | `--event-game` | `#1e3a5f` | `--event-game-border` | `#60a5fa` |
 | **Party** | `--event-party` | `#4d1a3a` | `--event-party-border` | `#f472b6` |
-| **Sport** | `--event-sport` | `#0f3d2e` | `--event-sport-border` | `#34d399` |
+| **Sport** | `--event-sport` | `#14432a` | `--event-sport-border` | `#4ade80` |
 | **DnD** | `--event-dnd` | `#3d2c0a` | `--event-dnd-border` | `#f59e0b` |
-| **Boardgame** | `--event-boardgame`| `#232450` | `--event-boardgame-border`| `#818cf8` |
-| **Other** | `--event-other` | `#1a5272` | `--event-other-border` | `#4a85a8` |
+| **Boardgame** | `--event-boardgame`| `#2e2150` | `--event-boardgame-border`| `#a78bfa` |
+| **Other** | `--event-other` | `#3d2024` | `--event-other-border` | `#f87171` |
 
 ---
 

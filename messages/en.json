@@ -264,9 +264,10 @@
     "transferError": "Failed to transfer guild"
   },
   "UpcomingEvents": {
-    "nextEvent": "Next Event",
+    "todayEvents": "Today's Events",
     "thisWeek": "Remaining This Week",
-    "noUpcoming": "No upcoming events",
+    "onlyMine": "Events I'm participating in",
+    "noToday": "No events today",
     "today": "Today",
     "tomorrow": "Tomorrow",
     "confirmedCount": "{count, plural, =1 {# participant} other {# participants}}",

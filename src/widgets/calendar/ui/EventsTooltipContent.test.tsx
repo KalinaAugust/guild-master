@@ -17,7 +17,8 @@ describe('EventsTooltipContent', () => {
 
   it('renders event time alongside title', () => {
     render(<EventsTooltipContent events={events} />);
-    expect(screen.getByText(/20:00.*Dragon Raid|Dragon Raid.*20:00/)).toBeInTheDocument();
+    expect(screen.getByText('20:00')).toBeInTheDocument();
+    expect(screen.getByText('Dragon Raid')).toBeInTheDocument();
   });
 
   it('renders nothing when events list is empty', () => {

@@ -35,20 +35,20 @@
   --font-display: var(--font-unbounded), sans-serif;
 
   /* Events */
-  --event-meeting: #1e4d80;
-  --event-meeting-border: #5a90b8;
-  --event-game: #254d38;
-  --event-game-border: #4a9068;
-  --event-other: #1a5272;
-  --event-other-border: #4a85a8;
+  --event-meeting: #103d4a;
+  --event-meeting-border: #22d3ee;
+  --event-game: #1e3a5f;
+  --event-game-border: #60a5fa;
+  --event-other: #3d2024;
+  --event-other-border: #f87171;
   --event-party: #4d1a3a;
   --event-party-border: #f472b6;
-  --event-sport: #0f3d2e;
-  --event-sport-border: #34d399;
+  --event-sport: #14432a;
+  --event-sport-border: #4ade80;
   --event-dnd: #3d2c0a;
   --event-dnd-border: #f59e0b;
-  --event-boardgame: #232450;
-  --event-boardgame-border: #818cf8;
+  --event-boardgame: #2e2150;
+  --event-boardgame-border: #a78bfa;
 
   /* Z-index scale — single source of truth for stacking order.
      Higher tiers always render above lower tiers. Floating layers
