@@ -23,10 +23,18 @@
   justify-content: space-between;
   gap: 12px;
 }
+.socialLabelWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
 .socialLabel {
   color: var(--text-secondary);
   font-size: 13px;
-  min-width: 96px;
+}
+.socialIcon {
+  color: var(--text-secondary);
 }
 .socialRow > :last-child {
   flex: 1;
@@ -48,4 +56,12 @@
 }
 .privacyRow:hover {
   background: rgba(255, 255, 255, 0.04);
+}
+.privacyFieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.privacyIcon {
+  color: var(--text-secondary);
 }

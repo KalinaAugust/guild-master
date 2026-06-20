@@ -10,7 +10,7 @@ export const getPublicProfile = cache(
     const { data: profile, error } = await supabase
       .from('profiles')
       .select(
-        'id, public_id, full_name, avatar_url, alias, display_as_alias, icon, about, interests, socials, birth_date, email, last_seen_at, privacy',
+        'id, public_id, full_name, avatar_url, alias, display_as_alias, icon, about, interests, socials, birth_date, birth_date_show_year, email, last_seen_at, privacy',
       )
       .eq('public_id', publicId)
       .maybeSingle();
@@ -42,6 +42,7 @@ export const getPublicProfile = cache(
       interests: (profile.interests as string[]) ?? [],
       socials: (profile.socials as unknown as SocialLink[]) ?? [],
       birthDate: profile.birth_date ?? null,
+      birthDateShowYear: profile.birth_date_show_year ?? true,
       email: profile.email ?? null,
       lastSeenAt: profile.last_seen_at ?? null,
       privacy: (profile.privacy as ProfilePrivacy) ?? {},

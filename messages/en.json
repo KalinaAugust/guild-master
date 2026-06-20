@@ -462,7 +462,9 @@
     },
     "settings": {
       "title": "Profile settings",
+      "displaySettings": "Display settings",
       "showAsAlias": "Show me as alias",
+      "showBirthYear": "Show birth year",
       "iconAfterName": "Icon after name",
       "socials": "Socials",
       "socialPlaceholder": "handle or link",

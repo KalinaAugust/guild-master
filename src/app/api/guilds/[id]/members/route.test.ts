@@ -35,6 +35,7 @@ function adminFindsUser(user: { id: string; email: string } | null) {
   const users = user ? [user] : [];
   vi.mocked(createAdminClient).mockReturnValue({
     auth: { admin: { listUsers: vi.fn().mockResolvedValue({ data: { users }, error: null }) } },
+    from: vi.fn().mockReturnValue(query({ error: null })),
   } as never);
 }
 

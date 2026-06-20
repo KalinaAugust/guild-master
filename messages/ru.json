@@ -462,8 +462,10 @@
     },
     "settings": {
       "title": "Настройки профиля",
-      "showAsAlias": "Показывать меня как псевдоним",
-      "iconAfterName": "Иконка после имени",
+      "displaySettings": "Настройки отображения",
+      "showAsAlias": "Показывать псевдоним вместо имени",
+      "showBirthYear": "Показывать год рождения",
+      "iconAfterName": "Иконка возле имени",
       "socials": "Соцсети",
       "socialPlaceholder": "ник или ссылка",
       "fieldPrivacy": "Приватность полей",

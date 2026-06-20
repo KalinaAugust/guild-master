@@ -26,6 +26,7 @@ export interface ProfileSettingsInput {
   interests?: string[];
   socials?: SocialLink[];
   birthDate?: string | null;
+  birthDateShowYear?: boolean;
   privacy?: ProfilePrivacy;
 }
 
@@ -40,6 +41,7 @@ export function sanitizeSettings(input: ProfileSettingsInput): ProfileSettingsIn
     out.alias = a || null;
   }
   if ('displayAsAlias' in input) out.displayAsAlias = Boolean(input.displayAsAlias);
+  if ('birthDateShowYear' in input) out.birthDateShowYear = Boolean(input.birthDateShowYear);
   if ('icon' in input) out.icon = isProfileIcon(input.icon) ? input.icon : null;
   if ('birthDate' in input) {
     const d = (input.birthDate ?? '').trim();

@@ -58,6 +58,7 @@ export interface PublicProfile {
   interests?: string[];
   socials?: SocialLink[];
   birthDate?: string | null;
+  birthDateShowYear?: boolean;
   email?: string | null;
   /** Presence timestamp; not privacy-gated (shown to everyone). */
   lastSeenAt?: string | null;
@@ -82,6 +83,7 @@ export interface RawProfile {
   interests: string[];
   socials: SocialLink[];
   birthDate: string | null;
+  birthDateShowYear: boolean;
   email: string | null;
   lastSeenAt: string | null;
   privacy: ProfilePrivacy;

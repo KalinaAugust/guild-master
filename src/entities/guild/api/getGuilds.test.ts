@@ -61,7 +61,9 @@ describe('getMyGuilds', () => {
       },
       from: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null }),
+      eq: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null })
+      }),
     };
     (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
@@ -100,7 +102,9 @@ describe('getMyGuilds', () => {
       },
       from: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockResolvedValue({ data: null, error: mockError }),
+      eq: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: null, error: mockError })
+      }),
     };
     (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
@@ -129,7 +133,9 @@ describe('getMyGuilds', () => {
       },
       from: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null }),
+      eq: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null })
+      }),
     };
     (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
 
