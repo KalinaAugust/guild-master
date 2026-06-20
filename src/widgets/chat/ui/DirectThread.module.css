@@ -1,0 +1,26 @@
+.headerInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+}
+
+.peerName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+}
+
+.presenceOnline {
+  font-size: 0.85rem;
+  color: var(--text-success);
+}
+
+.presenceOffline {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
