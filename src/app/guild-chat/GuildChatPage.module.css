@@ -1,18 +1,24 @@
 .main {
   max-width: 1400px;
   margin: 0 auto;
-  padding-bottom: 1rem;
 }
 
-/* On wide screens pin the page to the viewport height so the panel fills the
-   space left after the header and the upcoming-events strip (which lives inside
-   .main, so the flex panel accounts for it automatically) instead of leaving a
-   large empty gap below. There is no footer on this route. */
+.chatWrapper {
+  height: calc(100dvh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
 @media (min-width: 961px) {
   .main {
     box-sizing: border-box;
     height: calc(100dvh - var(--header-height));
     display: flex;
     flex-direction: column;
+  }
+  
+  .chatWrapper {
+    flex: 1;
+    min-height: 0;
   }
 }
