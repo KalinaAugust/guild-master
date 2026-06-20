@@ -107,15 +107,23 @@ export const SocialsBlock = ({ socials }: { socials: SocialLink[] }) => (
   </section>
 );
 
-/**
- * Direct messaging is not implemented yet, so this is an intentionally disabled
- * placeholder matching the public-profile design.
- */
-export const SendMessageButton = () => (
-  <Button variant="primary" fullWidth>
-    Send message
-  </Button>
-);
+export const SendMessageButton = ({ peerPublicId, canMessage, label }: { peerPublicId: string; canMessage: boolean; label: string }) => {
+  if (!canMessage) {
+    return (
+      <Button variant="primary" fullWidth disabled>
+        {label}
+      </Button>
+    );
+  }
+
+  return (
+    <Button variant="primary" fullWidth asChild>
+      <Link href={`/guild-chat?dm=${peerPublicId}`}>
+        {label}
+      </Link>
+    </Button>
+  );
+};
 
 export const BirthDateBlock = ({ birthDate, birthDateShowYear, locale }: { birthDate: string; birthDateShowYear: boolean; locale: string }) => (
   <ProfileBlock icon={Cake} title="Birth date">

@@ -214,7 +214,8 @@
   },
   "PublicProfile": {
     "joined": "Joined",
-    "email": "Email"
+    "email": "Email",
+    "sendMessage": "Send message"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",

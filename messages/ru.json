@@ -214,7 +214,8 @@
   },
   "PublicProfile": {
     "joined": "Дата регистрации",
-    "email": "Почта"
+    "email": "Почта",
+    "sendMessage": "Написать сообщение"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",
