@@ -20,8 +20,6 @@ interface Props {
   initialGuildId?: string;
 }
 
-type FilterMode = 'all' | 'mine';
-
 // Stable references for the hydration guard, so useSyncExternalStore never
 // re-subscribes between renders.
 const emptySubscribe = () => () => {};
@@ -38,7 +36,7 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
     getServerSnapshot
   );
 
-  const [mode, setMode] = useState<FilterMode>('mine');
+  const [onlyMine, setOnlyMine] = useState(true);
 
   const currentGuildId = useAppSelector(state => state.guild.currentGuildId);
   const activeGuildId = useMemo(
@@ -54,17 +52,10 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
   });
 
   const events = fetchedEvents ?? (activeGuildId === initialGuildId ? initialEvents : []);
-  const onlyMine = mode === 'mine';
 
   const myEventIds = useMemo(() => myIdsData?.eventIds ?? [], [myIdsData]);
-  const myIdSet = useMemo(() => new Set(myEventIds), [myEventIds]);
 
-  const todayEvents = useTodayEvents(events);
-  const displayedToday = useMemo(
-    () => (onlyMine ? todayEvents.filter(e => myIdSet.has(e.id.split('_')[0])) : todayEvents),
-    [onlyMine, todayEvents, myIdSet]
-  );
-
+  const displayedToday = useTodayEvents(events, myEventIds, onlyMine);
   const eventsByType = useWeekEventsByType(events, myEventIds, onlyMine);
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
 
@@ -77,7 +68,7 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
       <label className={styles.filterToggle}>
         <Switch
           checked={onlyMine}
-          onCheckedChange={(checked) => setMode(checked ? 'mine' : 'all')}
+          onCheckedChange={setOnlyMine}
           ariaLabel={t('onlyMine')}
         />
         <span className={styles.filterToggleLabel}>{t('onlyMine')}</span>
