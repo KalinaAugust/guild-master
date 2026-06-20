@@ -1,0 +1,167 @@
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-right: 1px solid var(--border-color, #e5e7eb);
+  background: var(--bg-surface, #fff);
+  width: 100%;
+}
+
+.guildItem {
+  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  padding: 16px;
+}
+
+.guildIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-primary, #f3f4f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+
+.conversationsScroll {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  gap: 12px;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.item:hover {
+  background: var(--bg-hover, #f9fafb);
+}
+
+.itemActive {
+  background: var(--bg-active, #f3f4f6);
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.onlineDot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: var(--text-success, #10b981);
+  border: 2px solid var(--bg-surface, #fff);
+  border-radius: 50%;
+}
+
+.itemContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.itemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.name {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.itemFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.preview {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bodyPreview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.youPrefix {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.attachmentPreview {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.attachmentIcon {
+  flex-shrink: 0;
+}
+
+.unreadDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary, #3b82f6);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+/* Dark mode overrides if needed */
+:global(.dark) .listContainer {
+  border-right-color: var(--border-color, #374151);
+}
+
+:global(.dark) .guildItem {
+  border-bottom-color: var(--border-color, #374151);
+}
+
+:global(.dark) .onlineDot {
+  border-color: var(--bg-surface, #1f2937);
+}
