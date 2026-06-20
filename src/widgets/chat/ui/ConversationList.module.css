@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-right: 1px solid var(--border-color, #e5e7eb);
-  background: var(--bg-surface, #fff);
   width: 100%;
+  padding: 0;
+  overflow: hidden;
 }
 
 .guildItem {
-  border-bottom: 1px solid var(--border-color, #e5e7eb);
+  border-bottom: 1px solid var(--glass-border);
   padding: 16px;
 }
 
@@ -16,7 +16,8 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: var(--bg-primary, #f3f4f6);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -43,11 +44,11 @@
 }
 
 .item:hover {
-  background: var(--bg-hover, #f9fafb);
+  background: var(--glass-bg);
 }
 
 .itemActive {
-  background: var(--bg-active, #f3f4f6);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .avatarWrapper {
@@ -62,7 +63,7 @@
   width: 12px;
   height: 12px;
   background-color: var(--text-success, #10b981);
-  border: 2px solid var(--bg-surface, #fff);
+  border: 2px solid var(--glass-border);
   border-radius: 50%;
 }
 
@@ -153,15 +154,3 @@
   font-size: 0.875rem;
 }
 
-/* Dark mode overrides if needed */
-:global(.dark) .listContainer {
-  border-right-color: var(--border-color, #374151);
-}
-
-:global(.dark) .guildItem {
-  border-bottom-color: var(--border-color, #374151);
-}
-
-:global(.dark) .onlineDot {
-  border-color: var(--bg-surface, #1f2937);
-}
