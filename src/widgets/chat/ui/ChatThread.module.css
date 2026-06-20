@@ -13,7 +13,6 @@
   align-items: center;
   border-bottom: 1px solid var(--glass-border);
   padding-bottom: 24px;
-  margin-bottom: 24px;
 }
 
 .body {
@@ -38,6 +37,7 @@
   gap: 8px;
   flex: 1;
   min-height: 0;
+  padding: 24px 0;
   overflow-y: auto;
   /* Same gutter trick as .polls: bleed right so the scrollbar sits near the edge,
      and reserve the gutter so the right gap stays identical with or without scroll. */
