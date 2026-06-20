@@ -31,7 +31,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   );
 
   return (
-    <Panel className={styles.listContainer}>
+    <Panel className={styles.listContainer} disablePadding>
       <div className={styles.searchContainer}>
         <Search className={styles.searchIcon} size={18} />
         <input 
