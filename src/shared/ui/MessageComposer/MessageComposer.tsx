@@ -32,6 +32,7 @@ interface MessageComposerProps {
   allowAttachment?: boolean;
   attachLabel?: string;
   removeAttachmentLabel?: string;
+  wrapperClassName?: string;
 }
 
 export const MessageComposer: React.FC<MessageComposerProps> = ({
@@ -51,6 +52,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   allowAttachment = false,
   attachLabel,
   removeAttachmentLabel,
+  wrapperClassName,
 }) => {
   const [value, setValue] = useState('');
   const [file, setFile] = useState<File | null>(null);
@@ -165,7 +167,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
   const canSend = !!value.trim() || !!file;
 
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${wrapperClassName || ''}`}>
       {editing && (
         <div className={styles.editBar}>
           <Pencil size={14} className={styles.editBarIcon} />

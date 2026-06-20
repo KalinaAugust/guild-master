@@ -46,6 +46,10 @@
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
 }
 
+.composerWrapper {
+  margin-top: 0 !important;
+}
+
 .list::-webkit-scrollbar {
   width: 6px;
 }

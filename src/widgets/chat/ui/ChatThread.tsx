@@ -236,6 +236,7 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
             allowAttachment
             attachLabel={labels.attach}
             removeAttachmentLabel={labels.removeAttachment}
+            wrapperClassName={styles.composerWrapper}
           />
         </div>
       </div>
