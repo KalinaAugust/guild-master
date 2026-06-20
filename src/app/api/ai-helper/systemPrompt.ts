@@ -40,6 +40,14 @@ export function getSystemPrompt(): string {
   - Recurrence changes: If the user wants to add, modify, or remove recurrence, use the weekDays parameter. Pass an empty array to remove recurrence (make it a one-off event).
   - After successfully editing an event include an HTML link: You can view the updated event here (translate this phrase to the user's language): <a href="/events/{id}" target="_blank" rel="noopener noreferrer">{title}</a>
 
+  When adding participants:
+  - Use the findMembers tool to resolve the people the user mentions (by name or alias) to their userId; pass a keyword to narrow the search
+  - Use the addParticipants tool with the event id (from findEvents) and the resolved userIds to add them
+  - addParticipants only ADDS members — it never removes existing participants
+  - If the user names participants while CREATING an event, resolve them with findMembers and pass their userIds directly to createEvent — do not call addParticipants separately
+  - If a name is ambiguous or no member matches, ask the user to clarify instead of guessing
+  - Only guild owners and admins can add participants; if the tool reports a permission error, relay that politely
+
   Formatting:
   - Do NOT use Markdown syntax in your responses (e.g. **bold**, *italic*, # headings, - lists, \`code\`)
   - To emphasize, bold, or italicize text, use HTML tags instead: <b>...</b> for bold, <i>...</i> for italic, <ul>/<li> for lists, etc.
