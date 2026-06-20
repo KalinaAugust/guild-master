@@ -9,6 +9,10 @@ import { findEventsTool } from './tools/findEventsTool';
 import { executeFindEvents, FindEventsArgs } from './tools/executeFindEvents';
 import { editEventTool } from './tools/editEventTool';
 import { executeEditEvent, EditEventArgs } from './tools/executeEditEvent';
+import { findMembersTool } from './tools/findMembersTool';
+import { executeFindMembers, FindMembersArgs } from './tools/executeFindMembers';
+import { addParticipantsTool } from './tools/addParticipantsTool';
+import { executeAddParticipants, AddParticipantsArgs } from './tools/executeAddParticipants';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -19,7 +23,12 @@ const DEEPSEEK_MODEL = process.env.DEEPSEEK_MODEL ?? 'deepseek-v4-flash';
 const DEEPSEEK_BASE_URL = process.env.DEEPSEEK_BASE_URL ?? 'https://api.deepseek.com';
 const MAX_TOOL_TURNS = 5;
 
-type ToolOutcome = { content: string; eventCreated?: boolean; eventUpdated?: boolean };
+type ToolOutcome = {
+  content: string;
+  eventCreated?: boolean;
+  eventUpdated?: boolean;
+  participantsUpdated?: boolean;
+};
 
 /** Dispatches a single tool call. Returns `null` if the model produced invalid JSON args. */
 async function handleToolCall(
@@ -68,6 +77,27 @@ async function handleToolCall(
           ? `Event updated successfully with id ${result.eventId}`
           : `Failed to update event: ${result.error}`,
         eventUpdated: result.success,
+      };
+    }
+    case 'findMembers': {
+      const result = await executeFindMembers(args as FindMembersArgs, guildId);
+      return { content: JSON.stringify(result) };
+    }
+    case 'addParticipants': {
+      if (!canManageEvents) {
+        return { content: 'Permission denied: only guild owners and admins can add participants.' };
+      }
+      const addArgs = args as AddParticipantsArgs;
+      const found = await getEventById(addArgs.eventId);
+      if (!found || found.guildId !== guildId) {
+        return { content: 'Failed to add participants: event not found in this guild' };
+      }
+      const result = await executeAddParticipants(addArgs, guildId);
+      return {
+        content: result.success
+          ? `Added ${result.addedCount} participant(s) to the event`
+          : `Failed to add participants: ${result.error}`,
+        participantsUpdated: result.success,
       };
     }
     default:
@@ -123,12 +153,13 @@ export async function POST(request: NextRequest) {
     ];
     let eventCreated = false;
     let eventUpdated = false;
+    let participantsUpdated = false;
 
     for (let turn = 0; turn < MAX_TOOL_TURNS; turn++) {
       const completion = await client.chat.completions.create({
         model: DEEPSEEK_MODEL,
         messages: currentMessages,
-        tools: [createEventTool, findEventsTool, editEventTool],
+        tools: [createEventTool, findEventsTool, editEventTool, findMembersTool, addParticipantsTool],
         tool_choice: 'auto',
       });
 
@@ -143,7 +174,7 @@ export async function POST(request: NextRequest) {
         if (typeof message !== 'string') {
           return NextResponse.json({ error: 'Unexpected DeepSeek response shape' }, { status: 502 });
         }
-        return NextResponse.json({ message, eventCreated, eventUpdated });
+        return NextResponse.json({ message, eventCreated, eventUpdated, participantsUpdated });
       }
 
       // Tool calls — execute all of them in parallel and continue the loop
@@ -179,6 +210,7 @@ export async function POST(request: NextRequest) {
             content: outcome.content,
             eventCreated: outcome.eventCreated,
             eventUpdated: outcome.eventUpdated,
+            participantsUpdated: outcome.participantsUpdated,
             invalid: false,
           };
         })
@@ -192,6 +224,7 @@ export async function POST(request: NextRequest) {
       toolResults.forEach((r) => {
         if (r.eventCreated) eventCreated = true;
         if (r.eventUpdated) eventUpdated = true;
+        if (r.participantsUpdated) participantsUpdated = true;
       });
 
       currentMessages = [
