@@ -97,4 +97,12 @@ describe('POST /api/dm/[peerId]/messages', () => {
     const res = await POST(req, params('peer1'));
     expect(res.status).toBe(404);
   });
+
+  it('400 when attachmentUrl is a non-string, non-null value', async () => {
+    okAuth();
+    vi.mocked(resolvePeerId).mockResolvedValue('uuid-peer' as never);
+    const req = { json: async () => ({ body: 'hi', attachmentUrl: 123 }) } as unknown as NextRequest;
+    const res = await POST(req, params('peer1'));
+    expect(res.status).toBe(400);
+  });
 });
