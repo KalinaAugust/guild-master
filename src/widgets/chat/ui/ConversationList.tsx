@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Users } from 'lucide-react';
+import { Users, Search } from 'lucide-react';
 import { useGetConversationsQuery } from '@/entities/direct-message';
 import { Panel } from '@/shared/ui/Panel';
 import { ConversationItem } from './ConversationItem';
@@ -32,6 +32,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <Panel className={styles.listContainer}>
+      <div className={styles.searchContainer}>
+        <Search className={styles.searchIcon} size={18} />
+        <input 
+          type="text" 
+          placeholder={t('searchPlaceholder', { fallback: 'Search...' })} 
+          className={styles.searchInput} 
+        />
+      </div>
+
       <button
         type="button"
         className={`${styles.item} ${styles.guildItem} ${guildSelected ? styles.itemActive : ''}`}
