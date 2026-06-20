@@ -19,6 +19,7 @@ export async function PATCH(request: NextRequest) {
   const update: TablesUpdate<'profiles'> = {};
   if ('alias' in clean) update.alias = clean.alias;
   if ('displayAsAlias' in clean) update.display_as_alias = clean.displayAsAlias;
+  if ('birthDateShowYear' in clean) update.birth_date_show_year = clean.birthDateShowYear;
   if ('icon' in clean) update.icon = clean.icon;
   if ('birthDate' in clean) update.birth_date = clean.birthDate;
   if ('about' in clean) update.about = clean.about;

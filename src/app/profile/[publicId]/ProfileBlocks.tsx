@@ -117,9 +117,9 @@ export const SendMessageButton = () => (
   </Button>
 );
 
-export const BirthDateBlock = ({ birthDate, locale }: { birthDate: string; locale: string }) => (
+export const BirthDateBlock = ({ birthDate, birthDateShowYear, locale }: { birthDate: string; birthDateShowYear: boolean; locale: string }) => (
   <ProfileBlock icon={Cake} title="Birth date">
-    <p className={styles.value}>{dayjs(birthDate).locale(locale).format('D MMMM YYYY')}</p>
+    <p className={styles.value}>{dayjs(birthDate).locale(locale).format(birthDateShowYear ? 'D MMMM YYYY' : 'D MMMM')}</p>
   </ProfileBlock>
 );
 

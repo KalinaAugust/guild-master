@@ -28,7 +28,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('avatar_url, full_name, alias, display_as_alias, icon, about, interests, socials, birth_date, privacy')
+    .select('avatar_url, full_name, alias, display_as_alias, icon, about, interests, socials, birth_date, birth_date_show_year, privacy')
     .eq('id', user.id)
     .single();
 
@@ -45,6 +45,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
     displayAsAlias: profile?.display_as_alias ?? false,
     icon: profile?.icon ?? null,
     birthDate: profile?.birth_date ?? null,
+    birthDateShowYear: profile?.birth_date_show_year ?? true,
     about: profile?.about ?? null,
     interests: (profile?.interests as string[]) ?? [],
     socials: (profile?.socials as unknown as SocialLink[]) ?? [],
@@ -94,6 +95,7 @@ export async function OwnProfile({ user }: OwnProfileProps) {
           <ProfileBlock icon={Cake} title="Birth date">
             <EditableBirthDate
               initialBirthDate={profile?.birth_date ?? null}
+              birthDateShowYear={profile?.birth_date_show_year ?? true}
               userId={user.id}
               locale={locale}
             />

@@ -11,11 +11,12 @@ import styles from './EditableBirthDate.module.css';
 
 interface EditableBirthDateProps {
   initialBirthDate: string | null;
+  birthDateShowYear: boolean;
   userId: string;
   locale: string;
 }
 
-export const EditableBirthDate = ({ initialBirthDate, userId, locale }: EditableBirthDateProps) => {
+export const EditableBirthDate = ({ initialBirthDate, birthDateShowYear, userId, locale }: EditableBirthDateProps) => {
   const pickerT = useTranslations('DateTimePicker');
   const t = useTranslations('UpdateProfile');
   const tc = useTranslations('Common');
@@ -31,7 +32,7 @@ export const EditableBirthDate = ({ initialBirthDate, userId, locale }: Editable
     return (
       <div className={styles.view}>
         <span className={saved ? styles.value : styles.placeholder}>
-          {saved ? dayjs(saved).locale(locale).format('D MMMM YYYY') : t('birthDate.empty')}
+          {saved ? dayjs(saved).locale(locale).format(birthDateShowYear ? 'D MMMM YYYY' : 'D MMMM') : t('birthDate.empty')}
         </span>
         <Button
           variant="ghost"

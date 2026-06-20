@@ -94,7 +94,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           {profile.interests && profile.interests.length > 0 && (
             <InterestsBlock interests={profile.interests} />
           )}
-          {profile.birthDate && <BirthDateBlock birthDate={profile.birthDate} locale={locale} />}
+          {profile.birthDate && <BirthDateBlock birthDate={profile.birthDate} birthDateShowYear={profile.birthDateShowYear ?? true} locale={locale} />}
 
           {profile.email && <ValueBlock icon={Mail} title={t('email')} value={profile.email} />}
 

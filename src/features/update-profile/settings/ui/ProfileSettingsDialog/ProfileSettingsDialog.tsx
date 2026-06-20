@@ -17,7 +17,19 @@ import {
   SOCIAL_META,
   type SocialPlatform,
   type ProfileIcon,
+  SocialIcon,
 } from '@/entities/user';
+import {
+  User,
+  VenetianMask,
+  FileText,
+  Sparkles,
+  Link2,
+  Cake,
+  Mail,
+  Calendar,
+  Users,
+} from 'lucide-react';
 import { type ProfileSettingsInput } from '../../model/types';
 import { useUpdateProfileSettingsMutation } from '../../api/profileSettingsApi';
 import { PrivacySelector } from '../PrivacySelector';
@@ -29,6 +41,7 @@ export interface ProfileSettingsInitial {
   displayAsAlias: boolean;
   icon: string | null;
   birthDate: string | null;
+  birthDateShowYear: boolean;
   about: string | null;
   interests: string[];
   socials: SocialLink[];
@@ -47,6 +60,18 @@ const PRIVACY_FIELDS: PrivacyField[] = [
   'common_guilds',
 ];
 
+const PRIVACY_ICONS: Record<PrivacyField, React.ElementType> = {
+  name: User,
+  alias: VenetianMask,
+  about: FileText,
+  interests: Sparkles,
+  socials: Link2,
+  birth_date: Cake,
+  email: Mail,
+  joined: Calendar,
+  common_guilds: Users,
+};
+
 interface Props {
   isOpen: boolean;
   onClose: () => void;
@@ -60,6 +85,7 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
   const [updateSettings, { isLoading }] = useUpdateProfileSettingsMutation();
 
   const [displayAsAlias, setDisplayAsAlias] = useState(initial.displayAsAlias);
+  const [birthDateShowYear, setBirthDateShowYear] = useState(initial.birthDateShowYear);
   const [icon, setIcon] = useState<string | null>(initial.icon);
   const [socials, setSocials] = useState<SocialLink[]>(initial.socials);
   const [privacy, setPrivacy] = useState(resolvePrivacy(initial.privacy));
@@ -75,6 +101,7 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
   const handleSave = async () => {
     const payload: ProfileSettingsInput = {
       displayAsAlias,
+      birthDateShowYear,
       icon,
       socials,
       privacy,
@@ -103,10 +130,24 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
     >
       <WizardColumn>
         <div className={styles.section}>
-          <label className={styles.toggleRow}>
-            <span>{t('settings.showAsAlias')}</span>
-            <Switch checked={displayAsAlias} onCheckedChange={setDisplayAsAlias} ariaLabel={t('settings.showAsAlias')} />
-          </label>
+          <span className={styles.label}>{t('settings.displaySettings')}</span>
+          <div className={styles.privacyList}>
+            <div className={styles.privacyRow}>
+              <div className={styles.privacyFieldLabel}>
+                <VenetianMask size={16} className={styles.privacyIcon} />
+                <span>{t('settings.showAsAlias')}</span>
+              </div>
+              <Switch checked={displayAsAlias} onCheckedChange={setDisplayAsAlias} ariaLabel={t('settings.showAsAlias')} />
+            </div>
+
+            <div className={styles.privacyRow}>
+              <div className={styles.privacyFieldLabel}>
+                <Cake size={16} className={styles.privacyIcon} />
+                <span>{t('settings.showBirthYear')}</span>
+              </div>
+              <Switch checked={birthDateShowYear} onCheckedChange={setBirthDateShowYear} ariaLabel={t('settings.showBirthYear')} />
+            </div>
+          </div>
         </div>
 
         <div className={styles.section}>
@@ -118,7 +159,10 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
           <span className={styles.label}>{t('settings.socials')}</span>
           {SOCIAL_PLATFORMS.map((platform) => (
             <div key={platform} className={styles.socialRow}>
-              <span className={styles.socialLabel}>{SOCIAL_META[platform].label}</span>
+              <div className={styles.socialLabelWrap}>
+                <SocialIcon platform={platform} size={16} className={styles.socialIcon} />
+                <span className={styles.socialLabel}>{SOCIAL_META[platform].label}</span>
+              </div>
               <Input
                 value={socials.find((s) => s.platform === platform)?.value ?? ''}
                 onChange={(e) => setSocial(platform, e.target.value)}
@@ -135,7 +179,13 @@ export const ProfileSettingsDialog = ({ isOpen, onClose, initial }: Props) => {
           <div className={styles.privacyList}>
             {PRIVACY_FIELDS.map((field) => (
               <div key={field} className={styles.privacyRow}>
-                <span>{t(`settings.fields.${field}`)}</span>
+                <div className={styles.privacyFieldLabel}>
+                  {(() => {
+                    const Icon = PRIVACY_ICONS[field];
+                    return <Icon size={16} className={styles.privacyIcon} />;
+                  })()}
+                  <span>{t(`settings.fields.${field}`)}</span>
+                </div>
                 <PrivacySelector
                   value={privacy[field]}
                   onChange={(level) => setPrivacy({ ...privacy, [field]: level })}

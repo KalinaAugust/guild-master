@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { EventDetailContent } from './EventDetailContent';
 import { calendarReducer } from '@/entities/calendar';
+import { TooltipProvider } from '@/shared/ui/Tooltip';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -65,7 +66,9 @@ describe('EventDetailContent', () => {
   it('renders event title', () => {
     render(
       <Provider store={makeStore()}>
-        <EventDetailContent eventId="e1" />
+        <TooltipProvider>
+          <EventDetailContent eventId="e1" />
+        </TooltipProvider>
       </Provider>
     );
     expect(screen.getByText('Morning Raid')).toBeInTheDocument();
@@ -74,7 +77,9 @@ describe('EventDetailContent', () => {
   it('renders event description', () => {
     render(
       <Provider store={makeStore()}>
-        <EventDetailContent eventId="e1" />
+        <TooltipProvider>
+          <EventDetailContent eventId="e1" />
+        </TooltipProvider>
       </Provider>
     );
     expect(screen.getByText('Bring potions')).toBeInTheDocument();
@@ -83,7 +88,9 @@ describe('EventDetailContent', () => {
   it('renders event time', () => {
     render(
       <Provider store={makeStore()}>
-        <EventDetailContent eventId="e1" />
+        <TooltipProvider>
+          <EventDetailContent eventId="e1" />
+        </TooltipProvider>
       </Provider>
     );
     expect(screen.getByText(/20:00/)).toBeInTheDocument();
@@ -92,7 +99,9 @@ describe('EventDetailContent', () => {
   it('renders back link to day page', () => {
     render(
       <Provider store={makeStore()}>
-        <EventDetailContent eventId="e1" />
+        <TooltipProvider>
+          <EventDetailContent eventId="e1" />
+        </TooltipProvider>
       </Provider>
     );
     const backLink = screen.getByRole('link', { name: /backToDay/i });
@@ -102,7 +111,9 @@ describe('EventDetailContent', () => {
   it('shows empty participants message when list is empty', () => {
     render(
       <Provider store={makeStore()}>
-        <EventDetailContent eventId="e1" />
+        <TooltipProvider>
+          <EventDetailContent eventId="e1" />
+        </TooltipProvider>
       </Provider>
     );
     expect(screen.getByText('noParticipants')).toBeInTheDocument();

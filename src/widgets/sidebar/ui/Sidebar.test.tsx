@@ -28,6 +28,7 @@ vi.mock('@/entities/call-to-action', () => ({
 
 vi.mock('@/entities/guild', () => ({
   useGetGuildsQuery: vi.fn(() => ({ data: [] })),
+  useGetPendingInvitesQuery: vi.fn(() => ({ data: [] })),
 }));
 
 import { useGetGuildsQuery } from '@/entities/guild';
