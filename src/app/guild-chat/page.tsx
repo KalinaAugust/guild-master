@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getMyGuilds } from '@/entities/guild';
 import { getUser } from '@/entities/user/api/getUser';
-import { GuildChat } from '@/widgets/guild-chat';
+import { GuildChat } from '@/widgets/chat';
 import styles from './GuildChatPage.module.css';
 
 export default async function GuildChatPage() {
