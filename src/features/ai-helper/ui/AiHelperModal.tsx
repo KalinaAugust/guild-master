@@ -45,6 +45,9 @@ export const AiHelperModal = ({ isOpen, onClose, messages, setMessages }: AiHelp
       if (result.eventCreated || result.eventUpdated) {
         dispatch(baseApi.util.invalidateTags([{ type: 'Event', id: 'LIST' }]));
       }
+      if (result.participantsUpdated) {
+        dispatch(baseApi.util.invalidateTags(['Participant']));
+      }
     } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: t('error') }]);
     }

@@ -9,6 +9,7 @@ interface SendAiMessageResponse {
   message: string;
   eventCreated: boolean;
   eventUpdated: boolean;
+  participantsUpdated: boolean;
 }
 
 interface SendAiMessageRequest {

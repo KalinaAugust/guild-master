@@ -38,6 +38,11 @@ export const createEventTool: ChatCompletionTool = {
           },
           description: 'Days of the week the event repeats on. 0 = Sunday, 1 = Monday, 2 = Tuesday, 3 = Wednesday, 4 = Thursday, 5 = Friday, 6 = Saturday. Omit or leave empty if the event is not recurring.',
         },
+        userIds: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'User ids of guild members to add as participants on creation. Obtain them via findMembers. Omit if none.',
+        },
       },
       required: ['title', 'date', 'time', 'type', 'description'],
     },

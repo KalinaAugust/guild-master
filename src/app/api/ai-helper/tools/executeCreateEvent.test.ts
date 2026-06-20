@@ -1,8 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { executeCreateEvent } from './executeCreateEvent';
 import { createEvent } from '@/entities/event/api/createEvent';
+import { executeAddParticipants } from './executeAddParticipants';
 
 vi.mock('@/entities/event/api/createEvent');
+vi.mock('./executeAddParticipants');
 
 const args = {
   title: 'Dragon Raid',
@@ -65,5 +67,26 @@ describe('executeCreateEvent', () => {
       guild_id: 'g1',
       weekDays: [1, 3, 5],
     });
+  });
+
+  it('adds participants when userIds provided', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    vi.mocked(executeAddParticipants).mockResolvedValue({ success: true, eventId: 'e1', addedCount: 2 });
+    const result = await executeCreateEvent({ ...args, userIds: ['u1', 'u2'] }, 'g1');
+    expect(executeAddParticipants).toHaveBeenCalledWith({ eventId: 'e1', userIds: ['u1', 'u2'] }, 'g1');
+    expect(result).toEqual({ success: true, eventId: 'e1' });
+  });
+
+  it('does not call executeAddParticipants when userIds is empty', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeCreateEvent({ ...args, userIds: [] }, 'g1');
+    expect(executeAddParticipants).not.toHaveBeenCalled();
+  });
+
+  it('still returns success when adding participants fails', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    vi.mocked(executeAddParticipants).mockResolvedValue({ success: false, error: 'boom' });
+    const result = await executeCreateEvent({ ...args, userIds: ['u1'] }, 'g1');
+    expect(result).toEqual({ success: true, eventId: 'e1' });
   });
 });
