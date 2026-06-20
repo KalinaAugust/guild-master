@@ -124,7 +124,6 @@
   font-size: 0.85rem;
   font-weight: 600;
   display: block;
-  margin-bottom: 4px;
   flex-shrink: 0;
 }
 
@@ -221,4 +220,73 @@
 
 .moreEvents:hover {
   filter: brightness(1.35);
+}
+
+.dateHeaderContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  min-height: 24px;
+}
+
+.invitesContainer {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.inviteBadge {
+  background: #f8961e;
+  color: #fff;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(248, 150, 30, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.inviteBadge:hover {
+  transform: scale(1.1);
+  filter: brightness(1.1);
+  box-shadow: 0 0 12px rgba(248, 150, 30, 0.8), 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.inviteTooltipContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inviteTooltipHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inviteTooltipTitle {
+  font-weight: 600;
+}
+
+.inviteTooltipSubtitle {
+  font-size: 0.75rem;
+  color: var(--status-warning, #f8961e);
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.tooltipIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
 }

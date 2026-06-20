@@ -49,7 +49,7 @@ const mockInvites = [
     description: 'A test guild',
     memberCount: 5,
     ownerId: 'user1',
-    avatarUrl: null,
+    avatarUrl: undefined,
   },
 ];
 
@@ -74,7 +74,7 @@ describe('PendingInvitesList', () => {
   });
 
   it('calls acceptInvite when accept is clicked and shows success toast', async () => {
-    vi.mocked(acceptInvite).mockResolvedValue({ data: null });
+    vi.mocked(acceptInvite).mockResolvedValue({ success: true });
     
     render(<PendingInvitesList invites={mockInvites} />);
     const acceptBtn = screen.getByRole('button', { name: 'accept' });
@@ -87,7 +87,7 @@ describe('PendingInvitesList', () => {
   });
 
   it('calls rejectInvite when reject is clicked and shows success toast', async () => {
-    vi.mocked(rejectInvite).mockResolvedValue({ data: null });
+    vi.mocked(rejectInvite).mockResolvedValue({ success: true });
     
     render(<PendingInvitesList invites={mockInvites} />);
     const rejectBtn = screen.getByRole('button', { name: 'reject' });

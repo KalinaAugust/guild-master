@@ -14,10 +14,10 @@ describe('GET /api/my-event-ids', () => {
   });
 
   it('returns the event ids', async () => {
-    vi.mocked(getMyEventIds).mockResolvedValue(['e1', 'e2']);
+    vi.mocked(getMyEventIds).mockResolvedValue({ eventIds: ['e1', 'e2'], pendingEventIds: ['e2'] });
     const res = await GET(req('g1'));
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ eventIds: ['e1', 'e2'] });
+    expect(await res.json()).toEqual({ eventIds: ['e1', 'e2'], pendingEventIds: ['e2'] });
   });
 
   it('returns 500 on failure', async () => {

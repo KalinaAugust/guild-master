@@ -14,6 +14,7 @@ const RAW: RawProfile = {
   interests: ['raids'],
   socials: [{ platform: 'discord', value: 'john#1' }],
   birthDate: '1990-05-20',
+  birthDateShowYear: false,
   email: 'john@doe.com',
   lastSeenAt: '2025-06-01T10:00:00Z',
   privacy: {}, // all defaults

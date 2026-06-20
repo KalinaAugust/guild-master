@@ -99,7 +99,7 @@ export const eventApi = baseApi.injectEndpoints({
       query: (id) => `events/${id}`,
       providesTags: (_, __, id) => [{ type: 'Event' as const, id }],
     }),
-    getMyEventIds: builder.query<{ eventIds: string[] }, string>({
+    getMyEventIds: builder.query<{ eventIds: string[], pendingEventIds: string[] }, string>({
       query: (guildId) => `my-event-ids?guildId=${guildId}`,
       providesTags: [{ type: 'Event' as const, id: 'MY-IDS' }],
     }),
