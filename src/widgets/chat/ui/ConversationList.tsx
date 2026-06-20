@@ -43,7 +43,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
       <button
         type="button"
-        className={`${styles.item} ${styles.guildItem} ${guildSelected ? styles.itemActive : ''}`}
+        className={`${styles.item} ${guildSelected ? styles.itemActive : ''}`}
         onClick={onSelectGuild}
       >
         <div className={styles.avatarWrapper}>
