@@ -102,6 +102,8 @@ export default defineConfig([
     // the rule keeps guarding accidental deep imports into other slices' UI.
     files: [
       './src/widgets/header/ui/UserMenu.tsx',
+      './src/widgets/chat/ui/DirectThread.tsx',
+      './src/widgets/chat/ui/GuildThread.tsx',
       './src/features/auth/ui/LoginForm.tsx',
       './src/features/ai-helper/ui/AiHelperModal.tsx',
       './src/features/update-profile/name/ui/EditableName/EditableName.tsx',

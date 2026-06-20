@@ -40,7 +40,7 @@ export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
       await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       toast.success(t('linkCopied'));
-    } catch (err) {
+    } catch {
       toast.error(t('copyError'));
     }
   };

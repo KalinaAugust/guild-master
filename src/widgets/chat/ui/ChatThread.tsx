@@ -101,10 +101,15 @@ export const ChatThread: React.FC<ChatThreadProps> = ({
   // scrollHeight so we can keep the viewport anchored instead of jumping up.
   const prependAnchorRef = useRef<number | null>(null);
 
+  const [prevResetKey, setPrevResetKey] = useState(resetKey);
+  if (resetKey !== prevResetKey) {
+    setPrevResetKey(resetKey);
+    setEditing(null);
+  }
+
   // A reset (e.g. switching guild/conversation) discards any in-progress edit
   // and re-pins to the bottom for the new thread.
   useEffect(() => {
-    setEditing(null);
     pendingScrollRef.current = true;
     prependAnchorRef.current = null;
   }, [resetKey]);

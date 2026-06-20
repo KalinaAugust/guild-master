@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { FileText, Sparkles, Cake, Users } from 'lucide-react';
-import * as Icons from 'lucide-react';
 import type { CommonGuild, SocialLink } from '@/entities/user';
 import { SOCIAL_META, SocialIcon } from '@/entities/user';
 import { Button } from '@/shared/ui/Button';
