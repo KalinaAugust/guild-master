@@ -1,0 +1,5 @@
+.guildSelect {
+  width: 270px;
+  max-width: 350px;
+  flex-shrink: 0;
+}

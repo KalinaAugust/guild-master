@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GuildChat } from './GuildChat';
+import { GuildThread } from './GuildThread';
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -45,20 +45,20 @@ const guilds = [{ id: 'g1', name: 'Test', avatarUrl: null }] as never;
 
 beforeEach(() => vi.clearAllMocks());
 
-describe('GuildChat', () => {
+describe('GuildThread', () => {
   it('renders the guild select and empty state', () => {
-    render(<GuildChat guilds={guilds} userId="u1" initialGuildId="g1" />);
+    render(<GuildThread guilds={guilds} userId="u1" initialGuildId="g1" />);
     expect(screen.getByTestId('guild-select')).toBeInTheDocument();
     expect(screen.getByText('empty')).toBeInTheDocument();
   });
 
   it('renders the composer placeholder for a member', () => {
-    render(<GuildChat guilds={guilds} userId="u1" initialGuildId="g1" />);
+    render(<GuildThread guilds={guilds} userId="u1" initialGuildId="g1" />);
     expect(screen.getByPlaceholderText('placeholder')).toBeInTheDocument();
   });
 
   it('does not render any poll UI', () => {
-    render(<GuildChat guilds={guilds} userId="u1" initialGuildId="g1" />);
+    render(<GuildThread guilds={guilds} userId="u1" initialGuildId="g1" />);
     expect(screen.queryByText('newPoll')).not.toBeInTheDocument();
   });
 });

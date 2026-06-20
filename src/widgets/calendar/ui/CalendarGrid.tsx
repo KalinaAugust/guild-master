@@ -20,7 +20,7 @@ import { EventsTooltipContent } from './EventsTooltipContent';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
-import { typeIcons } from '@/entities/event/config/activityTypes';
+import { typeIcons } from '@/entities/event';
 
 export const CalendarGrid: React.FC<{
   guilds: Guild[];

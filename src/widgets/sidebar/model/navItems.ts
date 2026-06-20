@@ -9,7 +9,7 @@ export interface NavItem {
 
 export const navItems: NavItem[] = [
   { href: '/', icon: Calendar, labelKey: 'Common.calendar' },
-  { href: '/guild-chat', icon: MessagesSquare, labelKey: 'Common.guildChat' },
+  { href: '/guild-chat', icon: MessagesSquare, labelKey: 'Common.chats' },
   { href: '/announcements', icon: Megaphone, labelKey: 'Common.announcements' },
   { href: '/looking-for-group', icon: Eye, labelKey: 'Common.callToAction' },
   { href: '/guilds', icon: Users, labelKey: 'Guild.title' },

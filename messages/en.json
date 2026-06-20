@@ -46,7 +46,7 @@
       "boardgame": "Board Games",
       "other": "Other"
     },
-    "guildChat": "Guild Chat",
+    "chats": "Chats",
     "announcements": "Announcements",
     "callToAction": "Looking for group",
     "copyLink": "Copy link",
@@ -214,7 +214,8 @@
   },
   "PublicProfile": {
     "joined": "Joined",
-    "email": "Email"
+    "email": "Email",
+    "sendMessage": "Send message"
   },
   "GuildDetail": {
     "backToGuilds": "Back to guilds",
@@ -486,5 +487,35 @@
         "common_guilds": "Common guilds"
       }
     }
+  },
+  "DirectMessages": {
+    "empty": "No messages yet",
+    "conversationsEmpty": "No conversations yet",
+    "guildChat": "Guild chat",
+    "searchPlaceholder": "Search...",
+    "placeholder": "Write a message…",
+    "you": "You: ",
+    "attachmentPreview": "Photo",
+    "online": "Online",
+    "lastSeen": "Last seen {time}",
+    "send": "Send",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "editing": "Editing message",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete this message?",
+    "loadingOlder": "Loading earlier messages…",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "sendError": "Failed to send message",
+    "updateError": "Failed to update message",
+    "deleteError": "Failed to delete message",
+    "attachmentError": "Failed to upload image",
+    "attach": "Attach image",
+    "removeAttachment": "Remove image",
+    "closeLightbox": "Close image",
+    "lockedPrompt": "Join this guild to write messages",
+    "edited": "edited"
   }
 }

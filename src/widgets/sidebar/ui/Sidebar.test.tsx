@@ -18,6 +18,10 @@ vi.mock('@/entities/guild-message', () => ({
   useGetGuildChatUnreadQuery: () => ({ data: { hasUnread: false } }),
 }));
 
+vi.mock('@/entities/direct-message', () => ({
+  useGetDmUnreadQuery: () => ({ data: { hasUnread: false } }),
+}));
+
 vi.mock('@/entities/announcement', () => ({
   useGetAnnouncementsUnreadQuery: () => ({ data: { hasUnread: false } }),
 }));

@@ -80,7 +80,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
           )}
           <ProfileStatus online={isOnline(profile.lastSeenAt)} lastSeenAt={profile.lastSeenAt} locale={locale} />
 
-          {viewer && <SendMessageButton />}
+          {viewer && <SendMessageButton peerPublicId={publicId} canMessage={commonGuilds.length > 0} label={t('sendMessage')} />}
 
           {profile.socials && profile.socials.length > 0 && (
             <SocialsBlock socials={profile.socials} />

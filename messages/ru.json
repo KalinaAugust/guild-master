@@ -46,7 +46,7 @@
       "boardgame": "Настольные игры",
       "other": "Прочее"
     },
-    "guildChat": "Чат гильдии",
+    "chats": "Чаты",
     "announcements": "Анонсы",
     "callToAction": "Поиск группы",
     "copyLink": "Скопировать ссылку",
@@ -214,7 +214,8 @@
   },
   "PublicProfile": {
     "joined": "Дата регистрации",
-    "email": "Почта"
+    "email": "Почта",
+    "sendMessage": "Написать сообщение"
   },
   "GuildDetail": {
     "backToGuilds": "Назад к гильдиям",
@@ -486,5 +487,35 @@
         "common_guilds": "Общие гильдии"
       }
     }
+  },
+  "DirectMessages": {
+    "empty": "Сообщений пока нет",
+    "conversationsEmpty": "Диалогов пока нет",
+    "guildChat": "Чат гильдии",
+    "searchPlaceholder": "Поиск...",
+    "placeholder": "Написать сообщение…",
+    "you": "Вы: ",
+    "attachmentPreview": "Фото",
+    "online": "В сети",
+    "lastSeen": "Был(а) {time}",
+    "send": "Отправить",
+    "save": "Сохранить",
+    "edit": "Изменить",
+    "delete": "Удалить",
+    "editing": "Редактирование сообщения",
+    "cancel": "Отмена",
+    "confirmDelete": "Удалить это сообщение?",
+    "loadingOlder": "Загрузка ранних сообщений…",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "sendError": "Не удалось отправить сообщение",
+    "updateError": "Не удалось обновить сообщение",
+    "deleteError": "Не удалось удалить сообщение",
+    "attachmentError": "Не удалось загрузить изображение",
+    "attach": "Прикрепить изображение",
+    "removeAttachment": "Удалить изображение",
+    "closeLightbox": "Закрыть изображение",
+    "lockedPrompt": "Вступите в гильдию, чтобы писать сообщения",
+    "edited": "изменено"
   }
 }
