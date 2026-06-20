@@ -1,11 +1,21 @@
 import dayjs from '@/shared/lib/dayjs';
 
-export function getSystemPrompt(): string {
+export interface CurrentUserContext {
+  userId: string;
+  userName: string;
+}
+
+export function getSystemPrompt(currentUser?: CurrentUserContext): string {
   const currentDateTime = dayjs.utc().format('YYYY-MM-DD HH:mm') + ' UTC';
+
+  let userContextText = '';
+  if (currentUser) {
+    userContextText = `\n  Current User Context:\n  - The user interacting with you is ${currentUser.userName} (userId: ${currentUser.userId})\n  - If the user asks to add themselves (e.g. "add me", "добавь меня"), use this userId directly without needing to search for it.`;
+  }
 
   return `You are a helpful AI assistant embedded in Guild Master — a guild management app built around a shared calendar.
 
-  Current date and time: ${currentDateTime}
+  Current date and time: ${currentDateTime}${userContextText}
 
   Your role:
   - Help users create, edit, find, and manage calendar events for their guild

@@ -144,11 +144,21 @@ export async function POST(request: NextRequest) {
     .single();
   const canManageEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
 
+  const { data: profile } = await auth.supabase
+    .from('profiles')
+    .select('full_name, alias, display_as_alias')
+    .eq('id', auth.user.id)
+    .single();
+
+  const currentUserName = profile
+    ? (profile.display_as_alias && profile.alias ? profile.alias : profile.full_name ?? profile.alias ?? 'Unknown')
+    : 'Unknown';
+
   const client = new OpenAI({ apiKey, baseURL: DEEPSEEK_BASE_URL });
 
   try {
     let currentMessages: OpenAI.Chat.ChatCompletionMessageParam[] = [
-      { role: 'system', content: getSystemPrompt() },
+      { role: 'system', content: getSystemPrompt({ userId: auth.user.id, userName: currentUserName }) },
       ...messages,
     ];
     let eventCreated = false;
