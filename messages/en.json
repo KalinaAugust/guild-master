@@ -492,6 +492,7 @@
     "empty": "No messages yet",
     "conversationsEmpty": "No conversations yet",
     "guildChat": "Guild chat",
+    "searchPlaceholder": "Search...",
     "placeholder": "Write a message…",
     "you": "You: ",
     "attachmentPreview": "Photo",

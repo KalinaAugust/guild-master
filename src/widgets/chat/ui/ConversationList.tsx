@@ -36,7 +36,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         <Search className={styles.searchIcon} size={18} />
         <input 
           type="text" 
-          placeholder={t('searchPlaceholder', { fallback: 'Search...' })} 
+          placeholder={t('searchPlaceholder')} 
           className={styles.searchInput} 
         />
       </div>

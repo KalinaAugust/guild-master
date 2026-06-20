@@ -47,6 +47,7 @@
       "other": "Прочее"
     },
     "guildChat": "Чат гильдии",
+    "searchPlaceholder": "Поиск...",
     "announcements": "Анонсы",
     "callToAction": "Поиск группы",
     "copyLink": "Скопировать ссылку",
@@ -492,6 +493,7 @@
     "empty": "Сообщений пока нет",
     "conversationsEmpty": "Диалогов пока нет",
     "guildChat": "Чат гильдии",
+    "searchPlaceholder": "Поиск...",
     "placeholder": "Написать сообщение…",
     "you": "Вы: ",
     "attachmentPreview": "Фото",
