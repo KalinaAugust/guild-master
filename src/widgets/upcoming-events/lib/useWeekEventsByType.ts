@@ -4,7 +4,8 @@ import type { ActivityEvent, ActivityType } from '@/shared/types';
 
 export const useWeekEventsByType = (
   events: ActivityEvent[],
-  myEventIds: string[]
+  myEventIds: string[],
+  onlyMine: boolean
 ): Partial<Record<ActivityType, ActivityEvent[]>> =>
   useMemo(() => {
     const now = dayjs();
@@ -14,11 +15,12 @@ export const useWeekEventsByType = (
     return events
       .filter(e => {
         const eventTime = dayjs(`${e.date}T${e.time}`);
-        return myIdSet.has(e.id.split('_')[0]) && eventTime.isAfter(now) && !eventTime.isAfter(endOfWeek);
+        const mineOk = !onlyMine || myIdSet.has(e.id.split('_')[0]);
+        return mineOk && eventTime.isAfter(now) && !eventTime.isAfter(endOfWeek);
       })
       .reduce<Partial<Record<ActivityType, ActivityEvent[]>>>((acc, e) => {
         if (!acc[e.type]) acc[e.type] = [];
         acc[e.type]!.push(e);
         return acc;
       }, {});
-  }, [events, myEventIds]);
+  }, [events, myEventIds, onlyMine]);

@@ -5,11 +5,31 @@
   border: 1px solid var(--glass-border);
   border-radius: 24px;
   box-shadow: var(--shadow-glass);
-  padding: 18px 28px;
+  padding: 18px 28px 28px;
   display: flex;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 16px;
+}
+
+.filterToggle {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.filterToggleLabel {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.content {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
 }
 
 .blockLabel {
@@ -17,21 +37,83 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 1.2px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   opacity: 0.7;
 }
 
-/* NextEventBlock */
-.nextEventBlock {
+/* TodayBlock */
+.todayBlock {
   flex: 1;
   min-width: 0;
 }
 
-.eventRow {
+.todayList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.todayItem {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.todayItemContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.todayItemHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.todayItem .participantsBadge {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.typeIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  width: 40px;
+  border-radius: 8px;
+}
+
+.typeIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.iconType_game { color: var(--event-game-border); background: color-mix(in srgb, var(--event-game-border) 12%, transparent); }
+.iconType_meeting { color: var(--event-meeting-border); background: color-mix(in srgb, var(--event-meeting-border) 12%, transparent); }
+.iconType_other { color: var(--event-other-border); background: color-mix(in srgb, var(--event-other-border) 12%, transparent); }
+.iconType_party { color: var(--event-party-border); background: color-mix(in srgb, var(--event-party-border) 12%, transparent); }
+.iconType_sport { color: var(--event-sport-border); background: color-mix(in srgb, var(--event-sport-border) 12%, transparent); }
+.iconType_dnd { color: var(--event-dnd-border); background: color-mix(in srgb, var(--event-dnd-border) 12%, transparent); }
+.iconType_boardgame { color: var(--event-boardgame-border); background: color-mix(in srgb, var(--event-boardgame-border) 12%, transparent); }
+
+.eventDescription {
+  min-width: 0;
+  max-width: 100%;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .eventLink {
@@ -51,7 +133,7 @@
   align-items: center;
   gap: 5px;
   font-size: 0.75rem;
-  color: var(--text-muted);
+  color: var(--text-primary);
 }
 
 .dot {
@@ -91,7 +173,7 @@
 /* Divider */
 .divider {
   width: 1px;
-  height: 44px;
+  align-self: stretch;
   background: var(--glass-border);
   flex-shrink: 0;
 }
@@ -99,17 +181,19 @@
 /* WeekByTypeBlock */
 .weekBlock {
   flex-shrink: 0;
+  width: 168px;
 }
 
 .typeChips {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
 .typeChip {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   padding: 5px 10px;
   border-radius: 10px;
@@ -124,13 +208,13 @@
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.chip_party   { background: rgba(244, 114, 182, 0.15); color: var(--event-party-border); }
-.chip_meeting { background: rgba(90, 144, 184, 0.15);  color: var(--event-meeting-border); }
-.chip_game    { background: rgba(74, 144, 104, 0.15);  color: var(--event-game-border); }
-.chip_sport   { background: rgba(52, 211, 153, 0.15);  color: var(--event-sport-border); }
-.chip_dnd     { background: rgba(245, 158, 11, 0.15);  color: var(--event-dnd-border); }
-.chip_boardgame { background: rgba(129, 140, 248, 0.15); color: var(--event-boardgame-border); }
-.chip_other   { background: rgba(74, 133, 168, 0.15);  color: var(--event-other-border); }
+.chip_party   { background: color-mix(in srgb, var(--event-party-border) 15%, transparent);   color: var(--event-party-border); }
+.chip_meeting { background: color-mix(in srgb, var(--event-meeting-border) 15%, transparent); color: var(--event-meeting-border); }
+.chip_game    { background: color-mix(in srgb, var(--event-game-border) 15%, transparent);    color: var(--event-game-border); }
+.chip_sport   { background: color-mix(in srgb, var(--event-sport-border) 15%, transparent);   color: var(--event-sport-border); }
+.chip_dnd     { background: color-mix(in srgb, var(--event-dnd-border) 15%, transparent);     color: var(--event-dnd-border); }
+.chip_boardgame { background: color-mix(in srgb, var(--event-boardgame-border) 15%, transparent); color: var(--event-boardgame-border); }
+.chip_other   { background: color-mix(in srgb, var(--event-other-border) 15%, transparent);   color: var(--event-other-border); }
 
 /* ParticipantsTooltip */
 .participantsList {

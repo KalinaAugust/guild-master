@@ -16,19 +16,25 @@ describe('useWeekEventsByType', () => {
   afterEach(() => vi.useRealTimers());
 
   it('returns empty object when no events', () => {
-    const { result } = renderHook(() => useWeekEventsByType([], []));
+    const { result } = renderHook(() => useWeekEventsByType([], [], true));
     expect(result.current).toEqual({});
   });
 
-  it('excludes events not in myEventIds', () => {
+  it('excludes events not in myEventIds when onlyMine', () => {
     const event = make('2026-06-04', 'game', '1');
-    const { result } = renderHook(() => useWeekEventsByType([event], []));
+    const { result } = renderHook(() => useWeekEventsByType([event], [], true));
     expect(result.current).toEqual({});
+  });
+
+  it('includes events regardless of myEventIds when not onlyMine', () => {
+    const event = make('2026-06-04', 'game', '1');
+    const { result } = renderHook(() => useWeekEventsByType([event], [], false));
+    expect(result.current.game).toHaveLength(1);
   });
 
   it('excludes events outside current week', () => {
     const event = make('2026-06-15', 'game', '1');
-    const { result } = renderHook(() => useWeekEventsByType([event], ['1']));
+    const { result } = renderHook(() => useWeekEventsByType([event], ['1'], true));
     expect(result.current).toEqual({});
   });
 
@@ -37,18 +43,18 @@ describe('useWeekEventsByType', () => {
     const raid2 = make('2026-06-04', 'game', 'r2'); // Thursday 18:00 (future)
     const meeting = make('2026-06-05', 'meeting', 'm1');
     const { result } = renderHook(() =>
-      useWeekEventsByType([raid1, raid2, meeting], ['r1', 'r2', 'm1'])
+      useWeekEventsByType([raid1, raid2, meeting], ['r1', 'r2', 'm1'], true)
     );
     expect(result.current.game).toHaveLength(2);
     expect(result.current.meeting).toHaveLength(1);
     expect(result.current.party).toBeUndefined();
   });
 
-  it('only includes events that are in myEventIds', () => {
+  it('only includes events that are in myEventIds when onlyMine', () => {
     const mine = make('2026-06-03', 'party', 'mine');
     const notMine = make('2026-06-03', 'party', 'other');
     const { result } = renderHook(() =>
-      useWeekEventsByType([mine, notMine], ['mine'])
+      useWeekEventsByType([mine, notMine], ['mine'], true)
     );
     expect(result.current.party).toHaveLength(1);
     expect(result.current.party?.[0].id).toBe('mine');
@@ -63,7 +69,8 @@ describe('useWeekEventsByType', () => {
     const { result } = renderHook(() =>
       useWeekEventsByType(
         [pastDay, pastTimeToday, futureToday, futureDay],
-        ['past-day', 'past-today', 'future-today', 'future-day']
+        ['past-day', 'past-today', 'future-today', 'future-day'],
+        true
       )
     );
 

@@ -34,45 +34,45 @@
 
 /* Type specific styles */
 .type_game .iconWrapper {
-  color: #4da3ff;
-  background: rgba(77, 163, 255, 0.1);
-  box-shadow: 0 0 15px rgba(77, 163, 255, 0.2);
+  color: var(--event-game-border);
+  background: color-mix(in srgb, var(--event-game-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-game-border) 20%, transparent);
 }
 
 .type_meeting .iconWrapper {
-  color: #4dff88;
-  background: rgba(77, 255, 136, 0.1);
-  box-shadow: 0 0 15px rgba(77, 255, 136, 0.2);
+  color: var(--event-meeting-border);
+  background: color-mix(in srgb, var(--event-meeting-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-meeting-border) 20%, transparent);
 }
 
 .type_other .iconWrapper {
-  color: #ffb347;
-  background: rgba(255, 179, 71, 0.1);
-  box-shadow: 0 0 15px rgba(255, 179, 71, 0.2);
+  color: var(--event-other-border);
+  background: color-mix(in srgb, var(--event-other-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-other-border) 20%, transparent);
 }
 
 .type_party .iconWrapper {
-  color: #f472b6;
-  background: rgba(244, 114, 182, 0.1);
-  box-shadow: 0 0 15px rgba(244, 114, 182, 0.2);
+  color: var(--event-party-border);
+  background: color-mix(in srgb, var(--event-party-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-party-border) 20%, transparent);
 }
 
 .type_sport .iconWrapper {
-  color: #34d399;
-  background: rgba(52, 211, 153, 0.1);
-  box-shadow: 0 0 15px rgba(52, 211, 153, 0.2);
+  color: var(--event-sport-border);
+  background: color-mix(in srgb, var(--event-sport-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-sport-border) 20%, transparent);
 }
 
 .type_dnd .iconWrapper {
-  color: #f59e0b;
-  background: rgba(245, 158, 11, 0.1);
-  box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+  color: var(--event-dnd-border);
+  background: color-mix(in srgb, var(--event-dnd-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-dnd-border) 20%, transparent);
 }
 
 .type_boardgame .iconWrapper {
-  color: #818cf8;
-  background: rgba(129, 140, 248, 0.1);
-  box-shadow: 0 0 15px rgba(129, 140, 248, 0.2);
+  color: var(--event-boardgame-border);
+  background: color-mix(in srgb, var(--event-boardgame-border) 10%, transparent);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--event-boardgame-border) 20%, transparent);
 }
 
 .content {

@@ -47,7 +47,7 @@ export const useCalendarDays = (now: Dayjs) => {
       });
     }
 
-    const remaining = 42 - calendarDays.length;
+    const remaining = Math.ceil(calendarDays.length / 7) * 7 - calendarDays.length;
     const nextMonthDate = now.add(1, 'month');
     for (let i = 1; i <= remaining; i++) {
       const d = nextMonthDate.date(i);

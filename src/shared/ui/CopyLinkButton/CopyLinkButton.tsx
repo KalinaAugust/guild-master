@@ -55,7 +55,16 @@ export const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
         onClick={handleCopy}
         aria-label={t('copyLink')}
       >
-        {copied ? <Check size={20} /> : <LinkIcon size={20} />}
+        <span className={styles.iconWrap} aria-hidden>
+          <LinkIcon
+            size={20}
+            className={`${styles.icon} ${copied ? styles.iconHidden : styles.iconVisible}`}
+          />
+          <Check
+            size={20}
+            className={`${styles.icon} ${copied ? styles.iconVisible : styles.iconHidden}`}
+          />
+        </span>
       </Button>
     </Tooltip>
   );

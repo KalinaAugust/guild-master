@@ -52,13 +52,13 @@
   font-weight: 600;
 }
 
-.typeHero_game    { border-left-color: #4da3ff; background: rgba(77,  163, 255, 0.08); color: #4da3ff; }
-.typeHero_meeting { border-left-color: #4dff88; background: rgba(77,  255, 136, 0.08); color: #4dff88; }
-.typeHero_other   { border-left-color: #ffb347; background: rgba(255, 179, 71,  0.08); color: #ffb347; }
-.typeHero_party   { border-left-color: #f472b6; background: rgba(244, 114, 182, 0.08); color: #f472b6; }
-.typeHero_sport   { border-left-color: #34d399; background: rgba(52,  211, 153, 0.08); color: #34d399; }
-.typeHero_dnd     { border-left-color: #f59e0b; background: rgba(245, 158, 11,  0.08); color: #f59e0b; }
-.typeHero_boardgame { border-left-color: #818cf8; background: rgba(129, 140, 248, 0.08); color: #818cf8; }
+.typeHero_game    { border-left-color: var(--event-game-border);    background: color-mix(in srgb, var(--event-game-border) 8%, transparent);    color: var(--event-game-border); }
+.typeHero_meeting { border-left-color: var(--event-meeting-border); background: color-mix(in srgb, var(--event-meeting-border) 8%, transparent); color: var(--event-meeting-border); }
+.typeHero_other   { border-left-color: var(--event-other-border);   background: color-mix(in srgb, var(--event-other-border) 8%, transparent);   color: var(--event-other-border); }
+.typeHero_party   { border-left-color: var(--event-party-border);   background: color-mix(in srgb, var(--event-party-border) 8%, transparent);   color: var(--event-party-border); }
+.typeHero_sport   { border-left-color: var(--event-sport-border);   background: color-mix(in srgb, var(--event-sport-border) 8%, transparent);   color: var(--event-sport-border); }
+.typeHero_dnd     { border-left-color: var(--event-dnd-border);     background: color-mix(in srgb, var(--event-dnd-border) 8%, transparent);     color: var(--event-dnd-border); }
+.typeHero_boardgame { border-left-color: var(--event-boardgame-border); background: color-mix(in srgb, var(--event-boardgame-border) 8%, transparent); color: var(--event-boardgame-border); }
 
 .dateTime {
   font-size: 1rem;

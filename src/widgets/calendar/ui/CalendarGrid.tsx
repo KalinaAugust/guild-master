@@ -17,7 +17,6 @@ import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import { Panel } from '@/shared/ui/Panel';
 import { EventsTooltipContent } from './EventsTooltipContent';
-import { typeIcons } from '@/entities/event';
 import { useCalendarNavigation } from '../model/useCalendarNavigation';
 import { useCalendarDays } from '../lib/useCalendarDays';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
@@ -58,21 +57,9 @@ export const CalendarGrid: React.FC<{
     dispatch(openEventModal());
   };
 
-  const MAX_TILT = 5;
-
-  const handleDayTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
-    const y = (e.clientY - rect.top - rect.height / 2) / (rect.height / 2);
-    el.style.setProperty('--tilt-ry', `${x * MAX_TILT}deg`);
-    el.style.setProperty('--tilt-rx', `${y * -MAX_TILT}deg`);
-  };
-
-  const handleDayTiltReset = (e: React.MouseEvent<HTMLDivElement>) => {
-    const el = e.currentTarget;
-    el.style.removeProperty('--tilt-ry');
-    el.style.removeProperty('--tilt-rx');
+  const handleEventClick = (e: React.MouseEvent, event: ActivityEvent) => {
+    e.stopPropagation();
+    router.push(`/events/${event.publicId ?? event.id}`);
   };
 
   return (
@@ -136,7 +123,7 @@ export const CalendarGrid: React.FC<{
             })
             .sort((a, b) => a.time.localeCompare(b.time));
 
-          const displayedEvents = dayEvents.slice(0, 2);
+          const displayedEvents = dayEvents.slice(0, 3);
           const remainingCount = dayEvents.length - displayedEvents.length;
 
           return (
@@ -146,8 +133,6 @@ export const CalendarGrid: React.FC<{
                 day.isToday ? styles.today : ''
               } ${day.isWeekend ? styles.weekend : ''}`}
               onClick={() => handleDayClick(day.fullDate)}
-              onMouseMove={handleDayTilt}
-              onMouseLeave={handleDayTiltReset}
             >
               <span className={styles.dateNumber}>{day.date}</span>
               {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && canManageEvents && (
@@ -164,29 +149,18 @@ export const CalendarGrid: React.FC<{
               )}
               <div className={styles.eventsList}>
                 {displayedEvents.map(event => (
-                  <Tooltip
+                  <div
                     key={event.id}
-                    side="top"
-                    content={
-                      <span className={styles.simpleTooltip}>
-                        <span>{event.time} - {event.title}</span>
-                        <span className={`${styles.tooltipIcon} ${styles[`iconType_${event.type}`]}`} aria-hidden="true">
-                          {typeIcons[event.type]}
-                        </span>
-                      </span>
-                    }
+                    className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
+                    onClick={(e) => handleEventClick(e, event)}
                   >
-                    <div
-                      className={`${styles.eventItem} ${styles[`event_${event.type}`]}`}
-                    >
-                      {event.time} {event.title}
-                    </div>
-                  </Tooltip>
+                    <span className={styles.eventTime}>{event.time}</span> {event.title}
+                  </div>
                 ))}
                 {remainingCount > 0 && (
                   <Tooltip
                     side="right"
-                    content={<EventsTooltipContent events={dayEvents.slice(displayedEvents.length)} />}
+                    content={<EventsTooltipContent events={dayEvents.slice(displayedEvents.length)} onEventClick={handleEventClick} />}
                   >
                     <div className={styles.moreEvents}>
                       +{remainingCount}

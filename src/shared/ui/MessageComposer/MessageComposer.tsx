@@ -231,6 +231,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           placeholder={placeholder}
           rows={1}
           maxLength={maxLength}
+          disabled={isSubmitting}
         />
         {isSubmitting ? (
           <Spinner className={styles.composerSpinner} aria-label={sendLabel} />

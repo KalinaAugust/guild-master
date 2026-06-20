@@ -13,10 +13,12 @@ vi.mock('@/shared/lib/useWeekdayLabels', () => ({
 import { useCalendarDays } from './useCalendarDays';
 
 describe('useCalendarDays', () => {
-  it('always returns exactly 42 days', () => {
+  it('returns a whole number of weeks (multiple of 7)', () => {
     const now = dayjs('2026-06-01');
     const { result } = renderHook(() => useCalendarDays(now));
-    expect(result.current.days).toHaveLength(42);
+    expect(result.current.days.length % 7).toBe(0);
+    expect(result.current.days.length).toBeGreaterThanOrEqual(28);
+    expect(result.current.days.length).toBeLessThanOrEqual(42);
   });
 
   it('marks current month days correctly', () => {
