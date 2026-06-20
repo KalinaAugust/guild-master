@@ -12,18 +12,26 @@ beforeEach(() => vi.clearAllMocks());
 
 const params = (id: string) => ({ params: Promise.resolve({ id }) });
 const okAuth = () => vi.mocked(requireUser).mockResolvedValue({ ok: true } as never);
+const getReq = (qs = '') =>
+  ({ nextUrl: new URL(`http://x/api/guilds/g1/messages${qs}`) }) as unknown as NextRequest;
 
 describe('GET /api/guilds/[id]/messages', () => {
-  it('returns messages', async () => {
-    vi.mocked(getGuildMessages).mockResolvedValue([{ id: 'm1' }] as never);
-    const res = await GET({} as NextRequest, params('g1'));
+  it('returns a page and forwards cursor params', async () => {
+    const page = { messages: [{ id: 'm1' }], hasMore: true };
+    vi.mocked(getGuildMessages).mockResolvedValue(page as never);
+    const res = await GET(getReq('?limit=30&before=2026-06-05T10:00:00Z'), params('g1'));
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual([{ id: 'm1' }]);
+    expect(await res.json()).toEqual(page);
+    expect(getGuildMessages).toHaveBeenCalledWith('g1', {
+      limit: 30,
+      before: '2026-06-05T10:00:00Z',
+      after: undefined,
+    });
   });
 
   it('returns 500 on failure', async () => {
     vi.mocked(getGuildMessages).mockRejectedValue(new Error('boom'));
-    const res = await GET({} as NextRequest, params('g1'));
+    const res = await GET(getReq(), params('g1'));
     expect(res.status).toBe(500);
   });
 });

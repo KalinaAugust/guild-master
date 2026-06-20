@@ -295,7 +295,8 @@
     "attachmentError": "Failed to upload image",
     "updateError": "Failed to update message",
     "deleteError": "Failed to delete message",
-    "closeLightbox": "Close image"
+    "closeLightbox": "Close image",
+    "loadingOlder": "Loading earlier messages…"
   },
   "GuildPoll": {
     "newPoll": "New poll",

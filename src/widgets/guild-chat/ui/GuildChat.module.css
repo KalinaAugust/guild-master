@@ -95,6 +95,13 @@
   text-align: center;
 }
 
+.loadingOlder {
+  font-size: 0.8rem;
+  opacity: 0.6;
+  padding: 8px 0;
+  text-align: center;
+}
+
 @media (max-width: 960px) {
   .body { flex-direction: column; }
   .chat { height: auto; }

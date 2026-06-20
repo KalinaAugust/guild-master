@@ -9,13 +9,32 @@ vi.mock('next-intl', () => ({
 
 const mockAdd = vi.fn();
 vi.mock('@/entities/guild-message', () => ({
-  useGetGuildMessagesQuery: () => ({ data: [], isLoading: false }),
+  guildMessageApi: { util: { updateQueryData: vi.fn() } },
+  useGetGuildMessagesQuery: () => ({ data: { messages: [], hasMore: false }, isLoading: false }),
+  useLazyFetchOlderMessagesQuery: () => [vi.fn(), { isFetching: false }],
+  useLazyFetchNewMessagesQuery: () => [vi.fn()],
   useGetGuildChatReadStateQuery: () => ({ data: { lastReadAt: null } }),
   useAddGuildMessageMutation: () => [mockAdd, { isLoading: false }],
   useUpdateGuildMessageMutation: () => [vi.fn(), {}],
   useDeleteGuildMessageMutation: () => [vi.fn(), {}],
   useMarkGuildChatReadMutation: () => [vi.fn()],
 }));
+
+vi.mock('@/shared/lib/hooks', () => ({ useAppDispatch: () => vi.fn() }));
+
+// Realtime client stub: a chainable channel and the auth/socket surface the
+// subscription effect touches.
+vi.mock('@/shared/api/supabase/client', () => {
+  const channel = { on: vi.fn(() => channel), subscribe: vi.fn(() => channel) };
+  return {
+    createClient: () => ({
+      auth: { getSession: vi.fn().mockResolvedValue({ data: { session: null } }) },
+      realtime: { setAuth: vi.fn() },
+      channel: vi.fn(() => channel),
+      removeChannel: vi.fn(),
+    }),
+  };
+});
 
 vi.mock('@/features/select-guild', () => ({
   useGuildSelection: () => ({ activeGuildId: 'g1', guildOptions: [], handleGuildChange: vi.fn() }),

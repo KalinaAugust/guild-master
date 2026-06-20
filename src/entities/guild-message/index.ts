@@ -1,6 +1,8 @@
 export {
   guildMessageApi,
   useGetGuildMessagesQuery,
+  useLazyFetchOlderMessagesQuery,
+  useLazyFetchNewMessagesQuery,
   useAddGuildMessageMutation,
   useUpdateGuildMessageMutation,
   useDeleteGuildMessageMutation,

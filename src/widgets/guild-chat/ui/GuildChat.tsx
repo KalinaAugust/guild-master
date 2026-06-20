@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
@@ -11,8 +11,13 @@ import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import type { Guild } from '@/entities/guild';
 import { uploadChatAttachment, type GuildMessage } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
+import { createClient } from '@/shared/api/supabase/client';
+import { useAppDispatch } from '@/shared/lib/hooks';
 import {
+  guildMessageApi,
   useGetGuildMessagesQuery,
+  useLazyFetchOlderMessagesQuery,
+  useLazyFetchNewMessagesQuery,
   useGetGuildChatReadStateQuery,
   useAddGuildMessageMutation,
   useUpdateGuildMessageMutation,
@@ -48,13 +53,16 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
   const t = useTranslations('GuildChat');
   const locale = useLocale();
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
+  const dispatch = useAppDispatch();
 
-  const { data: messages = [], isLoading } = useGetGuildMessagesQuery(activeGuildId ?? '', {
+  const { data, isLoading } = useGetGuildMessagesQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
-    pollingInterval: 60_000,
     refetchOnFocus: true,
-    skipPollingIfUnfocused: true,
   });
+  const messages = data?.messages ?? [];
+  const hasMore = data?.hasMore ?? false;
+  const [fetchOlder, { isFetching: loadingOlder }] = useLazyFetchOlderMessagesQuery();
+  const [fetchNew] = useLazyFetchNewMessagesQuery();
   const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
@@ -63,6 +71,87 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
   const [editing, setEditing] = useState<{ id: string; body: string } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // Latest messages snapshot, read inside the Realtime callback without
+  // re-subscribing the channel on every new message.
+  const messagesRef = useRef<GuildMessage[]>(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  });
+  const supabase = useMemo(() => createClient(), []);
+
+  // Realtime guild chat: an INSERT is just a signal to pull the enriched delta
+  // (the raw row carries no joined profile); UPDATE/DELETE patch the cache by id.
+  useEffect(() => {
+    if (!activeGuildId) return;
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let active = true;
+
+    (async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      // Authorise the Realtime socket so RLS (guild membership) lets the
+      // subscription through.
+      supabase.realtime.setAuth(sessionData.session?.access_token ?? null);
+      if (!active) return;
+
+      const filter = `guild_id=eq.${activeGuildId}`;
+      channel = supabase
+        .channel(`guild-chat:${activeGuildId}`)
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'guild_messages', filter },
+          () => {
+            const last = messagesRef.current.at(-1);
+            fetchNew({
+              guildId: activeGuildId,
+              after: last?.createdAt ?? new Date(0).toISOString(),
+            });
+          },
+        )
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'guild_messages', filter },
+          (payload) => {
+            const row = payload.new as {
+              id: string;
+              body: string;
+              updated_at: string;
+              attachment_url: string | null;
+            };
+            dispatch(
+              guildMessageApi.util.updateQueryData('getGuildMessages', activeGuildId, (draft) => {
+                const m = draft.messages.find((x) => x.id === row.id);
+                if (m) {
+                  m.body = row.body;
+                  m.updatedAt = row.updated_at;
+                  m.attachmentUrl = row.attachment_url;
+                }
+              }),
+            );
+          },
+        )
+        .on(
+          'postgres_changes',
+          { event: 'DELETE', schema: 'public', table: 'guild_messages', filter },
+          (payload) => {
+            const id = (payload.old as { id?: string }).id;
+            if (!id) return;
+            dispatch(
+              guildMessageApi.util.updateQueryData('getGuildMessages', activeGuildId, (draft) => {
+                const idx = draft.messages.findIndex((x) => x.id === id);
+                if (idx !== -1) draft.messages.splice(idx, 1);
+              }),
+            );
+          },
+        )
+        .subscribe();
+    })();
+
+    return () => {
+      active = false;
+      if (channel) supabase.removeChannel(channel);
+    };
+  }, [activeGuildId, supabase, fetchNew, dispatch]);
 
   const hasUnread =
     !!readState &&
@@ -78,9 +167,13 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
 
   const pendingScrollRef = useRef(true);
   const isAtBottomRef = useRef(true);
+  // When set, the last list change prepended older messages; holds the pre-update
+  // scrollHeight so we can keep the viewport anchored instead of jumping up.
+  const prependAnchorRef = useRef<number | null>(null);
 
   useEffect(() => {
     pendingScrollRef.current = true;
+    prependAnchorRef.current = null;
   }, [activeGuildId]);
 
   // Switching guilds discards any in-progress edit (the message belongs to the
@@ -94,11 +187,23 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
     const el = listRef.current;
     if (!el) return;
     isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    // Near the top: pull the previous page and anchor the viewport across it.
+    if (el.scrollTop < 120 && hasMore && !loadingOlder && activeGuildId && messages[0]) {
+      prependAnchorRef.current = el.scrollHeight;
+      fetchOlder({ guildId: activeGuildId, before: messages[0].createdAt });
+    }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = listRef.current;
     if (!el) return;
+    // Older page prepended → preserve scroll position (no jump to top).
+    if (prependAnchorRef.current != null) {
+      el.scrollTop += el.scrollHeight - prependAnchorRef.current;
+      prependAnchorRef.current = null;
+      return;
+    }
+    // Initial load or a new message while pinned to the bottom → stick to bottom.
     if (pendingScrollRef.current || isAtBottomRef.current) {
       el.scrollTop = el.scrollHeight;
       pendingScrollRef.current = false;
@@ -174,6 +279,9 @@ export const GuildChat: React.FC<GuildChatProps> = ({ guilds, userId, viewerProf
         <div className={styles.chat}>
           <div className={styles.list} ref={listRef} onScroll={handleScroll}>
             {isLoading && <MessagesSkeleton />}
+            {!isLoading && loadingOlder && (
+              <p className={styles.loadingOlder}>{t('loadingOlder')}</p>
+            )}
             {!isLoading && messages.length === 0 && <p className={styles.empty}>{t('empty')}</p>}
             {!isLoading && messages.map((m, i) => {
               const prev = messages[i - 1];

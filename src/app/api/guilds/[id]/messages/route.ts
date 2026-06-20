@@ -4,13 +4,17 @@ import { createGuildMessage, InvalidGuildMessageError } from '@/entities/guild-m
 import { requireUser } from '@/shared/api/guildAuth';
 
 export async function GET(
-  _: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const messages = await getGuildMessages(id);
-    return NextResponse.json(messages);
+    const { searchParams } = request.nextUrl;
+    const limit = Math.min(Number(searchParams.get('limit')) || 50, 100);
+    const before = searchParams.get('before') ?? undefined;
+    const after = searchParams.get('after') ?? undefined;
+    const page = await getGuildMessages(id, { limit, before, after });
+    return NextResponse.json(page);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
   }
