@@ -20,6 +20,12 @@ Bob to Friday's raid".
 - **Semantics:** add-only (union with current participants). Nothing is ever
   removed. New participants get status `pending` (the existing
   `syncParticipants` behavior for non-creators).
+- **Create-with-participants:** `createEvent` gains an optional `userIds`
+  parameter so an event can be created with participants in a single tool
+  call. After the event is created, `executeCreateEvent` reuses
+  `executeAddParticipants` (best-effort) to attach them. Adding participants
+  never fails event creation — a participant error is reported but the event
+  still exists.
 
 ## Architecture
 
@@ -60,6 +66,19 @@ Mirror the existing AI-helper tool pattern: each tool is a pair of files under
     number of newly-added ids (valid ids not already participants).
   - Wrap in try/catch → `{ success: false, error: message }`.
 
+### `createEvent` change (create with participants)
+
+- `createEventTool.ts`: add optional `userIds: string[]` property (not in
+  `required`) — "User ids of guild members to add as participants on creation;
+  obtain them via findMembers. Omit if none."
+- `executeCreateEvent.ts`: add optional `userIds?: string[]` to
+  `CreateEventArgs`. After a successful `createEvent`, if `userIds` is a
+  non-empty array, call `executeAddParticipants({ eventId: data.id, userIds }, guildId)`
+  and ignore its failure for the purposes of the create result (the event was
+  created). Return shape stays `{ success, eventId, error }`.
+- No `route.ts` change for `createEvent` beyond what already passes
+  `args as CreateEventArgs` — `userIds` flows through automatically.
+
 ### `route.ts` changes
 
 - Import the two new tool schemas and executors.
@@ -93,6 +112,9 @@ Mirror the existing AI-helper tool pattern: each tool is a pair of files under
 - Add a "When adding participants" section: use `findMembers` to resolve people
   to ids, then `addParticipants` with the event id from `findEvents`; it only
   adds, never removes; confirm ambiguous names with the user first.
+- In the "When creating events" section, note that if the user names
+  participants, resolve them with `findMembers` first and pass their ids via
+  `createEvent`'s `userIds` (no separate `addParticipants` call needed).
 - Mention `findMembers` in the tool overview.
 
 ## Data flow
@@ -119,6 +141,10 @@ Mirror the existing AI-helper tool pattern: each tool is a pair of files under
   non-members filtered out; empty `userIds` → error; `addedCount` correctness.
   Mock `getGuildMembers`, `getEventParticipantUserIds`, `syncParticipants`
   (mirroring `executeCreateEvent.test.ts`).
+- `executeCreateEvent.test.ts`: extend with a case that passes `userIds` and
+  asserts `executeAddParticipants` is invoked with the new event id; and a case
+  where participant-adding fails but the create result is still
+  `{ success: true }`.
 
 ## Out of scope
 

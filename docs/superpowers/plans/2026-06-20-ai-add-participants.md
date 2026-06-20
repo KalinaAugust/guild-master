@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add two AI-helper tools (`findMembers`, `addParticipants`) so the assistant can add guild members to an existing event from the chat modal.
+**Goal:** Add two AI-helper tools (`findMembers`, `addParticipants`) and an optional `userIds` on `createEvent` so the assistant can add guild members to an event — either an existing one or at creation time — from the chat modal.
 
-**Architecture:** Follow the existing AI-helper tool pattern — each tool is a `*Tool.ts` OpenAI function schema plus an `execute*.ts` server executor that calls existing `entities/*` data functions. `route.ts` wires schemas into the `tools` array and dispatches in `handleToolCall`. Add-participants is union-only and gated to OWNER/ADMIN.
+**Architecture:** Follow the existing AI-helper tool pattern — each tool is a `*Tool.ts` OpenAI function schema plus an `execute*.ts` server executor that calls existing `entities/*` data functions. `route.ts` wires schemas into the `tools` array and dispatches in `handleToolCall`. Add-participants is union-only and gated to OWNER/ADMIN. `createEvent` reuses `executeAddParticipants` to attach participants on creation (best-effort).
 
 **Tech Stack:** Next.js route handler, OpenAI SDK (DeepSeek), RTK Query, Vitest.
 
@@ -369,7 +369,128 @@ git commit -m "feat(ai-helper): add addParticipants tool"
 
 ---
 
-### Task 3: Wire tools into the route handler
+### Task 3: `createEvent` accepts `userIds`
+
+**Files:**
+- Modify: `src/app/api/ai-helper/tools/createEventTool.ts`
+- Modify: `src/app/api/ai-helper/tools/executeCreateEvent.ts`
+- Modify: `src/app/api/ai-helper/tools/executeCreateEvent.test.ts`
+
+**Interfaces:**
+- Consumes: `executeAddParticipants`, `AddParticipantsArgs` (Task 2).
+- Produces: `CreateEventArgs` gains optional `userIds?: string[]`; `createEvent` tool schema gains optional `userIds`. Return shape unchanged: `{ success, eventId?, error? }`.
+
+- [ ] **Step 1: Add the failing tests**
+
+Append to `src/app/api/ai-helper/tools/executeCreateEvent.test.ts`. Add the mock and cases:
+
+```typescript
+import { executeAddParticipants } from './executeAddParticipants';
+
+vi.mock('./executeAddParticipants');
+
+// ... inside describe('executeCreateEvent', ...):
+
+  it('adds participants when userIds provided', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    vi.mocked(executeAddParticipants).mockResolvedValue({ success: true, eventId: 'e1', addedCount: 2 });
+    const result = await executeCreateEvent({ ...args, userIds: ['u1', 'u2'] }, 'g1');
+    expect(executeAddParticipants).toHaveBeenCalledWith({ eventId: 'e1', userIds: ['u1', 'u2'] }, 'g1');
+    expect(result).toEqual({ success: true, eventId: 'e1' });
+  });
+
+  it('does not call executeAddParticipants when userIds is empty', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeCreateEvent({ ...args, userIds: [] }, 'g1');
+    expect(executeAddParticipants).not.toHaveBeenCalled();
+  });
+
+  it('still returns success when adding participants fails', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    vi.mocked(executeAddParticipants).mockResolvedValue({ success: false, error: 'boom' });
+    const result = await executeCreateEvent({ ...args, userIds: ['u1'] }, 'g1');
+    expect(result).toEqual({ success: true, eventId: 'e1' });
+  });
+```
+
+- [ ] **Step 2: Run tests to verify the new cases fail**
+
+Run: `pnpm test:run src/app/api/ai-helper/tools/executeCreateEvent.test.ts`
+Expected: the three new cases FAIL (`executeAddParticipants` not called / not imported in executor).
+
+- [ ] **Step 3: Extend the executor**
+
+In `src/app/api/ai-helper/tools/executeCreateEvent.ts`, add the import, extend `CreateEventArgs`, and attach participants after creation:
+
+```typescript
+import { createEvent } from '@/entities/event/api/createEvent';
+import { executeAddParticipants } from './executeAddParticipants';
+
+export interface CreateEventArgs {
+  title: string;
+  date: string;
+  time: string;
+  type: 'game' | 'meeting' | 'other' | 'party' | 'sport' | 'dnd' | 'boardgame';
+  description: string;
+  weekDays?: number[];
+  userIds?: string[];
+}
+
+export const executeCreateEvent = async (
+  args: CreateEventArgs,
+  guildId: string,
+): Promise<{ success: boolean; eventId?: string; error?: string }> => {
+  try {
+    const data = await createEvent({
+      title: args.title,
+      date: args.date,
+      time: args.time,
+      type: args.type,
+      description: args.description,
+      weekDays: args.weekDays,
+      guild_id: guildId,
+    });
+    if (args.userIds && args.userIds.length > 0) {
+      // Best-effort: a participant error must not undo a successful event creation.
+      await executeAddParticipants({ eventId: data.id, userIds: args.userIds }, guildId);
+    }
+    return { success: true, eventId: data.id };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    return { success: false, error: message };
+  }
+};
+```
+
+- [ ] **Step 4: Add the optional `userIds` to the tool schema**
+
+In `src/app/api/ai-helper/tools/createEventTool.ts`, add inside `properties` (after `weekDays`):
+
+```typescript
+        userIds: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'User ids of guild members to add as participants on creation. Obtain them via findMembers. Omit if none.',
+        },
+```
+
+(Leave `required` unchanged — `userIds` is optional.)
+
+- [ ] **Step 5: Run tests to verify they pass**
+
+Run: `pnpm test:run src/app/api/ai-helper/tools/executeCreateEvent.test.ts`
+Expected: PASS (original + 3 new cases).
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add src/app/api/ai-helper/tools/createEventTool.ts src/app/api/ai-helper/tools/executeCreateEvent.ts src/app/api/ai-helper/tools/executeCreateEvent.test.ts
+git commit -m "feat(ai-helper): create events with participants via userIds"
+```
+
+---
+
+### Task 4: Wire tools into the route handler
 
 **Files:**
 - Modify: `src/app/api/ai-helper/route.ts`
@@ -478,7 +599,7 @@ git commit -m "feat(ai-helper): wire findMembers and addParticipants into route"
 
 ---
 
-### Task 4: System prompt guidance
+### Task 5: System prompt guidance
 
 **Files:**
 - Modify: `src/app/api/ai-helper/systemPrompt.ts`
@@ -495,6 +616,7 @@ In `getSystemPrompt`, after the "When editing events" block (before the "Formatt
   - Use the findMembers tool to resolve the people the user mentions (by name or alias) to their userId; pass a keyword to narrow the search
   - Use the addParticipants tool with the event id (from findEvents) and the resolved userIds to add them
   - addParticipants only ADDS members — it never removes existing participants
+  - If the user names participants while CREATING an event, resolve them with findMembers and pass their userIds directly to createEvent — do not call addParticipants separately
   - If a name is ambiguous or no member matches, ask the user to clarify instead of guessing
   - Only guild owners and admins can add participants; if the tool reports a permission error, relay that politely
 ```
@@ -513,7 +635,7 @@ git commit -m "feat(ai-helper): document add-participants flow in system prompt"
 
 ---
 
-### Task 5: Client refresh on participant changes
+### Task 6: Client refresh on participant changes
 
 **Files:**
 - Modify: `src/features/ai-helper/api/aiHelperApi.ts`
@@ -566,6 +688,6 @@ git commit -m "feat(ai-helper): refresh participants after AI adds them"
 
 ## Self-Review Notes
 
-- **Spec coverage:** findMembers (T1), addParticipants + union/filter/permission (T2, T3), event-in-guild guard (T3), participantsUpdated flag + client invalidation (T3, T5), system prompt (T4), tests (T1, T2). All spec sections mapped.
-- **Type consistency:** `executeFindMembers` / `executeAddParticipants` signatures and the `participantsUpdated` flag are used identically in `route.ts` (T3) and the client (T5). `getEventById` returns `{ event, guildId }` — guard uses `found.guildId`, matching the existing `editEvent` case.
+- **Spec coverage:** findMembers (T1), addParticipants + union/filter/permission (T2, T4), createEvent+userIds (T3), event-in-guild guard (T4), participantsUpdated flag + client invalidation (T4, T6), system prompt incl. create-with-participants (T5), tests (T1, T2, T3). All spec sections mapped.
+- **Type consistency:** `executeFindMembers` / `executeAddParticipants` signatures and the `participantsUpdated` flag are used identically in `route.ts` (T4) and the client (T6). `executeCreateEvent` (T3) calls `executeAddParticipants({ eventId, userIds }, guildId)` — matching the `AddParticipantsArgs` shape from T2. The guard uses `found.guildId`, matching the existing `editEvent` case in `route.ts`.
 - **Placeholders:** none — every code step is complete.
