@@ -177,3 +177,35 @@
 .pendingRemove:hover {
   color: var(--text-primary);
 }
+
+.permGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.permList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.permRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.permRowLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.permSelect {
+  min-width: 9.5rem;
+}

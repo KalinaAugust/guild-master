@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
-import { X, Image as ImageIcon, Users, Settings, Trash2 } from 'lucide-react';
+import { X, Image as ImageIcon, Users, Settings, Trash2, ShieldCheck } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation, uploadGuildAvatar } from '@/entities/guild';
+import { useGuildPermissions } from '@/entities/guild';
+import { Select } from '@/shared/ui/Select';
+import { GUILD_ACTIONS, DEFAULT_PERMISSIONS, resolveLevel, type GuildAction, type PermissionLevel, type GuildPermissions } from '@/shared/api/guildPermissions';
 import { Button } from '@/shared/ui/Button';
 import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
@@ -43,6 +46,28 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
   const [addMember] = useAddGuildMemberMutation();
   const [deleteGuild, { isLoading: isDeleting }] = useDeleteGuildMutation();
   const isLoading = isCreating || isUpdating || isUploadingAvatar;
+
+  const { isOwner } = useGuildPermissions(guild?.id, userId);
+  const canEditPermissions = isEdit ? isOwner : true;
+
+  const [permissions, setPermissions] = useState<GuildPermissions>(() => {
+    const base = (guild?.permissions ?? {}) as GuildPermissions;
+    return Object.fromEntries(
+      GUILD_ACTIONS.map((a) => [a, base[a] ?? DEFAULT_PERMISSIONS[a]]),
+    ) as GuildPermissions;
+  });
+
+  const actionLabel: Record<GuildAction, string> = {
+    events: t('permEvents'),
+    announcements: t('permAnnouncements'),
+    polls: t('permPolls'),
+    call_to_actions: t('permCallToActions'),
+  };
+  const levelOptions: { label: string; value: PermissionLevel }[] = [
+    { label: t('permLevelAll'), value: 'all' },
+    { label: t('permLevelOfficers'), value: 'officers' },
+    { label: t('permLevelOwner'), value: 'owner' },
+  ];
 
   const handleSelectAvatar = (blob: Blob) => {
     setAvatarBlob(blob);
@@ -103,20 +128,23 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
           name: name.trim(),
           description: description.trim(),
           ...(avatarUrl !== undefined ? { avatarUrl } : {}),
+          permissions,
         }).unwrap();
         toast.success(t('successUpdated'));
       } else {
         const newGuild = await createGuild({ name: name.trim(), description: description.trim() }).unwrap();
+        let avatarUrl: string | undefined;
         if (avatarBlob) {
           setIsUploadingAvatar(true);
-          const avatarUrl = await uploadGuildAvatar(newGuild.id, avatarBlob);
-          await updateGuild({
-            id: newGuild.id,
-            name: name.trim(),
-            description: description.trim(),
-            avatarUrl,
-          }).unwrap();
+          avatarUrl = await uploadGuildAvatar(newGuild.id, avatarBlob);
         }
+        await updateGuild({
+          id: newGuild.id,
+          name: name.trim(),
+          description: description.trim(),
+          ...(avatarUrl !== undefined ? { avatarUrl } : {}),
+          permissions,
+        }).unwrap();
         if (pendingEmails.length > 0) {
           const results = await Promise.allSettled(
             pendingEmails.map((email) => addMember({ guildId: newGuild.id, email }).unwrap())
@@ -251,6 +279,30 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                       disabled={isLoading}
                     />
                   </div>
+
+                  {canEditPermissions && (
+                    <div className={styles.permGroup}>
+                      <div className={styles.stubHeader}>
+                        <ShieldCheck size={16} aria-hidden="true" />
+                        <span className={styles.stubLabel}>{t('permissionsSection')}</span>
+                      </div>
+                      <ul className={styles.permList}>
+                        {GUILD_ACTIONS.map((action) => (
+                          <li key={action} className={styles.permRow}>
+                            <span className={styles.permRowLabel}>{actionLabel[action]}</span>
+                            <Select
+                              value={resolveLevel(permissions, action)}
+                              onValueChange={(v) =>
+                                setPermissions((prev) => ({ ...prev, [action]: v as PermissionLevel }))
+                              }
+                              options={levelOptions}
+                              className={styles.permSelect}
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                   {isEdit && (
                     <div className={styles.dangerZone}>
