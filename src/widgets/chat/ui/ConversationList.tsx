@@ -10,7 +10,12 @@ import { resolveDisplayName } from '@/entities/user';
 import { useAppSelector } from '@/shared/lib/hooks';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Panel } from '@/shared/ui/Panel';
+import { createClient } from '@/shared/api/supabase/client';
+import { useAppDispatch } from '@/shared/lib/hooks';
+import { directMessageApi } from '@/entities/direct-message';
+import { guildMessageApi, useLazyFetchNewMessagesQuery } from '@/entities/guild-message';
 import { ConversationItem } from './ConversationItem';
+import type { ChatScope } from '@/entities/guild-message';
 import styles from './ConversationList.module.css';
 
 interface ConversationListProps {
@@ -43,6 +48,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const t = useTranslations('DirectMessages');
   const { data: conversations = [], isLoading } = useGetConversationsQuery();
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
+  const dispatch = useAppDispatch();
+  const [fetchNewGuildMsg] = useLazyFetchNewMessagesQuery();
 
   // Redux `currentGuildId` is hydrated from persisted client state, so it isn't
   // available during SSR. Resolve from props on first render to keep server and
@@ -81,6 +88,47 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const { data: officerUnread } = useGetGuildChatUnreadQuery(
     isOfficer && activeGuild ? { guildId: activeGuild.id, scope: 'officers' } : skipToken,
   );
+
+  useEffect(() => {
+    if (!activeGuild?.id) return;
+    let active = true;
+    const supabase = createClient();
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    (async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      supabase.realtime.setAuth(sessionData.session?.access_token ?? null);
+      if (!active) return;
+
+      channel = supabase.channel('sidebar-chat-updates')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'direct_messages' }, () => {
+          dispatch(directMessageApi.util.invalidateTags([
+            { type: 'DirectMessage', id: 'CONVERSATIONS' },
+            { type: 'DmRead', id: 'UNREAD' }
+          ]));
+        })
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guild_messages', filter: `guild_id=eq.${activeGuild.id}` }, (payload) => {
+          const scope = payload.new.scope as ChatScope;
+          const date = new Date(payload.new.created_at);
+          date.setSeconds(date.getSeconds() - 1);
+          
+          fetchNewGuildMsg({
+            guildId: activeGuild.id,
+            scope,
+            after: date.toISOString(),
+          });
+          
+          dispatch(guildMessageApi.util.invalidateTags([
+            { type: 'GuildChatRead', id: `LIST-${activeGuild.id}-${scope}` }
+          ]));
+        })
+        .subscribe();
+    })();
+
+    return () => {
+      active = false;
+      if (channel) supabase.removeChannel(channel);
+    };
+  }, [activeGuild?.id, dispatch, fetchNewGuildMsg]);
 
   const [search, setSearch] = useState('');
 
