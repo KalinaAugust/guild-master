@@ -1,9 +1,6 @@
 .card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--shadow-glass);
+  background: var(--glass-bg-light);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
   border-radius: 16px;
   padding: 16px;
   display: flex;

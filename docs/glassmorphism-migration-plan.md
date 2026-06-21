@@ -26,13 +26,13 @@
 ### Фаза 1: Списки и карточки событий (Events & Guilds)
 Эти компоненты всегда рендерятся внутри обертки `Panel`, `Sidebar` или внутри `ProfileBlock`, поэтому они строго вложенные (L2).
 
-- [ ] `src/entities/event/ui/EventCard.module.css`
-- [ ] `src/shared/ui/EventCardSkeleton/EventCardSkeleton.module.css`
-- [ ] `src/features/event-detail/ui/ParticipantItem.module.css`
-- [ ] `src/widgets/upcoming-events/ui/UpcomingEventsStrip.module.css`
-- [ ] `src/features/manage-guilds/ui/GuildList.module.css`
-- [ ] `src/features/manage-guilds/ui/PendingInvitesList.module.css`
-- [ ] `src/widgets/guild-members/ui/GuildMembersSection.module.css`
+- [x] `src/entities/event/ui/EventCard.module.css`
+- [x] `src/shared/ui/EventCardSkeleton/EventCardSkeleton.module.css`
+- [x] `src/features/event-detail/ui/ParticipantItem.module.css`
+- [x] `src/widgets/upcoming-events/ui/UpcomingEventsStrip.module.css`
+- [x] `src/features/manage-guilds/ui/GuildList.module.css`
+- [x] `src/features/manage-guilds/ui/PendingInvitesList.module.css`
+- [x] `src/widgets/guild-members/ui/GuildMembersSection.module.css`
 
 ### Фаза 2: Мессенджер и коммуникации (Chat)
 Чат-секция содержит интенсивный скроллинг, поэтому удаление `backdrop-filter` с сотен бабблов сообщений даст наибольший прирост производительности.

@@ -13,5 +13,5 @@ export const navItems: NavItem[] = [
   { href: '/announcements', icon: Megaphone, labelKey: 'Common.announcements' },
   { href: '/looking-for-group', icon: Eye, labelKey: 'Common.callToAction' },
   { href: '/guilds', icon: Users, labelKey: 'Guild.title' },
-  { href: '/design-system', icon: Palette, labelKey: 'Design System' },
+  { href: '/design-system', icon: Palette, labelKey: 'Common.designSystem' },
 ];
