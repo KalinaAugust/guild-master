@@ -208,7 +208,9 @@ export async function POST(request: NextRequest) {
             toolCall.function.name,
             toolCall.function.arguments,
             guildId,
-            canEditEvents
+            canCreateEvents,
+            canEditEvents,
+            canDeleteEvents
           );
 
           if (!outcome) {
