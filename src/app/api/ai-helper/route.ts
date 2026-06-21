@@ -35,7 +35,9 @@ async function handleToolCall(
   name: string,
   rawArgs: string,
   guildId: string,
-  canManageEvents: boolean,
+  canCreateEvents: boolean,
+  canEditEvents: boolean,
+  canDeleteEvents: boolean,
 ): Promise<ToolOutcome | null> {
   let args: unknown;
   try {
@@ -46,7 +48,7 @@ async function handleToolCall(
 
   switch (name) {
     case 'createEvent': {
-      if (!canManageEvents) {
+      if (!canEditEvents) {
         return { content: 'Permission denied: only guild owners and admins can create events.' };
       }
       const result = await executeCreateEvent(args as CreateEventArgs, guildId);
@@ -62,7 +64,7 @@ async function handleToolCall(
       return { content: JSON.stringify(result) };
     }
     case 'editEvent': {
-      if (!canManageEvents) {
+      if (!canEditEvents) {
         return { content: 'Permission denied: only guild owners and admins can edit events.' };
       }
       const editArgs = args as EditEventArgs;
@@ -84,7 +86,7 @@ async function handleToolCall(
       return { content: JSON.stringify(result) };
     }
     case 'addParticipants': {
-      if (!canManageEvents) {
+      if (!canDeleteEvents) {
         return { content: 'Permission denied: only guild owners and admins can add participants.' };
       }
       const addArgs = args as AddParticipantsArgs;
@@ -142,7 +144,9 @@ export async function POST(request: NextRequest) {
     .eq('guild_id', guildId)
     .eq('user_id', auth.user.id)
     .single();
-  const canManageEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
+  const canCreateEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
+  const canEditEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
+  const canDeleteEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
 
   const { data: profile } = await auth.supabase
     .from('profiles')
@@ -204,7 +208,7 @@ export async function POST(request: NextRequest) {
             toolCall.function.name,
             toolCall.function.arguments,
             guildId,
-            canManageEvents
+            canEditEvents
           );
 
           if (!outcome) {

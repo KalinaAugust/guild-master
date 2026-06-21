@@ -19,7 +19,8 @@ export function useGuildPermissions(
   const permissions = guilds.find((g) => g.id === guildId)?.permissions ?? null;
 
   return {
-    canManageEvents: elevated,
+    canEditEvents: elevated,
+    canDeleteEvents: elevated,
     canManageMembers: elevated,
     isOwner,
     canCreateEvents: canPerform(permissions, 'events', myRole),

@@ -23,7 +23,8 @@ describe('useGuildPermissions', () => {
     vi.mocked(useGetGuildsQuery).mockReturnValue({ data: guildWithDefaultPerms } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
-    expect(result.current.canManageEvents).toBe(true);
+    expect(result.current.canEditEvents).toBe(true);
+    expect(result.current.canDeleteEvents).toBe(true);
     expect(result.current.canManageMembers).toBe(true);
   });
 
@@ -34,7 +35,8 @@ describe('useGuildPermissions', () => {
     vi.mocked(useGetGuildsQuery).mockReturnValue({ data: guildWithDefaultPerms } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
-    expect(result.current.canManageEvents).toBe(true);
+    expect(result.current.canEditEvents).toBe(true);
+    expect(result.current.canDeleteEvents).toBe(true);
     expect(result.current.canManageMembers).toBe(true);
   });
 
@@ -45,7 +47,8 @@ describe('useGuildPermissions', () => {
     vi.mocked(useGetGuildsQuery).mockReturnValue({ data: guildWithDefaultPerms } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
-    expect(result.current.canManageEvents).toBe(false);
+    expect(result.current.canEditEvents).toBe(false);
+    expect(result.current.canDeleteEvents).toBe(false);
     expect(result.current.canManageMembers).toBe(false);
   });
 
@@ -56,7 +59,8 @@ describe('useGuildPermissions', () => {
     vi.mocked(useGetGuildsQuery).mockReturnValue({ data: guildWithDefaultPerms } as never);
 
     const { result } = renderHook(() => useGuildPermissions('g1', 'u1'));
-    expect(result.current.canManageEvents).toBe(false);
+    expect(result.current.canEditEvents).toBe(false);
+    expect(result.current.canDeleteEvents).toBe(false);
   });
 
   it('skips query when guildId is null', () => {

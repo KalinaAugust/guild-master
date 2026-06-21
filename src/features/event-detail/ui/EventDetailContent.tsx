@@ -72,7 +72,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
     useGetParticipantsQuery(eventId, { skip: !event });
   const currentUserId = participantsData?.currentUserId ?? '';
 
-  const { canManageEvents } = useGuildPermissions(data?.guildId ?? '', currentUserId);
+  const { canEditEvents, canDeleteEvents } = useGuildPermissions(data?.guildId ?? '', currentUserId);
   // Order: the viewer first, then confirmed participants, then everyone else.
   const participantRank = (p: { user_id: string; status: string }) =>
     p.user_id === currentUserId ? 0 : p.status === 'confirmed' ? 1 : 2;
@@ -452,7 +452,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
           </>
         }
         footer={
-          canManageEvents || isCreator ? (
+          (canEditEvents || isCreator) ? (
             <>
               {isCreator && (
                 <Button 
@@ -469,7 +469,7 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
                   {commonT('delete')}
                 </Button>
               )}
-              {(canManageEvents || isCreator) && (
+              {(canEditEvents || isCreator) && (
                 <Button
                   type="button"
                   variant="secondary"

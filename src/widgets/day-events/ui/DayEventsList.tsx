@@ -64,7 +64,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
   const currentGuildId = useAppSelector((state) => state.guild.currentGuildId);
 
   const activeGuildId = currentGuildId || propGuildId;
-  const { canCreateEvents, canManageEvents } = useGuildPermissions(activeGuildId, userId);
+  const { canCreateEvents, canDeleteEvents } = useGuildPermissions(activeGuildId, userId);
 
   const { data: events = [], isLoading } = useGetEventsQuery(activeGuildId ?? '', {
     skip: !activeGuildId,
@@ -184,7 +184,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
               key={event.id}
               event={event}
               href={`/events/${event.publicId ?? event.id}`}
-              onDelete={canManageEvents ? handleDeleteClick : undefined}
+              onDelete={canDeleteEvents ? handleDeleteClick : undefined}
               isPendingInvite={myIdsData?.pendingEventIds?.includes(event.id)}
             />
           ))}
