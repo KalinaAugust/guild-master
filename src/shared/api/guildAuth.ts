@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { SupabaseClient, User } from '@supabase/supabase-js';
 import { createClient } from './supabase/server';
 import type { Database } from './supabase/types';
+import { canPerform, type GuildAction, type GuildPermissions } from './guildPermissions';
 
 type Client = SupabaseClient<Database>;
 
@@ -59,6 +60,37 @@ export async function requireGuildOwner(
     .single();
 
   if (!guild || guild.owner_id !== userId) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+  return null;
+}
+
+/**
+ * Returns a 403 response if the guild's permission level for `action`
+ * does not admit the caller's role, otherwise null. Reads guilds.permissions
+ * and the caller's guild_members.role; missing config falls back to defaults.
+ */
+export async function requireGuildPermission(
+  supabase: Client,
+  guildId: string,
+  userId: string,
+  action: GuildAction,
+): Promise<NextResponse | null> {
+  const { data: membership } = await supabase
+    .from('guild_members')
+    .select('role')
+    .eq('guild_id', guildId)
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  const { data: guild } = await supabase
+    .from('guilds')
+    .select('permissions')
+    .eq('id', guildId)
+    .maybeSingle();
+
+  const permissions = (guild?.permissions ?? null) as GuildPermissions | null;
+  if (!canPerform(permissions, action, membership?.role)) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
   return null;
