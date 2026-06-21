@@ -1,4 +1,5 @@
 import { createClient } from '@/shared/api/supabase/server';
+import type { ChatScope } from '../model/types';
 
 /**
  * Lightweight unread check for the sidebar dot: true when at least one message
@@ -6,6 +7,7 @@ import { createClient } from '@/shared/api/supabase/server';
  */
 export const getGuildChatUnread = async (
   guildId: string,
+  scope: ChatScope = 'all',
 ): Promise<{ hasUnread: boolean }> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -16,6 +18,7 @@ export const getGuildChatUnread = async (
     .select('last_read_at')
     .eq('guild_id', guildId)
     .eq('user_id', user.id)
+    .eq('scope', scope)
     .maybeSingle();
   if (readError) throw readError;
   const lastReadAt: string | null = read?.last_read_at ?? null;
@@ -24,6 +27,7 @@ export const getGuildChatUnread = async (
     .from('guild_messages')
     .select('id')
     .eq('guild_id', guildId)
+    .eq('scope', scope)
     .neq('user_id', user.id);
   if (lastReadAt) q = q.gt('created_at', lastReadAt);
   const { data: rows, error } = await q.limit(1);
