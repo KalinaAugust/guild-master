@@ -10,7 +10,7 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)')
+    .select('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url)')
     .eq('user_id', user.id)
     .eq('status', 'ACCEPTED');
 
@@ -26,6 +26,7 @@ export async function GET() {
       ownerId: string;
       description?: string;
       avatarUrl?: string;
+      role?: 'OWNER' | 'ADMIN' | 'MEMBER';
       memberCount: number;
       pendingRequestCount: number;
     }>
@@ -47,6 +48,7 @@ export async function GET() {
           ownerId: g.owner_id,
           description: g.description || undefined,
           avatarUrl: g.avatar_url || undefined,
+          role: (m.role as 'OWNER' | 'ADMIN' | 'MEMBER') ?? undefined,
           memberCount: 0,
           pendingRequestCount: 0,
         });
