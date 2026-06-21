@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
-import { X, Users, Settings, Trash2, Calendar, Megaphone, BarChart3 } from 'lucide-react';
+import { X, Users, Settings, Calendar, Megaphone, BarChart3 } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation, uploadGuildAvatar } from '@/entities/guild';
 import { useGuildPermissions } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
@@ -314,7 +314,6 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   {isEdit && (
                     <div className={styles.dangerZone}>
                       <div className={styles.dangerZoneHeader}>
-                        <Trash2 size={16} aria-hidden="true" />
                         <span className={styles.dangerZoneLabel}>{t('deleteLabel')}</span>
                       </div>
                       {showDeleteConfirm ? (
