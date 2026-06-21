@@ -90,7 +90,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   );
 
   useEffect(() => {
-    if (!activeGuild?.id) return;
     let active = true;
     const supabase = createClient();
     let channel: ReturnType<typeof supabase.channel> | null = null;
@@ -99,14 +98,16 @@ export const ConversationList: React.FC<ConversationListProps> = ({
       supabase.realtime.setAuth(sessionData.session?.access_token ?? null);
       if (!active) return;
 
-      channel = supabase.channel('sidebar-chat-updates')
+      let channelBuilder = supabase.channel('sidebar-chat-updates')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'direct_messages' }, () => {
           dispatch(directMessageApi.util.invalidateTags([
             { type: 'DirectMessage', id: 'CONVERSATIONS' },
             { type: 'DmRead', id: 'UNREAD' }
           ]));
-        })
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guild_messages', filter: `guild_id=eq.${activeGuild.id}` }, (payload) => {
+        });
+
+      if (activeGuild?.id) {
+        channelBuilder = channelBuilder.on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'guild_messages', filter: `guild_id=eq.${activeGuild.id}` }, (payload) => {
           const scope = payload.new.scope as ChatScope;
           const date = new Date(payload.new.created_at);
           date.setSeconds(date.getSeconds() - 1);
@@ -120,8 +121,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
           dispatch(guildMessageApi.util.invalidateTags([
             { type: 'GuildChatRead', id: `LIST-${activeGuild.id}-${scope}` }
           ]));
-        })
-        .subscribe();
+        });
+      }
+
+      channel = channelBuilder.subscribe();
     })();
 
     return () => {
