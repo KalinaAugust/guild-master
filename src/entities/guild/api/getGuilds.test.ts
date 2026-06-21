@@ -88,7 +88,7 @@ describe('getMyGuilds', () => {
       },
     ]);
     expect(mockSupabase.from).toHaveBeenCalledWith('guild_members');
-    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url)');
+    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url, permissions)');
     expect(mockSupabase.eq).toHaveBeenCalledWith('user_id', mockUser.id);
   });
 

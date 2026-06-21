@@ -17,6 +17,7 @@ import {
   type AnnouncementComment,
 } from '@/entities/announcement';
 import type { Guild } from '@/entities/guild';
+import { useGuildPermissions } from '@/entities/guild';
 import { AnnouncementsSkeleton, PollsSkeleton } from './AnnouncementsSkeleton';
 import styles from './GuildAnnouncements.module.css';
 
@@ -36,6 +37,7 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
   const t = useTranslations('Announcements');
   const pollT = useTranslations('GuildPoll');
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
+  const { canCreatePolls } = useGuildPermissions(activeGuildId ?? '', userId);
 
   const { data, isLoading } = useGetGuildAnnouncementsQuery(activeGuildId ?? '', { skip: !activeGuildId });
   const announcements = data?.announcements ?? [];
@@ -86,17 +88,19 @@ export const GuildAnnouncements: React.FC<GuildAnnouncementsProps> = ({
           )}
         </div>
         <div className={styles.headerPolls}>
-          <Tooltip content={pollT('newPoll')}>
-            <Button
-              type="button"
-              variant="primary"
-              className={styles.newPollButton}
-              onClick={() => setIsPollWizardOpen(true)}
-              aria-label={pollT('newPoll')}
-            >
-              <Plus size={18} strokeWidth={3} />
-            </Button>
-          </Tooltip>
+          {canCreatePolls && (
+            <Tooltip content={pollT('newPoll')}>
+              <Button
+                type="button"
+                variant="primary"
+                className={styles.newPollButton}
+                onClick={() => setIsPollWizardOpen(true)}
+                aria-label={pollT('newPoll')}
+              >
+                <Plus size={18} strokeWidth={3} />
+              </Button>
+            </Tooltip>
+          )}
         </div>
       </div>
 

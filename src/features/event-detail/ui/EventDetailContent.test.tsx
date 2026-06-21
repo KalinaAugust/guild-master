@@ -37,7 +37,7 @@ vi.mock('@/entities/event', () => ({
   useCreateEventMutation: vi.fn().mockReturnValue([vi.fn().mockResolvedValue({}), {}]),
 }));
 vi.mock('@/entities/guild', () => ({
-  useGuildPermissions: vi.fn().mockReturnValue({ canManageEvents: true }),
+  useGuildPermissions: vi.fn().mockReturnValue({ canEditEvents: true }),
 }));
 vi.mock('../api/detailApi', () => ({
   useUpdateParticipantStatusMutation: vi.fn().mockReturnValue([vi.fn()]),

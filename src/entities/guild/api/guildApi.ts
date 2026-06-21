@@ -31,7 +31,7 @@ export const guildApi = baseApi.injectEndpoints({
     }),
     updateGuild: builder.mutation<
       Guild,
-      { id: string; name: string; description?: string; avatarUrl?: string }
+      { id: string; name: string; description?: string; avatarUrl?: string; permissions?: import('../model/types').Guild['permissions'] }
     >({
       query: ({ id, ...body }) => ({ url: `guilds/${id}`, method: 'PATCH', body }),
       invalidatesTags: (_, __, { id }) => [

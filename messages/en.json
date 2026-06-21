@@ -185,7 +185,15 @@
     "successUpdated": "Guild updated",
     "membersAria": "{count, plural, one {# member} other {# members}}",
     "pendingRequestsAria": "{count, plural, one {# pending join request} other {# pending join requests}}",
-    "copyLink": "Copy link"
+    "copyLink": "Copy link",
+    "permissionsSection": "Permissions",
+    "permEvents": "Events",
+    "permAnnouncements": "Announcements",
+    "permPolls": "Polls",
+    "permCallToActions": "Looking for group",
+    "permLevelAll": "All members",
+    "permLevelOfficers": "Officers",
+    "permLevelOwner": "Owner"
   },
   "AiHelper": {
     "tooltip": "AI Assistant",

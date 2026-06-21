@@ -185,7 +185,15 @@
     "successUpdated": "Гильдия обновлена",
     "membersAria": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участников}}",
     "pendingRequestsAria": "{count, plural, one {# заявка на вступление} few {# заявки на вступление} many {# заявок на вступление} other {# заявок на вступление}}",
-    "copyLink": "Скопировать ссылку"
+    "copyLink": "Скопировать ссылку",
+    "permissionsSection": "Права",
+    "permEvents": "События",
+    "permAnnouncements": "Анонсы",
+    "permPolls": "Опросы",
+    "permCallToActions": "Поиск спутников",
+    "permLevelAll": "Все участники",
+    "permLevelOfficers": "Офицеры",
+    "permLevelOwner": "Владелец"
   },
   "AiHelper": {
     "tooltip": "AI помощник",
