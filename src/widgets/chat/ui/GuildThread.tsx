@@ -5,7 +5,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { toast } from 'sonner';
 import { useGuildSelection, GuildSelect } from '@/features/select-guild';
 import type { Guild } from '@/entities/guild';
-import { uploadChatAttachment, type GuildMessage } from '@/entities/guild-message';
+import { skipToken } from '@reduxjs/toolkit/query';
+import { uploadChatAttachment, type GuildMessage, type ChatScope } from '@/entities/guild-message';
 import { createClient } from '@/shared/api/supabase/client';
 import { useAppDispatch } from '@/shared/lib/hooks';
 import {
@@ -27,23 +28,26 @@ interface GuildThreadProps {
   userId?: string;
   viewerProfile?: GuildMessage['profile'];
   initialGuildId?: string;
+  scope: ChatScope;
 }
 
-export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewerProfile, initialGuildId }) => {
+export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewerProfile, initialGuildId, scope }) => {
   const t = useTranslations('GuildChat');
   const locale = useLocale();
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
   const dispatch = useAppDispatch();
 
-  const { data, isLoading } = useGetGuildMessagesQuery(activeGuildId ?? '', {
-    skip: !activeGuildId,
-    refetchOnFocus: true,
-  });
+  const { data, isLoading } = useGetGuildMessagesQuery(
+    activeGuildId ? { guildId: activeGuildId, scope } : skipToken,
+    { refetchOnFocus: true }
+  );
   const messages = data?.messages ?? [];
   const hasMore = data?.hasMore ?? false;
   const [fetchOlder, { isFetching: loadingOlder }] = useLazyFetchOlderMessagesQuery();
   const [fetchNew] = useLazyFetchNewMessagesQuery();
-  const { data: readState } = useGetGuildChatReadStateQuery(activeGuildId ?? '', { skip: !activeGuildId });
+  const { data: readState } = useGetGuildChatReadStateQuery(
+    activeGuildId ? { guildId: activeGuildId, scope } : skipToken
+  );
   const [addMessage, { isLoading: isAdding }] = useAddGuildMessageMutation();
   const [updateMessage, updateState] = useUpdateGuildMessageMutation();
   const [deleteMessage, deleteState] = useDeleteGuildMessageMutation();
@@ -68,14 +72,16 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
 
       const filter = `guild_id=eq.${activeGuildId}`;
       channel = supabase
-        .channel(`guild-chat:${activeGuildId}`)
+        .channel(`chat:${scope}:${activeGuildId}`)
         .on(
           'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'guild_messages', filter },
-          () => {
+          (payload) => {
+            if ((payload.new as { scope?: string }).scope !== scope) return;
             const last = messagesRef.current.at(-1);
             fetchNew({
               guildId: activeGuildId,
+              scope,
               after: last?.createdAt ?? new Date(0).toISOString(),
             });
           },
@@ -84,6 +90,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
           'postgres_changes',
           { event: 'UPDATE', schema: 'public', table: 'guild_messages', filter },
           (payload) => {
+            if (((payload.new ?? payload.old) as { scope?: string }).scope !== scope) return;
             const row = payload.new as {
               id: string;
               body: string;
@@ -91,7 +98,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
               attachment_url: string | null;
             };
             dispatch(
-              guildMessageApi.util.updateQueryData('getGuildMessages', activeGuildId, (draft) => {
+              guildMessageApi.util.updateQueryData('getGuildMessages', { guildId: activeGuildId, scope }, (draft) => {
                 const m = draft.messages.find((x) => x.id === row.id);
                 if (m) {
                   m.body = row.body;
@@ -106,10 +113,11 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
           'postgres_changes',
           { event: 'DELETE', schema: 'public', table: 'guild_messages', filter },
           (payload) => {
+            if ((payload.old as { scope?: string }).scope !== scope) return;
             const id = (payload.old as { id?: string }).id;
             if (!id) return;
             dispatch(
-              guildMessageApi.util.updateQueryData('getGuildMessages', activeGuildId, (draft) => {
+              guildMessageApi.util.updateQueryData('getGuildMessages', { guildId: activeGuildId, scope }, (draft) => {
                 const idx = draft.messages.findIndex((x) => x.id === id);
                 if (idx !== -1) draft.messages.splice(idx, 1);
               }),
@@ -123,7 +131,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
       active = false;
       if (channel) supabase.removeChannel(channel);
     };
-  }, [activeGuildId, supabase, fetchNew, dispatch]);
+  }, [activeGuildId, scope, supabase, fetchNew, dispatch]);
 
   const hasUnread =
     !!readState &&
@@ -134,8 +142,8 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
     );
 
   useEffect(() => {
-    if (activeGuildId && hasUnread) markRead(activeGuildId);
-  }, [activeGuildId, hasUnread, markRead]);
+    if (activeGuildId && hasUnread) markRead({ guildId: activeGuildId, scope });
+  }, [activeGuildId, scope, hasUnread, markRead]);
 
   const handleSubmit = async (body: string, file?: File | null) => {
     if (!activeGuildId) return;
@@ -154,6 +162,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
     try {
       await addMessage({
         guildId: activeGuildId,
+        scope,
         body,
         attachmentUrl,
         author: userId && viewerProfile ? { userId, profile: viewerProfile } : undefined,
@@ -167,7 +176,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
   const handleEdit = async (id: string, body: string) => {
     if (!activeGuildId) return;
     try {
-      await updateMessage({ guildId: activeGuildId, messageId: id, body }).unwrap();
+      await updateMessage({ guildId: activeGuildId, scope, messageId: id, body }).unwrap();
     } catch {
       toast.error(t('updateError'));
       throw new Error('Update error');
@@ -177,7 +186,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
   const handleDelete = async (id: string) => {
     if (!activeGuildId) return;
     try {
-      await deleteMessage({ guildId: activeGuildId, messageId: id }).unwrap();
+      await deleteMessage({ guildId: activeGuildId, scope, messageId: id }).unwrap();
     } catch {
       toast.error(t('deleteError'));
       throw new Error('Delete error');
@@ -222,7 +231,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
       loadingOlder={loadingOlder}
       hasMore={hasMore}
       onLoadOlder={(beforeIso) => {
-        if (activeGuildId) fetchOlder({ guildId: activeGuildId, before: beforeIso });
+        if (activeGuildId) fetchOlder({ guildId: activeGuildId, scope, before: beforeIso });
       }}
       onSubmit={handleSubmit}
       onEdit={handleEdit}
@@ -230,7 +239,7 @@ export const GuildThread: React.FC<GuildThreadProps> = ({ guilds, userId, viewer
       isSubmitting={isAdding || updateState.isLoading || isUploading}
       deletingId={deleteState.isLoading ? deleteState.originalArgs?.messageId : null}
       canWrite={!!userId}
-      resetKey={activeGuildId}
+      resetKey={`${activeGuildId}-${scope}`}
       header={
         <div className={styles.guildSelect}>
           <GuildSelect value={activeGuildId} onValueChange={handleGuildChange} options={guildOptions} />

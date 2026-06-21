@@ -88,7 +88,7 @@ describe('getMyGuilds', () => {
       },
     ]);
     expect(mockSupabase.from).toHaveBeenCalledWith('guild_members');
-    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, guilds (id, public_id, name, owner_id, description, avatar_url)');
+    expect(mockSupabase.select).toHaveBeenCalledWith('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url)');
     expect(mockSupabase.eq).toHaveBeenCalledWith('user_id', mockUser.id);
   });
 
@@ -150,5 +150,31 @@ describe('getMyGuilds', () => {
       description: undefined,
       avatarUrl: undefined,
     });
+  });
+
+  it('maps the viewer role onto each guild', async () => {
+    const mockUser = { id: 'user-123' };
+    const mockGuildsData = [
+      {
+        guild_id: 'g1',
+        role: 'ADMIN',
+        guilds: { id: 'g1', public_id: 'p1', name: 'G', owner_id: 'o1', description: null, avatar_url: null }
+      },
+    ];
+
+    const mockSupabase = {
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: mockUser }, error: null }),
+      },
+      from: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnValue({
+        eq: vi.fn().mockResolvedValue({ data: mockGuildsData, error: null })
+      }),
+    };
+    (createClient as MockedFunction<typeof createClient>).mockResolvedValue(mockSupabase as unknown as never);
+
+    const result = await getMyGuilds('user-123');
+    expect(result[0].role).toBe('ADMIN');
   });
 });

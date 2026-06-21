@@ -198,6 +198,7 @@ All tables use RLS. Supabase client is created via `createServerClient` with `ge
 3. **Naming:** Follow BEM-like class naming inside modules where it aids readability.
 4. **Radix UI:** Style Radix UI primitives (`@radix-ui/react-dialog`, `@radix-ui/react-select`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-tooltip`) via CSS Modules, never Tailwind.
 5. **clsx + tailwind-merge:** Only allowed in `shared/ui` utility components. Features/entities/widgets use CSS Modules only.
+6. **Page transitions:** App Router navigations use the native **View Transitions API**, enabled by `experimental.viewTransition: true` in `next.config.mjs`. The flag is necessary but not sufficient — content is wrapped in a `<ViewTransition>` (from `react`) in `src/app/PageTransition.tsx`, a client component keyed by `usePathname()` with `default="none"`. Keying makes only route changes animate (`enter`/`exit`); Suspense reveals (skeleton → content) are an `update` and stay silent, avoiding a double-transition jump. The crossfade is tuned in `globals.css` on the `::view-transition-old(.page-exit)` / `::view-transition-new(.page-enter)` classes and guarded by `prefers-reduced-motion`. See [design-system.md](docs/design-system.md) §13.4.
 
 ## CSS Vendor Prefixes
 

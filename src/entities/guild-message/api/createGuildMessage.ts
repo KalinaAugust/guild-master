@@ -1,5 +1,5 @@
 import { createClient } from '@/shared/api/supabase/server';
-import type { GuildMessage } from '../model/types';
+import type { GuildMessage, ChatScope } from '../model/types';
 import { MESSAGE_SELECT, mapMessageRow } from './mapMessageRow';
 
 export const MAX_MESSAGE_LENGTH = 2000;
@@ -11,6 +11,7 @@ export const createGuildMessage = async (
   guildId: string,
   body: string,
   attachmentUrl?: string | null,
+  scope: ChatScope = 'all',
 ): Promise<GuildMessage> => {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -23,7 +24,7 @@ export const createGuildMessage = async (
 
   const { data, error } = await supabase
     .from('guild_messages')
-    .insert({ guild_id: guildId, user_id: user.id, body: trimmed, attachment_url: attachmentUrl ?? null })
+    .insert({ guild_id: guildId, user_id: user.id, body: trimmed, attachment_url: attachmentUrl ?? null, scope })
     .select(MESSAGE_SELECT)
     .single();
 

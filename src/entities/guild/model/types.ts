@@ -12,6 +12,8 @@ export interface Guild {
   ownerName?: string | null;
   ownerAvatarUrl?: string | null;
   ownerPublicId?: string | null;
+  /** The viewer's role in this guild (populated by guild list endpoints). */
+  role?: 'OWNER' | 'ADMIN' | 'MEMBER';
 }
 
 export interface GuildDetail {

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGuildMessages } from '@/entities/guild-message/api/getGuildMessages';
 import { createGuildMessage, InvalidGuildMessageError } from '@/entities/guild-message/api/createGuildMessage';
-import { requireUser } from '@/shared/api/guildAuth';
+import type { ChatScope } from '@/entities/guild-message';
+import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
+
+const parseScope = (raw: string | null): ChatScope => (raw === 'officers' ? 'officers' : 'all');
 
 export async function GET(
   request: NextRequest,
@@ -13,7 +16,8 @@ export async function GET(
     const limit = Math.min(Number(searchParams.get('limit')) || 50, 100);
     const before = searchParams.get('before') ?? undefined;
     const after = searchParams.get('after') ?? undefined;
-    const page = await getGuildMessages(id, { limit, before, after });
+    const scope = parseScope(searchParams.get('scope'));
+    const page = await getGuildMessages(id, { limit, before, after, scope });
     return NextResponse.json(page);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch messages' }, { status: 500 });
@@ -28,14 +32,19 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const { body, attachmentUrl } = await request.json();
+    const { body, attachmentUrl, scope: rawScope } = await request.json();
     if (typeof body !== 'string') {
       return NextResponse.json({ error: 'Invalid message body' }, { status: 400 });
     }
     if (attachmentUrl != null && typeof attachmentUrl !== 'string') {
       return NextResponse.json({ error: 'Invalid attachment' }, { status: 400 });
     }
-    const message = await createGuildMessage(id, body, attachmentUrl ?? null);
+    const scope = parseScope(typeof rawScope === 'string' ? rawScope : null);
+    if (scope === 'officers') {
+      const forbidden = await requireGuildRole(auth.supabase, id, auth.user.id, ['ADMIN', 'OWNER']);
+      if (forbidden) return forbidden;
+    }
+    const message = await createGuildMessage(id, body, attachmentUrl ?? null, scope);
     return NextResponse.json(message, { status: 201 });
   } catch (e) {
     if (e instanceof InvalidGuildMessageError) {

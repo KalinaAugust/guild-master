@@ -20,6 +20,7 @@ import StoreProvider from "./providers/StoreProvider";
 import { Header, UserMenu } from "@/widgets/header";
 import { Sidebar } from "@/widgets/sidebar";
 import { CopyrightFooter } from "./CopyrightFooter";
+import { PageTransition } from "./PageTransition";
 import { getUser } from "@/entities/user/api/getUser";
 import { resolveDisplayName } from '@/entities/user';
 import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
@@ -96,7 +97,9 @@ export default async function RootLayout({
             <div className={styles.appShell}>
               <Header />
               <div className={styles.content}>
-                {children}
+                <PageTransition>
+                  {children}
+                </PageTransition>
               </div>
               <CopyrightFooter />
             </div>

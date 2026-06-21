@@ -25,6 +25,18 @@ describe('createGuildMessage', () => {
     await expect(createGuildMessage('g1', 'a'.repeat(2001))).rejects.toBeInstanceOf(InvalidGuildMessageError);
   });
 
+  it('inserts the requested scope', async () => {
+    const q = query({ data: {
+      id: 'm1', guild_id: 'g1', user_id: 'u1', body: 'hi', created_at: 't', updated_at: 't', profiles: { full_name: 'Me', avatar_url: null },
+    } });
+    const from = vi.fn().mockReturnValue(q);
+    useClient({ id: 'u1' }, from);
+
+    await createGuildMessage('g1', 'hi', null, 'officers');
+
+    expect(q.insert).toHaveBeenCalledWith(expect.objectContaining({ scope: 'officers' }));
+  });
+
   it('inserts trimmed body and returns mapped message', async () => {
     const from = vi.fn().mockReturnValueOnce(query({ data: {
       id: 'm1', guild_id: 'g1', user_id: 'u1', body: 'hi', created_at: 't', updated_at: 't', profiles: { full_name: 'Me', avatar_url: null },
