@@ -1,4 +1,4 @@
-import { Users, Calendar, MessagesSquare, Megaphone, Eye, type LucideIcon } from 'lucide-react';
+import { Users, Calendar, MessagesSquare, Megaphone, Eye, Palette, type LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   href: string;
@@ -13,4 +13,5 @@ export const navItems: NavItem[] = [
   { href: '/announcements', icon: Megaphone, labelKey: 'Common.announcements' },
   { href: '/looking-for-group', icon: Eye, labelKey: 'Common.callToAction' },
   { href: '/guilds', icon: Users, labelKey: 'Guild.title' },
+  { href: '/design-system', icon: Palette, labelKey: 'Design System' },
 ];
