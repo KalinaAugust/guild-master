@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/shared/lib/hooks';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useGetGuildChatUnreadQuery } from '@/entities/guild-message';
 import { useGetDmUnreadQuery } from '@/entities/direct-message';
 import { useGetAnnouncementsUnreadQuery } from '@/entities/announcement';
@@ -27,7 +28,10 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     pollingInterval: 60_000,
     skipPollingIfUnfocused: true,
   };
-  const { data: chatUnread } = useGetGuildChatUnreadQuery(activeGuildId ?? '', pollOptions);
+  const { data: chatUnread } = useGetGuildChatUnreadQuery(
+    activeGuildId ? { guildId: activeGuildId, scope: 'all' } : skipToken,
+    pollOptions
+  );
   const { data: dmUnread } = useGetDmUnreadQuery(undefined, { pollingInterval: 60_000, skipPollingIfUnfocused: true });
   const { data: announcementsUnread } = useGetAnnouncementsUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: ctaUnread } = useGetCallToActionsUnreadQuery(activeGuildId ?? '', pollOptions);
@@ -40,6 +44,13 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     skipPollingIfUnfocused: true,
   });
 
+  const activeGuild = guilds?.find((g) => g.id === activeGuildId);
+  const isOfficer = activeGuild?.role === 'ADMIN' || activeGuild?.role === 'OWNER';
+  const { data: officerChatUnread } = useGetGuildChatUnreadQuery(
+    isOfficer && activeGuildId ? { guildId: activeGuildId, scope: 'officers' } : skipToken,
+    pollOptions,
+  );
+
   // Pending join requests in any owned guild signal that guilds need attention.
   const ownedGuildsNeedAttention = !!guilds?.some((g) => (g.pendingRequestCount ?? 0) > 0);
   const userHasPendingInvites = !!pendingInvites && pendingInvites.length > 0;
@@ -47,7 +58,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
 
   // Per-route unread flags; the dot hides on the route it points to.
   const unreadByHref: Record<string, boolean | undefined> = {
-    '/guild-chat': chatUnread?.hasUnread || dmUnread?.hasUnread,
+    '/guild-chat': chatUnread?.hasUnread || officerChatUnread?.hasUnread || dmUnread?.hasUnread,
     '/announcements': announcementsUnread?.hasUnread,
     '/looking-for-group': ctaUnread?.hasUnread,
     '/guilds': guildsNeedAttention,

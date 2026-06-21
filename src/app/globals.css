@@ -6,6 +6,9 @@
   /* Backgrounds */
   --bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);
   --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg-light: rgba(255, 255, 255, 0.03);
+  --glass-cutout: rgba(3, 13, 26, 0.5);
+  --glass-cutout-strong: rgba(3, 13, 26, 0.8);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-blur: blur(5px) saturate(120%);
 
@@ -26,6 +29,7 @@
   --shadow-glass: 0 20px 40px -15px rgba(0, 0, 0, 0.5),
                   inset 0 1px 0 rgba(255, 255, 255, 0.15),
                   inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  --shadow-inset-cutout: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 
   /* Modal */
   --modal-bg: #0b1528;
@@ -131,4 +135,36 @@ h1, h2, h3, h4, h5, h6 {
 
 [data-sonner-toast][data-type='success'] [data-icon] {
   color: var(--accent-secondary);
+}
+
+/* Native View Transitions: route-change crossfade + slight slide-in on App
+   Router navigations. Enabled via experimental.viewTransition in
+   next.config.mjs; content is wrapped in a keyed <ViewTransition> in
+   PageTransition.tsx, whose enter/exit props expose the classes below.
+   Suspense reveals stay silent (default="none"), so the skeleton-to-content
+   swap is not animated. */
+@keyframes page-fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes page-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+::view-transition-old(.page-exit) {
+  animation: page-fade-out 0.35s ease both;
+}
+
+::view-transition-new(.page-enter) {
+  animation: page-slide-in 0.35s ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-exit),
+  ::view-transition-new(.page-enter) {
+    animation: none;
+  }
 }

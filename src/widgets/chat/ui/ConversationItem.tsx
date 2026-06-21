@@ -39,12 +39,14 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     >
       <div className={styles.avatarWrapper}>
         <UserAvatar avatarUrl={peer.avatarUrl} name={name} size="md" />
-        {isOnline && <div className={styles.onlineDot} />}
       </div>
       
       <div className={styles.itemContent}>
         <div className={styles.itemHeader}>
-          <span className={styles.name} title={name ?? undefined}>{name}</span>
+          <div className={styles.nameContainer}>
+            <span className={styles.name} title={name ?? undefined}>{name}</span>
+            {isOnline && <div className={styles.onlineDot} />}
+          </div>
           <span className={styles.time}>{timeStr}</span>
         </div>
         <div className={styles.itemFooter}>

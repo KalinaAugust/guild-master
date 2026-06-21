@@ -6,6 +6,11 @@ const supabaseHostname = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname;
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Enable the native browser View Transitions API for App Router
+  // navigations (global page crossfade tuned in src/app/globals.css).
+  experimental: {
+    viewTransition: true,
+  },
   // Static, route-agnostic security headers. The dynamic, nonce-based
   // Content-Security-Policy is set per-request in src/proxy.ts.
   async headers() {

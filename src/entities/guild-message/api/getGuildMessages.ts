@@ -14,6 +14,7 @@ interface FetchOpts {
   before?: string;
   /** Keyset cursor (created_at): fetch everything strictly newer than this. */
   after?: string;
+  scope?: import('../model/types').ChatScope;
 }
 
 /**
@@ -25,7 +26,7 @@ interface FetchOpts {
  */
 export const getGuildMessages = async (
   guildId: string,
-  { limit = 50, before, after }: FetchOpts = {},
+  { limit = 50, before, after, scope = 'all' }: FetchOpts = {},
 ): Promise<GuildMessagesPage> => {
   const supabase = await createClient();
 
@@ -34,6 +35,7 @@ export const getGuildMessages = async (
       .from('guild_messages')
       .select(MESSAGE_SELECT)
       .eq('guild_id', guildId)
+      .eq('scope', scope)
       .gt('created_at', after)
       .order('created_at', { ascending: true });
     if (error) throw error;
@@ -43,7 +45,8 @@ export const getGuildMessages = async (
   let q = supabase
     .from('guild_messages')
     .select(MESSAGE_SELECT)
-    .eq('guild_id', guildId);
+    .eq('guild_id', guildId)
+    .eq('scope', scope);
   if (before) q = q.lt('created_at', before);
 
   const { data, error } = await q

@@ -60,4 +60,14 @@ describe('getGuildMessages', () => {
     useClient(vi.fn().mockReturnValueOnce(query({ error: new Error('boom') })));
     await expect(getGuildMessages('g1')).rejects.toThrow('boom');
   });
+
+  it('filters by officer scope when requested', async () => {
+    const q = query({ data: [] });
+    const from = vi.fn().mockReturnValue(q);
+    vi.mocked(createClient).mockResolvedValue(mockClient({ user: { id: 'u1' }, from }) as never);
+
+    await getGuildMessages('g1', { scope: 'officers' });
+
+    expect(q.eq).toHaveBeenCalledWith('scope', 'officers');
+  });
 });

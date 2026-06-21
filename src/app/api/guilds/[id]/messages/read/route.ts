@@ -3,15 +3,18 @@ import { getGuildChatReadState } from '@/entities/guild-message/api/getGuildChat
 import { markGuildChatRead } from '@/entities/guild-message/api/markGuildChatRead';
 import { requireUser } from '@/shared/api/guildAuth';
 
+const parseScope = (raw: string | null) => (raw === 'officers' ? 'officers' as const : 'all' as const);
+
 export async function GET(
-  _: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const auth = await requireUser();
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const state = await getGuildChatReadState(id);
+    const scope = parseScope(request.nextUrl.searchParams.get('scope'));
+    const state = await getGuildChatReadState(id, scope);
     return NextResponse.json(state);
   } catch {
     return NextResponse.json({ error: 'Failed to fetch read state' }, { status: 500 });
@@ -19,14 +22,15 @@ export async function GET(
 }
 
 export async function POST(
-  _: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const auth = await requireUser();
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    await markGuildChatRead(id);
+    const scope = parseScope(request.nextUrl.searchParams.get('scope'));
+    await markGuildChatRead(id, scope);
     return NextResponse.json({ marked: true });
   } catch {
     return NextResponse.json({ error: 'Failed to mark chat read' }, { status: 500 });

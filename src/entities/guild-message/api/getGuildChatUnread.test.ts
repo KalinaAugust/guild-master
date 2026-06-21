@@ -41,4 +41,16 @@ describe('getGuildChatUnread', () => {
     vi.mocked(createClient).mockResolvedValue(mockClient({ user: { id: 'u1' }, from }) as never);
     await expect(getGuildChatUnread('g1')).rejects.toThrow('boom');
   });
+
+  it('scopes the unread probe to officers', async () => {
+    const readQ = query({ data: { last_read_at: null } });
+    const msgQ = query({ data: [] });
+    const from = vi.fn().mockReturnValueOnce(readQ).mockReturnValueOnce(msgQ);
+    vi.mocked(createClient).mockResolvedValue(mockClient({ user: { id: 'u1' }, from }) as never);
+
+    await getGuildChatUnread('g1', 'officers');
+
+    expect(readQ.eq).toHaveBeenCalledWith('scope', 'officers');
+    expect(msgQ.eq).toHaveBeenCalledWith('scope', 'officers');
+  });
 });
