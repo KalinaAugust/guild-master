@@ -61,7 +61,7 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
 
   if (!isMounted) {
-    return <Panel className={styles.strip} style={{ minHeight: '82px' }} />;
+    return <Panel className={styles.strip} style={{ minHeight: '82px' }}>{null}</Panel>;
   }
 
   return (
