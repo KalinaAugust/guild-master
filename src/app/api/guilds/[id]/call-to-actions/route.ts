@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getCallToActions } from '@/entities/call-to-action/api/getCallToActions';
 import { createCallToAction, InvalidCallToActionError } from '@/entities/call-to-action/api/createCallToAction';
-import { requireUser, requireGuildRole } from '@/shared/api/guildAuth';
+import { requireUser, requireGuildPermission } from '@/shared/api/guildAuth';
 
 export async function GET(
   _: NextRequest,
@@ -24,7 +24,7 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
-    const forbidden = await requireGuildRole(auth.supabase, id, auth.user.id, ['MEMBER', 'ADMIN', 'OWNER']);
+    const forbidden = await requireGuildPermission(auth.supabase, id, auth.user.id, 'call_to_actions');
     if (forbidden) return forbidden;
 
     const body = await request.json();

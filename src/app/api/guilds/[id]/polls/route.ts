@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getGuildPolls } from '@/entities/poll/api/getGuildPolls';
 import { createPoll, InvalidPollError } from '@/entities/poll/api/createPoll';
-import { requireUser } from '@/shared/api/guildAuth';
+import { requireUser, requireGuildPermission } from '@/shared/api/guildAuth';
 
 export async function GET(
   _: NextRequest,
@@ -24,6 +24,8 @@ export async function POST(
   if (!auth.ok) return auth.response;
   try {
     const { id } = await params;
+    const forbidden = await requireGuildPermission(auth.supabase, id, auth.user.id, 'polls');
+    if (forbidden) return forbidden;
     const body = await request.json();
     const poll = await createPoll(id, {
       title: String(body.title ?? ''),
