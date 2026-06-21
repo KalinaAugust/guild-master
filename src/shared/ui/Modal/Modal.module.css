@@ -1,6 +1,6 @@
 .overlay {
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background-color: rgba(3, 13, 26, 0.4);
+  backdrop-filter: blur(3px);
   position: fixed;
   inset: 0;
   z-index: var(--z-modal);

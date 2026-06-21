@@ -10,6 +10,8 @@ import { ProfileLink } from '@/shared/ui/ProfileLink';
 import { Button } from '@/shared/ui/Button';
 import { Tooltip } from '@/shared/ui/Tooltip';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
+import { GlassCard } from '@/shared/ui/GlassCard';
+import clsx from 'clsx';
 import styles from './ParticipantItem.module.css';
 
 interface ParticipantItemProps {
@@ -49,14 +51,10 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
     (participant.status === 'confirmed' || participant.status === 'declined');
 
   return (
-    <div
-      className={[
-        styles.item,
-        isCurrentUser && styles.currentUser,
-        styles[`status_${participant.status}`],
-      ]
-        .filter(Boolean)
-        .join(' ')}
+    <GlassCard
+      interactive
+      selected={isCurrentUser}
+      className={clsx(styles.item, styles[`status_${participant.status}`])}
     >
       <ProfileLink
         publicId={participant.profile.publicId}
@@ -117,6 +115,6 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({
           </button>
         </Tooltip>
       )}
-    </div>
+    </GlassCard>
   );
 };

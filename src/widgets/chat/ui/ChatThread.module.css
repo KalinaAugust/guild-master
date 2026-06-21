@@ -77,9 +77,6 @@
   padding: 6px 16px;
   border-radius: 999px;
   background: rgba(3, 13, 26, 0.45);
-  border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-primary);

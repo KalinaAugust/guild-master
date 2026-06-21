@@ -11,7 +11,7 @@
   height: 28px;
   border-radius: 7px;
   border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
+  background: var(--glass-bg-light);
   color: var(--text-secondary);
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;

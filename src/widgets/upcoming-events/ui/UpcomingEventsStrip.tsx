@@ -9,6 +9,7 @@ import type { Guild } from '@/entities/guild';
 import type { ActivityEvent } from '@/shared/types';
 import { useTodayEvents } from '../lib/useTodayEvents';
 import { useWeekEventsByType } from '../lib/useWeekEventsByType';
+import { Panel } from '@/shared/ui/Panel';
 import { TodayBlock } from './TodayBlock';
 import { WeekByTypeBlock } from './WeekByTypeBlock';
 import styles from './UpcomingEventsStrip.module.css';
@@ -60,11 +61,11 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
   const hasWeekEvents = Object.keys(eventsByType).length > 0;
 
   if (!isMounted) {
-    return <div className={styles.strip} style={{ minHeight: '82px' }} />;
+    return <Panel className={styles.strip} style={{ minHeight: '82px' }} />;
   }
 
   return (
-    <div className={styles.strip}>
+    <Panel className={styles.strip}>
       <label className={styles.filterToggle}>
         <Switch
           checked={onlyMine}
@@ -82,6 +83,6 @@ export const UpcomingEventsStrip: React.FC<Props> = ({ guilds, userId, initialEv
           </>
         )}
       </div>
-    </div>
+    </Panel>
   );
 };

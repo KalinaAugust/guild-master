@@ -1,6 +1,6 @@
 .panel {
   padding: 24px;
-  background: var(--glass-bg);
+  background: var(--glass-bg-light);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);

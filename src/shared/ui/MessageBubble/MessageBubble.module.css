@@ -9,21 +9,15 @@
   max-width: 90%;
   align-self: flex-start;
   background: rgba(3, 13, 26, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 16px 16px 16px 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
 }
 
 .own {
   align-self: flex-end;
   background: rgba(45, 158, 208, 0.12);
-  border: 1px solid rgba(125, 211, 252, 0.15);
   border-radius: 16px 16px 4px 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.05);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
 }
 
 /* Highlights the message currently being edited in the composer. */

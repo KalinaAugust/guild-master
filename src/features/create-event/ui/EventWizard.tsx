@@ -19,6 +19,7 @@ import { WizardDialog, WizardColumn } from '@/shared/ui/WizardDialog';
 import { Input } from '@/shared/ui/Input';
 import { UserAvatar } from '@/shared/ui/UserAvatar';
 import { NameWithIcon } from '@/shared/ui/NameWithIcon';
+import { GlassCard } from '@/shared/ui/GlassCard';
 import dayjs from '@/shared/lib/dayjs';
 import { useWeekdayLabels } from '@/shared/lib/useWeekdayLabels';
 import { EventForm } from './EventForm';
@@ -147,7 +148,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
       if (editingEvent) {
         // We update the event using its real ID
         const realEventId = editingEvent.id.split('_')[0];
-        await updateEvent({ id: realEventId, event: eventPayload }).unwrap();
+        await updateEvent({ id: realEventId, originalId: editingEvent.id, event: eventPayload }).unwrap();
         await syncParticipants({ eventId: realEventId, userIds: selectedParticipants }).unwrap();
         toast.success(t('successUpdated'));
       } else {
@@ -258,9 +259,11 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                         displayAsAlias: member.profile.displayAsAlias,
                       });
                       return (
-                        <div
+                        <GlassCard
                           key={member.userId}
-                          className={`${styles.memberItem} ${selected ? styles.memberSelected : ''}`}
+                          className={styles.memberItem}
+                          interactive
+                          selected={selected}
                           onClick={() => toggleParticipant(member.userId)}
                         >
                           <UserAvatar
@@ -279,7 +282,7 @@ export const EventWizard: React.FC<{ guildId?: string; isDayView?: boolean; user
                                </svg>
                              </span>
                            )}
-                        </div>
+                        </GlassCard>
                       );
                     })}
                     </div>

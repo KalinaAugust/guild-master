@@ -56,12 +56,13 @@ export const eventApi = baseApi.injectEndpoints({
     }),
     updateEvent: builder.mutation<
       ActivityEvent,
-      { id: string; event: Partial<Omit<ActivityEvent, 'id'>> }
+      { id: string; originalId?: string; event: Partial<Omit<ActivityEvent, 'id'>> }
     >({
       query: ({ id, event }) => ({ url: `events/${id}`, method: 'PATCH', body: event }),
       transformResponse: (raw: RawEvent) => transformEvent(raw),
-      invalidatesTags: (_, __, { id }) => [
+      invalidatesTags: (_, __, { id, originalId }) => [
         { type: 'Event' as const, id },
+        ...(originalId && originalId !== id ? [{ type: 'Event' as const, id: originalId }] : []),
         { type: 'Event' as const, id: 'LIST' },
       ],
     }),

@@ -93,7 +93,8 @@ When building layouts with glassmorphism, transparencies and blurs multiply. A s
 | Depth Level | Material Concept | Target CSS Token |
 | :--- | :--- | :--- |
 | **L0 (Base)** | Global gradient background | `--bg-gradient` |
-| **L1 (Outer)** | Glass panel + Blur + Border + Drop Shadow | `--glass-bg` |
+| **L1 (Outer Panel)** | Large glass panel + Blur + Border + Drop Shadow | `--glass-bg` |
+| **L1 (Standalone Card)** | Floating standalone card + Blur + Border + Drop Shadow | `--glass-bg-light` |
 | **L2 (Inside L1)** | Cutout well, inset shadow, dark fill, NO border | `--glass-cutout` |
 | **L3 (Inside L2)** | Flat glass chip/input, light fill | `--glass-bg-light` |
 | **L4 (Deepest)** | Opaque solid overlay / dense container | `--modal-bg` |

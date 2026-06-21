@@ -3,15 +3,13 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-  padding: 16px 0 !important;
   overflow: hidden;
-  gap: 8px;
+  gap: 16px;
 }
 
 .searchContainer {
   display: flex;
   align-items: center;
-  margin: 0 16px;
   padding: 10px 16px;
   border-radius: 12px;
   background: rgba(0, 0, 0, 0.25);
@@ -60,7 +58,7 @@
 
 .divider {
   height: 1px;
-  margin: 4px 16px;
+  margin: 4px 0;
   background: rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
 }
@@ -80,8 +78,7 @@
 .item {
   display: flex;
   align-items: center;
-  margin: 0 16px;
-  width: calc(100% - 32px);
+  width: 100%;
   padding: 12px 16px;
   border-radius: 14px;
   background: linear-gradient(145deg, rgba(56, 189, 248, 0.04) 0%, rgba(56, 189, 248, 0.01) 100%);

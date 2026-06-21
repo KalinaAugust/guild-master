@@ -1,6 +1,7 @@
 .trigger {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass-cutout);
+  border: none;
+  box-shadow: var(--shadow-inset-cutout);
   color: var(--text-primary);
   padding: 0 16px;
   height: 45px;
@@ -16,14 +17,12 @@
 }
 
 .trigger:hover {
-  background: rgba(56, 189, 248, 0.03);
-  border-color: rgba(56, 189, 248, 0.35);
+  background: var(--glass-cutout-strong);
 }
 
 .trigger:focus {
-  border-color: var(--accent-primary);
   outline: none;
-  box-shadow: 0 0 10px var(--accent-glow);
+  box-shadow: var(--shadow-inset-cutout), 0 0 0 1px var(--accent-primary), 0 0 10px var(--accent-glow);
 }
 
 .triggerText {

@@ -98,10 +98,10 @@ export const CalendarGrid: React.FC<{
           </div>
         </div>
         <div className={styles.controlsRight}>
-          <Button variant="icon" size="icon" onClick={handlePrevMonth}>
+          <Button variant="cutout" size="icon" onClick={handlePrevMonth}>
             <ChevronLeft size={20} />
           </Button>
-          <Button variant="icon" size="icon" onClick={handleNextMonth}>
+          <Button variant="cutout" size="icon" onClick={handleNextMonth}>
             <ChevronRight size={20} />
           </Button>
         </div>

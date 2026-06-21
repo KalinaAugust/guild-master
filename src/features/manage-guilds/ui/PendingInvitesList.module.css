@@ -25,7 +25,10 @@
   align-items: center;
   border-radius: 16px;
   background: var(--glass-bg-light);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 16px 20px;
   gap: 16px;
