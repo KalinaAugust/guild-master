@@ -46,7 +46,8 @@ Cards, panels, calendars, and other container surfaces use a **Glassmorphism** s
 ### 3.1 Glass Properties
 | CSS Variable | Value | Description |
 | :--- | :--- | :--- |
-| `--glass-bg` | `rgba(255, 255, 255, 0.05)` | Semi-transparent white surface |
+| `--glass-bg` | `rgba(255, 255, 255, 0.05)` | Semi-transparent white surface for outer shells |
+| `--glass-bg-light` | `rgba(255, 255, 255, 0.03)` | Fill for nested surfaces (no backdrop-filter) |
 | `--glass-border` | `rgba(255, 255, 255, 0.08)` | Subtle white border simulating glass edges |
 | `--glass-blur` | `blur(5px) saturate(120%)` | Backdrop blur with color saturation effect |
 | `--shadow-glass` | `0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.2)` | Multi-layered shadow (outer shadow, top glare highlight, bottom dark edge) |
@@ -62,40 +63,45 @@ Cards, panels, calendars, and other container surfaces use a **Glassmorphism** s
 }
 ```
 
-### 3.3 Core Rules & Formulas for Glassmorphism
-To ensure a high-end sci-fi aesthetic and maintain readability, developers must follow these standard properties and ratios:
+### 3.3 Core Stacking & Layering Laws (The 5 Rules of Glass)
+When building layouts with glassmorphism, transparencies and blurs multiply. A stacking mistake degrades readability, destroys the hierarchy, and kills rendering performance. Follow these 5 strict rules:
 
-1.  **Surface Opacities:**
-    *   **Standard Panels:** `rgba(255, 255, 255, 0.05)` (Provides a premium, subtle glass shell).
-    *   **Light Containers / Inner Elements:** `rgba(255, 255, 255, 0.02)` to `0.03` (Keeps UI light and readable).
-    *   **Elevated Overlays / Focus Elements:** `rgba(255, 255, 255, 0.08)` or a subtle brand tint `rgba(56, 189, 248, 0.04)` to `0.08` (Pulls attention).
-2.  **Backdrop Blur Strength:**
-    *   Standard blur is `blur(8px) saturate(120%)`.
-    *   Do not stack multiple backdrop blurs directly.
-    *   For overlays, menus, and popups, use Strategy 1 (disable/minimize inner blur) to prevent visual artifacts and performance drops.
-3.  **Light Refraction (Borders):**
-    *   Glass borders must act as light highlights, not solid framing lines. Use `1px solid rgba(255, 255, 255, 0.08)` as the base.
-    *   On hover or selection, borders highlight to `rgba(255, 255, 255, 0.15)` or `rgba(56, 189, 248, 0.35)`.
-4.  **Dual-Shadow Depth:**
-    *   Combine soft outer drop shadows (`rgba(0, 0, 0, 0.4)` to `0.5`) with a crisp inner glare highlight on the top edge (`inset 0 1px 0 rgba(255, 255, 255, 0.15)`) to simulate the reflection of light off a three-dimensional glass panel.
+1. **Правило чередования материалов (Material Alternation)**
+   * Glass is a convex, raised surface. **Never nest glass directly inside glass**.
+   * Alternate materials using the "cutout" well approach: `glass panel` (raised) → `cutout well` (pressed-in, no blur, dark) → `glass-light chip` (flat).
+   * The eye reads depth as raised → cut out → raised. Two adjacent raised layers break the hierarchy.
+   * **Implementation:** Use `--glass-cutout` or `--glass-cutout-strong` combined with `--shadow-inset-cutout` for nested structural containers.
 
-### 3.4 Nested Stacking & Layering Rules
-When rendering a glass component inside another glass component, backdrop blurs and semi-transparent backgrounds stack. This reduces depth, creates visual mud, and degrades text legibility. To solve this, we define three nested glassmorphism strategies:
+2. **Один blur на стекинг-контекст (Single Blur per Context)**
+   * `backdrop-filter` must live **only** on the outermost shell/container.
+   * Nested surfaces must take a semi-transparent background (`--glass-bg-light` or `--glass-cutout`) **without** their own `backdrop-filter`.
+   * *Why:* Eliminates visual mud (double-blurring) and prevents severe performance drops (nested backdrop-filters are one of the most expensive browser rendering operations).
 
-*   **Strategy 1: Elevation / "Higher is Lighter & Sharper" (Recommended for overlays)**
-    *   *Concept:* Simulates depth by raising the nested card closer to the light source along the Z-axis.
-    *   *Rules:* Set `backdrop-filter: none` (or keep under `2px`) on the nested card to avoid stacked blur. Make background slightly lighter/brand-tinted (`rgba(255, 255, 255, 0.08)` or `rgba(125, 211, 252, 0.06)`). Increase border visibility to `1px solid rgba(255, 255, 255, 0.15)` and add a deep drop shadow `box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4)`.
-    *   *When to use:* Floating panels, dropdown menus, context popups, or hover-triggered cards that need to look layered above the main interface.
+3. **Бюджет глубины (Depth Budget: Max 2 Glass Layers)**
+   * Beyond the second nested level, transparency stops conveying hierarchy effectively. 
+   * **Rule:** "Deeper than two glasses — become solid."
+   * At the 3rd depth level and beyond, transition to opaque or near-opaque backgrounds (e.g., `--modal-bg` / `#0b1528`) to maintain high text contrast and readability.
 
-*   **Strategy 2: Cutout / "Darker Semi-Transparent Plaquette" (Recommended for data containers)**
-    *   *Concept:* Ground nested components by placing them in a "carved-out" space within the main glass panel.
-    *   *Rules:* Disable backdrop-filter on the child card (`backdrop-filter: none`). Use a dark, semi-transparent background derived from the site's dark palette (`rgba(3, 13, 26, 0.5)` or `rgba(11, 21, 40, 0.6)`). Apply a very subtle border (`1px solid rgba(255, 255, 255, 0.05)`) and optionally an inner shadow (`box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4)`).
-    *   *When to use:* Interactive inline widgets (e.g., PollCard inside chat aside, chat messages, event details list item) where high contrast is required for nested buttons, input fields, checkboxes, or colorful progress bars.
+4. **Бордер только на верхнем крае (Borders Are Glare, Not Frames)**
+   * A light 1px border simulates light refraction on a raised glass edge.
+   * On nested elements, **remove the outer light border** or replace it with an inner shadow (`--shadow-inset-cutout`).
+   * *Why:* Stacking multiple white borders makes the UI look like a basic HTML table, destroying the illusion of glass.
 
-*   **Strategy 3: Outline / "Border Only"**
-    *   *Concept:* Keep the layout light and minimal by eliminating the nested background entirely.
-    *   *Rules:* Set `background: transparent`, use a thin, subtle border (`1px solid rgba(255, 255, 255, 0.08)`), disable drop shadows, and increase padding/white space to separate elements.
-    *   *When to use:* Static read-only cards, text lists, or secondary settings items where no overlapping progress bars or dense inputs are present.
+5. **Рамп прозрачности по глубине (Transparency Ramp by Depth)**
+   To make nesting predictable and scalable, map your layers explicitly to this token scale:
+
+| Depth Level | Material Concept | Target CSS Token |
+| :--- | :--- | :--- |
+| **L0 (Base)** | Global gradient background | `--bg-gradient` |
+| **L1 (Outer)** | Glass panel + Blur + Border + Drop Shadow | `--glass-bg` |
+| **L2 (Inside L1)** | Cutout well, inset shadow, dark fill, NO border | `--glass-cutout` |
+| **L3 (Inside L2)** | Flat glass chip/input, light fill | `--glass-bg-light` |
+| **L4 (Deepest)** | Opaque solid overlay / dense container | `--modal-bg` |
+
+### 3.4 Shadow Formulas
+To support the rules above, use the designated shadow tokens:
+* **Outer Panel Shadows (`--shadow-glass`):** Combines a soft outer drop shadow with a crisp inner glare highlight on the top edge (`inset 0 1px 0 rgba(255, 255, 255, 0.15)`) to simulate a 3D glass edge.
+* **Cutout Shadows (`--shadow-inset-cutout`):** A soft inset drop shadow that pushes the element inward, creating a well (`inset 0 2px 4px rgba(0, 0, 0, 0.4)`).
 
 ---
 
@@ -265,6 +271,30 @@ For chat components and messages, we apply specific formatting and structural gu
     *   **Must not use rounded outline borders/backgrounds** on hover unless explicitly defined (e.g. they hover with a clean color change and a subtle box/circle background, never lifting along the Y-axis).
 
 ---
+
+## 13.4 Page Transitions (Native View Transitions API)
+
+App Router navigations use the browser's native **View Transitions API** for a subtle route-change crossfade. It is enabled via `experimental.viewTransition: true` in `next.config.mjs`. The flag alone is not enough — React only engages `document.startViewTransition` when a `<ViewTransition>` boundary wraps the changing content.
+
+The boundary lives in `src/app/PageTransition.tsx` (a client component) and is **keyed by `usePathname()`** with `default="none"`. Keying turns a navigation into an `exit` of the old path + `enter` of the new one, while a Suspense reveal (skeleton → content within the same route) is only an `update` and therefore stays silent — this is what prevents the double-transition "jump" when entering an async page. The sidebar/header stay outside the boundary and don't animate.
+
+The `enter`/`exit` props expose the `page-enter` / `page-exit` view-transition classes, tuned in `globals.css` — a 0.35s crossfade where the incoming page also slides up 8px:
+
+```css
+@keyframes page-fade-out { to { opacity: 0; } }
+@keyframes page-slide-in {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+::view-transition-old(.page-exit) { animation: page-fade-out 0.35s ease both; }
+::view-transition-new(.page-enter) { animation: page-slide-in 0.35s ease both; }
+```
+
+Rules:
+- Keep transitions **short and subtle** (~0.35s, small offset). This is ambient polish, not a focal animation.
+- Always guard with `@media (prefers-reduced-motion: reduce)` → `animation: none` for accessibility.
+- Suspense reveals must stay silent (`default="none"`). Only route changes (`enter`/`exit`) animate.
+- To scope a transition to a specific element (shared-element morph), assign it a unique `view-transition-name`.
 
 ## 14. Guidelines for Developers & Agents
 
