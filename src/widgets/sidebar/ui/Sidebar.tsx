@@ -44,6 +44,13 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     skipPollingIfUnfocused: true,
   });
 
+  const activeGuild = guilds?.find((g) => g.id === activeGuildId);
+  const isOfficer = activeGuild?.role === 'ADMIN' || activeGuild?.role === 'OWNER';
+  const { data: officerChatUnread } = useGetGuildChatUnreadQuery(
+    isOfficer && activeGuildId ? { guildId: activeGuildId, scope: 'officers' } : skipToken,
+    pollOptions,
+  );
+
   // Pending join requests in any owned guild signal that guilds need attention.
   const ownedGuildsNeedAttention = !!guilds?.some((g) => (g.pendingRequestCount ?? 0) > 0);
   const userHasPendingInvites = !!pendingInvites && pendingInvites.length > 0;
@@ -51,7 +58,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
 
   // Per-route unread flags; the dot hides on the route it points to.
   const unreadByHref: Record<string, boolean | undefined> = {
-    '/guild-chat': chatUnread?.hasUnread || dmUnread?.hasUnread,
+    '/guild-chat': chatUnread?.hasUnread || officerChatUnread?.hasUnread || dmUnread?.hasUnread,
     '/announcements': announcementsUnread?.hasUnread,
     '/looking-for-group': ctaUnread?.hasUnread,
     '/guilds': guildsNeedAttention,

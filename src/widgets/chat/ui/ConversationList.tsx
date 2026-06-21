@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Users, Search, Paperclip, Shield } from 'lucide-react';
 import { useGetConversationsQuery } from '@/entities/direct-message';
 import type { Guild } from '@/entities/guild';
-import { useGetGuildMessagesQuery } from '@/entities/guild-message';
+import { useGetGuildChatUnreadQuery, useGetGuildMessagesQuery } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
 import { useAppSelector } from '@/shared/lib/hooks';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -77,6 +77,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const officerLabel = activeGuild
     ? t('officerChatLabel', { name: activeGuild.name })
     : t('officerChat');
+
+  const { data: officerUnread } = useGetGuildChatUnreadQuery(
+    isOfficer && activeGuild ? { guildId: activeGuild.id, scope: 'officers' } : skipToken,
+  );
 
   const [search, setSearch] = useState('');
 
@@ -190,6 +194,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               </div>
             )}
           </div>
+          {officerUnread?.hasUnread && !officerSelected && <div className={styles.unreadDot} />}
         </button>
       )}
 
