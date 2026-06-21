@@ -8,6 +8,7 @@ import type { Guild } from '@/entities/guild';
 import { useGetGuildMessagesQuery } from '@/entities/guild-message';
 import { resolveDisplayName } from '@/entities/user';
 import { useAppSelector } from '@/shared/lib/hooks';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Panel } from '@/shared/ui/Panel';
 import { ConversationItem } from './ConversationItem';
 import styles from './ConversationList.module.css';
@@ -52,9 +53,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     ? t('guildChatLabel', { name: activeGuild.name })
     : t('guildChat');
 
-  const { data: guildData } = useGetGuildMessagesQuery(activeGuild?.id ?? '', {
-    skip: !activeGuild,
-  });
+  const { data: guildData } = useGetGuildMessagesQuery(
+    activeGuild ? { guildId: activeGuild.id, scope: 'all' } : skipToken
+  );
   const lastGuildMessage = guildData?.messages.at(-1);
   const lastSenderName = lastGuildMessage
     ? resolveDisplayName(lastGuildMessage.profile)

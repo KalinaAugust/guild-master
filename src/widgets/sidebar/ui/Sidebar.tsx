@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useAppSelector } from '@/shared/lib/hooks';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useGetGuildChatUnreadQuery } from '@/entities/guild-message';
 import { useGetDmUnreadQuery } from '@/entities/direct-message';
 import { useGetAnnouncementsUnreadQuery } from '@/entities/announcement';
@@ -27,7 +28,10 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     pollingInterval: 60_000,
     skipPollingIfUnfocused: true,
   };
-  const { data: chatUnread } = useGetGuildChatUnreadQuery(activeGuildId ?? '', pollOptions);
+  const { data: chatUnread } = useGetGuildChatUnreadQuery(
+    activeGuildId ? { guildId: activeGuildId, scope: 'all' } : skipToken,
+    pollOptions
+  );
   const { data: dmUnread } = useGetDmUnreadQuery(undefined, { pollingInterval: 60_000, skipPollingIfUnfocused: true });
   const { data: announcementsUnread } = useGetAnnouncementsUnreadQuery(activeGuildId ?? '', pollOptions);
   const { data: ctaUnread } = useGetCallToActionsUnreadQuery(activeGuildId ?? '', pollOptions);

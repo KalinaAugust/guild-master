@@ -74,6 +74,7 @@ export const ChatPage: React.FC<ChatPageProps> = ({
             userId={userId}
             viewerProfile={viewerProfile}
             initialGuildId={initialGuildId}
+            scope="all"
           />
         ) : activeDm && resolvedPeer ? (
           <DirectThread
