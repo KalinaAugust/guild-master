@@ -691,16 +691,19 @@ export type Database = {
         Row: {
           guild_id: string
           last_read_at: string
+          scope: string
           user_id: string
         }
         Insert: {
           guild_id: string
           last_read_at?: string
+          scope?: string
           user_id: string
         }
         Update: {
           guild_id?: string
           last_read_at?: string
+          scope?: string
           user_id?: string
         }
         Relationships: [
@@ -727,6 +730,7 @@ export type Database = {
           created_at: string
           guild_id: string
           id: string
+          scope: string
           updated_at: string
           user_id: string
         }
@@ -736,6 +740,7 @@ export type Database = {
           created_at?: string
           guild_id: string
           id?: string
+          scope?: string
           updated_at?: string
           user_id: string
         }
@@ -745,6 +750,7 @@ export type Database = {
           created_at?: string
           guild_id?: string
           id?: string
+          scope?: string
           updated_at?: string
           user_id?: string
         }
