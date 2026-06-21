@@ -35,7 +35,7 @@ export const CalendarGrid: React.FC<{
   const { now, months, years, handlePrevMonth, handleNextMonth, handleMonthChange, handleYearChange } = useCalendarNavigation();
   const { days, DAYS_OF_WEEK } = useCalendarDays(now);
   const { activeGuildId, guildOptions, handleGuildChange } = useGuildSelection(guilds, initialGuildId, userId);
-  const { canManageEvents } = useGuildPermissions(activeGuildId, userId);
+  const { canCreateEvents } = useGuildPermissions(activeGuildId, userId);
   const excludedEventTypes = useAppSelector((state) => state.ui.excludedEventTypes);
   const onlyParticipating = useAppSelector((state) => state.ui.onlyParticipating);
 
@@ -169,7 +169,7 @@ export const CalendarGrid: React.FC<{
                   </div>
                 )}
               </div>
-              {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && canManageEvents && (
+              {!dayjs(day.fullDate).isBefore(dayjs().startOf('day')) && canCreateEvents && (
                 <Tooltip content={t('addEvent')} side="top">
                   <Button
                     variant="icon_floating"
