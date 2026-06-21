@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/shared/api/supabase/server';
 import { requireUser, requireGuildOwner } from '@/shared/api/guildAuth';
+import type { Json } from '@/shared/api/supabase/types';
 
 export async function GET(
   _: NextRequest,
@@ -51,17 +52,18 @@ export async function PATCH(
   const { supabase, user } = auth;
 
   const { id } = await params;
-  const { name, description, avatarUrl } = await request.json();
+  const { name, description, avatarUrl, permissions } = await request.json();
   if (!name) return NextResponse.json({ error: 'name required' }, { status: 400 });
 
   const forbidden = await requireGuildOwner(supabase, id, user.id);
   if (forbidden) return forbidden;
 
-  const updates: { name: string; description: string | null; avatar_url?: string | null } = {
+  const updates: { name: string; description: string | null; avatar_url?: string | null; permissions?: Json } = {
     name,
     description: description || null,
   };
   if (avatarUrl !== undefined) updates.avatar_url = avatarUrl || null;
+  if (permissions !== undefined) updates.permissions = permissions;
 
   const { data: guild, error } = await supabase
     .from('guilds')
@@ -72,7 +74,7 @@ export async function PATCH(
 
   if (error || !guild) return NextResponse.json({ error: 'Failed to update guild' }, { status: 500 });
 
-  const g = guild as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
+  const g = guild as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null; permissions: unknown };
 
   return NextResponse.json({
     id: g.id,
@@ -81,6 +83,7 @@ export async function PATCH(
     ownerId: g.owner_id,
     description: g.description || undefined,
     avatarUrl: g.avatar_url || undefined,
+    permissions: g.permissions ?? undefined,
   });
 }
 

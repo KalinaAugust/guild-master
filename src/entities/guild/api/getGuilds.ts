@@ -1,6 +1,7 @@
 'use server';
 import { createClient } from '@/shared/api/supabase/server';
 import { Guild } from '../model/types';
+import type { GuildPermissions } from '@/shared/api/guildPermissions';
 
 export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
   const supabase = await createClient();
@@ -14,7 +15,7 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
 
   const { data, error } = await supabase
     .from('guild_members')
-    .select('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url)')
+    .select('guild_id, role, guilds (id, public_id, name, owner_id, description, avatar_url, permissions)')
     .eq('user_id', finalUserId)
     .eq('status', 'ACCEPTED');
 
@@ -25,7 +26,7 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
     
   // Map the nested guilds data and ensure it matches the Guild interface
   return data.reduce<Guild[]>((acc, m) => {
-    const g = m.guilds as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null };
+    const g = m.guilds as unknown as { id: string; public_id: string; name: string; owner_id: string; description: string | null; avatar_url: string | null; permissions: GuildPermissions | null };
     if (g) {
       acc.push({
         id: g.id,
@@ -35,6 +36,7 @@ export const getMyGuilds = async (userId?: string): Promise<Guild[]> => {
         description: g.description || undefined,
         avatarUrl: g.avatar_url || undefined,
         role: (m.role as 'OWNER' | 'ADMIN' | 'MEMBER') ?? undefined,
+        permissions: g.permissions ?? undefined,
       });
     }
     return acc;

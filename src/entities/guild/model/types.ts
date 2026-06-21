@@ -1,3 +1,5 @@
+import type { GuildPermissions } from '@/shared/api/guildPermissions';
+
 export interface Guild {
   id: string;
   publicId?: string;
@@ -14,6 +16,8 @@ export interface Guild {
   ownerPublicId?: string | null;
   /** The viewer's role in this guild (populated by guild list endpoints). */
   role?: 'OWNER' | 'ADMIN' | 'MEMBER';
+  /** Per-action create permissions; NULL/missing keys fall back to defaults. */
+  permissions?: GuildPermissions;
 }
 
 export interface GuildDetail {
