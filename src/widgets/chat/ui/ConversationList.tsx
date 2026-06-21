@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Users, Search, Paperclip } from 'lucide-react';
+import { Users, Search, Paperclip, Shield } from 'lucide-react';
 import { useGetConversationsQuery } from '@/entities/direct-message';
 import type { Guild } from '@/entities/guild';
 import { useGetGuildMessagesQuery } from '@/entities/guild-message';
@@ -22,6 +22,9 @@ interface ConversationListProps {
   onSelectGuild: () => void;
   onSelectPeer: (publicId: string) => void;
   guildUnread?: boolean;
+  isOfficer?: boolean;
+  officerSelected?: boolean;
+  onSelectOfficer?: () => void;
 }
 
 export const ConversationList: React.FC<ConversationListProps> = ({
@@ -33,6 +36,9 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   onSelectGuild,
   onSelectPeer,
   guildUnread,
+  isOfficer,
+  officerSelected,
+  onSelectOfficer,
 }) => {
   const t = useTranslations('DirectMessages');
   const { data: conversations = [], isLoading } = useGetConversationsQuery();
@@ -60,6 +66,17 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   const lastSenderName = lastGuildMessage
     ? resolveDisplayName(lastGuildMessage.profile)
     : null;
+
+  const { data: officerData } = useGetGuildMessagesQuery(
+    isOfficer && activeGuild ? { guildId: activeGuild.id, scope: 'officers' } : skipToken
+  );
+  const lastOfficerMessage = officerData?.messages.at(-1);
+  const lastOfficerSender = lastOfficerMessage
+    ? resolveDisplayName(lastOfficerMessage.profile)
+    : null;
+  const officerLabel = activeGuild
+    ? t('officerChatLabel', { name: activeGuild.name })
+    : t('officerChat');
 
   const [search, setSearch] = useState('');
 
@@ -138,6 +155,43 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         </div>
         {guildUnread && <div className={styles.unreadDot} />}
       </button>
+
+      {isOfficer && (
+        <button
+          type="button"
+          className={`${styles.item} ${officerSelected ? styles.itemActive : ''}`}
+          onClick={onSelectOfficer}
+        >
+          <div className={styles.avatarWrapper}>
+            <div className={styles.guildIcon}>
+              <Shield size={20} />
+            </div>
+          </div>
+          <div className={styles.itemContent}>
+            <div className={styles.itemHeader}>
+              <span className={styles.name}>{officerLabel}</span>
+            </div>
+            {lastOfficerMessage && (
+              <div className={styles.itemFooter}>
+                <div className={styles.preview}>
+                  <span className={styles.senderName}>
+                    {lastOfficerMessage.userId === userId
+                      ? t('you')
+                      : t('senderPrefix', { name: lastOfficerSender ?? '' })}
+                  </span>
+                  {!lastOfficerMessage.body && lastOfficerMessage.attachmentUrl ? (
+                    <span className={styles.attachmentPreview}>
+                      <Paperclip size={14} className={styles.attachmentIcon} /> {t('attachmentPreview')}
+                    </span>
+                  ) : (
+                    <span className={styles.bodyPreview}>{lastOfficerMessage.body}</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </button>
+      )}
 
       <div className={styles.divider} />
 

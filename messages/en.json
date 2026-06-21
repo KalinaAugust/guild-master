@@ -493,6 +493,8 @@
     "conversationsEmpty": "No conversations yet",
     "guildChat": "Guild chat",
     "guildChatLabel": "{name} chat",
+    "officerChat": "Officer chat",
+    "officerChatLabel": "{name} officers",
     "senderPrefix": "{name}: ",
     "searchPlaceholder": "Search...",
     "placeholder": "Write a message…",

@@ -493,6 +493,8 @@
     "conversationsEmpty": "Диалогов пока нет",
     "guildChat": "Чат гильдии",
     "guildChatLabel": "Чат {name}",
+    "officerChat": "Чат офицеров",
+    "officerChatLabel": "Офицеры {name}",
     "senderPrefix": "{name}: ",
     "searchPlaceholder": "Поиск...",
     "placeholder": "Написать сообщение…",
