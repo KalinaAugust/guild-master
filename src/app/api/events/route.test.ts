@@ -5,6 +5,10 @@ import { createEvent } from '@/entities/event/api/createEvent';
 
 vi.mock('@/entities/event/api/getEvents');
 vi.mock('@/entities/event/api/createEvent');
+vi.mock('@/shared/api/guildAuth', () => ({
+  requireUser: vi.fn().mockResolvedValue({ ok: true, supabase: {}, user: { id: 'u1' } }),
+  requireGuildPermission: vi.fn().mockResolvedValue(null),
+}));
 
 const RAW_EVENT = {
   id: 'e1',

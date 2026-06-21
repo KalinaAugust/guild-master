@@ -31,6 +31,10 @@ vi.mock('@/features/guild-poll', () => ({
   PollWizard: () => <div data-testid="poll-wizard" />,
 }));
 
+vi.mock('@/entities/guild', () => ({
+  useGuildPermissions: () => ({ canCreatePolls: true }),
+}));
+
 const guilds = [{ id: 'g1', name: 'Test', avatarUrl: null }] as never;
 
 beforeEach(() => vi.clearAllMocks());
