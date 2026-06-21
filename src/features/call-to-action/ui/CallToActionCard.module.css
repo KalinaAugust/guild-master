@@ -1,11 +1,9 @@
 .card {
   position: relative;
-  background: rgba(3, 13, 26, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass-cutout);
   border-radius: 16px;
   padding: 1.75rem 1.5rem;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: none;
+  box-shadow: var(--shadow-inset-cutout);
   display: flex;
   flex-direction: column;
   gap: 1.4rem;

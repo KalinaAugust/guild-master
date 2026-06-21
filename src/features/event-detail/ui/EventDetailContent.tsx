@@ -374,9 +374,9 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
             {event.weekDays && event.weekDays.length > 0 && (
               <div className={styles.infoGroup}>
                 <span className={styles.label}>{t('recurrence')}</span>
-                <span className={styles.dateTime} style={{ color: 'var(--accent-secondary)' }}>
-                  {t('recurrenceDays')}{' '}
-                  <strong>
+                <span className={styles.dateTime}>
+                  <span className={styles.recurrenceText}>{t('recurrenceDays')}</span>{' '}
+                  <strong className={styles.recurrenceDays}>
                     {event.weekDays
                       .map((d) => getDayLabel(d))
                       .join(', ')}

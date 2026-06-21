@@ -51,7 +51,8 @@
     "callToAction": "Looking for group",
     "copyLink": "Copy link",
     "linkCopied": "Link copied to clipboard",
-    "copyError": "Failed to copy link"
+    "copyError": "Failed to copy link",
+    "designSystem": "Design System"
   },
   "Auth": {
     "login": "Login"

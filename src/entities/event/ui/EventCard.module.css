@@ -1,23 +1,12 @@
 .card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  box-shadow: var(--shadow-glass);
-  border-radius: 16px;
-  padding: 16px;
   display: flex;
   gap: 16px;
-  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
   align-items: center;
-}
-
-.card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .iconWrapper {
@@ -174,12 +163,9 @@
   background: transparent !important;
 }
 
-.clickable {
-  cursor: pointer;
-}
-
-.clickable:hover {
-  background: rgba(255, 255, 255, 0.04);
+.deleteBtn:hover {
+  color: #ff4d4d;
+  background: transparent !important;
 }
 
 .meta {

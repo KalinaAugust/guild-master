@@ -4,7 +4,7 @@ import { Spinner } from '@/shared/ui/Spinner';
 import styles from './Button.module.css';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'secondary_glass' | 'ghost' | 'icon' | 'icon_floating' | 'danger';
+  variant?: 'primary' | 'secondary' | 'secondary_glass' | 'ghost' | 'icon' | 'icon_floating' | 'danger' | 'cutout';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'icon' | 'icon_sm';
   fullWidth?: boolean;
   asChild?: boolean;

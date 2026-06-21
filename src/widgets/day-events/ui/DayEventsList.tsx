@@ -27,9 +27,10 @@ import styles from './DayEventsList.module.css';
 const EventCardWithCounts: React.FC<{
   event: ActivityEvent;
   onClick?: (event: ActivityEvent) => void;
+  href?: string;
   onDelete?: (id: string) => void;
   isPendingInvite?: boolean;
-}> = ({ event, onClick, onDelete, isPendingInvite }) => {
+}> = ({ event, onClick, href, onDelete, isPendingInvite }) => {
   const { data } = useGetParticipantsQuery(event.id);
   const participants = data?.participants ?? [];
   const total = participants.length;
@@ -39,6 +40,7 @@ const EventCardWithCounts: React.FC<{
     <EventCard
       event={event}
       onClick={onClick}
+      href={href}
       onDelete={onDelete}
       participantCount={data ? { total, confirmed } : undefined}
       showInviteBadge={isPendingInvite}
@@ -88,10 +90,6 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
     if (isPastDate) return;
     dispatch(setSelectedDate(date));
     dispatch(openEventModal());
-  };
-
-  const handleViewEvent = (event: ActivityEvent) => {
-    router.push(`/events/${event.publicId ?? event.id}`);
   };
 
   const handleDeleteClick = (id: string) => {
@@ -185,7 +183,7 @@ export const DayEventsList: React.FC<DayEventsListProps> = ({ date, guildId: pro
             <EventCardWithCounts
               key={event.id}
               event={event}
-              onClick={handleViewEvent}
+              href={`/events/${event.publicId ?? event.id}`}
               onDelete={canManageEvents ? handleDeleteClick : undefined}
               isPendingInvite={myIdsData?.pendingEventIds?.includes(event.id)}
             />

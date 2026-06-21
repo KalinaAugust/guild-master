@@ -1,6 +1,6 @@
 .block {
   position: relative;
-  background: var(--glass-bg);
+  background: var(--glass-bg-light);
   border: 1px solid var(--glass-border);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);

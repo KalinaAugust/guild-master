@@ -24,40 +24,40 @@
 Ниже представлен детальный список файлов, разбитый на логические фазы. Галочками `[ ]` можно отмечать прогресс.
 
 ### Фаза 1: Списки и карточки событий (Events & Guilds)
-Эти компоненты всегда рендерятся внутри обертки `Panel`, `Sidebar` или внутри `ProfileBlock`, поэтому они строго вложенные (L2).
+Внимание: Карточки событий (EventCard) часто лежат прямо на фоне страницы (уровень L1), поэтому они должны сохранять полноценный глассморфизм. Остальные элементы списков (например, участники), как правило, рендерятся внутри `Panel` или `ProfileBlock` (L2).
 
-- [ ] `src/entities/event/ui/EventCard.module.css`
-- [ ] `src/shared/ui/EventCardSkeleton/EventCardSkeleton.module.css`
-- [ ] `src/features/event-detail/ui/ParticipantItem.module.css`
-- [ ] `src/widgets/upcoming-events/ui/UpcomingEventsStrip.module.css`
-- [ ] `src/features/manage-guilds/ui/GuildList.module.css`
-- [ ] `src/features/manage-guilds/ui/PendingInvitesList.module.css`
-- [ ] `src/widgets/guild-members/ui/GuildMembersSection.module.css`
+- [x] `src/entities/event/ui/EventCard.module.css`
+- [x] `src/shared/ui/EventCardSkeleton/EventCardSkeleton.module.css`
+- [x] `src/features/event-detail/ui/ParticipantItem.module.css`
+- [x] `src/widgets/upcoming-events/ui/UpcomingEventsStrip.module.css`
+- [x] `src/features/manage-guilds/ui/GuildList.module.css`
+- [x] `src/features/manage-guilds/ui/PendingInvitesList.module.css`
+- [x] `src/widgets/guild-members/ui/GuildMembersSection.module.css`
 
 ### Фаза 2: Мессенджер и коммуникации (Chat)
 Чат-секция содержит интенсивный скроллинг, поэтому удаление `backdrop-filter` с сотен бабблов сообщений даст наибольший прирост производительности.
 
-- [ ] `src/shared/ui/MessageBubble/MessageBubble.module.css`
-- [ ] `src/widgets/chat/ui/ChatThread.module.css`
-- [ ] `src/shared/ui/MessageComposer/EmojiPicker.module.css`
-- [ ] `src/app/guild-chat/loading.module.css`
+- [x] `src/shared/ui/MessageBubble/MessageBubble.module.css`
+- [x] `src/widgets/chat/ui/ChatThread.module.css`
+- [x] `src/shared/ui/MessageComposer/EmojiPicker.module.css`
+- [x] `src/app/guild-chat/loading.module.css`
 
 ### Фаза 3: Интерактивные фичи гильдии (Announcements, Polls, Notifications)
 Аналогично первой фазе, элементы списков и карточек.
 
-- [ ] `src/features/guild-announcement/ui/AnnouncementCard.module.css`
-- [ ] `src/features/guild-poll/ui/PollCard.module.css`
-- [ ] `src/features/notification-panel/ui/NotificationPanel.module.css`
-- [ ] `src/features/call-to-action/ui/CallToActionCard.module.css`
+- [x] `src/features/guild-announcement/ui/AnnouncementCard.module.css`
+- [x] `src/features/guild-poll/ui/PollCard.module.css`
+- [x] `src/features/notification-panel/ui/NotificationPanel.module.css`
+- [x] `src/features/call-to-action/ui/CallToActionCard.module.css`
 
 ### Фаза 4: Элементы форм, инпуты и общие UI-виджеты
 Многие общие элементы сейчас имеют свое собственное "стекло". Их надо сделать более плоскими и легкими.
 
-- [ ] `src/shared/ui/Button/Button.module.css`
-- [ ] `src/features/update-profile/interests/ui/EditableInterests/EditableInterests.module.css`
-- [ ] `src/shared/ui/Select/Select.module.css`
-- [ ] `src/shared/ui/Switch/Switch.module.css`
-- [ ] `src/features/auth/ui/LoginForm.module.css`
+- [x] `src/shared/ui/Button/Button.module.css`
+- [x] `src/features/update-profile/interests/ui/EditableInterests/EditableInterests.module.css`
+- [x] `src/shared/ui/Select/Select.module.css`
+- [x] `src/shared/ui/Switch/Switch.module.css`
+- [x] `src/features/auth/ui/LoginForm.module.css`
 
 ### Фаза 5: Оболочки L1, которые нужно ПРОВЕРИТЬ, но скорее всего ОСТАВИТЬ
 Эти компоненты являются модальными окнами, дропдаунами или основными панелями. Они лежат поверх градиента страницы и по правилам **должны сохранить** `backdrop-filter` и `--glass-bg`. В них нужно только проверить, что они не вложены в другие панели.

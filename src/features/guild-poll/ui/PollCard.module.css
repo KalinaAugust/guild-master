@@ -3,10 +3,9 @@
   flex-direction: column;
   gap: 16px;
   padding: 1.25rem;
-  background: rgba(3, 13, 26, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass-cutout);
   border-radius: 16px;
-  backdrop-filter: none;
+  box-shadow: var(--shadow-inset-cutout);
 }
 
 .head {

@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Toaster } from 'sonner';
 import "./globals.css";
+import "@/shared/design-system/tokens.css";
 
 const manrope = Manrope({
   subsets: ["latin", "cyrillic"],

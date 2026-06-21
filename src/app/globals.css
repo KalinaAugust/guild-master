@@ -29,7 +29,7 @@
   --shadow-glass: 0 20px 40px -15px rgba(0, 0, 0, 0.5),
                   inset 0 1px 0 rgba(255, 255, 255, 0.15),
                   inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-  --shadow-inset-cutout: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-inset-cutout: inset 0 2px 6px rgba(0, 0, 0, 0.4), 0 1px 0 rgba(255, 255, 255, 0.05);
 
   /* Modal */
   --modal-bg: #0b1528;

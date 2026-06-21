@@ -5,6 +5,7 @@ import { Gamepad2, Users, Calendar, Clock, Trash2, PartyPopper, Dumbbell, Dices,
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import { Button } from '@/shared/ui/Button';
 import { CopyLinkButton } from '@/shared/ui/CopyLinkButton';
+import { GlassCard } from '@/shared/ui/GlassCard';
 import { stripMarkdown } from '@/shared/lib/stripMarkdown';
 import styles from './EventCard.module.css';
 
@@ -17,6 +18,7 @@ interface EventCardProps {
   event: ActivityEvent;
   participantCount?: ParticipantCount;
   onClick?: (event: ActivityEvent) => void;
+  href?: string;
   onDelete?: (id: string) => void;
   showInviteBadge?: boolean;
 }
@@ -31,11 +33,13 @@ const typeIcons: Record<ActivityType, React.ReactNode> = {
   boardgame: <Puzzle size={20} />,
 };
 
-export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, onDelete, showInviteBadge }) => {
+export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, onClick, href, onDelete, showInviteBadge }) => {
   return (
-    <div
-      className={`${styles.card} ${styles[`type_${event.type}`]} ${onClick ? styles.clickable : ''}`}
-      onClick={() => onClick?.(event)}
+    <GlassCard
+      className={`${styles.card} ${styles[`type_${event.type}`]}`}
+      interactive={!!onClick || !!href}
+      onClick={onClick ? () => onClick(event) : undefined}
+      href={href}
     >
       <div className={styles.iconWrapper}>
         {typeIcons[event.type]}
@@ -90,6 +94,6 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
           </Button>
         )}
       </div>
-    </div>
+    </GlassCard>
   );
 };

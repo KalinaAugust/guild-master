@@ -18,12 +18,12 @@
     radial-gradient(circle at 150px 270px, rgba(255, 255, 255, 0.4) 0.6px, transparent 1.2px),
 
     /* Layer 4: Space Nebulae Glows */
-    radial-gradient(circle at 12% 25%, rgba(139, 92, 246, 0.16) 0%, transparent 45%),
-    radial-gradient(circle at 88% 75%, rgba(45, 158, 208, 0.16) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 12% 25%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 88% 75%, rgba(14, 165, 233, 0.16) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.08) 0%, transparent 40%),
 
     /* Base Gradient */
-    linear-gradient(135deg, rgba(4, 5, 15, 0.96) 0%, rgba(15, 12, 30, 0.96) 50%, rgba(25, 18, 45, 0.96) 100%);
+    linear-gradient(135deg, rgba(4, 8, 18, 0.96) 0%, rgba(8, 16, 32, 0.96) 50%, rgba(12, 28, 52, 0.96) 100%);
 
   background-size: 
     600px 600px, 600px 600px, /* Layer 1 */

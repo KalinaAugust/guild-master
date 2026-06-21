@@ -155,7 +155,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   }, [conversations, search]);
 
   return (
-    <Panel className={styles.listContainer} disablePadding>
+    <Panel className={styles.listContainer}>
       <div className={styles.searchContainer}>
         <Search className={styles.searchIcon} size={18} />
         <input

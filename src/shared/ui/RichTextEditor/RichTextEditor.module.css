@@ -1,19 +1,20 @@
 .wrapper {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--glass-cutout);
+  border: none;
+  box-shadow: var(--shadow-inset-cutout);
   border-radius: 12px;
   color: var(--text-primary);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
   overflow: hidden;
 }
 
 .wrapper:hover {
-  border-color: rgba(56, 189, 248, 0.35);
+  background: var(--glass-cutout-strong);
 }
 
 .wrapper:focus-within {
-  border-color: var(--accent-primary);
-  box-shadow: 0 0 10px var(--accent-glow);
+  outline: none;
+  box-shadow: var(--shadow-inset-cutout), 0 0 0 1px var(--accent-primary), 0 0 10px var(--accent-glow);
 }
 
 .toolbar {
@@ -22,7 +23,7 @@
   align-items: center;
   gap: 0.15rem;
   padding: 0.35rem 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .linkPopover {

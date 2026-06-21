@@ -1,0 +1,47 @@
+.card {
+  border-radius: 24px;
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--shadow-glass);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 16px;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.interactive:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-glass);
+}
+
+.selected {
+  background: linear-gradient(135deg, rgba(45, 158, 208, 0.12) 0%, rgba(14, 82, 114, 0.25) 100%);
+  border-color: rgba(45, 158, 208, 0.4);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 12px rgba(45, 158, 208, 0.2);
+}
+
+.selected:hover {
+  background: linear-gradient(135deg, rgba(45, 158, 208, 0.16) 0%, rgba(14, 82, 114, 0.3) 100%);
+  border-color: rgba(45, 158, 208, 0.6);
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 16px rgba(45, 158, 208, 0.3);
+}
