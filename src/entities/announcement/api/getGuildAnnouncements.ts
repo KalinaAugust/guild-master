@@ -1,4 +1,5 @@
 import { createClient } from '@/shared/api/supabase/server';
+import { canPerform, type GuildPermissions } from '@/shared/api/guildPermissions';
 import type { GuildAnnouncementsResult } from '../model/types';
 import { ANNOUNCEMENT_SELECT, buildAnnouncement, type AnnouncementRow } from './mapAnnouncementRow';
 
@@ -28,6 +29,13 @@ export const getGuildAnnouncements = async (guildId: string): Promise<GuildAnnou
   const supabase = await createClient();
   const { userId, role } = await resolveCaller(supabase, guildId);
 
+  const { data: guildRow } = await supabase
+    .from('guilds')
+    .select('permissions')
+    .eq('id', guildId)
+    .maybeSingle();
+  const permissions = (guildRow?.permissions ?? null) as GuildPermissions | null;
+
   const { data, error } = await supabase
     .from('announcements')
     .select(ANNOUNCEMENT_SELECT)
@@ -39,7 +47,7 @@ export const getGuildAnnouncements = async (guildId: string): Promise<GuildAnnou
   const announcements = ((data ?? []) as unknown as AnnouncementRow[]).map((row) =>
     buildAnnouncement(row, userId, canManage(row.created_by, userId, role)),
   );
-  return { announcements, canCreate: isManager(role) };
+  return { announcements, canCreate: canPerform(permissions, 'announcements', role) };
 };
 
 /** Re-reads a single announcement (used after mutations) and maps it for the caller. */

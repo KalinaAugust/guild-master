@@ -1,4 +1,5 @@
 import { createClient } from '@/shared/api/supabase/server';
+import { canPerform, type GuildPermissions } from '@/shared/api/guildPermissions';
 import type { CallToAction, CallToActionsResult } from '../model/types';
 import { CTA_SELECT, buildCallToAction, type CallToActionRow } from './mapCallToActionRow';
 
@@ -26,6 +27,13 @@ export const getCallToActions = async (guildId: string): Promise<CallToActionsRe
   const supabase = await createClient();
   const { userId, role, isMember } = await resolveCaller(supabase, guildId);
 
+  const { data: guildRow } = await supabase
+    .from('guilds')
+    .select('permissions')
+    .eq('id', guildId)
+    .maybeSingle();
+  const permissions = (guildRow?.permissions ?? null) as GuildPermissions | null;
+
   const { data, error } = await supabase
     .from('call_to_actions')
     .select(CTA_SELECT)
@@ -37,7 +45,7 @@ export const getCallToActions = async (guildId: string): Promise<CallToActionsRe
   const callToActions = ((data ?? []) as unknown as CallToActionRow[]).map((row) =>
     buildCallToAction(row, userId, canManage(row.created_by, userId, role)),
   );
-  return { callToActions, canCreate: isMember };
+  return { callToActions, canCreate: canPerform(permissions, 'call_to_actions', role) };
 };
 
 /** Re-reads a single CTA (used after mutations) and maps it for the caller. */
