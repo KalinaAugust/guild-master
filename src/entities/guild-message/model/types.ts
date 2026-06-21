@@ -1,3 +1,5 @@
+export type ChatScope = 'all' | 'officers';
+
 export interface GuildMessage {
   id: string;
   guildId: string;

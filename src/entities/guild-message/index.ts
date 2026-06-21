@@ -11,4 +11,4 @@ export {
   useGetGuildChatUnreadQuery,
 } from './api/guildMessageApi';
 export { uploadChatAttachment } from './api/uploadChatAttachment';
-export type { GuildMessage } from './model/types';
+export type { GuildMessage, ChatScope } from './model/types';
