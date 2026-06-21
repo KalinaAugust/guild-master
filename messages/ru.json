@@ -492,6 +492,8 @@
     "empty": "Сообщений пока нет",
     "conversationsEmpty": "Диалогов пока нет",
     "guildChat": "Чат гильдии",
+    "guildChatLabel": "Чат {name}",
+    "senderPrefix": "{name}: ",
     "searchPlaceholder": "Поиск...",
     "placeholder": "Написать сообщение…",
     "you": "Вы: ",

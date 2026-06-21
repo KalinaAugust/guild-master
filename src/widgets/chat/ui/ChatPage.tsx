@@ -58,6 +58,9 @@ export const ChatPage: React.FC<ChatPageProps> = ({
     <div className={styles.container}>
       <div className={`${styles.sidebar} ${!isGuildChat ? styles.mobileHidden : ''}`}>
         <ConversationList
+          guilds={guilds}
+          userId={userId}
+          initialGuildId={initialGuildId}
           activePeerId={activeDm}
           guildSelected={isGuildChat}
           onSelectGuild={handleSelectGuild}

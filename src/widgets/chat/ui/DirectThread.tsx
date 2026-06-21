@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
 import dayjs from '@/shared/lib/dayjs';
 import { toast } from 'sonner';
@@ -238,11 +239,11 @@ export const DirectThread: React.FC<DirectThreadProps> = ({
       : '';
 
   const header = (
-    <div className={styles.headerInfo}>
+    <Link href={`/profile/${peerPublicId}`} className={styles.headerInfo}>
       <UserAvatar
         avatarUrl={peer.avatarUrl}
         name={peer.alias ?? peer.fullName ?? ''}
-        size="md"
+        size="lg"
       />
       <div className={styles.headerText}>
         <span className={styles.peerName}>
@@ -256,7 +257,7 @@ export const DirectThread: React.FC<DirectThreadProps> = ({
           {presenceLine}
         </span>
       </div>
-    </div>
+    </Link>
   );
 
   return (

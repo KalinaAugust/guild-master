@@ -492,6 +492,8 @@
     "empty": "No messages yet",
     "conversationsEmpty": "No conversations yet",
     "guildChat": "Guild chat",
+    "guildChatLabel": "{name} chat",
+    "senderPrefix": "{name}: ",
     "searchPlaceholder": "Search...",
     "placeholder": "Write a message…",
     "you": "You: ",
