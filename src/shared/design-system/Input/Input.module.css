@@ -1,13 +1,13 @@
 .input {
   display: inline-flex;
-  height: 40px;
-  padding: 0 var(--ds-spacing-md);
+  height: 45px;
+  padding: 0 16px;
   font-family: var(--ds-font-body);
-  font-size: 16px;
+  font-size: 1rem;
   color: var(--ds-color-text);
   background-color: var(--ds-color-bg);
   border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-md);
+  border-radius: var(--ds-radius-lg);
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }

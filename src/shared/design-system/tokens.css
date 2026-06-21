@@ -15,8 +15,8 @@
   --ds-font-display: var(--font-unbounded), sans-serif;
 
   /* Border radius */
-  --ds-radius-sm: 4px;
-  --ds-radius-md: 8px;
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 10px;
   --ds-radius-lg: 12px;
   
   /* Spacing */
