@@ -1,0 +1,28 @@
+:root {
+  /* Colors */
+  --ds-color-bg: #030d1a;
+  --ds-color-bg-gradient: linear-gradient(135deg, #030d1a 0%, #0a2540 50%, #0e3460 100%);
+  --ds-color-primary: #2d9ed0;
+  --ds-color-primary-hover: #2589b6;
+  --ds-color-secondary: #7dd3fc;
+  --ds-color-text: #ffffff;
+  --ds-color-text-muted: rgba(255, 255, 255, 0.6);
+  --ds-color-border: rgba(255, 255, 255, 0.08);
+  --ds-color-glass: rgba(255, 255, 255, 0.05);
+  
+  /* Fonts */
+  --ds-font-body: var(--font-manrope), sans-serif;
+  --ds-font-display: var(--font-unbounded), sans-serif;
+
+  /* Border radius */
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-radius-lg: 12px;
+  
+  /* Spacing */
+  --ds-spacing-xs: 4px;
+  --ds-spacing-sm: 8px;
+  --ds-spacing-md: 16px;
+  --ds-spacing-lg: 24px;
+  --ds-spacing-xl: 32px;
+}
