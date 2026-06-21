@@ -201,10 +201,15 @@
 }
 
 .permRowLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
 
 .permSelect {
+  justify-self: end;
   width: 100%;
+  max-width: 16rem;
 }

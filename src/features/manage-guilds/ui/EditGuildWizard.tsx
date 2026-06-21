@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import * as Form from '@radix-ui/react-form';
-import { X, Image as ImageIcon, Users, Settings, Trash2, ShieldCheck } from 'lucide-react';
+import { X, Users, Settings, Trash2, Calendar, Megaphone, BarChart3 } from 'lucide-react';
 import { Guild, useCreateGuildMutation, useUpdateGuildMutation, useAddGuildMemberMutation, useDeleteGuildMutation, uploadGuildAvatar } from '@/entities/guild';
 import { useGuildPermissions } from '@/entities/guild';
 import { Select } from '@/shared/ui/Select';
@@ -62,6 +62,12 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
     announcements: t('permAnnouncements'),
     polls: t('permPolls'),
     call_to_actions: t('permCallToActions'),
+  };
+  const actionIcon: Record<GuildAction, React.ReactNode> = {
+    events: <Calendar size={15} aria-hidden="true" />,
+    announcements: <Megaphone size={15} aria-hidden="true" />,
+    polls: <BarChart3 size={15} aria-hidden="true" />,
+    call_to_actions: <Users size={15} aria-hidden="true" />,
   };
   const levelOptions: { label: string; value: PermissionLevel }[] = [
     { label: t('permLevelAll'), value: 'all' },
@@ -270,7 +276,6 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                 <>
                   <div className={styles.stubGroup}>
                     <div className={styles.stubHeader}>
-                      <ImageIcon size={16} aria-hidden="true" />
                       <span className={styles.stubLabel}>{t('avatarSection')}</span>
                     </div>
                     <GuildAvatarUpload
@@ -283,13 +288,15 @@ export const EditGuildWizard: React.FC<GuildWizardProps> = ({ open, guild, onClo
                   {canEditPermissions && (
                     <div className={styles.permGroup}>
                       <div className={styles.stubHeader}>
-                        <ShieldCheck size={16} aria-hidden="true" />
                         <span className={styles.stubLabel}>{t('permissionsSection')}</span>
                       </div>
                       <ul className={styles.permList}>
                         {GUILD_ACTIONS.map((action) => (
                           <li key={action} className={styles.permRow}>
-                            <span className={styles.permRowLabel}>{actionLabel[action]}</span>
+                            <span className={styles.permRowLabel}>
+                              {actionIcon[action]}
+                              {actionLabel[action]}
+                            </span>
                             <Select
                               value={resolveLevel(permissions, action)}
                               onValueChange={(v) =>
