@@ -2,6 +2,7 @@ import { createClient } from '@/shared/api/supabase/server';
 import { ActivityEvent } from '@/shared/types';
 import { parseEventId } from '@/shared/lib/parseEventId';
 import dayjs from '@/shared/lib/dayjs';
+import { deriveEnd } from '@/shared/lib/eventInterval';
 
 type RawEventRow = {
   id: string;
@@ -10,6 +11,7 @@ type RawEventRow = {
   description: string | null;
   type: string;
   event_date: string;
+  end_date: string | null;
   guild_id: string;
   created_by: string;
   week_days: number[] | null;
@@ -24,7 +26,7 @@ export const getEventById = async (
   
   const { data, error } = await supabase
     .from('events')
-    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
+    .select('id, public_id, title, description, type, event_date, end_date, guild_id, created_by, week_days, exceptions')
     .eq('id', realId)
     .maybeSingle();
 
@@ -42,6 +44,14 @@ export const getEventById = async (
   const displayDate = occurrenceDate || d.format('YYYY-MM-DD');
   const eventPublicId = raw.public_id;
 
+  const occEnd =
+    occurrenceDate && raw.end_date
+      ? dayjs
+          .utc(raw.end_date)
+          .add(dayjs.utc(occurrenceDate).diff(d.startOf('day'), 'day'), 'day')
+          .toISOString()
+      : raw.end_date;
+
   return {
     event: {
       id: id, // return the requested (possibly virtual) ID
@@ -51,6 +61,7 @@ export const getEventById = async (
       type: raw.type as ActivityEvent['type'],
       date: displayDate,
       time: d.format('HH:mm'),
+      ...deriveEnd(raw.event_date, occEnd),
       createdBy: raw.created_by,
       weekDays: raw.week_days || undefined,
       exceptions: raw.exceptions || undefined,

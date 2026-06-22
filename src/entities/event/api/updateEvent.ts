@@ -1,14 +1,16 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { ActivityEvent } from '@/shared/types';
+import { buildEndDate } from '@/shared/lib/eventInterval';
 
 export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent, 'id'>>) => {
   const supabase = await createClient();
   
-  const updateData: { 
-    title?: string; 
-    description?: string | null; 
-    type?: string; 
+  const updateData: {
+    title?: string;
+    description?: string | null;
+    type?: string;
     event_date?: string;
+    end_date?: string | null;
     week_days?: number[];
     exceptions?: string[];
   } = {};
@@ -21,6 +23,10 @@ export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent,
 
   if (event.date && event.time) {
     updateData.event_date = `${event.date}T${event.time}:00`;
+  }
+
+  if (event.endTime !== undefined && event.date && event.time) {
+    updateData.end_date = buildEndDate(event.date, event.time, event.endTime);
   }
 
   const { data, error } = await supabase
