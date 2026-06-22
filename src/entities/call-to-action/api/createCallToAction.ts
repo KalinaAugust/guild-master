@@ -1,3 +1,4 @@
+import { buildEndDate } from '@/shared/lib/eventInterval';
 import { createClient } from '@/shared/api/supabase/server';
 import type { CallToAction, CreateCallToActionInput } from '../model/types';
 import { getCallToActionById } from './getCallToActions';
@@ -28,6 +29,7 @@ export const createCallToAction = async (
     p_type: input.type,
     p_event_date: `${input.date}T${input.time}:00`,
     p_target_count: input.targetCount,
+    p_end_date: buildEndDate(input.date, input.time, input.endTime ?? '') ?? undefined,
   });
   if (error) throw error;
   if (!data) throw new Error('Failed to create call to action');

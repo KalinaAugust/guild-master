@@ -22,6 +22,8 @@ export interface CallToAction {
   description: string;
   type: ActivityType;
   eventDate: string; // ISO timestamptz
+  endTime?: string; // HH:mm, undefined when no end set
+  endsNextDay?: boolean;
   targetCount: number;
   interestedCount: number;
   /** Confirmed participants, ordered by join time. */
@@ -48,5 +50,6 @@ export interface CreateCallToActionInput {
   type: ActivityType;
   date: string; // YYYY-MM-DD
   time: string; // HH:mm
+  endTime?: string; // HH:mm, '' or undefined = no end
   targetCount: number;
 }
