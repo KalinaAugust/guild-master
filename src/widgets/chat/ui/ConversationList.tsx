@@ -26,7 +26,6 @@ interface ConversationListProps {
   guildSelected: boolean;
   onSelectGuild: () => void;
   onSelectPeer: (publicId: string) => void;
-  guildUnread?: boolean;
   isOfficer?: boolean;
   officerSelected?: boolean;
   onSelectOfficer?: () => void;
@@ -40,7 +39,6 @@ export const ConversationList: React.FC<ConversationListProps> = ({
   guildSelected,
   onSelectGuild,
   onSelectPeer,
-  guildUnread,
   isOfficer,
   officerSelected,
   onSelectOfficer,
@@ -87,6 +85,10 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   const { data: officerUnread } = useGetGuildChatUnreadQuery(
     isOfficer && activeGuild ? { guildId: activeGuild.id, scope: 'officers' } : skipToken,
+  );
+
+  const { data: guildAllUnread } = useGetGuildChatUnreadQuery(
+    activeGuild ? { guildId: activeGuild.id, scope: 'all' } : skipToken,
   );
 
   useEffect(() => {
@@ -208,7 +210,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             </div>
           )}
         </div>
-        {guildUnread && <div className={styles.unreadDot} />}
+        {mounted && guildAllUnread?.hasUnread && !guildSelected && <div className={styles.unreadDot} />}
       </button>
 
       {isOfficer && (
@@ -245,7 +247,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
               </div>
             )}
           </div>
-          {officerUnread?.hasUnread && !officerSelected && <div className={styles.unreadDot} />}
+          {mounted && officerUnread?.hasUnread && !officerSelected && <div className={styles.unreadDot} />}
         </button>
       )}
 
