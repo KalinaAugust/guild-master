@@ -80,6 +80,7 @@
     "deleteOccurrenceDesc": "This is a recurring event. Do you want to delete only this occurrence or the entire series?",
     "deleteOnlyThis": "Only this occurrence",
     "deleteAll": "Entire series",
+    "endsNextDay": "+1 day",
     "repeatEvent": "Repeat Event",
     "repeatEventTitle": "Repeat Event",
     "error": "An error occurred",
