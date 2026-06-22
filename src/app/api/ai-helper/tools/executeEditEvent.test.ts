@@ -50,4 +50,10 @@ describe('executeEditEvent', () => {
     await executeEditEvent({ id: 'e1', weekDays: [2, 4] });
     expect(updateEvent).toHaveBeenCalledWith('e1', { weekDays: [2, 4] });
   });
+
+  it('forwards endTime to updateEvent', async () => {
+    vi.mocked(updateEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeEditEvent({ id: 'e1', endTime: '22:00' });
+    expect(updateEvent).toHaveBeenCalledWith('e1', expect.objectContaining({ endTime: '22:00' }));
+  });
 });

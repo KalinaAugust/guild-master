@@ -29,6 +29,10 @@ export const createEventTool: ChatCompletionTool = {
           type: 'string',
           description: 'Optional longer description of the event. Empty string if not specified.',
         },
+        endTime: {
+          type: 'string',
+          description: 'Optional event end time in HH:mm 24-hour format (e.g. "21:30"). If the end is on/after midnight relative to the start it is treated as the next day. Omit if the event has no defined end.',
+        },
         weekDays: {
           type: 'array',
           items: {

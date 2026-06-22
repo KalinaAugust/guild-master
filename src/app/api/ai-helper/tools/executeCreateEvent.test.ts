@@ -89,4 +89,13 @@ describe('executeCreateEvent', () => {
     const result = await executeCreateEvent({ ...args, userIds: ['u1'] }, 'g1');
     expect(result).toEqual({ success: true, eventId: 'e1' });
   });
+
+  it('forwards endTime to createEvent', async () => {
+    vi.mocked(createEvent).mockResolvedValue({ id: 'e1' } as never);
+    await executeCreateEvent(
+      { title: 'T', date: '2026-06-22', time: '19:00', type: 'game', description: '', endTime: '21:00' },
+      'guild-1',
+    );
+    expect(createEvent).toHaveBeenCalledWith(expect.objectContaining({ endTime: '21:00' }));
+  });
 });
