@@ -231,3 +231,9 @@
   color: var(--text-secondary);
   line-height: 1.5;
 }
+
+.nextDay {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}

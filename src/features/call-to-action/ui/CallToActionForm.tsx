@@ -11,7 +11,7 @@ import { Input } from '@/shared/ui/Input';
 import { RichTextEditor } from '@/shared/ui/RichTextEditor';
 import { FormField } from '@/shared/ui/FormField';
 import { DatePicker } from '@/shared/ui/DatePicker';
-import { TimePicker } from '@/shared/ui/TimePicker';
+import { TimeRangePicker } from '@/shared/ui/TimeRangePicker';
 import dayjs from '@/shared/lib/dayjs';
 import { createCtaFormSchema, type CtaFormData } from '../model/schema';
 import styles from './CallToActionForm.module.css';
@@ -39,6 +39,7 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(dayjs().format('YYYY-MM-DD'));
   const [time, setTime] = useState('19:00');
+  const [endTime, setEndTime] = useState('20:00');
   const [type, setType] = useState<ActivityType>('game');
   const [description, setDescription] = useState('');
   const [targetCount, setTargetCount] = useState('5');
@@ -62,7 +63,7 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
       timeRequired: t('validation.timeRequired'),
       targetMin: t('validation.targetMin'),
     });
-    const result = schema.safeParse({ title, date, time, type, description, targetCount });
+    const result = schema.safeParse({ title, date, time, endTime, type, description, targetCount });
     if (!result.success) {
       const fieldErrors: Partial<Record<string, string>> = {};
       for (const issue of result.error.issues) {
@@ -99,15 +100,21 @@ export const CallToActionForm: React.FC<CallToActionFormProps> = ({
           />
         </FormField>
         <FormField name="time" label={t('timeLabel')} error={errors.time}>
-          <TimePicker
-            value={time}
-            onChange={setTime}
+          <TimeRangePicker
+            start={time}
+            end={endTime}
+            onChange={({ start, end }) => {
+              setTime(start);
+              setEndTime(end);
+            }}
             hasError={!!errors.time}
-            placeholder={pickerT('selectTime')}
             labels={{
               open: pickerT('openTime'),
               hours: pickerT('hours'),
               minutes: pickerT('minutes'),
+              startPlaceholder: pickerT('selectTime'),
+              endPlaceholder: pickerT('selectEndTime'),
+              nextDayHint: pickerT('nextDayHint'),
             }}
           />
         </FormField>

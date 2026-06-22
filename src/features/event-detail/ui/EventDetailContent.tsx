@@ -368,6 +368,13 @@ export const EventDetailContent: React.FC<EventDetailContentProps> = ({ eventId 
               <span className={styles.dateTime}>
                 {eventDate?.format('dddd')}, <span className={styles.dateNum}>{eventDate?.format('D')}</span>{' '}
                 {eventDate?.format('MMMM')} · <span className={styles.dateNum}>{eventDate?.format('HH:mm')}</span>
+                {event.endTime && (
+                  <>
+                    {' – '}
+                    <span className={styles.dateNum}>{event.endTime}</span>
+                    {event.endsNextDay && <span className={styles.nextDay}>{eventT('endsNextDay')}</span>}
+                  </>
+                )}
               </span>
             </div>
 

@@ -11,7 +11,7 @@ import { Input } from '@/shared/ui/Input';
 import { RichTextEditor } from '@/shared/ui/RichTextEditor';
 import { FormField } from '@/shared/ui/FormField';
 import { DatePicker } from '@/shared/ui/DatePicker';
-import { TimePicker } from '@/shared/ui/TimePicker';
+import { TimeRangePicker } from '@/shared/ui/TimeRangePicker';
 import { EventFormProps } from '../model/types';
 import { createEventFormSchema } from '../model/schema';
 import styles from './EventForm.module.css';
@@ -34,6 +34,7 @@ export const EventForm: React.FC<EventFormProps> = ({
   const [title, setTitle] = useState(initialData?.title || '');
   const [date, setDate] = useState(initialData?.date || '');
   const [time, setTime] = useState(initialData?.time || '19:00');
+  const [endTime, setEndTime] = useState(initialData?.endTime || (isEdit ? '' : '20:00'));
   const [type, setType] = useState<ActivityType>(initialData?.type || 'game');
   const [description, setDescription] = useState(initialData?.description || '');
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
@@ -55,7 +56,7 @@ export const EventForm: React.FC<EventFormProps> = ({
       dateRequired: t('validation.dateRequired'),
       timeRequired: t('validation.timeRequired'),
     });
-    const result = schema.safeParse({ title, date, time, type, description });
+    const result = schema.safeParse({ title, date, time, endTime, type, description });
     if (!result.success) {
       const fieldErrors: Partial<Record<string, string>> = {};
       for (const issue of result.error.issues) {
@@ -95,15 +96,21 @@ export const EventForm: React.FC<EventFormProps> = ({
           </FormField>
         )}
         <FormField name="time" label={t('timeLabel')} error={errors.time}>
-          <TimePicker
-            value={time}
-            onChange={setTime}
+          <TimeRangePicker
+            start={time}
+            end={endTime}
+            onChange={({ start, end }) => {
+              setTime(start);
+              setEndTime(end);
+            }}
             hasError={!!errors.time}
-            placeholder={pickerT('selectTime')}
             labels={{
               open: pickerT('openTime'),
               hours: pickerT('hours'),
               minutes: pickerT('minutes'),
+              startPlaceholder: pickerT('selectTime'),
+              endPlaceholder: pickerT('selectEndTime'),
+              nextDayHint: pickerT('nextDayHint'),
             }}
           />
         </FormField>

@@ -1,14 +1,17 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { ActivityEvent } from '@/shared/types';
+import { buildEndDate } from '@/shared/lib/eventInterval';
+import dayjs from '@/shared/lib/dayjs';
 
 export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent, 'id'>>) => {
   const supabase = await createClient();
   
-  const updateData: { 
-    title?: string; 
-    description?: string | null; 
-    type?: string; 
+  const updateData: {
+    title?: string;
+    description?: string | null;
+    type?: string;
     event_date?: string;
+    end_date?: string | null;
     week_days?: number[];
     exceptions?: string[];
   } = {};
@@ -21,6 +24,27 @@ export const updateEvent = async (id: string, event: Partial<Omit<ActivityEvent,
 
   if (event.date && event.time) {
     updateData.event_date = `${event.date}T${event.time}:00`;
+  }
+
+  if (event.endTime !== undefined) {
+    let date = event.date;
+    let time = event.time;
+    if (!date || !time) {
+      // endTime changed without a date/time change — source them from the stored event_date.
+      const { data: existing, error: fetchError } = await supabase
+        .from('events')
+        .select('event_date')
+        .eq('id', id)
+        .single();
+      if (fetchError) {
+        console.error('Error fetching event for end_date recompute:', fetchError);
+        throw fetchError;
+      }
+      const d = dayjs.utc(existing.event_date);
+      date = date ?? d.format('YYYY-MM-DD');
+      time = time ?? d.format('HH:mm');
+    }
+    updateData.end_date = buildEndDate(date, time, event.endTime);
   }
 
   const { data, error } = await supabase

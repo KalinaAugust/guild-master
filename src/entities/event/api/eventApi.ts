@@ -1,6 +1,7 @@
 import { baseApi } from '@/shared/api/baseApi';
 import { ActivityEvent, ActivityType, EventParticipant } from '@/shared/types';
 import dayjs from '@/shared/lib/dayjs';
+import { deriveEnd } from '@/shared/lib/eventInterval';
 
 type RawEvent = {
   id: string;
@@ -9,6 +10,7 @@ type RawEvent = {
   description: string | null;
   type: string;
   event_date: string;
+  end_date?: string | null;
   created_by?: string;
 };
 
@@ -29,6 +31,7 @@ function transformEvent(raw: RawEvent): ActivityEvent {
     type: raw.type as ActivityType,
     date: d.format('YYYY-MM-DD'),
     time: d.format('HH:mm'),
+    ...deriveEnd(raw.event_date, raw.end_date ?? null),
     createdBy: raw.created_by,
   };
 }

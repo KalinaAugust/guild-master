@@ -58,7 +58,9 @@ export const EventCard: React.FC<EventCardProps> = ({ event, participantCount, o
           <div className={styles.meta}>
             <div className={styles.timeWrapper}>
               <Clock size={14} />
-              <span>{event.time}</span>
+              <span>
+                {event.endTime ? `${event.time} – ${event.endTime}` : event.time}
+              </span>
             </div>
             {participantCount !== undefined && (
               <div className={styles.participantWrapper}>

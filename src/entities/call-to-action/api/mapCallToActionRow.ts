@@ -1,10 +1,11 @@
+import { deriveEnd } from '@/shared/lib/eventInterval';
 import type { ActivityType } from '@/shared/types';
 import type { CallToAction, CtaAuthor, CtaParticipant } from '../model/types';
 
 const PROFILE_FIELDS = 'public_id, full_name, avatar_url, alias, display_as_alias, icon';
 
 export const CTA_SELECT =
-  `id, guild_id, created_by, title, description, type, event_date, target_count, ` +
+  `id, guild_id, created_by, title, description, type, event_date, end_date, target_count, ` +
   `event_id, launched_at, created_at, ` +
   `profiles(${PROFILE_FIELDS}), ` +
   `call_to_action_interests(user_id, created_at, profiles(${PROFILE_FIELDS}))`;
@@ -32,6 +33,7 @@ export interface CallToActionRow {
   description: string;
   type: string;
   event_date: string;
+  end_date: string | null;
   target_count: number;
   event_id: string | null;
   launched_at: string | null;
@@ -69,6 +71,7 @@ export const buildCallToAction = (
     description: row.description,
     type: row.type as ActivityType,
     eventDate: row.event_date,
+    ...deriveEnd(row.event_date, row.end_date),
     targetCount: row.target_count,
     interestedCount: participants.length,
     participants,

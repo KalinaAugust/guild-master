@@ -67,3 +67,22 @@ describe('createEventFormSchema', () => {
     expect(schema.safeParse({ ...valid, description: '' }).success).toBe(true);
   });
 });
+
+const msgs = {
+  titleRequired: 'title',
+  dateRequired: 'date',
+  timeRequired: 'time',
+};
+
+describe('endTime', () => {
+  const base = { title: 'x', date: '2026-06-22', time: '19:00', type: 'game', description: '' };
+  it('accepts an empty endTime', () => {
+    expect(createEventFormSchema(msgs).safeParse({ ...base, endTime: '' }).success).toBe(true);
+  });
+  it('accepts a valid endTime', () => {
+    expect(createEventFormSchema(msgs).safeParse({ ...base, endTime: '21:00' }).success).toBe(true);
+  });
+  it('rejects a malformed endTime', () => {
+    expect(createEventFormSchema(msgs).safeParse({ ...base, endTime: '9pm' }).success).toBe(false);
+  });
+});

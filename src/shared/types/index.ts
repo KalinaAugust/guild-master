@@ -6,6 +6,8 @@ export interface ActivityEvent {
   title: string;
   date: string; // ISO string format
   time: string; // HH:mm format
+  endTime?: string; // HH:mm, undefined when no end set
+  endsNextDay?: boolean; // true when the interval rolls past midnight
   type: ActivityType;
   description?: string;
   createdBy?: string;

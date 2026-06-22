@@ -1,6 +1,7 @@
 import { createClient } from '@/shared/api/supabase/server';
 import { ActivityEvent, ActivityType } from '@/shared/types';
 import dayjs from '@/shared/lib/dayjs';
+import { deriveEnd } from '@/shared/lib/eventInterval';
 
 interface DbEvent {
   id: string;
@@ -9,6 +10,7 @@ interface DbEvent {
   description: string | null;
   type: string;
   event_date: string;
+  end_date: string | null;
   guild_id: string;
   created_by: string | null;
   week_days: number[] | null;
@@ -39,11 +41,18 @@ function generateOccurrences(raw: DbEvent): DbEvent[] {
     if (weekDays.includes(dayNum)) {
       const currentSecs = current.format('YYYY-MM-DD');
       if (!exceptions.includes(currentSecs)) {
+        const occEnd = raw.end_date
+          ? dayjs
+              .utc(raw.end_date)
+              .add(current.diff(start, 'day'), 'day')
+              .format('YYYY-MM-DDTHH:mm:ss')
+          : null;
         occurrences.push({
           ...raw,
           id: `${raw.id}_${currentSecs}`,
           public_id: `${raw.public_id}_${currentSecs}`,
           event_date: `${currentSecs}T${timeStr}`,
+          end_date: occEnd,
         });
       }
     }
@@ -56,7 +65,7 @@ export const getServerEvents = async (guildId: string): Promise<ActivityEvent[]>
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('events')
-    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
+    .select('id, public_id, title, description, type, event_date, end_date, guild_id, created_by, week_days, exceptions')
     .eq('guild_id', guildId)
     .order('event_date', { ascending: true });
 
@@ -86,6 +95,7 @@ export const getServerEvents = async (guildId: string): Promise<ActivityEvent[]>
       type: raw.type as ActivityType,
       date: d.format('YYYY-MM-DD'),
       time: d.format('HH:mm'),
+      ...deriveEnd(raw.event_date, raw.end_date),
       createdBy: raw.created_by || undefined,
       weekDays: raw.week_days || undefined,
       exceptions: raw.exceptions || undefined,
@@ -97,7 +107,7 @@ export const fetchEvents = async (guildId: string) => {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('events')
-    .select('id, public_id, title, description, type, event_date, guild_id, created_by, week_days, exceptions')
+    .select('id, public_id, title, description, type, event_date, end_date, guild_id, created_by, week_days, exceptions')
     .eq('guild_id', guildId)
     .order('event_date', { ascending: true });
 

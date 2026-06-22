@@ -28,3 +28,14 @@ describe('createCtaFormSchema', () => {
     expect(schema.safeParse({ ...base, date: '07/01/2026' }).success).toBe(false);
   });
 });
+
+describe('cta endTime', () => {
+  const base = { title: 'x', date: '2026-06-22', time: '19:00', type: 'game', description: '', targetCount: 5 };
+  const m = { titleRequired: 't', dateRequired: 'd', timeRequired: 'ti', targetMin: 'm' };
+  it('accepts empty endTime', () => {
+    expect(createCtaFormSchema(m).safeParse({ ...base, endTime: '' }).success).toBe(true);
+  });
+  it('rejects malformed endTime', () => {
+    expect(createCtaFormSchema(m).safeParse({ ...base, endTime: '9pm' }).success).toBe(false);
+  });
+});

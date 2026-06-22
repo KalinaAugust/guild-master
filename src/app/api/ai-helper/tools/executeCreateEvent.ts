@@ -8,6 +8,7 @@ export interface CreateEventArgs {
   time: string;
   type: 'game' | 'meeting' | 'other' | 'party' | 'sport' | 'dnd' | 'boardgame';
   description: string;
+  endTime?: string;
   weekDays?: number[];
   userIds?: string[];
 }
@@ -23,6 +24,7 @@ export const executeCreateEvent = async (
       time: args.time,
       type: args.type,
       description: args.description,
+      endTime: args.endTime,
       weekDays: args.weekDays,
       guild_id: guildId,
     });
