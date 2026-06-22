@@ -5,7 +5,9 @@
     "openCalendar": "Open calendar",
     "openTime": "Open time picker",
     "hours": "Hours",
-    "minutes": "Minutes"
+    "minutes": "Minutes",
+    "selectEndTime": "End time",
+    "nextDayHint": "Ends next day"
   },
   "Common": {
     "title": "Guild Master",
