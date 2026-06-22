@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.separator {
+  color: var(--text-secondary);
+  user-select: none;
+}
+.hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
