@@ -256,6 +256,7 @@ export type Database = {
           created_at: string
           created_by: string
           description: string
+          end_date: string | null
           event_date: string
           event_id: string | null
           guild_id: string
@@ -270,6 +271,7 @@ export type Database = {
           created_at?: string
           created_by: string
           description?: string
+          end_date?: string | null
           event_date: string
           event_id?: string | null
           guild_id: string
@@ -284,6 +286,7 @@ export type Database = {
           created_at?: string
           created_by?: string
           description?: string
+          end_date?: string | null
           event_date?: string
           event_id?: string | null
           guild_id?: string
@@ -557,6 +560,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           description: string | null
+          end_date: string | null
           event_date: string
           exceptions: string[] | null
           guild_id: string
@@ -570,6 +574,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          end_date?: string | null
           event_date: string
           exceptions?: string[] | null
           guild_id: string
@@ -583,6 +588,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           description?: string | null
+          end_date?: string | null
           event_date?: string
           exceptions?: string[] | null
           guild_id?: string
@@ -1114,6 +1120,7 @@ export type Database = {
       create_call_to_action: {
         Args: {
           p_description: string
+          p_end_date?: string
           p_event_date: string
           p_guild_id: string
           p_target_count: number
