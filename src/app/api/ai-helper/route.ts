@@ -37,7 +37,7 @@ async function handleToolCall(
   guildId: string,
   canCreateEvents: boolean,
   canEditEvents: boolean,
-  canDeleteEvents: boolean,
+  canManageParticipants: boolean,
 ): Promise<ToolOutcome | null> {
   let args: unknown;
   try {
@@ -86,7 +86,7 @@ async function handleToolCall(
       return { content: JSON.stringify(result) };
     }
     case 'addParticipants': {
-      if (!canDeleteEvents) {
+      if (!canManageParticipants) {
         return { content: 'Permission denied: only guild owners and admins can add participants.' };
       }
       const addArgs = args as AddParticipantsArgs;
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
     .single();
   const canCreateEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
   const canEditEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
-  const canDeleteEvents = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
+  const canManageParticipants = membership?.role === 'OWNER' || membership?.role === 'ADMIN';
 
   const { data: profile } = await auth.supabase
     .from('profiles')
@@ -210,7 +210,7 @@ export async function POST(request: NextRequest) {
             guildId,
             canCreateEvents,
             canEditEvents,
-            canDeleteEvents
+            canManageParticipants
           );
 
           if (!outcome) {

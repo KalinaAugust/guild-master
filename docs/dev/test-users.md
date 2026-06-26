@@ -14,3 +14,4 @@ Seeded accounts for local development and testing. All emails are pre-confirmed.
 | user8@test.com | password1 | User8 |
 | user9@test.com | password1 | User9 |
 | user10@test.com | password1 | User10 |
+| empty-user@test.com | password123 | — (empty profile) |

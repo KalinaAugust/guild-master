@@ -12,7 +12,7 @@ export const Header = async () => {
       <nav className={styles.nav}>
         {user ? (
           <>
-            <AiHelperButton />
+            <AiHelperButton userId={user.id} />
             <NotificationBell userId={user.id} />
           </>
         ) : (
