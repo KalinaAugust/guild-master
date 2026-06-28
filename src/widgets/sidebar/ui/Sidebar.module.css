@@ -7,6 +7,13 @@
   overflow: hidden;
   transition: width 200ms ease;
   z-index: var(--z-nav);
+  /* Participate in the route-change View Transition with its own snapshot so
+     the sidebar stays above the page-content snapshot during the animation
+     (named groups paint above the root group). Without this, the new page's
+     ::view-transition-new snapshot is painted in the overlay layer on top of
+     the fixed sidebar for the duration of the transition, then drops back
+     under it when the snapshot is removed. */
+  view-transition-name: sidebar;
   display: flex;
   flex-direction: column;
   padding: calc(var(--header-height) + 0.5rem) 0 1rem;
