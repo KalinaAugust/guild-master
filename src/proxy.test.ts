@@ -85,7 +85,9 @@ describe('proxy CSP headers', () => {
 
   it('exposes the nonce to downstream via the x-nonce request header', async () => {
     authed();
-    const res = await proxy(makeRequest('/'));
+    // Use a non-redirecting route so the response is the NextResponse.next()
+    // that carries the x-middleware-request-* headers (a redirect has none).
+    const res = await proxy(makeRequest('/home'));
     const csp = res.headers.get('content-security-policy')!;
     const nonce = csp.match(/'nonce-([^']+)'/)![1];
 
@@ -106,13 +108,47 @@ describe('proxy route protection', () => {
     expect(res.headers.get('content-security-policy')).toBeTruthy();
   });
 
-  it('redirects an authenticated user away from /login to /', async () => {
+  it('redirects an authenticated user away from /login to /home', async () => {
     authed();
     const res = await proxy(makeRequest('/login'));
 
     expect(res.status).toBe(307);
-    expect(res.headers.get('location')).toBe('http://localhost:3000/');
+    expect(res.headers.get('location')).toBe('http://localhost:3000/home');
     expect(res.headers.get('content-security-policy')).toBeTruthy();
+  });
+
+  it('redirects an authenticated user away from the landing / to /home', async () => {
+    authed();
+    const res = await proxy(makeRequest('/'));
+
+    expect(res.status).toBe(307);
+    expect(res.headers.get('location')).toBe('http://localhost:3000/home');
+  });
+
+  it('lets an unauthenticated user reach the landing / without redirect', async () => {
+    anon();
+    const res = await proxy(makeRequest('/'));
+
+    expect(res.headers.get('location')).toBeNull();
+    expect(res.headers.get('content-security-policy')).toBeTruthy();
+  });
+
+  it('preserves refreshed session cookies across a redirect', async () => {
+    // getUser triggers a token refresh (setAll) on a request that then
+    // redirects (authed user on the landing). The rotated sb-* cookie must
+    // be carried onto the redirect response, not dropped.
+    h.getUser.mockImplementation(async () => {
+      h.cookies?.setAll([
+        { name: 'sb-access-token', value: 'fresh', options: {} },
+      ]);
+      return { data: { user: { id: 'u1' } } };
+    });
+
+    const res = await proxy(makeRequest('/'));
+
+    expect(res.status).toBe(307);
+    expect(res.headers.get('location')).toBe('http://localhost:3000/home');
+    expect(res.cookies.get('sb-access-token')?.value).toBe('fresh');
   });
 
   it('lets an unauthenticated user reach /login without redirect', async () => {
