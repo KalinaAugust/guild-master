@@ -29,7 +29,7 @@ export const LoginForm = () => {
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
-        router.replace('/');
+        router.replace('/home');
         router.refresh();
       }
     });
