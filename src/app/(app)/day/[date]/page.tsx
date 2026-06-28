@@ -39,7 +39,7 @@ export default async function DayPage({ params, searchParams }: DayPageProps) {
 
   return (
     <>
-      <Link href="/" className={styles.backLink}>
+      <Link href="/home" className={styles.backLink}>
         <ChevronLeft size={20} />
         {t('backToCalendar')}
       </Link>

@@ -162,6 +162,16 @@ h1, h2, h3, h4, h5, h6 {
   animation: page-slide-in 0.35s ease both;
 }
 
+/* The persistent sidebar (view-transition-name: sidebar in Sidebar.module.css)
+   gets its own snapshot group during route transitions. Named groups otherwise
+   paint in capture/DOM order — the sidebar comes before the page content, so the
+   incoming .page-enter content snapshot would paint over it for the duration of
+   the animation, then drop back under it. An explicit z-index keeps the sidebar
+   group on top throughout. */
+::view-transition-group(sidebar) {
+  z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(.page-exit),
   ::view-transition-new(.page-enter) {

@@ -8,7 +8,7 @@ export interface NavItem {
 }
 
 export const navItems: NavItem[] = [
-  { href: '/', icon: Calendar, labelKey: 'Common.calendar' },
+  { href: '/home', icon: Calendar, labelKey: 'Common.calendar' },
   { href: '/guild-chat', icon: MessagesSquare, labelKey: 'Common.chats' },
   { href: '/announcements', icon: Megaphone, labelKey: 'Common.announcements' },
   { href: '/looking-for-group', icon: Eye, labelKey: 'Common.callToAction' },

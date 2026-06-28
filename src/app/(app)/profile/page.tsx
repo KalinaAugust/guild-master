@@ -13,7 +13,7 @@ export default async function ProfilePage() {
     .eq('id', user.id)
     .single();
 
-  if (!profile) redirect('/');
+  if (!profile) redirect('/home');
 
   redirect(`/profile/${profile.public_id}`);
 }

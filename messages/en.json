@@ -533,5 +533,22 @@
     "closeLightbox": "Close image",
     "lockedPrompt": "Join this guild to write messages",
     "edited": "edited"
+  },
+  "Landing": {
+    "nav": { "login": "Sign in" },
+    "hero": {
+      "title": "Run your guild like a pro",
+      "subtitle": "Calendar, chat, and announcements for your gaming community — all in one place.",
+      "cta": "Get started"
+    },
+    "features": {
+      "calendar": { "title": "Event calendar", "body": "Plan raids, sessions, and meetups. Everyone sees what's next." },
+      "chat": { "title": "Guild chat", "body": "Real-time chat and direct messages keep your members in sync." },
+      "community": { "title": "Announcements & LFG", "body": "Post announcements and rally members with Looking-for-Group calls." }
+    },
+    "finalCta": {
+      "title": "Ready to organize your guild?",
+      "cta": "Join now"
+    }
   }
 }

@@ -17,7 +17,7 @@ export async function AccessDenied({ ownerName }: AccessDeniedProps) {
           {t('guildLeaderContact', { name: ownerName })}
         </p>
       )}
-      <Link href="/" className={styles.homeLink}>
+      <Link href="/home" className={styles.homeLink}>
         {t('goHome')}
       </Link>
     </div>
