@@ -97,6 +97,13 @@ export async function proxy(request: NextRequest) {
   // return, so none are lost across response re-creation.
   const finalize = (res: NextResponse) => {
     res.headers.set('Content-Security-Policy', csp);
+    // Carry over any cookies Supabase wrote during a session refresh (setAll
+    // sets them on `response`). A redirect returns a brand-new response object,
+    // so without this copy the rotated sb-* tokens would be dropped and never
+    // reach the browser — breaking the refresh on any request that redirects.
+    if (res !== response) {
+      response.cookies.getAll().forEach((cookie) => res.cookies.set(cookie));
+    }
     if (localeToSet) {
       res.cookies.set('NEXT_LOCALE', localeToSet);
     }
