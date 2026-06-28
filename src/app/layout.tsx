@@ -6,104 +6,45 @@ import { Toaster } from 'sonner';
 import "./globals.css";
 import "@/shared/design-system/tokens.css";
 
-const manrope = Manrope({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-manrope",
-  display: "swap",
-});
+const manrope = Manrope({ subsets: ["latin", "cyrillic"], variable: "--font-manrope", display: "swap" });
+const unbounded = Unbounded({ subsets: ["latin", "cyrillic"], variable: "--font-unbounded", display: "swap" });
 
-const unbounded = Unbounded({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-unbounded",
-  display: "swap",
-});
 import StoreProvider from "./providers/StoreProvider";
-import { Header, UserMenu } from "@/widgets/header";
-import { Sidebar } from "@/widgets/sidebar";
-import { CopyrightFooter } from "./CopyrightFooter";
-import { PageTransition } from "./PageTransition";
 import { getUser } from "@/entities/user/api/getUser";
-import { resolveDisplayName } from '@/entities/user';
 import { ParticlesBackground } from "@/shared/ui/ParticlesBackground";
-import styles from './Layout.module.css';
+import shell from './(app)/Layout.module.css';
 
 export const metadata: Metadata = {
   title: "Guild Master",
   description: "Guild management system",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const requiredNamespaces = [
+  'Common', 'Event', 'Guild', 'GuildDetail', 'EventComments', 'EventDetail',
+  'GuildChat', 'DirectMessages', 'GuildPoll', 'Announcements', 'CallToAction',
+  'GuildMembers', 'UpcomingEvents', 'Notifications', 'AiHelper', 'Auth',
+  'DateTimePicker', 'PrivateNote', 'UpdateProfile', 'Landing',
+];
+
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
   const messages = await getMessages();
   const user = await getUser();
 
-  const requiredNamespaces = [
-    'Common',
-    'Event',
-    'Guild',
-    'GuildDetail',
-    'EventComments',
-    'EventDetail',
-    'GuildChat',
-    'DirectMessages',
-    'GuildPoll',
-    'Announcements',
-    'CallToAction',
-    'GuildMembers',
-    'UpcomingEvents',
-    'Notifications',
-    'AiHelper',
-    'Auth',
-    'DateTimePicker',
-    'PrivateNote',
-    'UpdateProfile'
-  ];
   const filteredMessages = Object.keys(messages)
     .filter((key) => requiredNamespaces.includes(key))
-    .reduce<typeof messages>((obj, key) => {
-      obj[key] = messages[key];
-      return obj;
-    }, {});
+    .reduce<typeof messages>((obj, key) => { obj[key] = messages[key]; return obj; }, {});
 
   return (
     <html lang={locale} className={`${manrope.variable} ${unbounded.variable}`}>
-      <body className={user ? undefined : styles.noRail}>
+      <body className={user ? undefined : shell.noRail}>
         <div className="bg-blob" />
         <div className="bg-blob bg-blob-secondary" />
         <ParticlesBackground />
         <NextIntlClientProvider messages={filteredMessages}>
           <StoreProvider>
             <Toaster position="top-right" richColors closeButton theme="dark" />
-            {user && (
-              <Sidebar
-                footer={
-                  <UserMenu
-                    publicId={user.profile?.publicId}
-                    email={user.email}
-                    avatarUrl={user.profile?.avatarUrl}
-                    name={resolveDisplayName({
-                      fullName: user.profile?.fullName ?? null,
-                      alias: user.profile?.alias ?? null,
-                      displayAsAlias: user.profile?.displayAsAlias ?? false,
-                    })}
-                    icon={user.profile?.icon ?? null}
-                  />
-                }
-              />
-            )}
-            <div className={styles.appShell}>
-              <Header />
-              <div className={styles.content}>
-                <PageTransition>
-                  {children}
-                </PageTransition>
-              </div>
-              <CopyrightFooter />
-            </div>
+            {children}
           </StoreProvider>
         </NextIntlClientProvider>
       </body>
