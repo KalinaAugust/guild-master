@@ -68,7 +68,7 @@ export const Sidebar = ({ footer }: SidebarProps) => {
     <nav className={styles.sidebar} aria-label="Main navigation">
       <ul className={styles.list}>
         {navItems.map((item) => {
-          const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(`${item.href}/`));
+          const active = pathname === item.href || (item.href !== '/home' && pathname.startsWith(`${item.href}/`));
           const dot = !!unreadByHref[item.href] && pathname !== item.href;
           return (
             <li key={item.href}>
