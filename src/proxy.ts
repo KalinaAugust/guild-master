@@ -106,18 +106,19 @@ export async function proxy(request: NextRequest) {
     return res;
   };
 
-  // Protect all routes except /login and /auth/callback
+  // Protect all routes except the landing (/), /login and /auth/callback
+  const isLandingPage = request.nextUrl.pathname === '/';
   const isLoginPage = request.nextUrl.pathname === '/login';
   const isAuthCallback = request.nextUrl.pathname.startsWith('/auth');
   const isGuildDetailPage = request.nextUrl.pathname.match(/^\/guilds\/[^/]+/) !== null;
   const isPublicProfilePage = request.nextUrl.pathname.match(/^\/profile\/[^/]+/) !== null;
 
-  if (!user && !isLoginPage && !isAuthCallback && !isGuildDetailPage && !isPublicProfilePage) {
+  if (!user && !isLandingPage && !isLoginPage && !isAuthCallback && !isGuildDetailPage && !isPublicProfilePage) {
     return finalize(NextResponse.redirect(new URL('/login', request.url)));
   }
 
-  if (user && isLoginPage) {
-    return finalize(NextResponse.redirect(new URL('/', request.url)));
+  if (user && (isLoginPage || isLandingPage)) {
+    return finalize(NextResponse.redirect(new URL('/home', request.url)));
   }
 
   return finalize(response);
