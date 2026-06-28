@@ -1,0 +1,18 @@
+.header {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem clamp(1rem, 5vw, 4rem);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+}
+.logo { font-family: var(--font-unbounded), sans-serif; font-weight: 700; color: var(--text-primary); font-size: 1.1rem; }
+.nav { display: flex; align-items: center; gap: 1rem; }
+.loginLink {
+  color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 0.95rem;
+  padding: 0.4rem 1rem; border-radius: var(--radius-sm, 8px);
+  border: 1px solid var(--glass-border);
+  transition: background 0.2s ease;
+}
+.loginLink:hover { background: var(--glass-bg); }

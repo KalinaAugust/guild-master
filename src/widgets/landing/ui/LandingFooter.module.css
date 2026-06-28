@@ -1,0 +1,8 @@
+.footer {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+  padding: 1.5rem clamp(1rem, 5vw, 4rem);
+  border-top: 1px solid var(--glass-border);
+  font-size: 0.85rem; color: var(--text-muted);
+}
+.link { color: #fff; font-weight: 600; text-decoration: none; }
+.link:hover { text-decoration: underline; }
