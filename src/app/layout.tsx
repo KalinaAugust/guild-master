@@ -3,6 +3,7 @@ import { Manrope, Unbounded } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Toaster } from 'sonner';
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 import "@/shared/design-system/tokens.css";
 
@@ -47,6 +48,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             {children}
           </StoreProvider>
         </NextIntlClientProvider>
+        <Analytics />
       </body>
     </html>
   );
